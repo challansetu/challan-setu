@@ -1,0 +1,612 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Admin Users ─────────────────────────────────────
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         AdminRole @default(SUPPORT_AGENT)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  notes         AdminNote[]
+  statusChanges UserStatusHistory[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+  @@index([role])
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  SUPPORT_AGENT
+}
+
+// ─── MVP Leads ─────────────────────────────────────
+
+model Lead {
+  id               String   @id @default(cuid())
+  fullName         String
+  mobileNumber     String
+  vehicleNumber    String
+  consentAccepted  Boolean
+  consentTimestamp DateTime
+  source           String   @default("homepage")
+  city             String?
+  leadStatus       String   @default("new")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([mobileNumber])
+  @@index([vehicleNumber])
+  @@index([city])
+  @@index([leadStatus])
+  @@index([source])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+// ─── Users ──────────────────────────────────────────
+
+model User {
+  id                String              @id @default(cuid())
+  phone             String              @unique
+  name              String?
+  email             String?
+  role              UserRole            @default(USER)
+  isActive          Boolean             @default(true)
+  lifecycleStatus   UserLifecycleStatus @default(NEW_USER)
+  lastActiveAt      DateTime?
+  consentAccepted   Boolean             @default(false)
+  consentAcceptedAt DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  vehicles        Vehicle[]
+  challanSearches ChallanSearch[]
+  carts           Cart[]
+  orders          Order[]
+  auditLogs       AuditLog[]
+  promises        SafeDrivingPromise[]
+  adminNotes      AdminNote[]
+  statusHistory   UserStatusHistory[]
+
+  @@index([lifecycleStatus])
+  @@index([lastActiveAt])
+  @@index([createdAt])
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserLifecycleStatus {
+  NEW_USER
+  ACTIVE
+  PAYMENT_PENDING
+  PAYMENT_FAILED
+  COMPLETED
+  CHURNED
+  BLOCKED
+}
+
+// ─── Admin Notes ─────────────────────────────────────
+
+model AdminNote {
+  id        String   @id @default(cuid())
+  userId    String
+  adminId   String
+  content   String
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User      @relation(fields: [userId], references: [id])
+  admin AdminUser @relation(fields: [adminId], references: [id])
+
+  @@index([userId])
+  @@index([adminId])
+  @@map("admin_notes")
+}
+
+// ─── User Status History ─────────────────────────────
+
+model UserStatusHistory {
+  id        String               @id @default(cuid())
+  userId    String
+  oldStatus UserLifecycleStatus?
+  newStatus UserLifecycleStatus
+  changedBy String?
+  reason    String?
+  createdAt DateTime             @default(now())
+
+  user  User       @relation(fields: [userId], references: [id])
+  admin AdminUser? @relation(fields: [changedBy], references: [id])
+
+  @@index([userId])
+  @@index([newStatus])
+  @@index([createdAt])
+  @@map("user_status_history")
+}
+
+// ─── Vehicles ───────────────────────────────────────
+
+model Vehicle {
+  id                      String   @id @default(cuid())
+  userId                  String
+  vehicleNumber           String
+  normalizedVehicleNumber String?
+  nickname                String?
+  updatedAt               DateTime @updatedAt
+  createdAt               DateTime @default(now())
+
+  user            User            @relation(fields: [userId], references: [id])
+  challanSearches ChallanSearch[]
+
+  @@unique([userId, vehicleNumber])
+  @@index([vehicleNumber])
+  @@index([normalizedVehicleNumber])
+  @@map("vehicles")
+}
+
+// ─── Challan Searches ───────────────────────────────
+
+model ChallanSearch {
+  id                      String       @id @default(cuid())
+  userId                  String
+  vehicleId               String
+  vehicleNumber           String
+  normalizedVehicleNumber String?
+  resultCount             Int          @default(0)
+  rawResponse             Json?
+  status                  SearchStatus @default(PENDING)
+  errorMessage            String?
+  apiProvider             String       @default("invincibleocean")
+  apiCost                 Int          @default(0)
+  cachedResponseUsed      Boolean      @default(false)
+  supportableFound        Int          @default(0)
+  serviceable             Boolean?
+  serviceableRegionsFound String[]     @default([])
+  createdAt               DateTime     @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  vehicle  Vehicle   @relation(fields: [vehicleId], references: [id])
+  challans Challan[]
+
+  @@index([userId])
+  @@index([vehicleNumber])
+  @@index([normalizedVehicleNumber])
+  @@index([createdAt])
+  @@map("challan_searches")
+}
+
+enum SearchStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  NO_DATA
+}
+
+// ─── Challans ───────────────────────────────────────
+
+model Challan {
+  id                      String           @id @default(cuid())
+  searchId                String
+  challanNo               String
+  vehicleNumber           String
+  rcNo                    String?
+  state                   String?
+  challanDate             DateTime?
+  location                String?
+  amount                  Float
+  status                  ChallanStatus
+  receiptNo               String?
+  challanSource           String?
+  courtStatusDesc         String?
+  courtName               String?
+  normalizedVehicleNumber String?
+  city                    String?
+  authority               String?
+  isSupported             Boolean?
+  supportedRegion         SupportedRegion?
+  unsupportedReason       String?
+  matchedBy               String?
+  lastSyncedAt            DateTime?
+  rawData                 Json?
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+
+  search      ChallanSearch    @relation(fields: [searchId], references: [id])
+  offences    ChallanOffence[]
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  settlements ChallanSettlement[]
+
+  @@unique([searchId, challanNo])
+  @@index([vehicleNumber])
+  @@index([challanNo])
+  @@index([isSupported, status])
+  @@index([normalizedVehicleNumber])
+  @@map("challans")
+}
+
+enum ChallanStatus {
+  PAID
+  UNPAID
+  PARTIAL
+  UNKNOWN
+}
+
+enum SupportedRegion {
+  DELHI
+  GURGAON
+  NOIDA
+  GHAZIABAD
+}
+
+// ─── Challan Offences ───────────────────────────────
+
+model ChallanOffence {
+  id        String  @id @default(cuid())
+  challanId String
+  offence   String
+  penalty   Float?
+
+  challan Challan @relation(fields: [challanId], references: [id], onDelete: Cascade)
+
+  @@map("challan_offences")
+}
+
+// ─── Carts ──────────────────────────────────────────
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String
+  status    CartStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id])
+  items CartItem[]
+  order Order?
+
+  @@index([userId, status])
+  @@map("carts")
+}
+
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+  EXPIRED
+}
+
+// ─── Cart Items ─────────────────────────────────────
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  challanId String
+  amount    Float
+  createdAt DateTime @default(now())
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  challan Challan @relation(fields: [challanId], references: [id])
+
+  @@unique([cartId, challanId])
+  @@map("cart_items")
+}
+
+// ─── Orders ─────────────────────────────────────────
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  cartId          String      @unique
+  orderNumber     String      @unique
+  grossAmount     Float
+  discountAmount  Float       @default(0)
+  finalAmount     Float
+  currency        String      @default("INR")
+  status          OrderStatus    @default(CREATED)
+  trackingStatus  TrackingStatus @default(ORDER_CREATED)
+  trackingHistory Json?
+  pricingSnapshot Json?
+  itemCount       Int
+  vehicleNumber   String?
+  discountPercent Float       @default(0)
+  platformFee     Float       @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user       User               @relation(fields: [userId], references: [id])
+  cart       Cart               @relation(fields: [cartId], references: [id])
+  payment    Payment?
+  settlement Settlement?
+  items      OrderItem[]
+  promise    SafeDrivingPromise?
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  CREATED
+  PAYMENT_PENDING
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  SETTLED
+  SETTLEMENT_FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum TrackingStatus {
+  ORDER_CREATED
+  LAWYER_ASSIGNED
+  UNDER_REVIEW
+  IN_PROGRESS
+  SETTLED
+  REFLECTION_PENDING
+}
+
+// ─── Order Items ─────────────────────────────────────
+// Immutable snapshot of challans in an order at checkout time.
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  challanId String
+  challanNo String
+  amount    Float
+  createdAt DateTime @default(now())
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  challan Challan @relation(fields: [challanId], references: [id])
+
+  @@unique([orderId, challanId])
+  @@map("order_items")
+}
+
+// ─── Payments ───────────────────────────────────────
+
+model Payment {
+  id                  String        @id @default(cuid())
+  orderId             String        @unique
+  razorpayOrderId     String        @unique
+  razorpayPaymentId   String?
+  razorpaySignature   String?
+  amount              Float
+  currency            String        @default("INR")
+  status              PaymentStatus @default(CREATED)
+  method              String?
+  errorCode           String?
+  errorDescription    String?
+  attempts            Int           @default(0)
+  gatewayName         String        @default("razorpay")
+  failureReason       String?
+  refundStatus        RefundStatus?
+  refundedAmount      Float?
+  refundedAt          DateTime?
+  gatewayRefundId     String?
+  gatewayResponse     Json?
+  webhookPayload      Json?
+  paidAt              DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([razorpayOrderId])
+  @@index([razorpayPaymentId])
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum RefundStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+// ─── Settlements ────────────────────────────────────
+
+model Settlement {
+  id                            String           @id @default(cuid())
+  orderId                       String           @unique
+  status                        SettlementStatus @default(PENDING)
+  attempts                      Int              @default(0)
+  lastAttemptAt                 DateTime?
+  startedAt                     DateTime?
+  completedAt                   DateTime?
+  governmentStatusLastCheckedAt DateTime?
+  proofUrl                      String?
+  receiptUrl                    String?
+  assignedTo                    String?
+  settlementNotes               String?
+  settledAt                     DateTime?
+  failureReason                 String?
+  externalRef                   String?
+  createdAt                     DateTime         @default(now())
+  updatedAt                     DateTime         @updatedAt
+
+  order              Order               @relation(fields: [orderId], references: [id])
+  challanSettlements ChallanSettlement[]
+
+  @@map("settlements")
+}
+
+enum SettlementStatus {
+  PENDING
+  PROCESSING
+  SUBMITTED
+  SETTLED
+  FAILED
+  MANUAL_REVIEW
+}
+
+// ─── Safe Driving Promise ────────────────────────────
+// Legal record of user accepting the promise. Required for discount validity.
+
+model SafeDrivingPromise {
+  id             String   @id @default(cuid())
+  userId         String
+  orderId        String   @unique
+  acceptedAt     DateTime @default(now())
+  ipAddress      String?
+  userAgent      String?
+  promiseVersion Int      @default(1)
+
+  user  User  @relation(fields: [userId], references: [id])
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([userId])
+  @@map("safe_driving_promises")
+}
+
+// ─── Webhook Events ──────────────────────────────────
+// Raw log of every incoming webhook. Never lose a payment event.
+
+model WebhookEvent {
+  id          String        @id @default(cuid())
+  source      String
+  event       String
+  payload     Json
+  status      WebhookStatus @default(PENDING)
+  error       String?
+  processedAt DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@index([source, event])
+  @@index([status])
+  @@index([createdAt])
+  @@map("webhook_events")
+}
+
+enum WebhookStatus {
+  PENDING
+  PROCESSED
+  FAILED
+  IGNORED
+}
+
+// ─── Per-Challan Settlement ──────────────────────────
+// Tracks settlement status for each individual challan in an order.
+
+model ChallanSettlement {
+  id            String    @id @default(cuid())
+  settlementId  String
+  challanId     String
+  challanNo     String
+  status        String    @default("PENDING")
+  govtReceiptNo String?
+  confirmedAt   DateTime?
+  failureReason String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  settlement Settlement @relation(fields: [settlementId], references: [id])
+  challan    Challan    @relation(fields: [challanId], references: [id])
+
+  @@unique([settlementId, challanId])
+  @@map("challan_settlements")
+}
+
+// ─── Discount Rules ─────────────────────────────────
+
+model DiscountRule {
+  id             String       @id @default(cuid())
+  name           String
+  description    String?
+  discountType   DiscountType
+  discountValue  Float
+  maxDiscount    Float?
+  minOrderAmount Float?
+  isActive       Boolean      @default(true)
+  validFrom      DateTime     @default(now())
+  validUntil     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("discount_rules")
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+// ─── Audit Logs ─────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  adminId   String?
+  action    String
+  entity    String
+  entityId  String?
+  oldValue  Json?
+  newValue  Json?
+  metadata  Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user  User?      @relation(fields: [userId], references: [id])
+  admin AdminUser? @relation(fields: [adminId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([adminId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("audit_logs")
+}
+// ─── Manual Transactions ──────────────────────────────
+// Separate flow for admin-only manual data entry.
+
+model ManualTransaction {
+  id                 String   @id @default(cuid())
+  userName           String
+  phoneNumber        String
+  vehicleNumber      String
+  state              String?
+  totalChallans      Int
+  totalChallanAmount Float
+  settledAmount      Float?
+  settledOnGovPortal Boolean  @default(false)
+  profit             Float?
+  discountPercentage Float?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userName])
+  @@index([phoneNumber])
+  @@index([vehicleNumber])
+  @@index([state])
+  @@map("manual_transactions")
+}

@@ -1,0 +1,163 @@
+{
+  "hero": {
+    "badge": "TRUSTED",
+    "badgeAction": "10,000+ challans cleared",
+    "title": [
+      "Check & Pay Your",
+      "Vehicle Challans"
+    ],
+    "subtitle": "Instantly discover pending traffic challans and pay them online.",
+    "subtitleHighlight": "",
+    "subtitleSuffix": "",
+    "searchPlaceholder": "Enter vehicle number",
+    "searchButton": "Check Eligibility",
+    "trustIndicators": [
+      "Secure",
+      "Instant Results"
+    ]
+  },
+  "noFeeBanner": {
+    "title": "No Convenience Fee. Just Honest Pricing.",
+    "points": [
+      "Zero hidden charges",
+      "Transparent breakdown",
+      "Pay only what's required"
+    ]
+  },
+  "promiseSection": {
+    "badge": "Commitment Reward",
+    "headingPrefix": "Promise to Drive Safe.",
+    "headingSuffix": "Unlock {discount}% Benefit.",
+    "description": "Your commitment to responsible driving matters. When you make the Safe Driving Promise at checkout, you become eligible for an instant {discount}% benefit on your challan payment, because safer roads deserve to be rewarded.",
+    "cta": "Check Your Challans",
+    "promisePoints": [
+      {
+        "text": "No drinking & driving",
+        "color": "text-rose-500",
+        "bg": "bg-rose-50"
+      },
+      {
+        "text": "No phone while driving",
+        "color": "text-blue-500",
+        "bg": "bg-blue-50"
+      },
+      {
+        "text": "Respect traffic rules",
+        "color": "text-amber-500",
+        "bg": "bg-amber-50"
+      },
+      {
+        "text": "Respect fellow road users",
+        "color": "text-teal-500",
+        "bg": "bg-teal-50"
+      }
+    ]
+  },
+  "benefitCard": {
+    "heading": "Your Promise Unlocks",
+    "benefitLabel": "Benefit",
+    "steps": [
+      {
+        "step": "1",
+        "text": "Search your vehicle challans"
+      },
+      {
+        "step": "2",
+        "text": "Make the Safe Driving Promise"
+      },
+      {
+        "step": "3",
+        "text": "{discount}% benefit applied instantly"
+      }
+    ],
+    "trustNote": "The benefit is applied at checkout when you make the promise. No convenience fee. No hidden charges. Transparent and instant."
+  },
+  "howItWorks": {
+    "badge": "How it works",
+    "title": "Three Simple Steps",
+    "subtitle": "From vehicle number to payment, it takes less than 2 minutes.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Enter Vehicle Number",
+        "desc": "Type your registration number and we instantly fetch all pending challans from government records.",
+        "iconColor": "text-primary-600",
+        "bg": "bg-primary-50"
+      },
+      {
+        "step": "02",
+        "title": "Make the Promise",
+        "desc": "Commit to driving responsibly with our Safe Driving Promise and instantly unlock your {discount}% benefit.",
+        "iconColor": "text-accent-600",
+        "bg": "bg-accent-50"
+      },
+      {
+        "step": "03",
+        "title": "Pay with Benefit",
+        "desc": "Complete payment securely via Razorpay with your {discount}% promise benefit already applied.",
+        "iconColor": "text-violet-600",
+        "bg": "bg-violet-50"
+      }
+    ]
+  },
+  "trustStats": [
+    {
+      "num": "10K+",
+      "label": "Challans Cleared"
+    },
+    {
+      "num": "Up to 50%",
+      "label": "Savings available"
+    },
+    {
+      "num": "4",
+      "label": "Cities Covered"
+    },
+    {
+      "num": "100%",
+      "label": "Money-Back Guarantee"
+    }
+  ],
+  "whyChoose": {
+    "title": "Why Choose ChallanSetu?",
+    "subtitle": "Built with security, transparency, and purpose at its core",
+    "features": [
+      {
+        "title": "100% Money-Back Guarantee",
+        "desc": "If your challan isn't settled, we refund every rupee, no questions asked.",
+        "iconBg": "bg-accent-50",
+        "iconColor": "text-accent-600"
+      },
+      {
+        "title": "Instant Processing",
+        "desc": "Real-time challan fetching and payment confirmation. No delays.",
+        "iconBg": "bg-violet-50",
+        "iconColor": "text-violet-600"
+      },
+      {
+        "title": "Clear Pricing",
+        "desc": "No confusion, no hidden charges. Full cost breakdown upfront before you pay.",
+        "iconBg": "bg-emerald-50",
+        "iconColor": "text-emerald-600"
+      },
+      {
+        "title": "Personalised Lawyer",
+        "desc": "A dedicated legal expert is assigned to your case, ensuring your challans are settled smoothly at the lowest cost.",
+        "iconBg": "bg-blue-50",
+        "iconColor": "text-blue-600"
+      },
+      {
+        "title": "0 Court Visits",
+        "desc": "Skip the hassle of physical court visits. We settle everything for you digitally and legally.",
+        "iconBg": "bg-primary-50",
+        "iconColor": "text-primary-600"
+      }
+    ]
+  },
+  "cta": {
+    "badge": "Trusted by thousands of vehicle owners",
+    "title": "Clear Your Challans Today",
+    "subtitle": "Check pending challans, pay online, and get them settled, all in one place. 100% money-back guarantee.",
+    "button": "Check Challans Now"
+  }
+}

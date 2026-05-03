@@ -1,0 +1,29 @@
+{
+  "validation": {
+    "vehicleNumberInvalid": "Please enter a valid vehicle number",
+    "vehicleNumberFormat": "Enter a valid vehicle number (e.g., {examples})",
+    "nameRequired": "Please enter your name",
+    "nameMinLength": "Name must be at least {min} characters",
+    "phoneInvalid": "Please enter a valid 10-digit mobile number"
+  },
+  "admin": {
+    "loadError": "Failed to load admin data. Please try again.",
+    "settleFailed": "Failed to mark as settled",
+    "noSettlements": "No pending settlements 🎉",
+    "noOrders": "No orders found",
+    "noUsers": "No users found",
+    "noOrdersYet": "No orders yet"
+  },
+  "statusNotice": {
+    "full": "Status updates for challan payment/resolution may not appear instantly on government systems or our platform. In some cases, the final update may take up to {days} days. Please keep your receipt or transaction confirmation for reference.",
+    "short": "Status may take up to {days} days to reflect on government systems or our platform. Please keep your receipt for reference."
+  },
+  "common": {
+    "loading": "Loading...",
+    "securedEncryption": "Secured with 256-bit encryption"
+  },
+  "labels": {
+    "fullName": "Full Name",
+    "mobileNumber": "Mobile Number"
+  }
+}

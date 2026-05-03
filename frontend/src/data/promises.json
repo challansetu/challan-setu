@@ -1,0 +1,90 @@
+{
+  "safeDrivingPromise": {
+    "acceptedTitle": "Safe Driving Promise Accepted",
+    "defaultTitle": "Promise to Drive Safe",
+    "acceptedSubtitle": "Thank you for choosing responsibility. You're making our roads safer.",
+    "defaultSubtitle": "Commit to safer roads and unlock an instant discount on your challan payment.",
+    "checkboxText": "I promise to drive responsibly, follow traffic rules, and contribute to safer roads.",
+    "checkboxHint": "Accept the promise to unlock your discount",
+    "lockedLabel": "Discount Locked",
+    "lockedHint": "Make the promise above to unlock",
+    "unlockedLabel": "Safe Driving Discount Applied!",
+    "savingLabel": "You're saving",
+    "thankYouMessage": "Thank you for choosing responsible driving",
+    "items": [
+      { "text": "I will never drink and drive.", "color": "text-rose-500", "bg": "bg-rose-50" },
+      { "text": "I will avoid using my phone while driving.", "color": "text-blue-500", "bg": "bg-blue-50" },
+      { "text": "I will respect traffic signals and speed limits.", "color": "text-amber-500", "bg": "bg-amber-50" },
+      { "text": "I will be patient and avoid unnecessary honking.", "color": "text-purple-500", "bg": "bg-purple-50" },
+      { "text": "I will respect pedestrians and fellow road users.", "color": "text-teal-500", "bg": "bg-teal-50" },
+      { "text": "I will drive responsibly for my safety and that of others.", "color": "text-pink-500", "bg": "bg-pink-50" },
+      { "text": "I will help make Indian roads safer.", "color": "text-emerald-500", "bg": "bg-emerald-50" }
+    ]
+  },
+  "roadSafetyModal": {
+    "title": "Road Safety Promise",
+    "subtitle": "For a Safer India 🇮🇳",
+    "whyTitle": "Why Responsible Driving Matters",
+    "whyCards": [
+      {
+        "title": "Your safety affects everyone",
+        "desc": "Driving responsibly protects your own life, the lives of your loved ones, and the safety of every person sharing the road.",
+        "gradient": "from-rose-50 to-pink-50",
+        "border": "border-rose-100/80",
+        "iconColor": "text-rose-500"
+      },
+      {
+        "title": "Your behaviour influences others",
+        "desc": "Safe, calm, and disciplined driving encourages others to behave the same way. Leading by example creates a culture of responsibility.",
+        "gradient": "from-blue-50 to-indigo-50",
+        "border": "border-blue-100/80",
+        "iconColor": "text-blue-500"
+      },
+      {
+        "title": "Contributing to a safer India",
+        "desc": "Thousands of responsible choices together can transform the way people drive. You become part of a larger movement.",
+        "gradient": "from-emerald-50 to-teal-50",
+        "border": "border-emerald-100/80",
+        "iconColor": "text-emerald-500"
+      }
+    ],
+    "commitmentsDivider": "My Commitments",
+    "commitments": [
+      { "title": "I will never drink and drive or drive under the influence", "desc": "I respect life, both my own and the lives of others. I will always choose safety, judgment, and responsibility over impulsive or dangerous choices.", "color": "text-rose-500", "bg": "bg-rose-50", "border": "border-rose-100" },
+      { "title": "I will avoid unnecessary honking and remain patient", "desc": "I understand that excessive honking and aggressive behaviour create stress, anger, and unsafe driving conditions.", "color": "text-purple-500", "bg": "bg-purple-50", "border": "border-purple-100" },
+      { "title": "I will stop at pedestrian crossings and give way where required", "desc": "Roads are shared by everyone. I will respect pedestrians and other vulnerable road users.", "color": "text-teal-500", "bg": "bg-teal-50", "border": "border-teal-100" },
+      { "title": "I will not overtake dangerously or from blind spots", "desc": "Saving a few seconds is never worth putting lives at risk. I will drive in a predictable, safe, and lawful manner.", "color": "text-amber-500", "bg": "bg-amber-50", "border": "border-amber-100" },
+      { "title": "I will keep my vehicle properly maintained", "desc": "Road safety begins with a roadworthy vehicle. I will ensure my vehicle is serviced regularly.", "color": "text-slate-500", "bg": "bg-slate-50", "border": "border-slate-100" },
+      { "title": "I will follow speed limits responsibly", "desc": "Speed limits exist to protect lives, not just to avoid penalties. I will choose control over carelessness.", "color": "text-blue-500", "bg": "bg-blue-50", "border": "border-blue-100" },
+      { "title": "I will use indicators and signals clearly", "desc": "Safe driving depends on clear communication. I will always use indicators and signals properly.", "color": "text-cyan-500", "bg": "bg-cyan-50", "border": "border-cyan-100" },
+      { "title": "I will use high beams responsibly", "desc": "I understand that improper use of high beams can create discomfort and danger for others.", "color": "text-yellow-500", "bg": "bg-yellow-50", "border": "border-yellow-100" },
+      { "title": "I will stop driving if I feel tired, distracted, or unwell", "desc": "If I feel drowsy, mentally distracted, or unfit to continue, I will pull over safely.", "color": "text-indigo-500", "bg": "bg-indigo-50", "border": "border-indigo-100" },
+      { "title": "I will treat traffic police and enforcement officers respectfully", "desc": "Even in disagreement, I will remain respectful and cooperative with authorities.", "color": "text-emerald-500", "bg": "bg-emerald-50", "border": "border-emerald-100" },
+      { "title": "I will keep all vehicle documents updated and available", "desc": "I will stay legally compliant by ensuring my vehicle papers are valid and ready.", "color": "text-sky-500", "bg": "bg-sky-50", "border": "border-sky-100" },
+      { "title": "I will act responsibly in the event of an accident", "desc": "I will respond with responsibility and humanity. I will not run away or worsen the situation.", "color": "text-orange-500", "bg": "bg-orange-50", "border": "border-orange-100" },
+      { "title": "I will never use my phone while driving, including at red lights", "desc": "No call, message, or notification is worth risking a life. I will stay focused on the road.", "color": "text-blue-600", "bg": "bg-blue-50", "border": "border-blue-100" },
+      { "title": "I will encourage at least one other person each month to value road safety", "desc": "Real change grows through awareness and action. I will help spread the message of safe driving.", "color": "text-fuchsia-500", "bg": "bg-fuchsia-50", "border": "border-fuchsia-100" },
+      { "title": "I will drive with humility, empathy, and awareness", "desc": "Every vehicle on the road carries a human being, a family, and a story. I will remember that.", "color": "text-pink-500", "bg": "bg-pink-50", "border": "border-pink-100" }
+    ],
+    "ourPromiseDivider": "Our Promise",
+    "progressSection": {
+      "title": "This Promise Is About Progress, Not Perfection",
+      "text": "Making a road safety promise does not mean claiming to be perfect. It means choosing to be more conscious, more thoughtful, and more committed every time you drive. It is a promise to keep improving and to stay aware of how your actions affect others."
+    },
+    "expectFromUs": {
+      "title": "What You Can Expect From Us",
+      "items": [
+        "Offering fast, transparent, and easy-to-access support for your legal concerns",
+        "Sharing helpful tools, updates, and information that promote awareness and informed driving",
+        "Supporting road safety efforts alongside communities, authorities, and responsible citizens",
+        "Recognizing and encouraging people who lead with responsibility on the road"
+      ]
+    },
+    "closingSection": {
+      "title": "You Are Doing More Than Resolving a Challan",
+      "text": "By making this promise, you are choosing to stand for responsibility, awareness, and safer roads in India. Your actions behind the wheel reflect who you are: careful, aware, and committed to doing better.",
+      "thankYou": "Thank you for being part of the change India needs. 🙏"
+    },
+    "footerButton": "I Promise to Drive Safe"
+  }
+}

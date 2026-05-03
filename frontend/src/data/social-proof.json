@@ -1,0 +1,18 @@
+{
+  "names": [
+    "Ravi", "Amit", "Priya", "Neha", "Suresh", "Pooja", "Rajesh", "Anita",
+    "Vikram", "Sneha", "Arjun", "Divya", "Manoj", "Kavita", "Rohit",
+    "Sunita", "Arun", "Meena", "Sanjay", "Nisha", "Deepak", "Rekha",
+    "Mohit", "Anjali", "Gaurav", "Swati", "Kiran", "Pankaj", "Shweta",
+    "Rahul", "Aarti", "Vishal", "Komal", "Sachin", "Mamta", "Nitin"
+  ],
+  "challanTypes": [
+    "traffic challan", "court challan", "speed challan",
+    "parking challan", "red light challan", "e-challan"
+  ],
+  "amounts": [
+    1500, 2000, 2500, 3000, 3500, 4000, 4500, 4800,
+    5000, 5500, 6000, 7000, 7500, 8000, 8500, 9000,
+    10000, 12000, 14000, 15000, 18000, 20000
+  ]
+}

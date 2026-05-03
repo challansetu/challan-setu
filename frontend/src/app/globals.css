@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes progressFill {
+  from { width: 0% }
+  to   { width: 100% }
+}
+
+@layer base {
+  :root {
+    --color-bg: 248 250 252;
+    --color-surface: 255 255 255;
+  }
+
+  html {
+    overscroll-behavior: none;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface-50 text-gray-900 antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Better tap targets on mobile */
+  button, a, input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth focus transitions */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500/40 ring-offset-2;
+    transition: box-shadow 150ms ease;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-primary-100 text-primary-900;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Safe area padding for bottom fixed bars (iOS notch) */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Premium glass effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .glass-dark {
+    @apply bg-gray-900/80 backdrop-blur-xl;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Premium card hover effect */
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+  .card-hover:hover {
+    @apply shadow-premium-lg -translate-y-0.5;
+  }
+
+  /* Gradient text helper */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+
+  .text-gradient-savings {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-500 to-accent-700;
+  }
+
+  /* Premium border */
+  .border-premium {
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* Savings badge glow */
+  .savings-glow {
+    @apply relative;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2), 0 0 40px rgba(16, 185, 129, 0.1);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Shimmer loading effect */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  /* Subtle pattern background */
+  .pattern-dots {
+    background-image: radial-gradient(circle, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .pattern-grid {
+    background-image:
+      linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@layer utilities {
+  /* Smooth animations */
+  .animate-in {
+    animation: animate-in 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in-from-top-2 {
+    animation: slide-in-from-top 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slide-in-from-top {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered animation delays */
+  .delay-75 { animation-delay: 75ms; }
+  .delay-150 { animation-delay: 150ms; }
+  .delay-225 { animation-delay: 225ms; }
+  .delay-300 { animation-delay: 300ms; }
+}
+
+/* ─── Feature marquee ────────────────────────────────────────────────────── */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.feature-marquee-track {
+  animation: marquee-scroll var(--marquee-duration, 20s) linear infinite;
+}
+
+.feature-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-marquee-track {
+    animation: none;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
