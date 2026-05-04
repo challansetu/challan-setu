@@ -151,7 +151,6 @@ export function LeadCaptureModal({
       const leadStatus = response?.data?.leadStatus;
       const createdAt = response?.data?.createdAt;
       redirectTimerRef.current = setTimeout(() => {
-        onClose();
         const params = new URLSearchParams({
           vehicle: vehicleNumber,
           ...(leadId ? { lead: leadId } : {}),
@@ -160,7 +159,7 @@ export function LeadCaptureModal({
           ...(city ? { city } : {}),
         });
         router.push(`/thank-you?${params.toString()}`);
-      }, 450);
+      }, 700);
     } catch (error: any) {
       const message =
         error.response?.data?.message ||
@@ -171,6 +170,25 @@ export function LeadCaptureModal({
   }, [isFormValid, mobileNumber, normalizedName, onClose, router, vehicleNumber]);
 
   if (!open) return null;
+
+  if (submitState === 'success') {
+    return createPortal(
+      <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-white">
+        <Logo scheme="dark" height={44} />
+        <div className="mt-10 relative flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin" />
+          <div className="absolute w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
+            <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+        <p className="mt-8 text-xl font-bold text-gray-900">Checking your eligibility…</p>
+        <p className="mt-2 text-sm font-medium text-gray-400">Vehicle: {vehicleNumber}</p>
+      </div>,
+      document.body,
+    );
+  }
 
   return createPortal(
     <div
@@ -282,12 +300,6 @@ export function LeadCaptureModal({
             <div className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3 text-xs font-medium text-primary-700">
               We never ask for OTP, UPI PIN, or bank details.
             </div>
-
-            {submitState === 'success' && (
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                Request saved successfully. Redirecting you now...
-              </div>
-            )}
 
             {submitState === 'error' && (
               <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
