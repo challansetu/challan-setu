@@ -324,33 +324,3 @@ export interface ListAuditLogsParams {
   dateFrom?: string;
   dateTo?: string;
 }
-export interface ManualTransaction {
-  id: string;
-  userName: string;
-  phoneNumber: string;
-  vehicleNumber: string;
-  state: string | null;
-  totalChallans: number;
-  totalChallanAmount: number;
-  settledAmount: number | null;
-  settledOnGovPortal: boolean;
-  profit: number | null;
-  discountPercentage: number | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ManualTransactionsResponse {
-  data: ManualTransaction[];
-}
-
-export interface ManualTransactionPayload {
-  userName: string;
-  phoneNumber: string;
-  vehicleNumber: string;
-  state: string;
-  totalChallans: number;
-  totalChallanAmount: number;
-  settledAmount?: number;
-  settledOnGovPortal: boolean;
-}

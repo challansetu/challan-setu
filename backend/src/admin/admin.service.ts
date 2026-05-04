@@ -713,7 +713,6 @@ export class AdminService {
 
     // Delete in dependency order to avoid FK violations
     await this.prisma.$transaction([
-      this.prisma.challanSettlement.deleteMany({ where: { settlementId: order.settlement?.id ?? '' } }),
       this.prisma.settlement.deleteMany({ where: { orderId } }),
       this.prisma.payment.deleteMany({ where: { orderId } }),
       this.prisma.safeDrivingPromise.deleteMany({ where: { orderId } }),

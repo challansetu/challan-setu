@@ -118,7 +118,9 @@ export class PricingService {
     validFrom?: Date;
     validUntil?: Date;
   }) {
-    return this.prisma.discountRule.create({ data });
+    return this.prisma.discountRule.create({
+      data: { ...data, validFrom: data.validFrom ?? new Date() },
+    });
   }
 
   async updateRule(

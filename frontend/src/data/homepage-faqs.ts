@@ -1,12 +1,12 @@
-export const HOMEPAGE_FAQ_TITLE = 'Traffic Challan Check & Discount FAQs';
+export const HOMEPAGE_FAQ_TITLE = 'Traffic Challan Assistance & Settlement FAQs';
 
 export const HOMEPAGE_FAQ_SUBTITLE =
-  'Answers to common questions about e-challan checking, traffic challan discount, court challan settlement, and Delhi NCR challan support.';
+  'Answers to common questions about challan assistance, discount eligibility, court challan settlement, and Delhi NCR challan support.';
 
 export const HOMEPAGE_FAQS = [
   {
-    q: 'How can I check my vehicle challan online?',
-    a: 'You can submit your vehicle number on ChallanSetu to start a challan eligibility check. This helps you check whether your pending traffic challan may be eligible for discount or settlement support.',
+    q: 'How can I get challan assistance for my vehicle?',
+    a: 'Submit your vehicle number on ChallanSetu to start a challan assistance request. Our team then reviews your challan details and shares the best available discount or settlement option.',
   },
   {
     q: 'Can I get a discount on my traffic challan?',
@@ -62,6 +62,6 @@ export const HOMEPAGE_FAQS = [
   },
   {
     q: 'Is ChallanSetu a government website?',
-    a: 'No. ChallanSetu is not a government website. It provides challan checking, support, and settlement assistance. Users can also verify challans through official government portals.',
+    a: 'No. ChallanSetu is not a government website. It provides challan assistance, support, and settlement guidance. Users can also verify their challan status through official government portals.',
   },
 ] as const;

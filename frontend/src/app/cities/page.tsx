@@ -8,7 +8,7 @@ import { ArrowRight, MapPin, CheckCircle2 } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Vehicle Challan Support by City | Delhi, Noida, Gurgaon, Ghaziabad, Faridabad',
   description:
-    'ChallanSetu supports traffic challan help in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. Select your city to check discount eligibility before you pay.',
+    'ChallanSetu provides traffic challan assistance in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. Select your city to request challan support and discount eligibility review.',
   alternates: { canonical: '/cities' },
 };
 
@@ -68,7 +68,7 @@ export default function CitiesPage() {
               Vehicle Challan Support by City
             </h1>
             <p className="text-primary-100 text-base sm:text-lg max-w-2xl">
-              ChallanSetu currently serves 5 cities in the NCR region. Choose your city to check challan discount eligibility before you pay.
+              ChallanSetu currently serves 5 cities in the NCR region. Choose your city to request challan assistance and discount eligibility review.
             </p>
           </div>
         </section>
@@ -108,7 +108,7 @@ export default function CitiesPage() {
         <section className="py-12 bg-primary-600">
           <div className="container-app text-center">
             <h2 className="text-2xl font-bold text-white mb-3">Not sure which city? Just enter your vehicle number</h2>
-            <p className="text-primary-100 mb-6">Start your challan discount eligibility check securely with your vehicle number.</p>
+            <p className="text-primary-100 mb-6">Start your challan assistance request securely with your vehicle number.</p>
             <Link href="/" className="flex w-full max-w-md mx-auto justify-center items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg">
               Check Eligibility <ArrowRight className="w-4 h-4" />
             </Link>

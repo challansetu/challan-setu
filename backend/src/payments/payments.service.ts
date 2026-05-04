@@ -293,21 +293,6 @@ export class PaymentsService {
       throw new BadRequestException('Invalid webhook signature');
     }
 
-    // Log raw webhook immediately — never lose an event
-    let webhookRecord: { id: string } | null = null;
-    try {
-      const parsed = JSON.parse(body);
-      webhookRecord = await this.prisma.webhookEvent.create({
-        data: {
-          source: 'razorpay',
-          event: parsed?.event ?? 'unknown',
-          payload: parsed,
-          status: 'PENDING',
-        },
-        select: { id: true },
-      });
-    } catch { /* logging is non-blocking */ }
-
     let event: any;
     try {
       event = JSON.parse(body);
@@ -401,13 +386,6 @@ export class PaymentsService {
         }
         break;
       }
-    }
-
-    if (webhookRecord) {
-      await this.prisma.webhookEvent.update({
-        where: { id: webhookRecord.id },
-        data: { status: 'PROCESSED', processedAt: new Date() },
-      }).catch(() => {});
     }
 
     return { status: 'ok' };

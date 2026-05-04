@@ -6,14 +6,14 @@
       "Check & Pay Your",
       "Vehicle Challans"
     ],
-    "subtitle": "Instantly discover pending traffic challans and pay them online.",
+    "subtitle": "Submit your vehicle number to start a challan assistance request.",
     "subtitleHighlight": "",
     "subtitleSuffix": "",
     "searchPlaceholder": "Enter vehicle number",
     "searchButton": "Check Eligibility",
     "trustIndicators": [
       "Secure",
-      "Instant Results"
+      "No Login Required"
     ]
   },
   "noFeeBanner": {
@@ -29,7 +29,7 @@
     "headingPrefix": "Promise to Drive Safe.",
     "headingSuffix": "Unlock {discount}% Benefit.",
     "description": "Your commitment to responsible driving matters. When you make the Safe Driving Promise at checkout, you become eligible for an instant {discount}% benefit on your challan payment, because safer roads deserve to be rewarded.",
-    "cta": "Check Your Challans",
+    "cta": "Submit Your Request",
     "promisePoints": [
       {
         "text": "No drinking & driving",
@@ -80,7 +80,7 @@
       {
         "step": "01",
         "title": "Enter Vehicle Number",
-        "desc": "Type your registration number and we instantly fetch all pending challans from government records.",
+        "desc": "Type your registration number to start a challan assistance request. Our team then reviews your challan details.",
         "iconColor": "text-primary-600",
         "bg": "bg-primary-50"
       },
@@ -129,8 +129,8 @@
         "iconColor": "text-accent-600"
       },
       {
-        "title": "Instant Processing",
-        "desc": "Real-time challan fetching and payment confirmation. No delays.",
+        "title": "Fast & Clear Process",
+        "desc": "Our team reviews your request and shares the best available option quickly. No unnecessary delays.",
         "iconBg": "bg-violet-50",
         "iconColor": "text-violet-600"
       },
@@ -157,7 +157,7 @@
   "cta": {
     "badge": "Trusted by thousands of vehicle owners",
     "title": "Clear Your Challans Today",
-    "subtitle": "Check pending challans, pay online, and get them settled, all in one place. 100% money-back guarantee.",
-    "button": "Check Challans Now"
+    "subtitle": "Submit your challan request, our team verifies the details, and we help you get the best available settlement option.",
+    "button": "Submit Your Request"
   }
 }

@@ -37,9 +37,10 @@ const STEPS = [
   },
   {
     number: '02',
-    icon:     title: 'Share Your Details',
+    icon: Contact,
+    title: 'Share Your Details',
     description:
-      'Add your full name, mobile number, and consent in the secure lead form so your request can be recorded.',
+      'Add your full name, mobile number, and consent in the secure lead form so our team can review your challan and find the best available option.',
     detail: 'No OTP, UPI PIN, or bank details are required.',
     color: 'bg-accent-50 text-accent-600',
   },
@@ -48,7 +49,7 @@ const STEPS = [
     icon: CheckCircle2,
     title: 'Receive the Next Step',
     description:
-      'Complete payment via UPI, card, or net banking through Razorpay - the same gateway used by India\'s biggest companies. Once paid, we process the challan settlement on your behalf.',
+      'Our team verifies your challan details and contacts you with the best available settlement option. If eligible, you can proceed with payment securely through Razorpay.',
     detail: 'No payment is required at the request stage.',
     color: 'bg-emerald-50 text-emerald-600',
   },
@@ -145,7 +146,7 @@ export default function HowItWorksPage() {
               href="/"
               className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
             >
-              Check Eligibility
+              Submit Your Request
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -241,7 +242,7 @@ export default function HowItWorksPage() {
               href="/"
               className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
             >
-              Check Now
+              Submit Your Request
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

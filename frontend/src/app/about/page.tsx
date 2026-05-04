@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'About ChallanSetu - Our Mission',
     description:
-      'Learn about ChallanSetu - India\'s simplest platform to check and resolve traffic challans online with savings up to 50%.',
+      'Learn about ChallanSetu - India\'s simplest platform to get challan assistance and settlement support, with savings up to 50% on eligible challans.',
   },
 };
 
@@ -29,7 +29,7 @@ const VALUES = [
     icon: Zap,
     title: 'Speed & Simplicity',
     description:
-      'We built ChallanSetu because the existing process was slow, confusing, and required multiple visits. Our goal: clear a challan in under 5 minutes, from your phone.',
+      'We built ChallanSetu because the existing process was slow, confusing, and required multiple visits. Our goal: start a challan assistance request in under 5 minutes, from your phone.',
   },
   {
     icon: MapPin,
@@ -77,7 +77,7 @@ export default function AboutPage() {
                 ChallanSetu&apos;s mission is simple: make traffic challan payment and settlement fast, affordable, and accessible to every vehicle owner in India.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                We currently serve <strong>Delhi, Noida, Gurgaon, and Ghaziabad</strong> - the four major urban centres of Delhi NCR. Our platform checks challans across traffic databases, lets you pay securely online, and handles the settlement process so you never have to visit a court or police station.
+                We currently serve <strong>Delhi, Noida, Gurgaon, and Ghaziabad</strong> - the four major urban centres of Delhi NCR. Our team reviews challan details, guides you through the settlement process, and you can pay securely online — so you never have to visit a court or police station.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 We work to unlock <strong>savings up to 50%</strong> depending on the challan details and route available. This is not a government scheme - it is part of how we make the process more valuable for the people who trust our platform.

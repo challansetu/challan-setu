@@ -71,8 +71,8 @@ const ALL_CITY_LINKS: CityRelated[] = [
 function buildCityFaqs(cityLabel: string): CityFAQ[] {
   return [
     {
-      q: `How can I check my vehicle challan in ${cityLabel}?`,
-      a: `Enter your vehicle number on ChallanSetu to start a challan discount eligibility check for ${cityLabel}. This helps you review whether your pending traffic challan may qualify for settlement support.`,
+      q: `How can I get challan assistance in ${cityLabel}?`,
+      a: `Submit your vehicle number on ChallanSetu to start a challan assistance request for ${cityLabel}. Our team reviews your challan details and helps you find the best available settlement or discount option.`,
     },
     {
       q: `Can I get a discount on my ${cityLabel} traffic challan?`,
@@ -100,7 +100,7 @@ function buildCityFaqs(cityLabel: string): CityFAQ[] {
     },
     {
       q: 'Is ChallanSetu a government website?',
-      a: 'No. ChallanSetu is not a government website. It provides challan checking, support, and settlement assistance. Users can also verify challans through official government portals.',
+      a: 'No. ChallanSetu is not a government website. It provides challan assistance, support, and settlement guidance. Users can also verify their challan status through official government portals.',
     },
     {
       q: 'Can I upload my challan screenshot or notice?',
@@ -146,7 +146,7 @@ function createCityPage(config: {
     steps: [
       {
         title: `Enter your ${config.cityName} vehicle number`,
-        desc: `Start with your vehicle number to check discount eligibility for ${config.cityName} challan support.`,
+        desc: `Start with your vehicle number to request challan assistance for ${config.cityName}.`,
       },
       {
         title: 'Share your details securely',
@@ -166,7 +166,7 @@ function createCityPage(config: {
     faqHeading: `${config.cityName} Challan FAQs`,
     faqs: buildCityFaqs(config.cityName),
     relatedCities: ALL_CITY_LINKS,
-    ctaHeading: `Check ${config.cityName} challan discount eligibility`,
+    ctaHeading: `Request challan assistance in ${config.cityName}`,
     ctaSubtext: 'No payment required to start. Submit your vehicle number and review the available option first.',
   };
 }

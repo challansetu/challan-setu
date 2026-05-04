@@ -17,9 +17,6 @@ import type {
   ListSettlementsParams,
   ListAuditLogsParams,
   ChallanSearch,
-  ManualTransaction,
-  ManualTransactionsResponse,
-  ManualTransactionPayload,
 } from "@/types/admin";
 
 const axiosInstance = axios.create({
@@ -222,26 +219,6 @@ export const adminApi = {
     return res.data as Blob;
   },
 
-  manualTransactions: async (search?: string) => {
-    const res = await axiosInstance.get<ManualTransaction[]>("/admin/manual-transactions", {
-      params: { search },
-    });
-    return res.data;
-  },
-
-  createManualTransaction: async (data: ManualTransactionPayload) => {
-    const res = await axiosInstance.post<ManualTransaction>("/admin/manual-transactions", data);
-    return res.data;
-  },
-
-  updateManualTransaction: async (id: string, data: Partial<ManualTransactionPayload>) => {
-    const res = await axiosInstance.patch<ManualTransaction>(`/admin/manual-transactions/${id}`, data);
-    return res.data;
-  },
-
-  deleteManualTransaction: async (id: string) => {
-    await axiosInstance.delete(`/admin/manual-transactions/${id}`);
-  },
 };
 
 export default axiosInstance;

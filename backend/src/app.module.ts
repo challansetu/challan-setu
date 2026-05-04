@@ -25,7 +25,6 @@ import { AdminModule } from './admin/admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { QueueModule } from './queue/queue.module';
 
-import { ManualTransactionsModule } from './manual-transactions/manual-transactions.module';
 import { LeadsModule } from './leads/leads.module';
 
 @Module({
@@ -59,7 +58,6 @@ import { LeadsModule } from './leads/leads.module';
     AdminModule,
     NotificationsModule,
     QueueModule,
-    ManualTransactionsModule,
     LeadsModule,
   ],
 })

@@ -32,7 +32,7 @@ export default function TermsOfServicePage() {
 
               <section>
                 <h2 className="text-lg font-bold text-gray-900 mb-2">2. What ChallanSetu Does</h2>
-                <p className="text-gray-600">ChallanSetu is an independent private platform that helps users check, pay, and settle traffic challans online. We are not affiliated with any government department, traffic police authority, RTO, or court. We facilitate the payment process - the challan amounts are paid to the relevant government authorities.</p>
+                <p className="text-gray-600">ChallanSetu is an independent private platform that helps users get assistance with traffic challan payment and settlement. We are not affiliated with any government department, traffic police authority, RTO, or court. We facilitate the payment process - the challan amounts are paid to the relevant government authorities.</p>
               </section>
 
               <section>
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
 
               <section>
                 <h2 className="text-lg font-bold text-gray-900 mb-2">4. Service Accuracy</h2>
-                <p className="text-gray-600">We retrieve challan data from government databases. While we make every effort to display accurate and up-to-date information, we cannot guarantee that our data is always complete or current. Challan data is sourced from third-party government systems which may have delays or inconsistencies. Always verify critical information with the relevant authority.</p>
+                <p className="text-gray-600">Our team verifies challan details through available sources. While we make every effort to provide accurate and up-to-date information, we cannot guarantee that information is always complete or current. Government systems may have delays or inconsistencies. Always verify critical information directly with the relevant authority.</p>
               </section>
 
               <section>

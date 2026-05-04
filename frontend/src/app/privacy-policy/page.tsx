@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
                 <p className="text-gray-600 mb-3">We collect the following types of information:</p>
                 <ul className="list-disc pl-5 text-gray-600 space-y-1.5">
                   <li><strong>Phone number</strong> - used for account creation and OTP-based login. We do not collect passwords.</li>
-                  <li><strong>Vehicle registration number</strong> - used to check and retrieve challan data from government databases.</li>
+                  <li><strong>Vehicle registration number</strong> - used to submit and review your challan assistance request.</li>
                   <li><strong>Payment information</strong> - payments are processed entirely by Razorpay. We do not store card numbers, UPI IDs, or bank account details.</li>
                   <li><strong>Order history</strong> - records of challan payments made through our platform.</li>
                   <li><strong>Device and usage data</strong> - browser type, IP address, and basic analytics data to improve our service.</li>
@@ -45,7 +45,7 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-lg font-bold text-gray-900 mb-2">3. How We Use Your Information</h2>
                 <ul className="list-disc pl-5 text-gray-600 space-y-1.5">
-                  <li>To provide the challan check, payment, and settlement service.</li>
+                  <li>To provide challan assistance, payment processing, and settlement support.</li>
                   <li>To process transactions and send payment confirmations and receipts.</li>
                   <li>To respond to support requests.</li>
                   <li>To improve our platform, fix bugs, and enhance user experience.</li>

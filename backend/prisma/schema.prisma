@@ -8,6 +8,31 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ─── Admin Users ────────────────────────────────────
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         AdminRole @default(SUPPORT_AGENT)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  notes         AdminNote[]
+  statusChanges UserStatusHistory[]
+  auditLogs     AuditLog[]
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  SUPPORT_AGENT
+}
+
 // ─── Users ──────────────────────────────────────────
 model User {
   id                String              @id @default(cuid())
@@ -28,6 +53,9 @@ model User {
   carts           Cart[]
   orders          Order[]
   promises        SafeDrivingPromise[]
+  adminNotes      AdminNote[]
+  statusHistory   UserStatusHistory[]
+  auditLogs       AuditLog[]
 
   @@index([lifecycleStatus])
   @@index([lastActiveAt])
@@ -403,5 +431,85 @@ model Lead {
   @@map("leads")
 }
 
-// ─── Enums used by retained models ─────────────────────
-// (Enums already defined above remain unchanged)
+// ─── Admin Notes ────────────────────────────────────
+model AdminNote {
+  id        String   @id @default(cuid())
+  userId    String
+  adminId   String
+  content   String
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin AdminUser @relation(fields: [adminId], references: [id])
+
+  @@index([userId])
+  @@map("admin_notes")
+}
+
+// ─── User Status History ─────────────────────────────
+model UserStatusHistory {
+  id        String              @id @default(cuid())
+  userId    String
+  oldStatus UserLifecycleStatus
+  newStatus UserLifecycleStatus
+  changedBy String?
+  reason    String?
+  createdAt DateTime            @default(now())
+
+  user  User       @relation(fields: [userId], references: [id])
+  admin AdminUser? @relation(fields: [changedBy], references: [id])
+
+  @@index([userId])
+  @@map("user_status_history")
+}
+
+// ─── Audit Logs ──────────────────────────────────────
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String?
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  oldValue  Json?
+  newValue  Json?
+  metadata  Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  admin AdminUser? @relation(fields: [adminId], references: [id])
+  user  User?      @relation(fields: [userId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([adminId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ─── Discount Rules ──────────────────────────────────
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model DiscountRule {
+  id             String       @id @default(cuid())
+  name           String       @unique
+  description    String?
+  discountType   DiscountType
+  discountValue  Float
+  maxDiscount    Float?
+  minOrderAmount Float        @default(0)
+  isActive       Boolean      @default(true)
+  validFrom      DateTime
+  validUntil     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([isActive])
+  @@map("discount_rules")
+}

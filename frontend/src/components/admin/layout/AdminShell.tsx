@@ -28,11 +28,6 @@ const navItems = [
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
   { href: "/admin/settlements", label: "Settlements", icon: Banknote },
-  {
-    href: "/admin/manual-transaction-entry",
-    label: "Manual Transaction Entry",
-    icon: ScrollText,
-  },
   { href: "/admin/audit-logs", label: "Audit Logs", icon: ScrollText },
 ];
 

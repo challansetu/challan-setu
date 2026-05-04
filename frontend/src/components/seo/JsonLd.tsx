@@ -23,7 +23,7 @@ export function organizationSchema() {
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
     description:
-      'ChallanSetu helps vehicle owners check and resolve traffic challans online in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad with savings that can go up to 50% and zero convenience fee.',
+      'ChallanSetu helps vehicle owners get challan assistance and settlement support in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad with savings that can go up to 50% on eligible challans and zero convenience fee.',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',

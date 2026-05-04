@@ -70,7 +70,7 @@ export default function LandingPage() {
                   </h1>
 
                   <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-md mx-auto mb-10 leading-relaxed px-4 lg:px-0">
-                    Enter your vehicle number to start your challan discount check securely.
+                    Enter your vehicle number to start your challan assistance request securely.
                   </p>
 
                   {/* Client island: form + modal only */}

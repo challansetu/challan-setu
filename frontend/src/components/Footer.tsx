@@ -40,7 +40,7 @@ export function Footer() {
               <Logo scheme="light" height={42} />
             </Link>
             <p className="text-sm text-gray-500 leading-relaxed mb-5 max-w-xs">
-              India's simplest platform to check, pay, and settle traffic challans online. Serving Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad.
+              India's simplest platform to get challan assistance and settlement support online. Serving Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad.
             </p>
             <div className="space-y-2.5">
               <div className="flex items-center gap-2 text-xs text-gray-500">

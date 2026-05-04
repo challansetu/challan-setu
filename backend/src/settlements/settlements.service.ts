@@ -74,27 +74,6 @@ export class SettlementsService {
         },
       });
 
-      // Create per-challan settlement tracking
-      try {
-        const orderItems = await this.prisma.orderItem.findMany({
-          where: { orderId },
-        });
-        for (const item of orderItems) {
-          await this.prisma.challanSettlement.upsert({
-            where: { settlementId_challanId: { settlementId: settlement.id, challanId: item.challanId } },
-            update: {},
-            create: {
-              settlementId: settlement.id,
-              challanId: item.challanId,
-              challanNo: item.challanNo,
-              status: 'PENDING',
-            },
-          });
-        }
-      } catch (e) {
-        this.logger.warn(`Could not create challan settlement items for order ${orderId}: ${e}`);
-      }
-
       await this.prisma.order.update({
         where: { id: orderId },
         data: { status: 'SETTLED' },

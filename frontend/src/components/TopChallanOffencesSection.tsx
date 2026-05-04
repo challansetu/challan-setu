@@ -85,8 +85,8 @@ function buildFaqs(
       a: 'Yes. Challan amounts can vary depending on your vehicle type (two-wheeler vs four-wheeler vs commercial vehicle), whether it is a first or repeat offence, and whether the challan is an e-challan or a court summons. Always check the exact amount on your challan notice before paying.',
     },
     {
-      q: `How can I check my traffic challan online${isNational ? '' : ` in ${city}`}?`,
-      a: `You can submit your vehicle number on ChallanSetu to start a challan eligibility check${isNational ? '' : ` for ${city}`}. This helps review whether the challan may qualify for settlement support or a discount option.`,
+      q: `How can I get help with my traffic challan${isNational ? '' : ` in ${city}`}?`,
+      a: `Submit your vehicle number on ChallanSetu to start a challan assistance request${isNational ? '' : ` for ${city}`}. Our team then reviews whether your challan may qualify for settlement support or a discount option.`,
     },
     {
       q: 'Can I pay my traffic challan online through ChallanSetu?',
