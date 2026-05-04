@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const WA_NUMBER = '918796323876'; // 91 = India country code
-const WA_MESSAGE = encodeURIComponent('Hi, I need help with my challan payment on ChallanSetu.');
+const WA_MESSAGE = encodeURIComponent('Hi Challan Setu, I want to check discount eligibility for my vehicle challan. Please help me.');
 const WA_URL = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 
 export function WhatsAppButton() {
