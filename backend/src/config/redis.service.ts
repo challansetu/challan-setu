@@ -10,6 +10,8 @@ export class RedisService implements OnModuleDestroy {
     this.client = new Redis({
       host: process.env.REDIS_HOST || 'localhost',
       port: parseInt(process.env.REDIS_PORT || '6379', 10),
+      password: process.env.REDIS_PASSWORD || undefined,
+      username: process.env.REDIS_USER || undefined,
     });
     this.client.on('connect', () => this.logger.log('Redis connected'));
     this.client.on('error', (err) => this.logger.error('Redis error', err));
