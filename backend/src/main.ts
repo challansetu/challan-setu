@@ -17,10 +17,12 @@ async function bootstrap() {
     rawBody: true, // Required for Razorpay webhook signature verification
   });
 
+  const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? (process.env.ALLOWED_ORIGINS ?? '').split(',').map((o) => o.trim()).filter(Boolean)
+    : DEV_CORS_ORIGINS;
+
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production'
-      ? ['https://yourdomain.com']
-      : DEV_CORS_ORIGINS,
+    origin: allowedOrigins.length ? allowedOrigins : false,
     credentials: true,
   });
 
@@ -47,7 +49,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.BACKEND_PORT || DEFAULT_PORT;
+  // Lightweight health check — Railway pings this to verify the container is up
+  const httpAdapter = app.getHttpAdapter();
+  httpAdapter.get('/api/health', (_req: any, res: any) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
+  const port = process.env.PORT || process.env.BACKEND_PORT || DEFAULT_PORT;
   await app.listen(port);
   logger.log(`Application running on port ${port}`);
 }
