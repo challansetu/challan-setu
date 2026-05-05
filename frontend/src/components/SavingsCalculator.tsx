@@ -227,14 +227,15 @@ export function SavingsCalculator() {
                   </div>
 
                   {/* Filled state */}
-                  <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-accent-500 to-emerald-500 flex items-center justify-between px-4 text-white transition-opacity duration-200 ${hasAmount ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                    <div className="flex items-baseline gap-1.5 min-w-0">
-                      <span className="text-xs text-white/70 font-medium whitespace-nowrap">Estimated savings up to</span>
-                      <span className="text-xl font-black tabular-nums truncate">{formatINR(dispMaxSave)}</span>
+                  <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-accent-500 to-emerald-500 flex items-center gap-3 px-4 text-white transition-opacity duration-200 ${hasAmount ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] text-white/70 font-medium leading-none">Estimated savings up to</p>
+                      <p className="text-lg font-black tabular-nums truncate leading-tight mt-0.5">{formatINR(dispMaxSave)}</p>
                     </div>
                     <Link
                       href="#hero-lead-form"
-                      className="flex items-center gap-1.5 bg-white text-accent-600 text-sm font-bold px-4 py-2 rounded-xl hover:bg-accent-50 transition-colors flex-shrink-0"
+                      onClick={(e) => { e.preventDefault(); document.getElementById('hero-lead-form')?.scrollIntoView({ behavior: 'smooth' }); }}
+                      className="flex-shrink-0 flex items-center gap-1 bg-white text-accent-600 text-sm font-bold px-3 py-2 rounded-xl hover:bg-accent-50 transition-colors whitespace-nowrap"
                     >
                       Start request <ArrowRight className="w-4 h-4" />
                     </Link>
