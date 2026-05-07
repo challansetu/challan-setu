@@ -1,19 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../config/prisma.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
-import {
-  ChallanProviderService,
-  ProviderChallan,
-} from '../challans/provider/challan-provider.service';
 
 @Injectable()
 export class LeadsService {
   private readonly logger = new Logger(LeadsService.name);
 
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly challanProvider: ChallanProviderService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async createLead(dto: CreateLeadDto) {
     const lead = await this.prisma.lead.create({
@@ -29,8 +22,8 @@ export class LeadsService {
       },
     });
 
-    // Fire-and-forget: fetch challans then notify Telegram
-    this.notifyWithChallans(lead).catch((err) =>
+    // Fire-and-forget: notify Telegram (no challan fetch — website shows it)
+    this.notifyTelegram(lead).catch((err) =>
       this.logger.warn(`Telegram notify failed: ${err?.message}`),
     );
 
@@ -42,7 +35,7 @@ export class LeadsService {
     };
   }
 
-  private async notifyWithChallans(lead: {
+  private async notifyTelegram(lead: {
     id: string;
     fullName: string;
     mobileNumber: string;
@@ -51,34 +44,6 @@ export class LeadsService {
     city: string | null;
     createdAt: Date;
   }) {
-    // Fetch challan data in parallel — never block the lead response
-    let challans: ProviderChallan[] = [];
-    try {
-      const providerResp = await this.challanProvider.fetchChallans(
-        lead.vehicleNumber,
-      );
-      challans = providerResp.result ?? [];
-    } catch (err) {
-      this.logger.warn(
-        `Could not fetch challans for ${lead.vehicleNumber}: ${err?.message}`,
-      );
-    }
-
-    await this.notifyTelegram(lead, challans);
-  }
-
-  private async notifyTelegram(
-    lead: {
-      id: string;
-      fullName: string;
-      mobileNumber: string;
-      vehicleNumber: string;
-      source: string;
-      city: string | null;
-      createdAt: Date;
-    },
-    challans: ProviderChallan[],
-  ) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     if (!token || !chatId) return;
@@ -87,75 +52,20 @@ export class LeadsService {
       timeZone: 'Asia/Kolkata',
     });
 
-    const lines = [
-      `🚗 *New Lead — #${lead.id}*`,
+    const text = [
+      `🚗 *New Lead*`,
       `👤 ${lead.fullName}`,
       `📱 ${lead.mobileNumber}`,
       `🔢 ${lead.vehicleNumber}`,
       `📍 ${lead.city ?? '—'} | ${lead.source}`,
       `🕐 ${ist} IST`,
-    ];
-
-    lines.push('');
-    lines.push(this.formatChallans(challans, lead.vehicleNumber));
-
-    const text = lines.join('\n');
+      `🆔 \`${lead.id}\``,
+    ].join('\n');
 
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
     });
-  }
-
-  private formatChallans(
-    challans: ProviderChallan[],
-    vehicleNumber: string,
-  ): string {
-    if (!challans.length) {
-      return `📋 *Challan Status:* No pending challans found for ${vehicleNumber}`;
-    }
-
-    const unpaid = challans.filter(
-      (c) => c.status?.toUpperCase() === 'UNPAID',
-    );
-    const totalAmount = challans.reduce(
-      (sum, c) => sum + (Number(c.amountChallan) || 0),
-      0,
-    );
-    const unpaidAmount = unpaid.reduce(
-      (sum, c) => sum + (Number(c.amountChallan) || 0),
-      0,
-    );
-
-    const summaryLines = [
-      `📋 *Challan Details (${challans.length} found)*`,
-      `💰 Total: ₹${totalAmount.toLocaleString('en-IN')} | Unpaid: ₹${unpaidAmount.toLocaleString('en-IN')} (${unpaid.length} challan${unpaid.length !== 1 ? 's' : ''})`,
-    ];
-
-    const challanLines = challans.map((c, i) => {
-      const statusIcon = c.status?.toUpperCase() === 'PAID' ? '✅' : '❌';
-      const amount = Number(c.amountChallan) || 0;
-      const date = c.dateChallan
-        ? c.dateChallan.split(' ')[0]
-        : '—';
-      const offences = (c.detailsViolation ?? [])
-        .map((v) => v.offence)
-        .filter(Boolean)
-        .join(', ');
-      const violation = offences || 'Violation details not available';
-      const location = c.locationChallan || c.nameCourt || '—';
-      const challanNo = c.challanNo || '—';
-
-      return [
-        ``,
-        `*${i + 1}.* ${statusIcon} ₹${amount.toLocaleString('en-IN')} — ${c.status}`,
-        `   📌 ${violation}`,
-        `   📍 ${location} | 📅 ${date}`,
-        `   🔖 No: \`${challanNo}\``,
-      ].join('\n');
-    });
-
-    return [...summaryLines, ...challanLines].join('\n');
   }
 }

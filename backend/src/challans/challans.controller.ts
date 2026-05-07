@@ -20,6 +20,7 @@ export class ChallansController {
 
   @Public()
   @Get('public')
+  @Throttle({ default: { ttl: 60000, limit: 10 } })
   @ApiOperation({ summary: 'Public challan lookup by vehicle number (no auth)' })
   async getPublicChallans(@Query('vehicle') vehicle: string) {
     if (!vehicle) return { challans: [] };

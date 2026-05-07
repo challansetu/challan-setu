@@ -1,11 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2, Calendar, MapPin } from 'lucide-react';
 import { challansApi, type ChallanEntry } from '@/lib/api';
 
 interface Props {
   vehicleNumber: string;
+}
+
+function formatDate(raw: string) {
+  if (!raw) return '—';
+  const d = new Date(raw.split(' ')[0]);
+  if (isNaN(d.getTime())) return raw.split(' ')[0];
+  return new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }).format(d);
+}
+
+function formatAmountShort(amount: number) {
+  if (amount >= 1000) {
+    const k = amount / 1000;
+    return `₹${k % 1 === 0 ? k : k.toFixed(1)}K`;
+  }
+  return `₹${amount.toLocaleString('en-IN')}`;
 }
 
 export function ChallanSection({ vehicleNumber }: Props) {
@@ -15,85 +30,124 @@ export function ChallanSection({ vehicleNumber }: Props) {
   useEffect(() => {
     if (!vehicleNumber) { setStatus('done'); return; }
 
+    const cacheKey = `challans:${vehicleNumber}`;
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        setChallans(JSON.parse(cached));
+        setStatus('done');
+        return;
+      }
+    } catch { }
+
     challansApi
       .getPublic(vehicleNumber)
       .then((res) => {
-        setChallans(res.data.challans ?? []);
+        const data = res.data.challans ?? [];
+        setChallans(data);
         setStatus('done');
+        try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch { }
       })
       .catch(() => setStatus('error'));
   }, [vehicleNumber]);
 
   if (status === 'loading') {
     return (
-      <div className="mb-4 rounded-2xl border border-primary-100 bg-white px-5 py-4 flex items-center gap-3 text-sm text-gray-500">
-        <Loader2 className="h-4 w-4 animate-spin text-primary-500 flex-shrink-0" />
-        Checking challan status for {vehicleNumber}…
+      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+        <Loader2 className="h-4 w-4 animate-spin text-blue-400 flex-shrink-0" />
+        <span className="text-sm text-gray-400">
+          Checking challans for <span className="font-semibold text-gray-600">{vehicleNumber}</span>…
+        </span>
       </div>
     );
   }
 
   if (status === 'error' || challans.length === 0) {
     return (
-      <div className="mb-4 rounded-2xl border border-green-100 bg-green-50 px-5 py-4 flex items-center gap-3">
-        <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
+          <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+        </div>
         <div>
-          <p className="text-sm font-semibold text-green-800">No pending challans found</p>
-          <p className="text-xs text-green-600 mt-0.5">Vehicle {vehicleNumber} has no active challans on record.</p>
+          <p className="text-sm font-bold text-gray-800">No pending challans</p>
+          <p className="text-xs text-gray-400 mt-0.5">{vehicleNumber} has a clean record.</p>
         </div>
       </div>
     );
   }
 
   const unpaid = challans.filter((c) => c.status?.toUpperCase() !== 'PAID');
-  const totalAmount = challans.reduce((s, c) => s + (Number(c.amountChallan) || 0), 0);
   const unpaidAmount = unpaid.reduce((s, c) => s + (Number(c.amountChallan) || 0), 0);
 
   return (
-    <div className="mb-4 rounded-2xl border border-red-100 bg-red-50 overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center gap-2.5 px-5 py-3 bg-red-100/60 border-b border-red-100">
-        <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-        <p className="text-sm font-bold text-red-800">
-          {challans.length} Challan{challans.length > 1 ? 's' : ''} Found
-        </p>
-        <span className="ml-auto text-xs font-semibold text-red-600">
-          ₹{unpaidAmount.toLocaleString('en-IN')} unpaid
-        </span>
+    <div className="space-y-3">
+      {/* Orange alert banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 px-5 py-5 shadow-md shadow-orange-200">
+        <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-white/10" />
+        <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/10" />
+        <div className="relative">
+          <h2 className="text-2xl font-black uppercase tracking-wide text-white">Challan Alert 🚨</h2>
+          <p className="mt-1 text-sm text-orange-100">
+            {challans.length} violation{challans.length > 1 ? 's' : ''} found on your vehicle
+          </p>
+        </div>
       </div>
 
-      {/* Summary row */}
-      <div className="px-5 py-2.5 flex gap-4 text-xs text-red-700 border-b border-red-100">
-        <span>Total: <strong>₹{totalAmount.toLocaleString('en-IN')}</strong></span>
-        <span>Unpaid: <strong>{unpaid.length}</strong></span>
-        <span>Paid: <strong>{challans.length - unpaid.length}</strong></span>
+      {/* Stat boxes */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-red-50 px-4 py-5 text-center">
+          <p className="text-3xl font-black text-red-500 leading-none">
+            {formatAmountShort(unpaidAmount)}
+          </p>
+          <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">
+            Total Due
+          </p>
+        </div>
+        <div className="rounded-2xl bg-green-50 px-4 py-5 text-center">
+          <p className="text-4xl font-black text-green-500 leading-none">
+            {challans.length}
+          </p>
+          <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">
+            Violations
+          </p>
+        </div>
       </div>
 
-      {/* Challan list */}
-      <div className="divide-y divide-red-100">
+      {/* Violations label */}
+      <p className="text-[10px] font-black tracking-[0.22em] text-gray-400 uppercase px-1 pt-1">
+        Violations
+      </p>
+
+      {/* Individual violation cards */}
+      <div className="space-y-2.5">
         {challans.map((c, i) => {
           const isPaid = c.status?.toUpperCase() === 'PAID';
-          const offense = c.detailsViolation?.[0]?.offence || 'Violation';
-          const date = c.dateChallan ? c.dateChallan.split(' ')[0] : '—';
+          const offense = c.detailsViolation?.[0]?.offence || 'Traffic Violation';
           const amount = Number(c.amountChallan) || 0;
 
           return (
-            <div key={i} className="px-5 py-3 flex items-start gap-3">
-              <span className={`mt-0.5 text-lg leading-none flex-shrink-0 ${isPaid ? 'text-green-500' : 'text-red-500'}`}>
-                {isPaid ? '✅' : '❌'}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{offense}</p>
-                  <p className="text-sm font-bold text-gray-900 flex-shrink-0">₹{amount.toLocaleString('en-IN')}</p>
-                </div>
-                <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
-                  <span>{date}</span>
-                  {c.locationChallan && <><span>·</span><span className="truncate">{c.locationChallan}</span></>}
-                  <span className={`ml-auto flex-shrink-0 font-medium ${isPaid ? 'text-green-600' : 'text-red-600'}`}>
-                    {c.status}
+            <div key={i} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+              {/* Offense name row */}
+              <div className="px-5 pt-4 pb-3 border-b border-gray-50">
+                <p className="text-[15px] font-bold text-gray-900 leading-snug">{offense}</p>
+              </div>
+              {/* Date + amount row */}
+              <div className="px-5 py-3 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 text-sm text-gray-400">
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {formatDate(c.dateChallan)}
                   </span>
+                  {c.locationChallan && (
+                    <span className="inline-flex items-center gap-1 truncate max-w-[100px]">
+                      <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                      <span className="truncate">{c.locationChallan}</span>
+                    </span>
+                  )}
                 </div>
+                <p className={`text-base font-black flex-shrink-0 ${isPaid ? 'text-emerald-500' : 'text-red-500'}`}>
+                  ₹{amount.toLocaleString('en-IN')}
+                </p>
               </div>
             </div>
           );
