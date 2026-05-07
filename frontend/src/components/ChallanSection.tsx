@@ -62,7 +62,21 @@ export function ChallanSection({ vehicleNumber }: Props) {
     );
   }
 
-  if (status === 'error' || challans.length === 0) {
+  if (status === 'error') {
+    return (
+      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-100">
+          <span className="text-sm">⚠️</span>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-gray-800">Could not fetch challan data</p>
+          <p className="text-xs text-gray-400 mt-0.5">Our team will check manually for {vehicleNumber}.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (challans.length === 0) {
     return (
       <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
         <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
