@@ -3,6 +3,7 @@ import { CheckCircle2, CarFront, ShieldCheck, ArrowRight, Clock3 } from 'lucide-
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/Button';
+import { ChallanSection } from '@/components/ChallanSection';
 
 const WA_NUMBER = '918796323876';
 
@@ -119,6 +120,7 @@ export default function ThankYouPage({
               </div>
 
               <div className="px-8 py-8 sm:px-10 sm:py-10">
+                {vehicleNumber && <ChallanSection vehicleNumber={vehicleNumber} />}
                 <div className="rounded-[1.6rem] border border-primary-100 bg-gradient-to-br from-surface-50 to-white px-5 py-5">
                   <div className="flex items-center gap-2.5 text-primary-600">
                     <CarFront className="w-4.5 h-4.5 flex-shrink-0" />

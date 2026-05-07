@@ -2,16 +2,31 @@ import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus } f
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { ChallansService } from './challans.service';
+import { ChallanProviderService } from './provider/challan-provider.service';
 import { SearchChallanDto } from './dto/search-challan.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Challans')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('challans')
 export class ChallansController {
-  constructor(private readonly challansService: ChallansService) {}
+  constructor(
+    private readonly challansService: ChallansService,
+    private readonly challanProvider: ChallanProviderService,
+  ) {}
+
+  @Public()
+  @Get('public')
+  @ApiOperation({ summary: 'Public challan lookup by vehicle number (no auth)' })
+  async getPublicChallans(@Query('vehicle') vehicle: string) {
+    if (!vehicle) return { challans: [] };
+    const vn = vehicle.toUpperCase().replace(/[\s\-]/g, '');
+    const result = await this.challanProvider.fetchChallans(vn);
+    return { challans: result.result ?? [] };
+  }
 
   @Post('search')
   @HttpCode(HttpStatus.OK)

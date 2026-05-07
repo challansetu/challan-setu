@@ -8,6 +8,25 @@ const api = axios.create({
   timeout: 30000, // 30-second timeout for all requests
 });
 
+// ─── Challans (public) ───────────────────────────────
+export const challansApi = {
+  getPublic: (vehicleNumber: string) =>
+    api.get<{ challans: ChallanEntry[] }>('/challans/public', {
+      params: { vehicle: vehicleNumber },
+      timeout: 35000,
+    }),
+};
+
+export interface ChallanEntry {
+  challanNo: string;
+  dateChallan: string;
+  amountChallan: number;
+  status: string;
+  locationChallan: string;
+  detailsViolation: { offence: string; penalty: string | number | null }[];
+  challan_search_source: string;
+}
+
 // ─── Leads ──────────────────────────────────────────
 export const leadsApi = {
   create: (data: {
