@@ -170,15 +170,15 @@ export default function ThankYouPage({
       <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] px-4 py-3">
         <div className="max-w-lg mx-auto flex gap-3">
           <a href={whatsappMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button variant="success" size="lg" className="w-full rounded-2xl">
+            <Button variant="success" size="lg" className="w-full rounded-2xl whitespace-nowrap">
               WhatsApp Us
-              <WhatsAppIcon className="w-5 h-5" />
+              <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
             </Button>
           </a>
           <a href={screenshotMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button variant="outline" size="lg" className="w-full rounded-2xl">
+            <Button variant="outline" size="lg" className="w-full rounded-2xl whitespace-nowrap">
               Share Challan
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 flex-shrink-0" />
             </Button>
           </a>
         </div>
