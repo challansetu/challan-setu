@@ -56,7 +56,7 @@ export class ChallanProviderService {
         confirmed?: boolean;
         error?: string;
       }>(`${this.scraperApiUrl}/eparivahan/initiate`, { vehicleNumber }, { timeout: 60_000 });
-      if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
+      if (!resp.data.success) throw new Error(resp.data.error || 'Initiation failed');
       if (resp.data.otpRequired) {
         return {
           otpRequired: true,
@@ -78,7 +78,7 @@ export class ChallanProviderService {
         { sessionId, otp },
         { timeout: 30_000 },
       );
-      if (!resp.data.success) throw new Error(resp.data.error ?? 'OTP verification failed');
+      if (!resp.data.success) throw new Error(resp.data.error || 'OTP verification failed');
       return resp.data.challans ?? [];
     } catch (e) {
       throw this._scraperError(e);
@@ -87,10 +87,13 @@ export class ChallanProviderService {
 
   private _scraperError(e: unknown): Error {
     if (e instanceof AxiosError) {
-      const detail = e.response?.data?.detail ?? e.response?.data?.message ?? e.message;
-      return new Error(detail);
+      const detail = e.response?.data?.detail || e.response?.data?.message || e.message;
+      this.logger.error(`Scraper error — status=${e.response?.status} data=${JSON.stringify(e.response?.data)} msg=${e.message}`);
+      return new Error(detail || `Scraper error (HTTP ${e.response?.status ?? 'no response'})`);
     }
-    return e instanceof Error ? e : new Error(String(e));
+    const msg = e instanceof Error ? e.message : String(e);
+    this.logger.error(`Scraper non-HTTP error: ${msg}`);
+    return e instanceof Error ? e : new Error(msg);
   }
 
   async fetchChallans(vehicleNumber: string): Promise<ProviderChallanResponse> {
