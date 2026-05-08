@@ -5,6 +5,7 @@ import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 
 from scrapers.carinfo_scraper import CarInfoScraper, _parse, _decrypt
+from scrapers import eparivahan_scraper
 from tests.fixtures import CARINFO_DECRYPTED, CARINFO_DECRYPTED_EMPTY
 
 
@@ -147,3 +148,33 @@ class TestCarInfoScraper:
                 await scraper.search_all_challans("dl 01-ab 1234")
 
         assert called_with[0] == "DL01AB1234"
+
+
+class TestEparivahanTransportOptions:
+    def test_prefers_direct_without_proxy(self):
+        with patch.object(eparivahan_scraper, "_EPARIVAHAN_PROXY_URL", ""), \
+             patch.object(eparivahan_scraper, "_SYSTEM_PROXY_URL", ""):
+            options = eparivahan_scraper._build_client_options()
+
+        assert len(options) == 1
+        assert options[0][0] == "direct"
+        assert options[0][1]["trust_env"] is False
+        assert "proxy" not in options[0][1]
+
+    def test_adds_explicit_proxy_as_fallback(self):
+        with patch.object(eparivahan_scraper, "_EPARIVAHAN_PROXY_URL", "http://proxy.example:8080"), \
+             patch.object(eparivahan_scraper, "_SYSTEM_PROXY_URL", ""):
+            options = eparivahan_scraper._build_client_options()
+
+        assert [name for name, _ in options] == ["direct", "configured-proxy"]
+        assert options[1][1]["proxy"] == "http://proxy.example:8080"
+
+    def test_formats_actionable_transport_error(self):
+        with patch.object(eparivahan_scraper, "_EPARIVAHAN_PROXY_URL", ""):
+            message = eparivahan_scraper._format_transport_failure(
+                "RJ14JP1684",
+                ["direct: ConnectTimeout: connection failed"],
+            )
+
+        assert "Unable to reach eparivahan for RJ14JP1684" in message
+        assert "EPARIVAHAN_PROXY_URL" in message

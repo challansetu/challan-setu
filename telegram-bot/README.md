@@ -118,6 +118,11 @@ All settings live in `config.py` and can be overridden via environment variables
 | `LOG_LEVEL` | `INFO` | DEBUG/INFO/WARNING/ERROR |
 | `HEALTH_CHECK_PORT` | `8080` | `/health` endpoint port |
 
+For `eparivahan`, production hosts outside India may need `EPARIVAHAN_PROXY_URL`
+set to an Indian proxy. The scraper now prefers direct outbound traffic and only
+uses a proxy when explicitly configured, which avoids accidental platform proxy
+env vars causing connection failures.
+
 ## Running Tests
 
 ```bash

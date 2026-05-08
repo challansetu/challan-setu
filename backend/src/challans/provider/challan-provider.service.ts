@@ -27,6 +27,16 @@ export interface ProviderChallan {
 
 const SCRAPER_TIMEOUT_MS = 30_000; // direct HTTP scraper, no browser
 
+export class ScraperUnavailableError extends Error {
+  constructor(
+    message: string,
+    readonly statusCode = 503,
+  ) {
+    super(message);
+    this.name = 'ScraperUnavailableError';
+  }
+}
+
 @Injectable()
 export class ChallanProviderService {
   private readonly logger = new Logger(ChallanProviderService.name);
@@ -87,9 +97,13 @@ export class ChallanProviderService {
 
   private _scraperError(e: unknown): Error {
     if (e instanceof AxiosError) {
+      const status = e.response?.status;
       const detail = e.response?.data?.detail || e.response?.data?.message || e.message;
-      this.logger.error(`Scraper error — status=${e.response?.status} data=${JSON.stringify(e.response?.data)} msg=${e.message}`);
-      return new Error(detail || `Scraper error (HTTP ${e.response?.status ?? 'no response'})`);
+      this.logger.error(`Scraper error — status=${status} data=${JSON.stringify(e.response?.data)} msg=${e.message}`);
+      if (!status || status >= 500) {
+        return new ScraperUnavailableError(detail || `Scraper error (HTTP ${status ?? 'no response'})`);
+      }
+      return new Error(detail || `Scraper error (HTTP ${status})`);
     }
     const msg = e instanceof Error ? e.message : String(e);
     this.logger.error(`Scraper non-HTTP error: ${msg}`);

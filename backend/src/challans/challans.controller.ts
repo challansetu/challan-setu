@@ -1,8 +1,8 @@
-import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus, BadRequestException, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus, BadRequestException, InternalServerErrorException, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { ChallansService } from './challans.service';
-import { ChallanProviderService } from './provider/challan-provider.service';
+import { ChallanProviderService, ScraperUnavailableError } from './provider/challan-provider.service';
 import { SearchChallanDto } from './dto/search-challan.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -43,6 +43,9 @@ export class ChallansController {
       return result;
     } catch (e: any) {
       this.logger.error(`eparivahanInitiate failed: ${e?.message}`, e?.stack);
+      if (e instanceof ScraperUnavailableError || e?.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+        throw new ServiceUnavailableException(e?.message ?? 'Initiation failed');
+      }
       throw new InternalServerErrorException(e?.message ?? 'Initiation failed');
     }
   }
@@ -62,6 +65,9 @@ export class ChallansController {
       return { challans };
     } catch (e: any) {
       this.logger.error(`eparivahanVerify failed: ${e?.message}`, e?.stack);
+      if (e instanceof ScraperUnavailableError || e?.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+        throw new ServiceUnavailableException(e?.message ?? 'OTP verification failed');
+      }
       throw new InternalServerErrorException(e?.message ?? 'OTP verification failed');
     }
   }

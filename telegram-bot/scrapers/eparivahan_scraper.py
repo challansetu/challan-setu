@@ -62,6 +62,8 @@ _OTP_TRIGGER_PARAMS = {
 }
 
 TWOCAPTCHA_API_KEY = os.environ.get("TWOCAPTCHA_API_KEY", "")
+_EPARIVAHAN_PROXY_URL = os.environ.get("EPARIVAHAN_PROXY_URL", "").strip()
+_SYSTEM_PROXY_URL = (os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY") or "").strip()
 
 # In-memory session store: session_id → {phpsessid, expires_at}
 _sessions: dict[str, dict] = {}
@@ -94,6 +96,52 @@ def _browser_headers(referer: str = PAGE_URL, extra: dict | None = None) -> dict
     if extra:
         h.update(extra)
     return h
+
+
+def _build_client_options() -> list[tuple[str, dict]]:
+    """
+    Build explicit transport options for eparivahan.
+
+    We always try direct first with trust_env=False so platform-level proxy
+    variables do not silently hijack scraper traffic. If a dedicated proxy is
+    configured, we retry through that proxy next.
+    """
+    base = {
+        "follow_redirects": True,
+        "timeout": httpx.Timeout(connect=10.0, read=20.0, write=10.0, pool=10.0),
+        "trust_env": False,
+    }
+    options: list[tuple[str, dict]] = [("direct", dict(base))]
+
+    proxy_url = _EPARIVAHAN_PROXY_URL or _SYSTEM_PROXY_URL
+    if proxy_url:
+        mode = "configured-proxy" if _EPARIVAHAN_PROXY_URL else "system-proxy"
+        options.append((mode, {**base, "proxy": proxy_url}))
+
+    return options
+
+
+def _is_upstream_connectivity_error(exc: Exception) -> bool:
+    return isinstance(
+        exc,
+        (
+            httpx.ConnectTimeout,
+            httpx.ConnectError,
+            httpx.ReadTimeout,
+            httpx.RemoteProtocolError,
+            httpx.ProxyError,
+        ),
+    )
+
+
+def _format_transport_failure(vrn: str, failures: list[str]) -> str:
+    summary = "; ".join(failures) if failures else "unknown transport failure"
+    hint = (
+        " Configure EPARIVAHAN_PROXY_URL to an Indian proxy if this service runs outside India."
+        if not _EPARIVAHAN_PROXY_URL
+        else " Verify EPARIVAHAN_PROXY_URL and outbound access from the scraper host."
+    )
+    return f"Unable to reach eparivahan for {vrn}. {summary}.{hint}"
 
 
 # ── CAPTCHA solving ───────────────────────────────────────────────────────────
@@ -370,66 +418,88 @@ class EparivahanScraper:
     async def initiate_search(self, vehicle_number: str) -> dict:
         vrn = vehicle_number.upper().replace(" ", "").replace("-", "")
         _cleanup_sessions()
+        transport_failures: list[str] = []
 
-        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
-        client_kwargs: dict = {"follow_redirects": True, "timeout": 30.0}
-        if proxy:
-            client_kwargs["proxy"] = proxy
+        for transport_name, client_kwargs in _build_client_options():
+            for attempt in range(3):
+                try:
+                    async with httpx.AsyncClient(**client_kwargs) as client:
+                        tokens = await _load_page(client)
+                        captcha_bytes = await _fetch_captcha(client)
+                        captcha_text = await solve_captcha(captcha_bytes)
 
-        for attempt in range(3):
-            try:
-                async with httpx.AsyncClient(**client_kwargs) as client:
-                    tokens = await _load_page(client)
-                    captcha_bytes = await _fetch_captcha(client)
-                    captcha_text = await solve_captcha(captcha_bytes)
+                        if not captcha_text:
+                            raise RuntimeError("CAPTCHA solving returned empty string")
 
-                    if not captcha_text:
-                        raise RuntimeError("CAPTCHA solving returned empty string")
+                        log.info(
+                            "CAPTCHA solved: '%s' for %s via %s (attempt %d)",
+                            captcha_text,
+                            vrn,
+                            transport_name,
+                            attempt + 1,
+                        )
 
-                    log.info("CAPTCHA solved: '%s' for %s (attempt %d)", captcha_text, vrn, attempt + 1)
+                        search_resp = await _submit_search(client, vrn, captcha_text, tokens)
+                        status = search_resp.get("status", "")
 
-                    search_resp = await _submit_search(client, vrn, captcha_text, tokens)
-                    status = search_resp.get("status", "")
+                        if status == "Failed":
+                            msg = str(search_resp.get("message", "Search failed"))
+                            # Only treat explicit "no challan" responses as empty results.
+                            # RECORD_NOT_FOUND is intentionally excluded — it means the
+                            # vehicle number doesn't exist in VAHAN (different from no challans).
+                            if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND"):
+                                log.info("eparivahan confirmed no challans for %s", vrn)
+                                return {"otp_required": False, "challans": [], "confirmed": True}
+                            if "captcha" in msg.lower() and attempt < 2:
+                                log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
+                                await asyncio.sleep(1.0)
+                                continue
+                            raise ValueError(f"eparivahan: {msg}")
 
-                    if status == "Failed":
-                        msg = str(search_resp.get("message", "Search failed"))
-                        # Only treat explicit "no challan" responses as empty results.
-                        # RECORD_NOT_FOUND is intentionally excluded — it means the
-                        # vehicle number doesn't exist in VAHAN (different from no challans).
-                        if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND"):
-                            log.info("eparivahan confirmed no challans for %s", vrn)
-                            return {"otp_required": False, "challans": [], "confirmed": True}
-                        if "captcha" in msg.lower() and attempt < 2:
-                            log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
-                            await asyncio.sleep(1.0)
-                            continue
-                        raise ValueError(f"eparivahan: {msg}")
+                        if status == "common":
+                            # No OTP needed — fetch challans directly
+                            token = search_resp.get("token", "")
+                            challans = await _fetch_challans_direct(tokens["phpsessid"], token)
+                            log.info("eparivahan no-OTP path: %d challan(s) for %s", len(challans), vrn)
+                            return {"otp_required": False, "challans": challans, "confirmed": True}
 
-                    if status == "common":
-                        # No OTP needed — fetch challans directly
-                        token = search_resp.get("token", "")
-                        challans = await _fetch_challans_direct(tokens["phpsessid"], token)
-                        log.info("eparivahan no-OTP path: %d challan(s) for %s", len(challans), vrn)
-                        return {"otp_required": False, "challans": challans, "confirmed": True}
+                        # OTP required — trigger SMS then store session
+                        otp_message = await _trigger_otp(client)
+                        session_id = str(uuid.uuid4())
+                        _sessions[session_id] = {
+                            "vrn": vrn,
+                            "phpsessid": tokens["phpsessid"],
+                            "expires_at": time.time() + _SESSION_TTL,
+                        }
+                        log.info("eparivahan OTP sent for %s, session %s", vrn, session_id)
+                        return {"otp_required": True, "session_id": session_id, "otp_message": otp_message}
 
-                    # OTP required — trigger SMS then store session
-                    otp_message = await _trigger_otp(client)
-                    session_id = str(uuid.uuid4())
-                    _sessions[session_id] = {
-                        "vrn": vrn,
-                        "phpsessid": tokens["phpsessid"],
-                        "expires_at": time.time() + _SESSION_TTL,
-                    }
-                    log.info("eparivahan OTP sent for %s, session %s", vrn, session_id)
-                    return {"otp_required": True, "session_id": session_id, "otp_message": otp_message}
-
-            except ValueError:
-                raise
-            except Exception as e:
-                if attempt == 2:
+                except ValueError:
                     raise
-                log.warning("eparivahan attempt %d failed for %s: %s", attempt + 1, vrn, e)
-                await asyncio.sleep(2.0)
+                except Exception as e:
+                    if attempt == 2:
+                        transport_failures.append(f"{transport_name}: {type(e).__name__}: {e}")
+                        if _is_upstream_connectivity_error(e):
+                            log.warning(
+                                "eparivahan transport %s exhausted for %s due to connectivity issue: %s",
+                                transport_name,
+                                vrn,
+                                e,
+                            )
+                        else:
+                            raise
+                    else:
+                        log.warning(
+                            "eparivahan attempt %d failed for %s via %s: %s",
+                            attempt + 1,
+                            vrn,
+                            transport_name,
+                            e,
+                        )
+                        await asyncio.sleep(2.0)
+
+        if transport_failures:
+            raise RuntimeError(_format_transport_failure(vrn, transport_failures))
 
         raise RuntimeError("eparivahan: all retries exhausted")
 

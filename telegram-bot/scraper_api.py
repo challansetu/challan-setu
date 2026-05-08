@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
+import httpx
 from pydantic import BaseModel
 
 from scrapers.carinfo_scraper import CarInfoScraper
@@ -95,6 +96,9 @@ async def eparivahan_initiate(req: SearchRequest):
             }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e) or type(e).__name__)
+    except (httpx.TimeoutException, httpx.NetworkError) as exc:
+        log.error("eparivahan initiate network error for %s: %s", vn, exc, exc_info=True)
+        raise HTTPException(status_code=503, detail=str(exc) or "eparivahan upstream unavailable")
     except Exception as exc:
         log.error("eparivahan initiate error for %s: %s", vn, exc, exc_info=True)
         raise HTTPException(status_code=500, detail=str(exc) or f"{type(exc).__name__}: connection failed")
@@ -112,6 +116,9 @@ async def eparivahan_verify(req: OtpVerifyRequest):
         return {"success": True, "challans": challans}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except (httpx.TimeoutException, httpx.NetworkError) as exc:
+        log.error("eparivahan verify network error: %s", exc, exc_info=True)
+        raise HTTPException(status_code=503, detail=str(exc) or "eparivahan upstream unavailable")
     except Exception as exc:
         log.error("eparivahan verify error: %s", exc, exc_info=True)
         raise HTTPException(status_code=500, detail=str(exc))
