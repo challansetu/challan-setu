@@ -5,6 +5,7 @@ const nextConfig = {
   // Keep dev and production artifacts separate so `next build` never corrupts
   // the running `next dev` asset graph.
   distDir: isProduction ? '.next' : '.next-dev',
+  output: isProduction ? 'standalone' : undefined,
 
   // Strict mode helps catch bugs early
   reactStrictMode: true,
