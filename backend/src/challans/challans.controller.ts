@@ -37,7 +37,8 @@ export class ChallansController {
   async eparivahanInitiate(@Body('vehicleNumber') vehicleNumber: string) {
     if (!vehicleNumber) throw new BadRequestException('vehicleNumber is required');
     try {
-      return await this.challanProvider.initiateEparivahan(vehicleNumber.toUpperCase().replace(/[\s\-]/g, ''));
+      const result = await this.challanProvider.initiateEparivahan(vehicleNumber.toUpperCase().replace(/[\s\-]/g, ''));
+      return result;
     } catch (e: any) {
       throw new InternalServerErrorException(e?.message ?? 'Initiation failed');
     }

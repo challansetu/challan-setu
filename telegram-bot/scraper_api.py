@@ -68,14 +68,19 @@ async def search_challans(req: SearchRequest):
 async def eparivahan_initiate(req: SearchRequest):
     """
     Step 1: load page, solve CAPTCHA, submit VRN.
-    eparivahan sends OTP to the vehicle owner's registered mobile.
-    Returns a session_id to pass to /eparivahan/verify.
+
+    Two possible responses:
+      {"success": true, "otpRequired": false, "challans": [...]}  — no OTP, data returned immediately
+      {"success": true, "otpRequired": true, "sessionId": "..."}  — OTP sent to mobile, call /verify next
     """
     vn = req.vehicleNumber.upper().replace(" ", "").replace("-", "")
     log.info("eparivahan: initiating search for %s", vn)
     try:
-        session_id = await _eparivahan.initiate_search(vn)
-        return {"success": True, "sessionId": session_id, "vehicleNumber": vn}
+        result = await _eparivahan.initiate_search(vn)
+        if result.get("otp_required"):
+            return {"success": True, "otpRequired": True, "sessionId": result["session_id"], "vehicleNumber": vn}
+        else:
+            return {"success": True, "otpRequired": False, "challans": result.get("challans", []), "vehicleNumber": vn}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as exc:

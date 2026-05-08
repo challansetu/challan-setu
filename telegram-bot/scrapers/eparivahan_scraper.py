@@ -1,26 +1,32 @@
 """
-eparivahan direct scraper — two-step OTP flow.
+eparivahan direct scraper — fully confirmed from DevTools captures.
 
-CONFIRMED endpoints (from DevTools):
-  ✅ GET  /index/accused-challan         → page with ng-init tokens
-  ✅ GET  /index/captcha-login           → CAPTCHA image (JPEG)
-  ✅ POST /index/verify-search-otp       → verify OTP, returns numeric randomSalt
-  ✅ POST /api/get-challan-detail        → returns challan array
-
-ASSUMED endpoint (verify with one test):
-  ❓ POST /index/accused-challan         → submit vrn+captcha, triggers OTP SMS
+ALL endpoints confirmed ✅:
+  GET  /index/accused-challan         → HTML with ng-init tokens + hashKeyText in JS
+  GET  /index/captcha-login           → CAPTCHA image (JPEG, ~6 char alphanumeric)
+  POST /index/search-challan          → submit VRN+captcha; response decides flow:
+                                         status='Failed'  → error (wrong vehicle/captcha)
+                                         status='common'  → token in rdata.token (NO OTP)
+                                         otherwise        → OTP modal shown
+  POST /index/send-aadhar-otp         → triggers OTP SMS to registered mobile
+  POST /index/verify-search-otp       → verify OTP → returns numeric randomSalt
+  POST /api/get-challan-detail        → returns challan array
 
 Flow:
-  1. GET accused-challan → extract dateTime, randomSalt (base64), PHPSESSID
+  1. GET accused-challan → extract dateTime, randomSalt (base64), hashKeyText, PHPSESSID
   2. GET captcha-login   → solve CAPTCHA (2Captcha or Tesseract)
-  3. POST accused-challan (vrn, captcha, tokens) → OTP sent to registered mobile
-  4. User enters OTP on our site
-  5. POST verify-search-otp → returns numeric randomSalt
-  6. POST get-challan-detail → returns challans
+  3. POST search-challan → check response status:
+       'common'  → fetch challans directly with rdata.token (no OTP, return immediately)
+       'Failed'  → raise error
+       else      → OTP required, continue to step 4
+  4. POST send-aadhar-otp → OTP SMS sent to vehicle owner's mobile
+  5. User enters OTP on our site
+  6. POST verify-search-otp → returns numeric randomSalt
+  7. POST get-challan-detail → returns challans
 
 CAPTCHA solving:
-  - Set TWOCAPTCHA_API_KEY env var for production (~$1/1000 solves, ~95% accuracy)
-  - Without key: falls back to pytesseract (~50% accuracy, may need retry)
+  - TWOCAPTCHA_API_KEY env var → 2Captcha (~$1/1000, ~95% accuracy)
+  - Without key → pytesseract local OCR (~50% accuracy, may need retry)
 """
 from __future__ import annotations
 
@@ -38,31 +44,28 @@ import httpx
 
 log = logging.getLogger("scraper.eparivahan")
 
-BASE_URL = "https://echallan.parivahan.gov.in"
-PAGE_URL = f"{BASE_URL}/index/accused-challan"
-CAP_URL = f"{BASE_URL}/index/captcha-login"
-OTP_URL = f"{BASE_URL}/index/verify-search-otp"
-DETAIL_URL = f"{BASE_URL}/api/get-challan-detail"
+BASE_URL     = "https://echallan.parivahan.gov.in"
+PAGE_URL     = f"{BASE_URL}/index/accused-challan"
+CAP_URL      = f"{BASE_URL}/index/captcha-login"
+SEARCH_URL   = f"{BASE_URL}/index/search-challan"
+SEND_OTP_URL = f"{BASE_URL}/index/send-aadhar-otp"
+VERIFY_URL   = f"{BASE_URL}/index/verify-search-otp"
+DETAIL_URL   = f"{BASE_URL}/api/get-challan-detail"
+
+# OTP trigger payload — hardcoded because we always use by_mobile_no;
+# aadhar fields are base64("undefined"), consent is base64("N")
+_OTP_TRIGGER_PARAMS = {
+    "otp_type": "by_mobile_no",
+    "aadhar_no": "dW5kZWZpbmVk",   # base64("undefined")
+    "vaadhar_no": "dW5kZWZpbmVk",  # base64("undefined")
+    "consent": "Tg==",              # base64("N")
+}
 
 TWOCAPTCHA_API_KEY = os.environ.get("TWOCAPTCHA_API_KEY", "")
 
 # In-memory session store: session_id → {phpsessid, expires_at}
 _sessions: dict[str, dict] = {}
 _SESSION_TTL = 600  # 10 minutes
-
-
-def _browser_headers(referer: str = PAGE_URL) -> dict:
-    return {
-        "accept": "application/json, text/plain, */*",
-        "accept-language": "en-IN,en-GB;q=0.9,en;q=0.8",
-        "user-agent": (
-            "Mozilla/5.0 (Linux; Android 14; Pixel 8) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Mobile Safari/537.36"
-        ),
-        "referer": referer,
-        "x-requested-with": "XMLHttpRequest",
-    }
 
 
 def _cleanup_sessions() -> None:
@@ -72,13 +75,32 @@ def _cleanup_sessions() -> None:
         del _sessions[k]
 
 
+def _browser_headers(referer: str = PAGE_URL, extra: dict | None = None) -> dict:
+    h = {
+        "accept": "application/json, text/plain, */*",
+        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+        "user-agent": (
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) "
+            "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+            "Version/18.5 Mobile/15E148 Safari/604.1"
+        ),
+        "origin": BASE_URL,
+        "referer": referer,
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "x-requested-with": "XMLHttpRequest",
+    }
+    if extra:
+        h.update(extra)
+    return h
+
+
 # ── CAPTCHA solving ───────────────────────────────────────────────────────────
 
 async def _solve_2captcha(image_bytes: bytes) -> str:
-    """Submit to 2Captcha, poll until result."""
-    import httpx as _httpx
     b64 = base64.b64encode(image_bytes).decode()
-    async with _httpx.AsyncClient(timeout=30) as c:
+    async with httpx.AsyncClient(timeout=30) as c:
         r = await c.post(
             "http://2captcha.com/in.php",
             data={"key": TWOCAPTCHA_API_KEY, "method": "base64", "body": b64},
@@ -103,17 +125,20 @@ async def _solve_2captcha(image_bytes: bytes) -> str:
 
 
 async def _solve_tesseract(image_bytes: bytes) -> str:
-    """Free local OCR — eparivahan CAPTCHA is simple digits/letters on white bg."""
     try:
-        import pytesseract
-        from PIL import Image, ImageFilter
         import io
+        import pytesseract
+        from PIL import Image
 
         img = Image.open(io.BytesIO(image_bytes)).convert("L")
         img = img.point(lambda x: 0 if x < 128 else 255)
         text = pytesseract.image_to_string(
             img,
-            config="--psm 8 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            config=(
+                "--psm 8 "
+                "-c tessedit_char_whitelist="
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+            ),
         ).strip()
         return text
     except Exception as e:
@@ -127,43 +152,48 @@ async def solve_captcha(image_bytes: bytes) -> str:
     return await _solve_tesseract(image_bytes)
 
 
-# ── Session init ──────────────────────────────────────────────────────────────
+# ── Page token extraction ─────────────────────────────────────────────────────
 
-async def _load_page_tokens(client: httpx.AsyncClient) -> dict:
-    """GET accused-challan page → extract dateTime + randomSalt (base64) + PHPSESSID."""
+def _extract_tokens(html: str) -> dict:
+    """Extract dateTime, randomSalt (base64), and hashKeyText from page HTML."""
+    dt_m = re.search(r"accused\.dateTime\s*=\s*'([^']+)'", html)
+    rs_m = re.search(r"accused\.randomSalt\s*=\s*'([^']+)'", html)
+    hk_m = re.search(r"'hashKeyText'\s*:\s*'([a-f0-9]+)'", html)
+
+    if not dt_m:
+        raise RuntimeError("dateTime not found in eparivahan page")
+    if not rs_m:
+        raise RuntimeError("randomSalt not found in eparivahan page")
+    if not hk_m:
+        raise RuntimeError("hashKeyText not found in eparivahan page")
+
+    return {
+        "date_time": dt_m.group(1),
+        "random_salt": rs_m.group(1),
+        "hash_key_text": hk_m.group(1),
+    }
+
+
+# ── Core request steps ────────────────────────────────────────────────────────
+
+async def _load_page(client: httpx.AsyncClient) -> dict:
+    """GET accused-challan → tokens + PHPSESSID."""
     resp = await client.get(
         PAGE_URL,
         headers={
             "accept": "text/html,application/xhtml+xml,*/*;q=0.9",
             "accept-language": "en-IN,en-GB;q=0.9,en;q=0.8",
             "user-agent": (
-                "Mozilla/5.0 (Linux; Android 14; Pixel 8) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Mobile Safari/537.36"
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) "
+                "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                "Version/18.5 Mobile/15E148 Safari/604.1"
             ),
         },
         timeout=15,
     )
-    html = resp.text
-
-    dt_m = re.search(r"accused\.dateTime\s*=\s*['\"]([^'\"]+)['\"]", html)
-    rs_m = re.search(r"accused\.randomSalt\s*=\s*['\"]([^'\"]+)['\"]", html)
-
-    if not dt_m or not rs_m:
-        # Fallback: look for ng-init patterns
-        dt_m = re.search(r"dateTime['\"]?\s*:\s*['\"]([^'\"]+)['\"]", html)
-        rs_m = re.search(r"randomSalt['\"]?\s*:\s*['\"]([^'\"]+)['\"]", html)
-
-    if not dt_m or not rs_m:
-        log.error("Could not extract tokens from eparivahan page (len=%d)", len(html))
-        raise RuntimeError("eparivahan page token extraction failed")
-
-    phpsessid = client.cookies.get("PHPSESSID", "")
-    return {
-        "date_time": dt_m.group(1),
-        "random_salt": rs_m.group(1),
-        "phpsessid": phpsessid,
-    }
+    tokens = _extract_tokens(resp.text)
+    tokens["phpsessid"] = client.cookies.get("PHPSESSID", "")
+    return tokens
 
 
 async def _fetch_captcha(client: httpx.AsyncClient) -> bytes:
@@ -175,92 +205,120 @@ async def _fetch_captcha(client: httpx.AsyncClient) -> bytes:
     return resp.content
 
 
-async def _submit_vehicle(
+async def _submit_search(
     client: httpx.AsyncClient,
     vrn: str,
     captcha_text: str,
-    date_time: str,
-    random_salt: str,
+    tokens: dict,
 ) -> dict:
     """
-    Step 3: submit vehicle number + CAPTCHA → OTP is sent to registered mobile.
+    POST /index/search-challan with vehicle number + solved CAPTCHA.
+    Returns the JSON response dict.
 
-    ❓ ASSUMED endpoint: POST /index/accused-challan
-       Confirm by checking DevTools: the XHR fired when you click Search.
-       If the URL or field names are wrong, update this function.
+    Response status values:
+      'Failed'  → wrong vehicle/captcha → raise error
+      'common'  → no OTP, token in rdata['token']
+      other     → OTP required (modal shown in browser)
     """
-    payload = {
-        "vrn": vrn,
-        "captcha_input": captcha_text,
-        "date_time": date_time,
-        "random_salt": random_salt,
-    }
     resp = await client.post(
-        PAGE_URL,
-        data=payload,
+        SEARCH_URL,
+        data={
+            "challans_no": "",
+            "vehicles_no": vrn,
+            "dl_no": "",
+            "dateTime": tokens["date_time"],
+            "randomsalt": tokens["random_salt"],   # lowercase 's' — confirmed from curl
+            "captcha": captcha_text,
+            "is_accussed": "true",
+            "hashKeyText": tokens["hash_key_text"],
+        },
         headers={
             **_browser_headers(),
-            "content-type": "application/x-www-form-urlencoded",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         timeout=20,
     )
     try:
         body = resp.json()
     except Exception:
-        body = {"raw": resp.text[:500]}
+        body = {"status": "Failed", "message": f"non-JSON response (HTTP {resp.status_code})"}
 
-    log.info("eparivahan submit VRN=%s status=%d body=%s", vrn, resp.status_code, body)
+    log.info("search-challan VRN=%s status=%s", vrn, body.get("status"))
     return body
 
 
-# ── OTP + challan fetch ───────────────────────────────────────────────────────
+async def _trigger_otp(client: httpx.AsyncClient) -> None:
+    """POST /index/send-aadhar-otp — triggers OTP SMS to registered mobile."""
+    resp = await client.post(
+        SEND_OTP_URL,
+        params={"data": json.dumps(_OTP_TRIGGER_PARAMS)},
+        content=b"",
+        headers={**_browser_headers(), "content-length": "0"},
+        timeout=15,
+    )
+    try:
+        body = resp.json()
+        log.info("send-aadhar-otp response: %s", body)
+    except Exception:
+        log.info("send-aadhar-otp HTTP %d (non-JSON)", resp.status_code)
+
+
+async def _fetch_challans_direct(phpsessid: str, token: str) -> list[dict]:
+    """Fetch challans when no OTP is needed (status='common')."""
+    async with httpx.AsyncClient(timeout=20) as client:
+        resp = await client.post(
+            DETAIL_URL,
+            params={"data": json.dumps({"randomSalt": token, "is_accussed": True})},
+            content=b"",
+            headers={
+                **_browser_headers(),
+                "content-length": "0",
+                "cookie": f"PHPSESSID={phpsessid}",
+            },
+        )
+        body = resp.json()
+    return [_parse_challan(c) for c in body.get("results", [])]
+
 
 async def _verify_otp_and_fetch(phpsessid: str, otp: str) -> list[dict]:
-    """Steps 5–6: verify OTP → get numeric randomSalt → fetch challans."""
+    """Steps 6–7: verify OTP → numeric randomSalt → fetch challans."""
     headers = {
         **_browser_headers(),
-        "Cookie": f"PHPSESSID={phpsessid}",
         "content-length": "0",
+        "cookie": f"PHPSESSID={phpsessid}",
     }
-
     async with httpx.AsyncClient(timeout=20) as client:
-        # Step 5: verify OTP
+        # Step 6: verify OTP
         otp_resp = await client.post(
-            OTP_URL,
+            VERIFY_URL,
             params={"data": json.dumps({"otp_code": otp, "otp_type": "by_mobile_no"})},
             content=b"",
             headers=headers,
         )
         otp_body = otp_resp.json()
-        log.info("OTP verify response: %s", otp_body)
+        log.info("verify-search-otp response: %s", otp_body)
 
         if otp_body.get("status") != "success":
             raise ValueError(otp_body.get("message", "OTP verification failed"))
 
         numeric_salt = str(otp_body["randomSalt"])
 
-        # Step 6: fetch challans
+        # Step 7: fetch challans
         detail_resp = await client.post(
             DETAIL_URL,
             params={"data": json.dumps({"randomSalt": numeric_salt, "is_accussed": True})},
             content=b"",
             headers=headers,
         )
-        detail_body = detail_resp.json()
-        log.info(
-            "get-challan-detail status=%s count=%d",
-            detail_body.get("status"),
-            len(detail_body.get("results", [])),
-        )
-
-        return [_parse_challan(c) for c in detail_body.get("results", [])]
+        body = detail_resp.json()
+        log.info("get-challan-detail: status=%s results=%d", body.get("status"), len(body.get("results", [])))
+        return [_parse_challan(c) for c in body.get("results", [])]
 
 
 def _parse_challan(raw: dict) -> dict:
-    offences_raw = raw.get("offences", [])
     seen: set = set()
     offences: list[dict] = []
-    for o in offences_raw:
+    for o in raw.get("offences", []):
         key = (o.get("offence_name", ""), o.get("penalty", ""))
         if key not in seen:
             seen.add(key)
@@ -295,16 +353,15 @@ class EparivahanScraper:
     """
     Two-step OTP scraper for echallan.parivahan.gov.in.
 
-    Step 1 — initiate_search(vrn) → session_id
-      Loads page, fetches CAPTCHA, solves it, submits vehicle.
-      OTP is sent to the vehicle owner's registered mobile.
+    initiate_search(vrn) → dict
+      Returns {"otp_required": False, "challans": [...]}   when status='common'
+      Returns {"otp_required": True,  "session_id": "..."}  when OTP needed
 
-    Step 2 — verify_otp(session_id, otp) → list[dict]
-      Submits OTP, fetches and returns challan list.
+    verify_otp(session_id, otp) → list[dict]
+      Submit OTP → return challan list.
     """
 
-    async def initiate_search(self, vehicle_number: str) -> str:
-        """Returns a session_id. OTP is sent to mobile by eparivahan."""
+    async def initiate_search(self, vehicle_number: str) -> dict:
         vrn = vehicle_number.upper().replace(" ", "").replace("-", "")
         _cleanup_sessions()
 
@@ -313,39 +370,58 @@ class EparivahanScraper:
         if proxy:
             client_kwargs["proxy"] = proxy
 
-        async with httpx.AsyncClient(**client_kwargs) as client:
-            tokens = await _load_page_tokens(client)
-            captcha_bytes = await _fetch_captcha(client)
-            captcha_text = await solve_captcha(captcha_bytes)
+        for attempt in range(3):
+            try:
+                async with httpx.AsyncClient(**client_kwargs) as client:
+                    tokens = await _load_page(client)
+                    captcha_bytes = await _fetch_captcha(client)
+                    captcha_text = await solve_captcha(captcha_bytes)
 
-            if not captcha_text:
-                raise RuntimeError("CAPTCHA solving failed — no text returned")
+                    if not captcha_text:
+                        raise RuntimeError("CAPTCHA solving returned empty string")
 
-            log.info("eparivahan: CAPTCHA solved as '%s' for %s", captcha_text, vrn)
+                    log.info("CAPTCHA solved: '%s' for %s (attempt %d)", captcha_text, vrn, attempt + 1)
 
-            submit_resp = await _submit_vehicle(
-                client, vrn, captcha_text,
-                tokens["date_time"], tokens["random_salt"],
-            )
+                    search_resp = await _submit_search(client, vrn, captcha_text, tokens)
+                    status = search_resp.get("status", "")
 
-            # Detect known error responses
-            if isinstance(submit_resp, dict):
-                msg = submit_resp.get("message", "")
-                status = submit_resp.get("status", "")
-                if "captcha" in msg.lower() or status == "error":
-                    raise ValueError(f"eparivahan rejected submission: {msg}")
+                    if status == "Failed":
+                        msg = search_resp.get("message", "Search failed")
+                        if "captcha" in str(msg).lower() and attempt < 2:
+                            log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
+                            await asyncio.sleep(1.0)
+                            continue
+                        raise ValueError(f"eparivahan: {msg}")
 
-        session_id = str(uuid.uuid4())
-        _sessions[session_id] = {
-            "vrn": vrn,
-            "phpsessid": tokens["phpsessid"],
-            "expires_at": time.time() + _SESSION_TTL,
-        }
-        log.info("eparivahan: session %s created for %s", session_id, vrn)
-        return session_id
+                    if status == "common":
+                        # No OTP needed — fetch challans directly
+                        token = search_resp.get("token", "")
+                        challans = await _fetch_challans_direct(tokens["phpsessid"], token)
+                        log.info("eparivahan no-OTP path: %d challan(s) for %s", len(challans), vrn)
+                        return {"otp_required": False, "challans": challans}
+
+                    # OTP required — trigger SMS then store session
+                    await _trigger_otp(client)
+                    session_id = str(uuid.uuid4())
+                    _sessions[session_id] = {
+                        "vrn": vrn,
+                        "phpsessid": tokens["phpsessid"],
+                        "expires_at": time.time() + _SESSION_TTL,
+                    }
+                    log.info("eparivahan OTP sent for %s, session %s", vrn, session_id)
+                    return {"otp_required": True, "session_id": session_id}
+
+            except ValueError:
+                raise
+            except Exception as e:
+                if attempt == 2:
+                    raise
+                log.warning("eparivahan attempt %d failed for %s: %s", attempt + 1, vrn, e)
+                await asyncio.sleep(2.0)
+
+        raise RuntimeError("eparivahan: all retries exhausted")
 
     async def verify_otp(self, session_id: str, otp: str) -> list[dict]:
-        """Submit OTP, return challan list."""
         session = _sessions.get(session_id)
         if not session:
             raise ValueError("Session not found or expired. Please search again.")

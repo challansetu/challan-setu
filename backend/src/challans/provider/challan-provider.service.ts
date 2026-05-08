@@ -42,15 +42,22 @@ export class ChallanProviderService {
     }
   }
 
-  async initiateEparivahan(vehicleNumber: string): Promise<{ sessionId: string }> {
+  async initiateEparivahan(
+    vehicleNumber: string,
+  ): Promise<{ otpRequired: false; challans: ProviderChallan[] } | { otpRequired: true; sessionId: string }> {
     if (!this.scraperApiUrl) throw new Error('Scraper not configured');
-    const resp = await axios.post<{ success: boolean; sessionId: string; error?: string }>(
-      `${this.scraperApiUrl}/eparivahan/initiate`,
-      { vehicleNumber },
-      { timeout: 60_000 },
-    );
+    const resp = await axios.post<{
+      success: boolean;
+      otpRequired: boolean;
+      sessionId?: string;
+      challans?: ProviderChallan[];
+      error?: string;
+    }>(`${this.scraperApiUrl}/eparivahan/initiate`, { vehicleNumber }, { timeout: 60_000 });
     if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
-    return { sessionId: resp.data.sessionId };
+    if (resp.data.otpRequired) {
+      return { otpRequired: true, sessionId: resp.data.sessionId! };
+    }
+    return { otpRequired: false, challans: resp.data.challans ?? [] };
   }
 
   async verifyEparivahanOtp(sessionId: string, otp: string): Promise<ProviderChallan[]> {
