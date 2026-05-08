@@ -29,6 +29,7 @@ import base64
 import hashlib
 import json
 import logging
+import os
 import random
 import re
 import time
@@ -54,6 +55,12 @@ _USER_AGENTS = [
 
 _MAX_RETRIES = 3
 _RETRY_BACKOFF = [2.0, 5.0, 10.0]  # seconds between retries
+
+# Proxy support: set HTTPS_PROXY env var to route through Indian IPs
+# Example: HTTPS_PROXY=http://user:pass@proxy.example.com:8080
+_PROXY_URL = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY") or None
+if _PROXY_URL:
+    log.info("CarInfo scraper: proxy configured (%s)", _PROXY_URL.split("@")[-1] if "@" in _PROXY_URL else _PROXY_URL)
 
 
 def _headers(ua: str, referer: str = "") -> dict:
@@ -209,10 +216,12 @@ class CarInfoScraper:
         ua = random.choice(_USER_AGENTS)
 
         try:
-            async with httpx.AsyncClient(
-                timeout=30.0,
-                follow_redirects=True,
-            ) as client:
+            client_kwargs: dict = {"timeout": 30.0, "follow_redirects": True}
+            if _PROXY_URL:
+                client_kwargs["proxy"] = _PROXY_URL
+                log.debug("CarInfo: using proxy %s", _PROXY_URL.split("@")[-1])
+
+            async with httpx.AsyncClient(**client_kwargs) as client:
                 await asyncio.sleep(random.uniform(0.5, 2.0))
 
                 build_id = await _get_build_id(client, ua)
