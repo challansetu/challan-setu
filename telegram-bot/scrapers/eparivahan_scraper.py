@@ -236,8 +236,16 @@ async def _submit_search(
     return body
 
 
-async def _trigger_otp(client: httpx.AsyncClient) -> None:
-    """POST /index/send-aadhar-otp — triggers OTP SMS to registered mobile."""
+async def _trigger_otp(client: httpx.AsyncClient) -> str:
+    """
+    POST /index/send-aadhar-otp — triggers OTP SMS to registered mobile.
+
+    Returns the success message from eparivahan (e.g. "OTP has been sent to
+    your registered Mobile No *******891") which we surface to the user.
+
+    Raises ValueError with eparivahan's error message if mobile is invalid/
+    not available in VAHAN (status='Failed' or 'error').
+    """
     resp = await client.post(
         SEND_OTP_URL,
         params={"data": json.dumps(_OTP_TRIGGER_PARAMS)},
@@ -247,9 +255,18 @@ async def _trigger_otp(client: httpx.AsyncClient) -> None:
     )
     try:
         body = resp.json()
-        log.info("send-aadhar-otp response: %s", body)
     except Exception:
-        log.info("send-aadhar-otp HTTP %d (non-JSON)", resp.status_code)
+        log.warning("send-aadhar-otp HTTP %d non-JSON", resp.status_code)
+        return "OTP sent to your registered mobile number."
+
+    log.info("send-aadhar-otp response: %s", body)
+    status = body.get("status", "")
+    message = body.get("message", "")
+
+    if status in ("Failed", "error", "fail"):
+        raise ValueError(message or "Mobile number not available in VAHAN.")
+
+    return message or "OTP sent to your registered mobile number."
 
 
 async def _fetch_challans_direct(phpsessid: str, token: str) -> list[dict]:
@@ -390,7 +407,7 @@ class EparivahanScraper:
                         return {"otp_required": False, "challans": challans}
 
                     # OTP required — trigger SMS then store session
-                    await _trigger_otp(client)
+                    otp_message = await _trigger_otp(client)
                     session_id = str(uuid.uuid4())
                     _sessions[session_id] = {
                         "vrn": vrn,
@@ -398,7 +415,7 @@ class EparivahanScraper:
                         "expires_at": time.time() + _SESSION_TTL,
                     }
                     log.info("eparivahan OTP sent for %s, session %s", vrn, session_id)
-                    return {"otp_required": True, "session_id": session_id}
+                    return {"otp_required": True, "session_id": session_id, "otp_message": otp_message}
 
             except ValueError:
                 raise

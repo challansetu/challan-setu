@@ -11,10 +11,10 @@ interface Props {
 type Stage =
   | { name: 'idle' }
   | { name: 'sending' }
-  | { name: 'otp_entry'; sessionId: string }
+  | { name: 'otp_entry'; sessionId: string; otpMessage: string }
   | { name: 'verifying' }
   | { name: 'done'; challans: ChallanEntry[] }
-  | { name: 'error'; message: string; canRetry: boolean };
+  | { name: 'error'; message: string; isInvalidMobile?: boolean; canRetry: boolean };
 
 function formatDate(raw: string) {
   if (!raw) return '—';
@@ -123,12 +123,13 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
       if (!data.otpRequired) {
         setStage({ name: 'done', challans: data.challans });
       } else {
-        setStage({ name: 'otp_entry', sessionId: data.sessionId });
+        setStage({ name: 'otp_entry', sessionId: data.sessionId, otpMessage: data.otpMessage });
         setTimeout(() => otpRef.current?.focus(), 100);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || 'Something went wrong. Please try again.';
-      setStage({ name: 'error', message: msg, canRetry: true });
+      const isInvalidMobile = msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('not available');
+      setStage({ name: 'error', message: msg, isInvalidMobile, canRetry: true });
     }
   }
 
@@ -195,9 +196,8 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               <p className="text-[10px] font-black tracking-[0.2em] text-emerald-600 uppercase">OTP Sent</p>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
-              An OTP has been sent to the mobile number registered with your vehicle. Enter it below.
-            </p>
+            <p className="text-sm font-semibold text-gray-800 mb-1">{stage.otpMessage}</p>
+            <p className="text-xs text-gray-400 mb-4">Enter the OTP below to fetch your challan details.</p>
             <div className="flex gap-2">
               <input
                 ref={otpRef}
@@ -245,21 +245,37 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
 
   if (stage.name === 'error') {
     return (
-      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-start gap-3">
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-100">
-          <span className="text-sm">⚠️</span>
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-gray-800">Could not fetch challan data</p>
-          <p className="text-xs text-gray-500 mt-0.5">{stage.message}</p>
-          {stage.canRetry && (
-            <button
-              onClick={() => { setOtp(''); setStage({ name: 'idle' }); }}
-              className="mt-3 text-xs font-semibold text-blue-600 hover:underline"
-            >
-              Try again
-            </button>
-          )}
+      <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
+        <div className="flex">
+          <div className={`w-1 flex-shrink-0 ${stage.isInvalidMobile ? 'bg-red-400' : 'bg-amber-400'}`} />
+          <div className="flex-1 px-5 py-5">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-base">{stage.isInvalidMobile ? '📵' : '⚠️'}</span>
+              <p className={`text-[10px] font-black tracking-[0.2em] uppercase ${stage.isInvalidMobile ? 'text-red-600' : 'text-amber-600'}`}>
+                {stage.isInvalidMobile ? 'Mobile Not Registered' : 'Could Not Fetch Data'}
+              </p>
+            </div>
+            <p className="text-sm font-semibold text-gray-800 mb-1">
+              {stage.isInvalidMobile ? 'Mobile number not found in VAHAN' : 'Could not fetch challan data'}
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">{stage.message}</p>
+            {stage.isInvalidMobile && (
+              <p className="text-xs text-gray-400 mt-2">
+                Update your mobile at{' '}
+                <a href="https://parivahan.gov.in/parivahan" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:underline">
+                  parivahan.gov.in
+                </a>
+              </p>
+            )}
+            {stage.canRetry && (
+              <button
+                onClick={() => { setOtp(''); setStage({ name: 'idle' }); }}
+                className="mt-3 text-xs font-semibold text-blue-600 hover:underline"
+              >
+                Try again
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );

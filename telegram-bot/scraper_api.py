@@ -78,7 +78,13 @@ async def eparivahan_initiate(req: SearchRequest):
     try:
         result = await _eparivahan.initiate_search(vn)
         if result.get("otp_required"):
-            return {"success": True, "otpRequired": True, "sessionId": result["session_id"], "vehicleNumber": vn}
+            return {
+                "success": True,
+                "otpRequired": True,
+                "sessionId": result["session_id"],
+                "otpMessage": result.get("otp_message", "OTP sent to your registered mobile number."),
+                "vehicleNumber": vn,
+            }
         else:
             return {"success": True, "otpRequired": False, "challans": result.get("challans", []), "vehicleNumber": vn}
     except ValueError as e:
