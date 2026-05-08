@@ -71,104 +71,151 @@ export default function ThankYouPage({
     <>
       <Navbar />
 
-      <main className="relative">
-        {/* Hero — fixed behind the cards (below sticky navbar h-16 = 4rem) */}
-        <div className="fixed top-16 inset-x-0 z-0 overflow-hidden bg-gradient-to-b from-[#1a237e] to-[#3D5AFE] px-6 pt-8 pb-6 text-center h-[190px]">
+      <main className="relative min-h-screen bg-[#F2F4F8]">
+
+        {/* ── Hero ── */}
+        {/* Mobile: fixed behind cards. Desktop: normal flow, taller */}
+        <div className="fixed top-16 inset-x-0 z-0 overflow-hidden bg-gradient-to-b from-[#1a237e] to-[#3D5AFE] px-6 pt-8 pb-6 text-center h-[190px] sm:relative sm:top-auto sm:inset-x-auto sm:z-auto sm:h-auto sm:py-16">
           <div className="absolute -top-16 -right-12 h-56 w-56 rounded-full bg-white/5" />
           <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-white/5" />
           <div className="relative">
-            <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/30 bg-white/15 backdrop-blur-sm">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-white">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/30 bg-white/15 backdrop-blur-sm sm:h-14 sm:w-14">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-white sm:h-7 sm:w-7">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">Request Received</h1>
-            <p className="mt-1 text-xs text-blue-300">No payment is required at this stage</p>
+            <h1 className="text-2xl font-black text-white tracking-tight sm:text-4xl">Request Received</h1>
+            <p className="mt-1 text-xs text-blue-300 sm:text-sm sm:mt-2">No payment is required at this stage</p>
           </div>
         </div>
 
-        {/* Spacer = hero height so cards start right below the hero */}
-        <div className="h-[190px]" />
+        {/* Mobile-only spacer */}
+        <div className="h-[190px] sm:hidden" />
 
-        {/* Cards — scroll up over the fixed hero */}
-        <div className="relative z-10 rounded-t-3xl bg-[#F2F4F8] shadow-[0_-8px_32px_rgba(0,0,0,0.12)]">
-          <div className="px-4 pt-5 pb-28 space-y-4 max-w-lg mx-auto">
+        {/* ── Content area ── */}
+        {/* Mobile: cards slide over fixed hero. Desktop: normal flow on gray bg */}
+        <div className="relative z-10 rounded-t-3xl bg-[#F2F4F8] shadow-[0_-8px_32px_rgba(0,0,0,0.12)] sm:rounded-none sm:shadow-none">
+          <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-4xl sm:px-8 sm:pt-10 sm:pb-20">
 
-            {/* Vehicle info card */}
-            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
-              <div className="flex">
-                <div className="w-1 flex-shrink-0 bg-blue-500" />
-                <div className="flex-1 px-5 py-5">
-                  <p className="text-[10px] font-black tracking-[0.22em] text-blue-600 uppercase mb-2">
-                    Vehicle Information
-                  </p>
-                  <p className="text-[2rem] font-black leading-none tracking-widest text-gray-900 break-all">
-                    {vehicleNumber || '—'}
-                  </p>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div>
-                      <p className="text-xs text-gray-400">Request ID</p>
-                      <p className="mt-0.5 text-sm font-bold text-gray-800">{requestId}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-400">Status</p>
-                      <p className="mt-0.5 text-sm font-bold text-amber-600">{statusLabel}</p>
+            {/* ── Desktop two-column grid ── */}
+            <div className="sm:grid sm:grid-cols-2 sm:gap-6 sm:items-start space-y-4 sm:space-y-0">
+
+              {/* Left column */}
+              <div className="space-y-4">
+
+                {/* Vehicle info card */}
+                <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+                  <div className="flex">
+                    <div className="w-1 flex-shrink-0 bg-blue-500" />
+                    <div className="flex-1 px-5 py-5">
+                      <p className="text-[10px] font-black tracking-[0.22em] text-blue-600 uppercase mb-2">
+                        Vehicle Information
+                      </p>
+                      <p className="text-[2rem] font-black leading-none tracking-widest text-gray-900 break-all">
+                        {vehicleNumber || '—'}
+                      </p>
+                      <div className="mt-4 grid grid-cols-2 gap-3">
+                        <div>
+                          <p className="text-xs text-gray-400">Request ID</p>
+                          <p className="mt-0.5 text-sm font-bold text-gray-800">{requestId}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400">Status</p>
+                          <p className="mt-0.5 text-sm font-bold text-amber-600">{statusLabel}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Challan section */}
+                {/* {vehicleNumber && <ChallanSection vehicleNumber={vehicleNumber} />} */}
+
+                {/* Status banner */}
+                <div className="rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
+                  <p className="text-sm font-bold text-amber-800">⏳ Status: {statusLabel}</p>
+                  <p className="mt-0.5 text-xs text-amber-600">Expected update: 15–30 minutes</p>
+                </div>
+
+                {/* Action buttons — desktop inline, replaces fixed bar */}
+                <div className="hidden sm:flex gap-3">
+                  <a href={whatsappMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button variant="success" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
+                      WhatsApp Us
+                      <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
+                    </Button>
+                  </a>
+                  <a href={screenshotMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button variant="outline" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
+                      Share Challan
+                      <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                    </Button>
+                  </a>
+                </div>
+
               </div>
-            </div>
 
-            {/* Challan section */}
-            {vehicleNumber && <ChallanSection vehicleNumber={vehicleNumber} />}
-
-            {/* Status banner */}
-            <div className="rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
-              <p className="text-sm font-bold text-amber-800">⏳ Status: {statusLabel}</p>
-              <p className="mt-0.5 text-xs text-amber-600">Expected update: 15–30 minutes</p>
-            </div>
-
-            {/* What happens next */}
-            <div className="rounded-2xl bg-white shadow-sm px-5 py-5">
-              <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck className="h-4 w-4 text-blue-500" />
-                <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">What happens next</h2>
-              </div>
+              {/* Right column */}
               <div className="space-y-4">
-                {nextSteps.map((step, index) => (
-                  <div
-                    key={step.title}
-                    className={`flex gap-3 ${index < nextSteps.length - 1 ? 'pb-4 border-b border-gray-50' : ''}`}
-                  >
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-xs font-black text-blue-600">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{step.title}</p>
-                      <p className="mt-0.5 text-xs text-gray-500">{step.description}</p>
-                    </div>
+
+                {/* What happens next */}
+                <div className="rounded-2xl bg-white shadow-sm px-5 py-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <ShieldCheck className="h-4 w-4 text-blue-500" />
+                    <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">What happens next</h2>
                   </div>
-                ))}
+                  <div className="space-y-4">
+                    {nextSteps.map((step, index) => (
+                      <div
+                        key={step.title}
+                        className={`flex gap-3 ${index < nextSteps.length - 1 ? 'pb-4 border-b border-gray-50' : ''}`}
+                      >
+                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-xs font-black text-blue-600">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{step.title}</p>
+                          <p className="mt-0.5 text-xs text-gray-500">{step.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Trust note — desktop only, placed in right col */}
+                <div className="hidden sm:flex items-center gap-2 px-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
+                  <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>
+                </div>
+                <div className="hidden sm:block px-1">
+                  <Link href="/" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                    ← Back to homepage
+                  </Link>
+                </div>
+
               </div>
             </div>
 
-            {/* Trust + back link */}
-            <div className="flex items-center gap-2 px-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
-              <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>
+            {/* Trust + back link — mobile only */}
+            <div className="sm:hidden mt-4 space-y-2">
+              <div className="flex items-center gap-2 px-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
+                <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>
+              </div>
+              <div className="px-1">
+                <Link href="/" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                  ← Back to homepage
+                </Link>
+              </div>
             </div>
-            <div className="px-1">
-              <Link href="/" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
-                ← Back to homepage
-              </Link>
-            </div>
+
           </div>
         </div>
       </main>
 
-      {/* Fixed bottom action bar */}
-      <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] px-4 py-3">
-        <div className="max-w-lg mx-auto flex gap-3">
+      {/* Fixed bottom action bar — mobile only */}
+      <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] px-4 py-3">
+        <div className="flex gap-3">
           <a href={whatsappMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
             <Button variant="success" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
               WhatsApp Us
