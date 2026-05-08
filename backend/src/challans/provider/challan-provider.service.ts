@@ -46,34 +46,50 @@ export class ChallanProviderService {
     vehicleNumber: string,
   ): Promise<{ otpRequired: false; challans: ProviderChallan[] } | { otpRequired: true; sessionId: string; otpMessage: string }> {
     if (!this.scraperApiUrl) throw new Error('Scraper not configured');
-    const resp = await axios.post<{
-      success: boolean;
-      otpRequired: boolean;
-      sessionId?: string;
-      otpMessage?: string;
-      challans?: ProviderChallan[];
-      error?: string;
-    }>(`${this.scraperApiUrl}/eparivahan/initiate`, { vehicleNumber }, { timeout: 60_000 });
-    if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
-    if (resp.data.otpRequired) {
-      return {
-        otpRequired: true,
-        sessionId: resp.data.sessionId!,
-        otpMessage: resp.data.otpMessage ?? 'OTP sent to your registered mobile number.',
-      };
+    try {
+      const resp = await axios.post<{
+        success: boolean;
+        otpRequired: boolean;
+        sessionId?: string;
+        otpMessage?: string;
+        challans?: ProviderChallan[];
+        error?: string;
+      }>(`${this.scraperApiUrl}/eparivahan/initiate`, { vehicleNumber }, { timeout: 60_000 });
+      if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
+      if (resp.data.otpRequired) {
+        return {
+          otpRequired: true,
+          sessionId: resp.data.sessionId!,
+          otpMessage: resp.data.otpMessage ?? 'OTP sent to your registered mobile number.',
+        };
+      }
+      return { otpRequired: false, challans: resp.data.challans ?? [] };
+    } catch (e) {
+      throw this._scraperError(e);
     }
-    return { otpRequired: false, challans: resp.data.challans ?? [] };
   }
 
   async verifyEparivahanOtp(sessionId: string, otp: string): Promise<ProviderChallan[]> {
     if (!this.scraperApiUrl) throw new Error('Scraper not configured');
-    const resp = await axios.post<{ success: boolean; challans: ProviderChallan[]; error?: string }>(
-      `${this.scraperApiUrl}/eparivahan/verify`,
-      { sessionId, otp },
-      { timeout: 30_000 },
-    );
-    if (!resp.data.success) throw new Error(resp.data.error ?? 'OTP verification failed');
-    return resp.data.challans ?? [];
+    try {
+      const resp = await axios.post<{ success: boolean; challans: ProviderChallan[]; error?: string }>(
+        `${this.scraperApiUrl}/eparivahan/verify`,
+        { sessionId, otp },
+        { timeout: 30_000 },
+      );
+      if (!resp.data.success) throw new Error(resp.data.error ?? 'OTP verification failed');
+      return resp.data.challans ?? [];
+    } catch (e) {
+      throw this._scraperError(e);
+    }
+  }
+
+  private _scraperError(e: unknown): Error {
+    if (e instanceof AxiosError) {
+      const detail = e.response?.data?.detail ?? e.response?.data?.message ?? e.message;
+      return new Error(detail);
+    }
+    return e instanceof Error ? e : new Error(String(e));
   }
 
   async fetchChallans(vehicleNumber: string): Promise<ProviderChallanResponse> {
