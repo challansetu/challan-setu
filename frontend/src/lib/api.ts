@@ -15,6 +15,15 @@ export const challansApi = {
       params: { vehicle: vehicleNumber },
       timeout: 35000,
     }),
+
+  eparivahanInitiate: (vehicleNumber: string) =>
+    api.post<
+      | { otpRequired: false; challans: ChallanEntry[] }
+      | { otpRequired: true; sessionId: string }
+    >('/challans/eparivahan/initiate', { vehicleNumber }, { timeout: 60000 }),
+
+  eparivahanVerify: (sessionId: string, otp: string) =>
+    api.post<{ challans: ChallanEntry[] }>('/challans/eparivahan/verify', { sessionId, otp }, { timeout: 30000 }),
 };
 
 export interface ChallanEntry {

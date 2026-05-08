@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/Button';
-import { ChallanSection } from '@/components/ChallanSection';
+import { EparivahanChallanSection } from '@/components/EparivahanChallanSection';
 
 const WA_NUMBER = '918796323876';
 
@@ -129,7 +129,7 @@ export default function ThankYouPage({
                 </div>
 
                 {/* Challan section */}
-                {/* {vehicleNumber && <ChallanSection vehicleNumber={vehicleNumber} />} */}
+                {vehicleNumber && <EparivahanChallanSection vehicleNumber={vehicleNumber} />}
 
                 {/* Status banner */}
                 <div className="rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
