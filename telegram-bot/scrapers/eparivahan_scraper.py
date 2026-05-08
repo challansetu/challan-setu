@@ -392,8 +392,12 @@ class EparivahanScraper:
                     status = search_resp.get("status", "")
 
                     if status == "Failed":
-                        msg = search_resp.get("message", "Search failed")
-                        if "captcha" in str(msg).lower() and attempt < 2:
+                        msg = str(search_resp.get("message", "Search failed"))
+                        # No challans found is a valid result, not an error
+                        if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND", "RECORD_NOT_FOUND"):
+                            log.info("eparivahan: no challans for %s (%s)", vrn, msg)
+                            return {"otp_required": False, "challans": []}
+                        if "captcha" in msg.lower() and attempt < 2:
                             log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
                             await asyncio.sleep(1.0)
                             continue

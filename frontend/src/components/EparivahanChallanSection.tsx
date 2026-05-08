@@ -10,6 +10,8 @@ interface Props {
 
 function friendlyError(raw: string): string {
   const r = raw.toLowerCase();
+  if (r.includes('challan_not_found') || r.includes('no_challan') || r.includes('record_not_found'))
+    return 'No pending challans found for this vehicle.';
   if (r.includes('maximum search exceeded') || r.includes('max search'))
     return 'Too many requests to eparivahan. Please wait 2–3 minutes and try again.';
   if (r.includes('invalid') && (r.includes('mobile') || r.includes('vahan')))
