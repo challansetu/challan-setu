@@ -15,7 +15,7 @@ const TESTIMONIALS = [
     name: 'Rahul Sharma',
     location: 'Noida',
     rating: 5,
-    review: 'I liked that no payment was required upfront. The process felt straightforward and easy to trust.',
+    review: 'Delivery ka kaam ruk gaya tha challan ki wajah se. Challan Setu team ne process easily handle kar diya.',
     photo: '/testimonials/t2.webp',
   },
   {
@@ -35,8 +35,8 @@ const TESTIMONIALS = [
 ];
 
 // Mobile card: 72vw wide, 12px gap, centered with 14vw padding on each side
-const CARD_VW    = 0.72;
-const GAP_PX     = 12;
+const CARD_VW = 0.72;
+const GAP_PX = 12;
 const PADDING_VW = 0.14;
 const AUTO_INTERVAL = 3500;
 
@@ -58,8 +58,8 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function TestimonialsCarousel() {
-  const trackRef  = useRef<HTMLDivElement>(null);
-  const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pausedRef = useRef(false);
   const activeRef = useRef(0);
   const [active, setActive] = useState(0);
@@ -92,7 +92,7 @@ export function TestimonialsCarousel() {
   }, [scrollToIndex]);
 
   const onTouchStart = useCallback(() => { pausedRef.current = true; }, []);
-  const onTouchEnd   = useCallback(() => {
+  const onTouchEnd = useCallback(() => {
     pausedRef.current = false;
     startTimer();
   }, [startTimer]);
@@ -100,14 +100,14 @@ export function TestimonialsCarousel() {
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    el.addEventListener('scroll',     onScroll,     { passive: true });
+    el.addEventListener('scroll', onScroll, { passive: true });
     el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchend',   onTouchEnd,   { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
     startTimer();
     return () => {
-      el.removeEventListener('scroll',     onScroll);
+      el.removeEventListener('scroll', onScroll);
       el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchend',   onTouchEnd);
+      el.removeEventListener('touchend', onTouchEnd);
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [onScroll, onTouchStart, onTouchEnd, startTimer]);
@@ -139,7 +139,7 @@ export function TestimonialsCarousel() {
             className="flex overflow-x-auto snap-x snap-mandatory select-none"
             style={{
               gap: `${GAP_PX}px`,
-              paddingLeft:  `${PADDING_VW * 100}vw`,
+              paddingLeft: `${PADDING_VW * 100}vw`,
               paddingRight: `${PADDING_VW * 100}vw`,
               scrollbarWidth: 'none',
               WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
@@ -152,8 +152,8 @@ export function TestimonialsCarousel() {
                   key={i}
                   className="snap-center flex-shrink-0 transition-all duration-300 ease-out"
                   style={{
-                    width:     `${CARD_VW * 100}vw`,
-                    opacity:   isActive ? 1 : 0.45,
+                    width: `${CARD_VW * 100}vw`,
+                    opacity: isActive ? 1 : 0.45,
                     transform: isActive ? 'scale(1)' : 'scale(0.94)',
                     transformOrigin: 'center top',
                   }}
@@ -171,11 +171,10 @@ export function TestimonialsCarousel() {
                 key={i}
                 onClick={() => handleDotClick(i)}
                 aria-label={`Review ${i + 1}`}
-                className={`rounded-full transition-all duration-300 ${
-                  active === i
-                    ? 'w-5 h-[7px] bg-primary-400'
-                    : 'w-[7px] h-[7px] bg-white/20 hover:bg-white/40'
-                }`}
+                className={`rounded-full transition-all duration-300 ${active === i
+                  ? 'w-5 h-[7px] bg-primary-400'
+                  : 'w-[7px] h-[7px] bg-white/20 hover:bg-white/40'
+                  }`}
               />
             ))}
           </div>
