@@ -86,7 +86,13 @@ async def eparivahan_initiate(req: SearchRequest):
                 "vehicleNumber": vn,
             }
         else:
-            return {"success": True, "otpRequired": False, "challans": result.get("challans", []), "vehicleNumber": vn}
+            return {
+                "success": True,
+                "otpRequired": False,
+                "challans": result.get("challans", []),
+                "confirmed": result.get("confirmed", False),
+                "vehicleNumber": vn,
+            }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as exc:

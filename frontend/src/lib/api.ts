@@ -18,7 +18,7 @@ export const challansApi = {
 
   eparivahanInitiate: (vehicleNumber: string) =>
     api.post<
-      | { otpRequired: false; challans: ChallanEntry[] }
+      | { otpRequired: false; challans: ChallanEntry[]; confirmed: boolean }
       | { otpRequired: true; sessionId: string; otpMessage: string }
     >('/challans/eparivahan/initiate', { vehicleNumber }, { timeout: 60000 }),
 

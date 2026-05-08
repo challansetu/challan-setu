@@ -393,10 +393,12 @@ class EparivahanScraper:
 
                     if status == "Failed":
                         msg = str(search_resp.get("message", "Search failed"))
-                        # No challans found is a valid result, not an error
-                        if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND", "RECORD_NOT_FOUND"):
-                            log.info("eparivahan: no challans for %s (%s)", vrn, msg)
-                            return {"otp_required": False, "challans": []}
+                        # Only treat explicit "no challan" responses as empty results.
+                        # RECORD_NOT_FOUND is intentionally excluded — it means the
+                        # vehicle number doesn't exist in VAHAN (different from no challans).
+                        if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND"):
+                            log.info("eparivahan confirmed no challans for %s", vrn)
+                            return {"otp_required": False, "challans": [], "confirmed": True}
                         if "captcha" in msg.lower() and attempt < 2:
                             log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
                             await asyncio.sleep(1.0)
@@ -408,7 +410,7 @@ class EparivahanScraper:
                         token = search_resp.get("token", "")
                         challans = await _fetch_challans_direct(tokens["phpsessid"], token)
                         log.info("eparivahan no-OTP path: %d challan(s) for %s", len(challans), vrn)
-                        return {"otp_required": False, "challans": challans}
+                        return {"otp_required": False, "challans": challans, "confirmed": True}
 
                     # OTP required — trigger SMS then store session
                     otp_message = await _trigger_otp(client)

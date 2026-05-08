@@ -32,7 +32,7 @@ type Stage =
   | { name: 'sending' }
   | { name: 'otp_entry'; sessionId: string; otpMessage: string }
   | { name: 'verifying' }
-  | { name: 'done'; challans: ChallanEntry[] }
+  | { name: 'done'; challans: ChallanEntry[]; confirmed: boolean }
   | { name: 'error'; message: string; isInvalidMobile?: boolean; canRetry: boolean };
 
 function formatDate(raw: string) {
@@ -50,8 +50,22 @@ function formatAmountShort(amount: number) {
   return `₹${amount.toLocaleString('en-IN')}`;
 }
 
-function ChallanResults({ challans }: { challans: ChallanEntry[] }) {
+function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; confirmed: boolean }) {
   if (challans.length === 0) {
+    if (!confirmed) {
+      // Scraper returned empty but didn't get explicit confirmation from eparivahan
+      return (
+        <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-100">
+            <span className="text-sm">⚠️</span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-800">Could not verify challan status</p>
+            <p className="text-xs text-gray-400 mt-0.5">Our team will check manually for your vehicle.</p>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
         <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
@@ -59,7 +73,7 @@ function ChallanResults({ challans }: { challans: ChallanEntry[] }) {
         </div>
         <div>
           <p className="text-sm font-bold text-gray-800">No pending challans found</p>
-          <p className="text-xs text-gray-400 mt-0.5">Your vehicle has a clean record on eparivahan.</p>
+          <p className="text-xs text-gray-400 mt-0.5">eparivahan confirmed your vehicle has a clean record.</p>
         </div>
       </div>
     );
@@ -140,7 +154,7 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
       const res = await challansApi.eparivahanInitiate(vehicleNumber);
       const data = res.data;
       if (!data.otpRequired) {
-        setStage({ name: 'done', challans: data.challans });
+        setStage({ name: 'done', challans: data.challans, confirmed: data.confirmed });
       } else {
         setStage({ name: 'otp_entry', sessionId: data.sessionId, otpMessage: data.otpMessage });
         setTimeout(() => otpRef.current?.focus(), 100);
@@ -160,7 +174,7 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
     setStage({ name: 'verifying' });
     try {
       const res = await challansApi.eparivahanVerify(sessionId, otp.trim());
-      setStage({ name: 'done', challans: res.data.challans ?? [] });
+      setStage({ name: 'done', challans: res.data.challans ?? [], confirmed: true });
     } catch (err: any) {
       const raw = err?.response?.data?.message || err?.message || 'OTP verification failed.';
       setStage({ name: 'error', message: friendlyError(raw), canRetry: true });
@@ -302,5 +316,5 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
   }
 
   // done
-  return <ChallanResults challans={stage.challans} />;
+  return <ChallanResults challans={stage.challans} confirmed={stage.confirmed} />;
 }

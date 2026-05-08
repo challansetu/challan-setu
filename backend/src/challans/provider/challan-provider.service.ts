@@ -44,7 +44,7 @@ export class ChallanProviderService {
 
   async initiateEparivahan(
     vehicleNumber: string,
-  ): Promise<{ otpRequired: false; challans: ProviderChallan[] } | { otpRequired: true; sessionId: string; otpMessage: string }> {
+  ): Promise<{ otpRequired: false; challans: ProviderChallan[]; confirmed: boolean } | { otpRequired: true; sessionId: string; otpMessage: string }> {
     if (!this.scraperApiUrl) throw new Error('Scraper not configured');
     try {
       const resp = await axios.post<{
@@ -53,6 +53,7 @@ export class ChallanProviderService {
         sessionId?: string;
         otpMessage?: string;
         challans?: ProviderChallan[];
+        confirmed?: boolean;
         error?: string;
       }>(`${this.scraperApiUrl}/eparivahan/initiate`, { vehicleNumber }, { timeout: 60_000 });
       if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
@@ -63,7 +64,7 @@ export class ChallanProviderService {
           otpMessage: resp.data.otpMessage ?? 'OTP sent to your registered mobile number.',
         };
       }
-      return { otpRequired: false, challans: resp.data.challans ?? [] };
+      return { otpRequired: false, challans: resp.data.challans ?? [], confirmed: resp.data.confirmed ?? false };
     } catch (e) {
       throw this._scraperError(e);
     }
