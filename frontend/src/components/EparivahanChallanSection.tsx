@@ -8,6 +8,23 @@ interface Props {
   vehicleNumber: string;
 }
 
+function friendlyError(raw: string): string {
+  const r = raw.toLowerCase();
+  if (r.includes('maximum search exceeded') || r.includes('max search'))
+    return 'Too many requests to eparivahan. Please wait 2–3 minutes and try again.';
+  if (r.includes('invalid') && (r.includes('mobile') || r.includes('vahan')))
+    return raw; // already user-friendly from eparivahan
+  if (r.includes('captcha'))
+    return 'CAPTCHA verification failed. Please try again.';
+  if (r.includes('session') && r.includes('expir'))
+    return 'Session expired. Please start again.';
+  if (r.includes('network') || r.includes('econnrefused') || r.includes('timeout'))
+    return 'Could not connect to eparivahan. Please try again in a moment.';
+  if (r.includes('otp') && (r.includes('invalid') || r.includes('wrong') || r.includes('incorrect')))
+    return 'Incorrect OTP. Please check and try again.';
+  return raw;
+}
+
 type Stage =
   | { name: 'idle' }
   | { name: 'sending' }
@@ -127,8 +144,9 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
         setTimeout(() => otpRef.current?.focus(), 100);
       }
     } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || 'Something went wrong. Please try again.';
-      const isInvalidMobile = msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('not available');
+      const raw = err?.response?.data?.message || err?.message || 'Something went wrong.';
+      const msg = friendlyError(raw);
+      const isInvalidMobile = raw.toLowerCase().includes('invalid') || raw.toLowerCase().includes('not available');
       setStage({ name: 'error', message: msg, isInvalidMobile, canRetry: true });
     }
   }
@@ -142,8 +160,8 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
       const res = await challansApi.eparivahanVerify(sessionId, otp.trim());
       setStage({ name: 'done', challans: res.data.challans ?? [] });
     } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || 'OTP verification failed.';
-      setStage({ name: 'error', message: msg, canRetry: true });
+      const raw = err?.response?.data?.message || err?.message || 'OTP verification failed.';
+      setStage({ name: 'error', message: friendlyError(raw), canRetry: true });
     }
   }
 
