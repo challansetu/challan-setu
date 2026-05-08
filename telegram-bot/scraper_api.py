@@ -1,9 +1,10 @@
 """
-FastAPI HTTP server that wraps the CarInfo challan scraper.
+FastAPI HTTP server exposing two scrapers:
 
-Usage:
-    python scraper_api.py
-    # Listens on http://127.0.0.1:8001
+  POST /search              — CarInfo scraper (existing, no OTP needed)
+  POST /eparivahan/initiate — Step 1: submit VRN, solve CAPTCHA, trigger OTP
+  POST /eparivahan/verify   — Step 2: verify OTP, return challans
+  GET  /health              — health check
 """
 from __future__ import annotations
 
@@ -14,10 +15,11 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from scrapers.carinfo_scraper import CarInfoScraper
+from scrapers.eparivahan_scraper import EparivahanScraper
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,11 +28,21 @@ logging.basicConfig(
 log = logging.getLogger("scraper_api")
 
 app = FastAPI(title="Challan Scraper API")
+_eparivahan = EparivahanScraper()
 
+
+# ── Models ────────────────────────────────────────────────────────────────────
 
 class SearchRequest(BaseModel):
     vehicleNumber: str
 
+
+class OtpVerifyRequest(BaseModel):
+    sessionId: str
+    otp: str
+
+
+# ── CarInfo endpoint (unchanged) ──────────────────────────────────────────────
 
 @app.get("/health")
 async def health():
@@ -40,26 +52,52 @@ async def health():
 @app.post("/search")
 async def search_challans(req: SearchRequest):
     vn = req.vehicleNumber.upper().replace(" ", "").replace("-", "")
-    log.info("Scraping challans for: %s", vn)
-
+    log.info("CarInfo: scraping %s", vn)
     try:
         async with CarInfoScraper() as scraper:
             challans = await scraper.search_all_challans(vn)
-        log.info("CarInfo: %d challan(s) for %s", len(challans), vn)
-        return {
-            "success": True,
-            "vehicleNumber": vn,
-            "challans": challans,
-            "source": "CarInfo",
-        }
+        return {"success": True, "vehicleNumber": vn, "challans": challans, "source": "CarInfo"}
     except Exception as exc:
-        log.error("Scraper error for %s: %s", vn, exc, exc_info=True)
-        return {
-            "success": False,
-            "vehicleNumber": vn,
-            "challans": [],
-            "error": str(exc),
-        }
+        log.error("CarInfo error for %s: %s", vn, exc, exc_info=True)
+        return {"success": False, "vehicleNumber": vn, "challans": [], "error": str(exc)}
+
+
+# ── eparivahan two-step endpoints ─────────────────────────────────────────────
+
+@app.post("/eparivahan/initiate")
+async def eparivahan_initiate(req: SearchRequest):
+    """
+    Step 1: load page, solve CAPTCHA, submit VRN.
+    eparivahan sends OTP to the vehicle owner's registered mobile.
+    Returns a session_id to pass to /eparivahan/verify.
+    """
+    vn = req.vehicleNumber.upper().replace(" ", "").replace("-", "")
+    log.info("eparivahan: initiating search for %s", vn)
+    try:
+        session_id = await _eparivahan.initiate_search(vn)
+        return {"success": True, "sessionId": session_id, "vehicleNumber": vn}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as exc:
+        log.error("eparivahan initiate error for %s: %s", vn, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/eparivahan/verify")
+async def eparivahan_verify(req: OtpVerifyRequest):
+    """
+    Step 2: verify OTP entered by user, return challan list.
+    Deletes the session after use.
+    """
+    log.info("eparivahan: verifying OTP for session %s", req.sessionId)
+    try:
+        challans = await _eparivahan.verify_otp(req.sessionId, req.otp)
+        return {"success": True, "challans": challans}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as exc:
+        log.error("eparivahan verify error: %s", exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
 if __name__ == "__main__":

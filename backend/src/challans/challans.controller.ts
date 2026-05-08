@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { ChallansService } from './challans.service';
@@ -27,6 +27,38 @@ export class ChallansController {
     const vn = vehicle.toUpperCase().replace(/[\s\-]/g, '');
     const result = await this.challanProvider.fetchChallans(vn);
     return { challans: result.result ?? [] };
+  }
+
+  @Public()
+  @Post('eparivahan/initiate')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
+  @ApiOperation({ summary: 'Step 1: submit VRN to eparivahan, trigger OTP to registered mobile' })
+  async eparivahanInitiate(@Body('vehicleNumber') vehicleNumber: string) {
+    if (!vehicleNumber) throw new BadRequestException('vehicleNumber is required');
+    try {
+      return await this.challanProvider.initiateEparivahan(vehicleNumber.toUpperCase().replace(/[\s\-]/g, ''));
+    } catch (e: any) {
+      throw new InternalServerErrorException(e?.message ?? 'Initiation failed');
+    }
+  }
+
+  @Public()
+  @Post('eparivahan/verify')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { ttl: 60000, limit: 10 } })
+  @ApiOperation({ summary: 'Step 2: verify OTP, return challan list' })
+  async eparivahanVerify(
+    @Body('sessionId') sessionId: string,
+    @Body('otp') otp: string,
+  ) {
+    if (!sessionId || !otp) throw new BadRequestException('sessionId and otp are required');
+    try {
+      const challans = await this.challanProvider.verifyEparivahanOtp(sessionId, otp);
+      return { challans };
+    } catch (e: any) {
+      throw new InternalServerErrorException(e?.message ?? 'OTP verification failed');
+    }
   }
 
   @Post('search')

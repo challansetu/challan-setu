@@ -18,3 +18,7 @@ fastapi==0.111.0
 uvicorn[standard]==0.30.1
 
 pycryptodome>=3.20.0
+
+# eparivahan CAPTCHA solving
+pytesseract>=0.3.10
+Pillow>=10.0.0

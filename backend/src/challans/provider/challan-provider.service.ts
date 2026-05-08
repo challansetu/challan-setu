@@ -42,6 +42,28 @@ export class ChallanProviderService {
     }
   }
 
+  async initiateEparivahan(vehicleNumber: string): Promise<{ sessionId: string }> {
+    if (!this.scraperApiUrl) throw new Error('Scraper not configured');
+    const resp = await axios.post<{ success: boolean; sessionId: string; error?: string }>(
+      `${this.scraperApiUrl}/eparivahan/initiate`,
+      { vehicleNumber },
+      { timeout: 60_000 },
+    );
+    if (!resp.data.success) throw new Error(resp.data.error ?? 'Initiation failed');
+    return { sessionId: resp.data.sessionId };
+  }
+
+  async verifyEparivahanOtp(sessionId: string, otp: string): Promise<ProviderChallan[]> {
+    if (!this.scraperApiUrl) throw new Error('Scraper not configured');
+    const resp = await axios.post<{ success: boolean; challans: ProviderChallan[]; error?: string }>(
+      `${this.scraperApiUrl}/eparivahan/verify`,
+      { sessionId, otp },
+      { timeout: 30_000 },
+    );
+    if (!resp.data.success) throw new Error(resp.data.error ?? 'OTP verification failed');
+    return resp.data.challans ?? [];
+  }
+
   async fetchChallans(vehicleNumber: string): Promise<ProviderChallanResponse> {
     if (!this.scraperApiUrl) {
       return { code: 200, message: 'No scraper configured', result: null };
