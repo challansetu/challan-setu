@@ -94,10 +94,10 @@ async def eparivahan_initiate(req: SearchRequest):
                 "vehicleNumber": vn,
             }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e) or type(e).__name__)
     except Exception as exc:
         log.error("eparivahan initiate error for %s: %s", vn, exc, exc_info=True)
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(status_code=500, detail=str(exc) or f"{type(exc).__name__}: connection failed")
 
 
 @app.post("/eparivahan/verify")
