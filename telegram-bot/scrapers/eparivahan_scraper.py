@@ -124,32 +124,21 @@ async def _solve_2captcha(image_bytes: bytes) -> str:
     raise RuntimeError("2Captcha timed out")
 
 
-async def _solve_tesseract(image_bytes: bytes) -> str:
+async def _solve_ddddocr(image_bytes: bytes) -> str:
     try:
-        import io
-        import pytesseract
-        from PIL import Image
-
-        img = Image.open(io.BytesIO(image_bytes)).convert("L")
-        img = img.point(lambda x: 0 if x < 128 else 255)
-        text = pytesseract.image_to_string(
-            img,
-            config=(
-                "--psm 8 "
-                "-c tessedit_char_whitelist="
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-            ),
-        ).strip()
-        return text
+        import ddddocr
+        ocr = ddddocr.DdddOcr(show_ad=False)
+        result = ocr.classification(image_bytes)
+        return result.strip()
     except Exception as e:
-        log.warning("Tesseract OCR failed: %s", e)
+        log.warning("ddddocr failed: %s", e)
         return ""
 
 
 async def solve_captcha(image_bytes: bytes) -> str:
     if TWOCAPTCHA_API_KEY:
         return await _solve_2captcha(image_bytes)
-    return await _solve_tesseract(image_bytes)
+    return await _solve_ddddocr(image_bytes)
 
 
 # ── Page token extraction ─────────────────────────────────────────────────────
