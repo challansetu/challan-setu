@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, UseGuards, HttpCode, HttpStatus, BadRequestException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { ChallansService } from './challans.service';
@@ -13,6 +13,8 @@ import { Public } from '../common/decorators/public.decorator';
 @UseGuards(JwtAuthGuard)
 @Controller('challans')
 export class ChallansController {
+  private readonly logger = new Logger(ChallansController.name);
+
   constructor(
     private readonly challansService: ChallansService,
     private readonly challanProvider: ChallanProviderService,
@@ -40,6 +42,7 @@ export class ChallansController {
       const result = await this.challanProvider.initiateEparivahan(vehicleNumber.toUpperCase().replace(/[\s\-]/g, ''));
       return result;
     } catch (e: any) {
+      this.logger.error(`eparivahanInitiate failed: ${e?.message}`, e?.stack);
       throw new InternalServerErrorException(e?.message ?? 'Initiation failed');
     }
   }
@@ -58,6 +61,7 @@ export class ChallansController {
       const challans = await this.challanProvider.verifyEparivahanOtp(sessionId, otp);
       return { challans };
     } catch (e: any) {
+      this.logger.error(`eparivahanVerify failed: ${e?.message}`, e?.stack);
       throw new InternalServerErrorException(e?.message ?? 'OTP verification failed');
     }
   }
