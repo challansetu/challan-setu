@@ -119,10 +119,6 @@ export default function ThankYouPage({
                           <p className="text-xs text-gray-400">Request ID</p>
                           <p className="mt-0.5 text-sm font-bold text-gray-800">{requestId}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-gray-400">Status</p>
-                          <p className="mt-0.5 text-sm font-bold text-amber-600">{statusLabel}</p>
-                        </div>
                       </div>
                     </div>
                   </div>
