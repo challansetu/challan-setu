@@ -216,30 +216,42 @@ def _preprocess_captcha(image_bytes: bytes, mode: int) -> bytes:
 
 
 async def _solve_ddddocr(image_bytes: bytes) -> str:
+    """
+    Solve eparivahan CAPTCHA with ddddocr.
+
+    Raw mode preserves colour contrast that helps ddddocr distinguish
+    mixed-case characters (e.g. 'J' vs 'j'). Preprocessing to grayscale
+    strips that signal and causes wrong-case answers that eparivahan rejects.
+    We only fall back to preprocessed modes when the raw result is invalid.
+    """
     try:
         from collections import Counter
         ocr = _get_ocr()
-        candidates = []
 
-        for mode in range(4):
+        # Primary: raw image — best case accuracy
+        raw_result = ocr.classification(image_bytes).strip()
+        if _CAPTCHA_RE.match(raw_result):
+            log.info("ddddocr raw: '%s'", raw_result)
+            return raw_result
+
+        # Fallback: try preprocessing modes when raw gives garbage
+        candidates = []
+        for mode in range(1, 4):
             processed = _preprocess_captcha(image_bytes, mode)
             try:
                 result = ocr.classification(processed).strip()
                 if _CAPTCHA_RE.match(result):
                     candidates.append(result)
-                    log.debug("ddddocr mode=%d → '%s'", mode, result)
             except Exception:
                 continue
 
         if candidates:
             winner, count = Counter(candidates).most_common(1)[0]
-            log.info("ddddocr consensus: '%s' (%d/%d votes)", winner, count, len(candidates))
+            log.info("ddddocr preprocessed fallback: '%s' (%d/%d votes)", winner, count, len(candidates))
             return winner
 
-        # No valid candidates — fall back to raw result anyway
-        fallback = ocr.classification(image_bytes).strip()
-        log.warning("ddddocr no valid candidate, using raw fallback: '%s'", fallback)
-        return fallback
+        log.warning("ddddocr no valid result, using raw anyway: '%s'", raw_result)
+        return raw_result
 
     except Exception as e:
         log.warning("ddddocr failed: %s", e)
