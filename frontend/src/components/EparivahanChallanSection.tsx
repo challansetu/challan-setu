@@ -213,7 +213,7 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
         <Loader2 className="h-4 w-4 animate-spin text-blue-400 flex-shrink-0" />
         <div>
           <p className="text-sm font-semibold text-gray-700">Sending OTP to registered mobile…</p>
-          <p className="text-xs text-gray-400 mt-0.5">Solving CAPTCHA in background, please wait</p>
+          <p className="text-xs text-gray-400 mt-0.5">please wait</p>
         </div>
       </div>
     );

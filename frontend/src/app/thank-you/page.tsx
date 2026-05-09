@@ -131,8 +131,8 @@ export default function ThankYouPage({
 
                 {/* Status banner */}
                 <div className="rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
-                  <p className="text-sm font-bold text-amber-800">⏳ Status: {statusLabel}</p>
-                  <p className="mt-0.5 text-xs text-amber-600">Expected update: 15–30 minutes</p>
+                  <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
+                  <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
                 </div>
 
                 {/* Action buttons — desktop inline, replaces fixed bar */}
