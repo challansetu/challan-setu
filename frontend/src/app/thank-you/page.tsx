@@ -94,7 +94,7 @@ export default function ThankYouPage({
 
         {/* ── Content area ── */}
         {/* Mobile: cards slide over fixed hero. Desktop: normal flow on gray bg */}
-        <div className="relative z-10 rounded-t-3xl bg-[#F2F4F8] shadow-[0_-8px_32px_rgba(0,0,0,0.12)] sm:rounded-none sm:shadow-none">
+        <div className="relative z-10 rounded-t-3xl bg-[#F2F4F8] -mt-6 sm:mt-0 sm:rounded-none sm:shadow-none">
           <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-4xl sm:px-8 sm:pt-10 sm:pb-20">
 
             {/* ── Desktop two-column grid ── */}

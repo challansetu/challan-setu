@@ -330,7 +330,10 @@ async def _fetch_challans_direct(phpsessid: str, token: str) -> list[dict]:
                 "cookie": f"PHPSESSID={phpsessid}",
             },
         )
-        body = resp.json()
+        try:
+            body = resp.json()
+        except Exception:
+            raise RuntimeError(f"eparivahan returned non-JSON response (HTTP {resp.status_code})")
     return [_parse_challan(c) for c in body.get("results", [])]
 
 
@@ -349,7 +352,10 @@ async def _verify_otp_and_fetch(phpsessid: str, otp: str) -> list[dict]:
             content=b"",
             headers=headers,
         )
-        otp_body = otp_resp.json()
+        try:
+            otp_body = otp_resp.json()
+        except Exception:
+            raise RuntimeError(f"eparivahan returned non-JSON response during OTP verification (HTTP {otp_resp.status_code})")
         log.info("verify-search-otp response: %s", otp_body)
 
         if otp_body.get("status") != "success":
@@ -364,7 +370,10 @@ async def _verify_otp_and_fetch(phpsessid: str, otp: str) -> list[dict]:
             content=b"",
             headers=headers,
         )
-        body = detail_resp.json()
+        try:
+            body = detail_resp.json()
+        except Exception:
+            raise RuntimeError(f"eparivahan returned non-JSON response while fetching challans (HTTP {detail_resp.status_code})")
         log.info("get-challan-detail: status=%s results=%d", body.get("status"), len(body.get("results", [])))
         return [_parse_challan(c) for c in body.get("results", [])]
 

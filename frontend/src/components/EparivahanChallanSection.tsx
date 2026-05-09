@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { CheckCircle2, Loader2, Calendar, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { CheckCircle2, Loader2, Calendar, MapPin, ShieldCheck, ArrowRight, X, Hash, CreditCard } from 'lucide-react';
 import { challansApi, type ChallanEntry } from '@/lib/api';
 
 interface Props {
@@ -24,6 +24,8 @@ function friendlyError(raw: string): string {
     return 'Could not connect to eparivahan. Please try again in a moment.';
   if (r.includes('otp') && (r.includes('invalid') || r.includes('wrong') || r.includes('incorrect')))
     return 'Incorrect OTP. Please check and try again.';
+  if (r.includes('non-json') || r.includes('expecting value') || r.includes('json'))
+    return 'eparivahan returned an unexpected response. Please try again.';
   return raw;
 }
 
@@ -50,7 +52,107 @@ function formatAmountShort(amount: number) {
   return `₹${amount.toLocaleString('en-IN')}`;
 }
 
+function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClose: () => void }) {
+  const isPaid = challan.status?.toUpperCase() === 'PAID';
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pt-5 pb-10 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Handle */}
+        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-gray-200" />
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-5">
+          <div>
+            <p className="text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase mb-1">Challan Details</p>
+            <p className={`text-sm font-bold px-2 py-0.5 rounded-full inline-block ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
+              {isPaid ? 'Paid' : 'Unpaid'}
+            </p>
+          </div>
+          <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
+            <X className="h-4 w-4 text-gray-500" />
+          </button>
+        </div>
+
+        {/* Amount */}
+        <div className="rounded-2xl bg-gray-50 px-5 py-4 mb-4 text-center">
+          <p className={`text-4xl font-black ${isPaid ? 'text-emerald-500' : 'text-red-500'}`}>
+            ₹{(Number(challan.amountChallan) || 0).toLocaleString('en-IN')}
+          </p>
+          <p className="text-xs text-gray-400 mt-1">Fine Amount</p>
+        </div>
+
+        {/* Details */}
+        <div className="space-y-3">
+          {challan.challanNo && (
+            <div className="flex items-start gap-3">
+              <Hash className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Challan No</p>
+                <p className="text-sm font-semibold text-gray-800">{challan.challanNo}</p>
+              </div>
+            </div>
+          )}
+          <div className="flex items-start gap-3">
+            <Calendar className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date</p>
+              <p className="text-sm font-semibold text-gray-800">{formatDate(challan.dateChallan)}</p>
+            </div>
+          </div>
+          {challan.locationChallan && (
+            <div className="flex items-start gap-3">
+              <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location</p>
+                <p className="text-sm font-semibold text-gray-800">{challan.locationChallan}</p>
+              </div>
+            </div>
+          )}
+          {challan.challan_search_source && (
+            <div className="flex items-start gap-3">
+              <CreditCard className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Source</p>
+                <p className="text-sm font-semibold text-gray-800">{challan.challan_search_source}</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Violations */}
+        {challan.detailsViolation?.length > 0 && (
+          <div className="mt-5">
+            <p className="text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase mb-2">Violations</p>
+            <div className="space-y-2">
+              {challan.detailsViolation.map((v, i) => (
+                <div key={i} className="rounded-xl bg-gray-50 px-4 py-3 flex items-start justify-between gap-3">
+                  <p className="text-sm font-medium text-gray-800 leading-snug">{v.offence}</p>
+                  {v.penalty != null && (
+                    <p className="text-sm font-bold text-red-500 flex-shrink-0">₹{v.penalty}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; confirmed: boolean }) {
+  const [selected, setSelected] = useState<ChallanEntry | null>(null);
+
   if (challans.length === 0) {
     if (!confirmed) {
       // Scraper returned empty but didn't get explicit confirmation from eparivahan
@@ -114,7 +216,7 @@ function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; con
           const offense = c.detailsViolation?.[0]?.offence || 'Traffic Violation';
           const amount = Number(c.amountChallan) || 0;
           return (
-            <div key={i} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <button key={i} onClick={() => setSelected(c)} className="w-full overflow-hidden rounded-2xl bg-white shadow-sm text-left active:scale-[0.98] transition-transform">
               <div className="px-5 pt-4 pb-3 border-b border-gray-50">
                 <p className="text-[15px] font-bold text-gray-900 leading-snug">{offense}</p>
               </div>
@@ -135,10 +237,12 @@ function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; con
                   ₹{amount.toLocaleString('en-IN')}
                 </p>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
+
+      {selected && <ChallanDetailSheet challan={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }
@@ -230,7 +334,7 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               <p className="text-[10px] font-black tracking-[0.2em] text-emerald-600 uppercase">OTP Sent</p>
             </div>
-            <p className="text-sm font-semibold text-gray-800 mb-1">{stage.otpMessage}</p>
+            <p className="text-sm font-semibold text-gray-800 mb-1 font-mono">{stage.otpMessage}</p>
             <p className="text-xs text-gray-400 mb-4">Enter the OTP below to fetch your challan details.</p>
             <div className="flex gap-2">
               <input
