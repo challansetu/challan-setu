@@ -493,7 +493,7 @@ class EparivahanScraper:
         transport_failures: list[str] = []
 
         for transport_name, client_kwargs in _build_client_options():
-            for attempt in range(3):
+            for attempt in range(5):
                 try:
                     async with httpx.AsyncClient(**client_kwargs) as client:
                         tokens = await _load_page(client)
@@ -520,16 +520,16 @@ class EparivahanScraper:
                             # (eparivahan doesn't always say "captcha" in the message).
                             # Retry up to 3 attempts before trusting it as a genuine clean record.
                             if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND"):
-                                if attempt < 2:
+                                if attempt < 4:
                                     log.warning(
                                         "CHALLAN_NOT_FOUND for %s on attempt %d — may be wrong CAPTCHA, retrying",
                                         vrn, attempt + 1,
                                     )
                                     await asyncio.sleep(1.0)
                                     continue
-                                log.info("eparivahan confirmed no challans for %s (consistent across 3 attempts)", vrn)
+                                log.info("eparivahan confirmed no challans for %s (consistent across 5 attempts)", vrn)
                                 return {"otp_required": False, "challans": [], "confirmed": True}
-                            if "captcha" in msg.lower() and attempt < 2:
+                            if "captcha" in msg.lower() and attempt < 4:
                                 log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
                                 await asyncio.sleep(1.0)
                                 continue
@@ -556,7 +556,7 @@ class EparivahanScraper:
                 except ValueError:
                     raise
                 except Exception as e:
-                    if attempt == 2:
+                    if attempt == 4:
                         transport_failures.append(f"{transport_name}: {type(e).__name__}: {e}")
                         if _is_upstream_connectivity_error(e):
                             log.warning(
