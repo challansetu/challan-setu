@@ -410,7 +410,7 @@ export default function LeadsPage() {
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Mobile</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Vehicle</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">City</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">Challan Settled</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">CRM Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Payment</th>
@@ -435,12 +435,11 @@ export default function LeadsPage() {
                         {lead.vehicleNumber}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {lead.city ? (
-                        <span className="capitalize">{lead.city.replace(/-/g, " ")}</span>
-                      ) : (
-                        <span className="text-gray-400">—</span>
-                      )}
+                    <td className="px-4 py-3">
+                      <Badge
+                        label={lead.challanSettled === "yes" ? "Yes" : lead.challanSettled === "initiated" ? "Initiated" : "No"}
+                        variant={lead.challanSettled === "yes" ? "green" : lead.challanSettled === "initiated" ? "yellow" : "gray"}
+                      />
                     </td>
                     <td className="px-4 py-3">
                       <Badge label={lead.source} variant="blue" className="capitalize" />
