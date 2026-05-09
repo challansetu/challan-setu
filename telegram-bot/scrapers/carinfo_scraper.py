@@ -1,26 +1,27 @@
 """
-CarInfo scraper — direct HTTP, no browser.
+CarInfo scraper — direct HTTP with Chrome TLS impersonation.
 
 Flow:
-  1. GET carinfo.app/e-challan-check → extract buildId from __NEXT_DATA__
+  1. GET carinfo.app/e-challan-check → session cookies + buildId
   2. GET _next/data/{buildId}/challan-details/{vehicle}.json
   3. Decrypt xdataprops (AES/CryptoJS)
   4. Return challan list
 
 Anti-blocking:
-  - No headless browser (plain HTTP is invisible to bot detectors)
-  - Rotates User-Agent on every request
-  - Random 0.5–2s delay per search
-  - Realistic browser headers
-  - Auto-refreshes buildId on 404 (CarInfo redeploys break the URL)
-  - BuildId cached 1 hour so we don't hit the home page every search
+  - curl_cffi impersonates Chrome 124 TLS fingerprint (JA3/JA4) — invisible to WAFs
+  - sec-ch-ua / sec-ch-ua-mobile / sec-ch-ua-platform aligned with User-Agent
+  - Correct sec-fetch-* for navigation vs XHR requests
+  - Random 1–3s delay between page load and API call (human pacing)
+  - Rotates across 5 Chrome profiles on Android/Windows/Linux
+  - Auto-refreshes buildId on 404
+  - BuildId cached 1 hour
 
 Production behaviour:
   - Network errors → retry up to 3 times with exponential backoff
   - HTTP 429/503 → retry with longer wait
-  - Decryption failure → return [] (no challans assumed, logged as warning)
-  - Empty xdataprops → return [] (vehicle has no challans on CarInfo)
-  - All exceptions are caught — scraper never raises, always returns a list
+  - Decryption failure → return [] (logged as warning)
+  - Empty xdataprops → return [] (no challans on CarInfo)
+  - All exceptions caught — scraper never raises, always returns a list
 """
 from __future__ import annotations
 
@@ -35,8 +36,6 @@ import re
 import time
 from typing import Optional
 
-import httpx
-
 log = logging.getLogger("scraper.carinfo")
 
 _AES_KEY = b"Gx!7m$9zK@qW2vP"
@@ -44,34 +43,92 @@ _AES_KEY = b"Gx!7m$9zK@qW2vP"
 _build_cache: dict = {"id": None, "ts": 0.0}
 _BUILD_TTL = 3600  # seconds
 
-_USER_AGENTS = [
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-    "Mozilla/5.0 (Linux; Android 13; Samsung SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
-    "Mozilla/5.0 (Linux; Android 12; OnePlus 9 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+# Each profile: (user_agent, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform)
+_CHROME_PROFILES = [
+    (
+        "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?1",
+        '"Android"',
+    ),
+    (
+        "Mozilla/5.0 (Linux; Android 13; Samsung SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?1",
+        '"Android"',
+    ),
+    (
+        "Mozilla/5.0 (Linux; Android 12; OnePlus 9 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?1",
+        '"Android"',
+    ),
+    (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?0",
+        '"Windows"',
+    ),
+    (
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?0",
+        '"Linux"',
+    ),
 ]
 
 _MAX_RETRIES = 3
-_RETRY_BACKOFF = [2.0, 5.0, 10.0]  # seconds between retries
+_RETRY_BACKOFF = [2.0, 5.0, 10.0]
 
-# Proxy support: set HTTPS_PROXY env var to route through Indian IPs
-# Example: HTTPS_PROXY=http://user:pass@proxy.example.com:8080
 _PROXY_URL = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY") or None
 if _PROXY_URL:
     log.info("CarInfo scraper: proxy configured (%s)", _PROXY_URL.split("@")[-1] if "@" in _PROXY_URL else _PROXY_URL)
 
+# curl_cffi gives us real Chrome TLS fingerprint; fall back to httpx if not installed
+try:
+    from curl_cffi.requests import AsyncSession as _CurlSession
+    _USE_CURL = True
+    log.info("CarInfo scraper: curl_cffi available — Chrome TLS impersonation active")
+except ImportError:
+    import httpx as _httpx
+    _USE_CURL = False
+    log.warning("CarInfo scraper: curl_cffi not found — falling back to httpx (weaker anti-bot)")
 
-def _headers(ua: str, referer: str = "") -> dict:
+
+def _page_headers(ua: str, sec_ch_ua: str, mobile: str, platform: str) -> dict:
+    """Headers for a full page navigation (home page visit)."""
+    return {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "accept-language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7",
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "sec-ch-ua": sec_ch_ua,
+        "sec-ch-ua-mobile": mobile,
+        "sec-ch-ua-platform": platform,
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1",
+        "user-agent": ua,
+    }
+
+
+def _api_headers(ua: str, sec_ch_ua: str, mobile: str, platform: str, vn: str) -> dict:
+    """Headers for the _next/data XHR request."""
     return {
         "accept": "*/*",
+        "accept-encoding": "gzip, deflate, br, zstd",
         "accept-language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7",
-        "user-agent": ua,
-        "referer": referer or "https://www.carinfo.app/e-challan-check",
+        "referer": f"https://www.carinfo.app/challan-details/{vn}",
+        "sec-ch-ua": sec_ch_ua,
+        "sec-ch-ua-mobile": mobile,
+        "sec-ch-ua-platform": platform,
         "sec-fetch-dest": "empty",
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-origin",
+        "user-agent": ua,
         "x-nextjs-data": "1",
         "src": "car-info_web",
         "city": "Delhi",
@@ -79,19 +136,16 @@ def _headers(ua: str, referer: str = "") -> dict:
     }
 
 
-async def _fetch_build_id(client: httpx.AsyncClient, ua: str) -> Optional[str]:
+async def _fetch_build_id(session, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[str]:
     try:
-        resp = await client.get(
+        resp = await session.get(
             "https://www.carinfo.app/e-challan-check",
-            headers={
-                "accept": "text/html,application/xhtml+xml,*/*;q=0.9",
-                "accept-language": "en-IN,en-GB;q=0.9,en;q=0.8",
-                "user-agent": ua,
-            },
-            follow_redirects=True,
-            timeout=15.0,
+            headers=_page_headers(ua, sec_ch_ua, mobile, platform),
+            allow_redirects=True,
+            timeout=15,
         )
-        m = re.search(r'"buildId"\s*:\s*"([^"]+)"', resp.text)
+        text = resp.text if hasattr(resp, "text") else resp.text
+        m = re.search(r'"buildId"\s*:\s*"([^"]+)"', text)
         if m:
             return m.group(1)
         log.warning("buildId not found in CarInfo page HTML (status %d)", resp.status_code)
@@ -100,16 +154,29 @@ async def _fetch_build_id(client: httpx.AsyncClient, ua: str) -> Optional[str]:
     return None
 
 
-async def _get_build_id(client: httpx.AsyncClient, ua: str, force: bool = False) -> Optional[str]:
+async def _get_build_id(session, ua: str, sec_ch_ua: str, mobile: str, platform: str, force: bool = False) -> Optional[str]:
+    """
+    Always fetches the e-challan-check page to establish session cookies.
+    Uses cached buildId when fresh to avoid parsing overhead, but the HTTP
+    request itself is always made so CarInfo sets the required session cookie.
+    Without that cookie the challan JSON endpoint returns a 302 to homepage.
+    """
     now = time.monotonic()
-    if not force and _build_cache["id"] and (now - _build_cache["ts"]) < _BUILD_TTL:
-        return _build_cache["id"]
-    build_id = await _fetch_build_id(client, ua)
+    cached_ok = not force and _build_cache["id"] and (now - _build_cache["ts"]) < _BUILD_TTL
+
+    build_id = await _fetch_build_id(session, ua, sec_ch_ua, mobile, platform)
     if build_id:
         _build_cache["id"] = build_id
         _build_cache["ts"] = now
-        log.info("CarInfo buildId refreshed: %s", build_id)
-    return build_id
+        if not cached_ok:
+            log.info("CarInfo buildId refreshed: %s", build_id)
+        return build_id
+
+    if cached_ok:
+        log.warning("CarInfo page fetch failed, using cached buildId: %s", _build_cache["id"])
+        return _build_cache["id"]
+
+    return None
 
 
 def _decrypt(xdata: str) -> Optional[dict]:
@@ -203,7 +270,7 @@ def _parse(data: dict, vn: str) -> list[dict]:
 
 
 class CarInfoScraper:
-    """Direct HTTP scraper — no browser required."""
+    """Chrome-impersonating HTTP scraper — no browser required."""
 
     async def __aenter__(self) -> "CarInfoScraper":
         return self
@@ -213,89 +280,121 @@ class CarInfoScraper:
 
     async def search_all_challans(self, vehicle_number: str) -> list[dict]:
         vn = vehicle_number.upper().replace(" ", "").replace("-", "")
-        ua = random.choice(_USER_AGENTS)
+        ua, sec_ch_ua, mobile, platform = random.choice(_CHROME_PROFILES)
 
         try:
-            client_kwargs: dict = {"timeout": 30.0, "follow_redirects": True}
-            if _PROXY_URL:
-                client_kwargs["proxy"] = _PROXY_URL
-                log.debug("CarInfo: using proxy %s", _PROXY_URL.split("@")[-1])
-
-            async with httpx.AsyncClient(**client_kwargs) as client:
-                await asyncio.sleep(random.uniform(0.5, 2.0))
-
-                build_id = await _get_build_id(client, ua)
-                if not build_id:
-                    log.warning("CarInfo: could not determine buildId for %s", vn)
-                    return []
-
-                result = await self._fetch_with_retry(client, vn, build_id, ua)
-
-                if result is None:
-                    # 404 = stale buildId — refresh and retry once
-                    log.info("CarInfo: got 404 for %s — refreshing buildId", vn)
-                    await asyncio.sleep(random.uniform(1.0, 2.5))
-                    build_id = await _get_build_id(client, ua, force=True)
-                    if not build_id:
-                        return []
-                    result = await self._fetch_with_retry(client, vn, build_id, ua)
-
-                challans = result or []
-                if challans:
-                    log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
-                else:
-                    log.info("CarInfo: no challans found for %s", vn)
-                return challans
-
+            if _USE_CURL:
+                return await self._run_with_curl(vn, ua, sec_ch_ua, mobile, platform)
+            else:
+                return await self._run_with_httpx(vn, ua, sec_ch_ua, mobile, platform)
         except Exception as e:
             log.error("CarInfo unexpected error for %s: %s", vn, e, exc_info=True)
             return []
 
-    async def _fetch_with_retry(
-        self, client: httpx.AsyncClient, vn: str, build_id: str, ua: str
-    ) -> Optional[list[dict]]:
-        """Retries on network errors. Returns None on 404 (stale buildId)."""
+    async def _run_with_curl(self, vn: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> list[dict]:
+        proxy_kwargs = {"proxies": {"https": _PROXY_URL, "http": _PROXY_URL}} if _PROXY_URL else {}
+        async with _CurlSession(impersonate="chrome124", **proxy_kwargs) as session:
+            await asyncio.sleep(random.uniform(1.0, 3.0))
+
+            build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform)
+            if not build_id:
+                log.warning("CarInfo: could not determine buildId for %s", vn)
+                return []
+
+            # Human-like pause between page load and API call
+            await asyncio.sleep(random.uniform(0.8, 2.0))
+
+            result = await self._fetch_with_retry_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
+
+            if result is None:
+                log.info("CarInfo: got 404 for %s — refreshing buildId", vn)
+                await asyncio.sleep(random.uniform(1.0, 2.5))
+                build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform, force=True)
+                if not build_id:
+                    return []
+                await asyncio.sleep(random.uniform(0.5, 1.5))
+                result = await self._fetch_with_retry_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
+
+            challans = result or []
+            if challans:
+                log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
+            else:
+                log.info("CarInfo: no challans found for %s", vn)
+            return challans
+
+    async def _run_with_httpx(self, vn: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> list[dict]:
+        client_kwargs: dict = {"timeout": 30.0, "follow_redirects": True}
+        if _PROXY_URL:
+            client_kwargs["proxy"] = _PROXY_URL
+        async with _httpx.AsyncClient(**client_kwargs) as client:
+            await asyncio.sleep(random.uniform(1.0, 3.0))
+
+            build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform)
+            if not build_id:
+                log.warning("CarInfo: could not determine buildId for %s", vn)
+                return []
+
+            await asyncio.sleep(random.uniform(0.8, 2.0))
+            result = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+
+            if result is None:
+                log.info("CarInfo: got 404 for %s — refreshing buildId", vn)
+                await asyncio.sleep(random.uniform(1.0, 2.5))
+                build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform, force=True)
+                if not build_id:
+                    return []
+                result = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+
+            challans = result or []
+            if challans:
+                log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
+            else:
+                log.info("CarInfo: no challans found for %s", vn)
+            return challans
+
+    async def _fetch_with_retry_curl(self, session, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
         for attempt in range(_MAX_RETRIES):
             try:
-                result = await self._fetch(client, vn, build_id, ua)
-                return result
-            except httpx.TimeoutException:
-                log.warning("CarInfo timeout for %s (attempt %d/%d)", vn, attempt + 1, _MAX_RETRIES)
-            except httpx.NetworkError as e:
-                log.warning("CarInfo network error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
+                return await self._fetch_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
             except Exception as e:
-                log.warning("CarInfo request error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
-
+                log.warning("CarInfo curl error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
             if attempt < _MAX_RETRIES - 1:
                 await asyncio.sleep(_RETRY_BACKOFF[attempt])
-
         log.error("CarInfo: all %d retries exhausted for %s", _MAX_RETRIES, vn)
         return []
 
-    async def _fetch(
-        self, client: httpx.AsyncClient, vn: str, build_id: str, ua: str
-    ) -> Optional[list[dict]]:
-        """Returns None on 404 (stale buildId), list otherwise (empty = no challans)."""
-        url = (
-            f"https://www.carinfo.app/_next/data/{build_id}"
-            f"/challan-details/{vn}.json"
-        )
-        resp = await client.get(
-            url,
-            headers=_headers(ua, referer=f"https://www.carinfo.app/challan-details/{vn}"),
-        )
+    async def _fetch_with_retry_httpx(self, client, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
+        for attempt in range(_MAX_RETRIES):
+            try:
+                return await self._fetch_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+            except Exception as e:
+                log.warning("CarInfo httpx error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
+            if attempt < _MAX_RETRIES - 1:
+                await asyncio.sleep(_RETRY_BACKOFF[attempt])
+        log.error("CarInfo: all %d retries exhausted for %s", _MAX_RETRIES, vn)
+        return []
 
+    async def _fetch_curl(self, session, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
+        url = f"https://www.carinfo.app/_next/data/{build_id}/challan-details/{vn}.json"
+        resp = await session.get(url, headers=_api_headers(ua, sec_ch_ua, mobile, platform, vn), timeout=30)
+        return self._handle_response(resp, vn)
+
+    async def _fetch_httpx(self, client, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
+        url = f"https://www.carinfo.app/_next/data/{build_id}/challan-details/{vn}.json"
+        resp = await client.get(url, headers=_api_headers(ua, sec_ch_ua, mobile, platform, vn))
+        return self._handle_response(resp, vn)
+
+    def _handle_response(self, resp, vn: str) -> Optional[list[dict]]:
         if resp.status_code == 404:
-            return None  # caller will refresh buildId
+            return None
 
         if resp.status_code == 429:
             log.warning("CarInfo rate limited (429) for %s", vn)
-            await asyncio.sleep(10.0)
-            raise httpx.NetworkError("Rate limited")
+            raise Exception("Rate limited")
 
         if resp.status_code == 503:
             log.warning("CarInfo service unavailable (503) for %s", vn)
-            raise httpx.NetworkError("Service unavailable")
+            raise Exception("Service unavailable")
 
         if resp.status_code != 200:
             log.warning("CarInfo HTTP %d for %s", resp.status_code, vn)
@@ -309,13 +408,11 @@ class CarInfoScraper:
 
         xdata = body.get("pageProps", {}).get("xdataprops", "")
         if not xdata:
-            # Valid response, vehicle simply has no challans on CarInfo
             log.info("CarInfo: no xdataprops for %s (no challans)", vn)
             return []
 
         decrypted = _decrypt(xdata)
         if not decrypted:
-            # Decryption failed — AES key may have changed
             log.warning("CarInfo: decryption failed for %s (key may have changed)", vn)
             return []
 

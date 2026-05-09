@@ -111,7 +111,7 @@ export default function ThankYouPage({
                       <p className="text-[10px] font-black tracking-[0.22em] text-blue-600 uppercase mb-2">
                         Vehicle Information
                       </p>
-                      <p className="text-[2rem] font-black leading-none tracking-widest text-gray-900 break-all">
+                      <p className="text-2xl font-black leading-none tracking-widest text-gray-900 break-all">
                         {vehicleNumber || '—'}
                       </p>
                       <div className="mt-4 grid grid-cols-2 gap-3">

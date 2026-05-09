@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { CheckCircle2, Loader2, Calendar, MapPin, ShieldCheck, ArrowRight, X, Hash, CreditCard } from 'lucide-react';
+import { CheckCircle2, Loader2, Calendar, MapPin, ShieldCheck, ArrowRight, X, Hash } from 'lucide-react';
 import { challansApi, type ChallanEntry } from '@/lib/api';
 
 interface Props {
@@ -54,6 +54,7 @@ function formatAmountShort(amount: number) {
 
 function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClose: () => void }) {
   const isPaid = challan.status?.toUpperCase() === 'PAID';
+  const amount = Number(challan.amountChallan) || 0;
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -62,89 +63,108 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
 
   return (
     <div className="fixed inset-0 z-[200] flex items-end" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <div
-        className="relative w-full max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pt-5 pb-28 shadow-2xl"
+        className="relative w-full max-h-[90vh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white pb-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-gray-200" />
-
-        {/* Header */}
-        <div className="flex items-start justify-between mb-5">
-          <div>
-            <p className="text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase mb-1">Challan Details</p>
-            <p className={`text-sm font-bold px-2 py-0.5 rounded-full inline-block ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
-              {isPaid ? 'Paid' : 'Unpaid'}
-            </p>
+        <div className="sticky top-0 bg-white pt-3 pb-2 px-5 z-10">
+          <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-gray-200" />
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-black tracking-[0.18em] text-gray-400 uppercase">Challan Details</p>
+            <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+              <X className="h-4 w-4 text-gray-500" />
+            </button>
           </div>
-          <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
-            <X className="h-4 w-4 text-gray-500" />
-          </button>
         </div>
 
-        {/* Amount */}
-        <div className="rounded-2xl bg-gray-50 px-5 py-4 mb-4 text-center">
-          <p className={`text-4xl font-black ${isPaid ? 'text-emerald-500' : 'text-red-500'}`}>
-            ₹{(Number(challan.amountChallan) || 0).toLocaleString('en-IN')}
-          </p>
-          <p className="text-xs text-gray-400 mt-1">Fine Amount</p>
-        </div>
-
-        {/* Details */}
-        <div className="space-y-3">
-          {challan.challanNo && (
-            <div className="flex items-start gap-3">
-              <Hash className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Challan No</p>
-                <p className="text-sm font-semibold text-gray-800">{challan.challanNo}</p>
-              </div>
-            </div>
-          )}
-          <div className="flex items-start gap-3">
-            <Calendar className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+        <div className="px-5 pt-1 pb-24">
+          {/* Amount hero */}
+          <div className={`rounded-2xl px-5 py-5 mb-5 flex items-center justify-between ${isPaid ? 'bg-emerald-50' : 'bg-red-50'}`}>
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date</p>
-              <p className="text-sm font-semibold text-gray-800">{formatDate(challan.dateChallan)}</p>
+              <p className={`text-3xl font-black leading-none ${isPaid ? 'text-emerald-600' : 'text-red-500'}`}>
+                ₹{amount.toLocaleString('en-IN')}
+              </p>
+              <p className="text-xs text-gray-400 mt-1.5">Fine Amount</p>
             </div>
+            <span className={`text-xs font-black px-3 py-1.5 rounded-full tracking-wide ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
+              {isPaid ? 'PAID' : 'UNPAID'}
+            </span>
           </div>
-          {challan.locationChallan && (
-            <div className="flex items-start gap-3">
-              <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+
+          {/* Details rows */}
+          <div className="rounded-2xl bg-gray-50 divide-y divide-gray-100 overflow-hidden mb-5">
+            {challan.challanNo && (
+              <div className="flex items-center gap-3 px-4 py-3.5">
+                <Hash className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Challan No</p>
+                  <p className="text-sm font-semibold text-gray-800 truncate">{challan.challanNo}</p>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-3 px-4 py-3.5">
+              <Calendar className="h-4 w-4 text-gray-400 flex-shrink-0" />
               <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location</p>
-                <p className="text-sm font-semibold text-gray-800">{challan.locationChallan}</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date</p>
+                <p className="text-sm font-semibold text-gray-800">{formatDate(challan.dateChallan)}</p>
               </div>
             </div>
-          )}
-          {challan.challan_search_source && (
-            <div className="flex items-start gap-3">
-              <CreditCard className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+            {challan.locationChallan && (
+              <div className="flex items-center gap-3 px-4 py-3.5">
+                <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location</p>
+                  <p className="text-sm font-semibold text-gray-800">{challan.locationChallan}</p>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-3 px-4 py-3.5">
+              <ShieldCheck className="h-4 w-4 text-gray-400 flex-shrink-0" />
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Source</p>
-                <p className="text-sm font-semibold text-gray-800">{challan.challan_search_source}</p>
+                <p className="text-sm font-semibold text-gray-800">Challan Setu</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Violations */}
+          {challan.detailsViolation?.length > 0 && (
+            <div>
+              <p className="text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase mb-2 px-0.5">Violations</p>
+              <div className="space-y-2">
+                {challan.detailsViolation.map((v, i) => (
+                  <div key={i} className="rounded-xl bg-gray-50 px-4 py-3.5 flex items-start gap-3">
+                    <div className="mt-0.5 h-5 w-5 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-[10px] font-black text-orange-500">{i + 1}</span>
+                    </div>
+                    <p className="text-sm font-medium text-gray-800 leading-snug">{v.offence}</p>
+                  </div>
+                ))}
               </div>
             </div>
           )}
-        </div>
 
-        {/* Violations */}
-        {challan.detailsViolation?.length > 0 && (
-          <div className="mt-5">
-            <p className="text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase mb-2">Violations</p>
-            <div className="space-y-2">
-              {challan.detailsViolation.map((v, i) => (
-                <div key={i} className="rounded-xl bg-gray-50 px-4 py-3 flex items-start justify-between gap-3">
-                  <p className="text-sm font-medium text-gray-800 leading-snug">{v.offence}</p>
-                  {v.penalty != null && (
-                    <p className="text-sm font-bold text-red-500 flex-shrink-0">₹{v.penalty}</p>
-                  )}
-                </div>
-              ))}
+          {/* FOMO warning — only for unpaid */}
+          {!isPaid && (
+            <div className="mt-5 rounded-2xl bg-red-50 border border-red-100 px-4 py-4">
+              <p className="text-xs font-black text-red-600 uppercase tracking-wider mb-2">⚠️ Don't ignore this</p>
+              <ul className="space-y-1.5">
+                {[
+                  'Unpaid challans can lead to driving licence suspension',
+                  'Vehicle registration renewal may be blocked',
+                  'Penalties increase over time with court notices',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                    <p className="text-xs text-red-700 leading-snug">{item}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -198,12 +218,12 @@ function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; con
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-red-50 px-4 py-5 text-center">
-          <p className="text-3xl font-black text-red-500 leading-none">{formatAmountShort(unpaidAmount)}</p>
+        <div className="rounded-2xl bg-red-50 px-4 py-4 text-center">
+          <p className="text-xl font-black text-red-500 leading-none">{formatAmountShort(unpaidAmount)}</p>
           <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">Total Due</p>
         </div>
-        <div className="rounded-2xl bg-green-50 px-4 py-5 text-center">
-          <p className="text-4xl font-black text-green-500 leading-none">{challans.length}</p>
+        <div className="rounded-2xl bg-green-50 px-4 py-4 text-center">
+          <p className="text-2xl font-black text-green-500 leading-none">{challans.length}</p>
           <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">Violations</p>
         </div>
       </div>
@@ -263,7 +283,7 @@ export function PublicChallanSection({ vehicleNumber }: Props) {
         <Loader2 className="h-4 w-4 animate-spin text-blue-400 flex-shrink-0" />
         <div>
           <p className="text-sm font-semibold text-gray-700">Checking challan records…</p>
-          <p className="text-xs text-gray-400 mt-0.5">Fetching from CarInfo database</p>
+          <p className="text-xs text-gray-400 mt-0.5">Fetching from our database</p>
         </div>
       </div>
     );
