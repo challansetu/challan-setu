@@ -45,7 +45,7 @@ export const leadsApi = {
     consentAccepted: boolean;
     source?: 'homepage' | 'city_page';
     city?: string;
-  }) => api.post('/leads', data),
+  }) => api.post('/leads', data, { timeout: 10000 }),
 };
 
 export default api;

@@ -314,7 +314,7 @@ export function LeadCaptureModal({
               disabled={!isFormValid}
               className="w-full rounded-2xl h-14"
             >
-              Submit Request
+              {submitState === 'loading' ? 'Submitting...' : 'Submit Request'}
               {submitState !== 'loading' && <ArrowRight className="w-5 h-5" />}
             </Button>
 
