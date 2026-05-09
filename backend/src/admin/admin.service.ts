@@ -131,6 +131,30 @@ export class AdminService {
     };
   }
 
+  async getLeadsStats() {
+    const [total, converted, dead, followUp, paymentDone, agg] = await Promise.all([
+      this.prisma.lead.count(),
+      this.prisma.lead.count({ where: { crmStatus: 'converted' } }),
+      this.prisma.lead.count({ where: { crmStatus: 'dead' } }),
+      this.prisma.lead.count({ where: { crmStatus: 'follow_up' } }),
+      this.prisma.lead.count({ where: { paymentStatus: 'payment_done' } }),
+      this.prisma.lead.aggregate({
+        _sum: { paidAmount: true, settledAmount: true, discountGiven: true, totalChallan: true },
+      }),
+    ]);
+    return {
+      total,
+      converted,
+      dead,
+      followUp,
+      paymentDone,
+      totalRevenue: agg._sum.paidAmount ?? 0,
+      totalSettled: agg._sum.settledAmount ?? 0,
+      totalDiscount: agg._sum.discountGiven ?? 0,
+      totalChallanValue: agg._sum.totalChallan ?? 0,
+    };
+  }
+
   async getLead(id: string) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');

@@ -75,6 +75,15 @@ export const adminApi = {
     return res.data;
   },
 
+  leadsStats: async () => {
+    const res = await axiosInstance.get<{
+      total: number; converted: number; dead: number; followUp: number;
+      paymentDone: number; totalRevenue: number; totalSettled: number;
+      totalDiscount: number; totalChallanValue: number;
+    }>('/admin/leads/stats');
+    return res.data;
+  },
+
   leadDetail: async (id: string) => {
     const res = await axiosInstance.get<import("@/types/admin").Lead>(`/admin/leads/${id}`);
     return res.data;

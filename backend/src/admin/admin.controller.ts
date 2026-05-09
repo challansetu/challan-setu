@@ -67,6 +67,12 @@ export class AdminController {
     return this.adminService.getLeads({ page, limit, search, status, source });
   }
 
+  @Get('leads/stats')
+  @ApiOperation({ summary: 'Leads aggregate stats' })
+  async getLeadsStats() {
+    return this.adminService.getLeadsStats();
+  }
+
   @Get('leads/:id')
   @ApiOperation({ summary: 'Get single lead detail' })
   async getLead(@Param('id') id: string) {

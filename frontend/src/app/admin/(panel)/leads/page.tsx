@@ -39,6 +39,18 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
     settledAmount: lead.settledAmount ?? "",
     discountGiven: lead.discountGiven ?? "",
   });
+
+  const updateForm = (patch: Partial<typeof form>) => {
+    setForm((prev) => {
+      const next = { ...prev, ...patch };
+      const total = Number(next.totalChallan);
+      const settled = Number(next.settledAmount);
+      if (total > 0 && settled > 0) {
+        next.discountGiven = String(Math.max(0, total - settled));
+      }
+      return next;
+    });
+  };
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -151,7 +163,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                   <label className={labelCls}>Lead Status</label>
                   <select
                     value={form.crmStatus}
-                    onChange={(e) => setForm({ ...form, crmStatus: e.target.value })}
+                    onChange={(e) => updateForm({ crmStatus: e.target.value })}
                     className={inputCls}
                   >
                     {CRM_STATUSES.map((s) => (
@@ -163,7 +175,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                   <label className={labelCls}>Payment Status</label>
                   <select
                     value={form.paymentStatus}
-                    onChange={(e) => setForm({ ...form, paymentStatus: e.target.value })}
+                    onChange={(e) => updateForm({ paymentStatus: e.target.value })}
                     className={inputCls}
                   >
                     {PAYMENT_STATUSES.map((s) => (
@@ -184,7 +196,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                 <input
                   type="number"
                   value={form.totalChallan}
-                  onChange={(e) => setForm({ ...form, totalChallan: e.target.value })}
+                  onChange={(e) => updateForm({ totalChallan: e.target.value })}
                   placeholder="0"
                   className={inputCls}
                 />
@@ -194,7 +206,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                 <input
                   type="number"
                   value={form.paidAmount}
-                  onChange={(e) => setForm({ ...form, paidAmount: e.target.value })}
+                  onChange={(e) => updateForm({ paidAmount: e.target.value })}
                   placeholder="0"
                   className={inputCls}
                 />
@@ -204,7 +216,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                 <input
                   type="number"
                   value={form.settledAmount}
-                  onChange={(e) => setForm({ ...form, settledAmount: e.target.value })}
+                  onChange={(e) => updateForm({ settledAmount: e.target.value })}
                   placeholder="0"
                   className={inputCls}
                 />
@@ -214,10 +226,11 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                 <input
                   type="number"
                   value={form.discountGiven}
-                  onChange={(e) => setForm({ ...form, discountGiven: e.target.value })}
-                  placeholder="0"
-                  className={inputCls}
+                  readOnly
+                  placeholder="Auto-calculated"
+                  className={`${inputCls} bg-gray-50 text-gray-500 cursor-not-allowed`}
                 />
+                <p className="text-[10px] text-gray-400 mt-1">= Total − Settled</p>
               </div>
             </div>
           </div>
@@ -259,6 +272,8 @@ export default function LeadsPage() {
   }), [searchParams]);
 
   const params = getParams();
+
+  const { data: stats } = useSWR("admin-leads-stats", adminApi.leadsStats);
 
   const { data, isLoading, error, mutate } = useSWR<LeadsResponse>(
     ["admin-leads", JSON.stringify(params)],
@@ -309,6 +324,24 @@ export default function LeadsPage() {
             Homepage and city-page request submissions from the MVP flow.
           </p>
         </div>
+      </div>
+
+      {/* Stats bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        {[
+          { label: "Total Leads", value: stats?.total ?? "—", color: "text-gray-900" },
+          { label: "Converted", value: stats?.converted ?? "—", color: "text-green-600" },
+          { label: "Follow Up", value: stats?.followUp ?? "—", color: "text-yellow-600" },
+          { label: "Dead", value: stats?.dead ?? "—", color: "text-red-500" },
+          { label: "Payment Done", value: stats?.paymentDone ?? "—", color: "text-blue-600" },
+          { label: "Revenue", value: stats ? `₹${(stats.totalRevenue).toLocaleString("en-IN")}` : "—", color: "text-green-600" },
+          { label: "Discount", value: stats ? `₹${(stats.totalDiscount).toLocaleString("en-IN")}` : "—", color: "text-orange-500" },
+        ].map((s) => (
+          <div key={s.label} className="bg-white rounded-xl shadow-sm px-4 py-3">
+            <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mt-0.5">{s.label}</p>
+          </div>
+        ))}
       </div>
 
       <div className="bg-white rounded-xl shadow-sm p-4">
