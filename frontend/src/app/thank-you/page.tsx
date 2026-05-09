@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button';
 import { EparivahanChallanSection } from '@/components/EparivahanChallanSection';
 
 const WA_NUMBER = '918796323876';
-const SHOW_EPARIVAHAN_UI = process.env.NEXT_PUBLIC_ENABLE_EPARIVAHAN_OTP === 'true';
 
 const nextSteps = [
   {
@@ -130,7 +129,7 @@ export default function ThankYouPage({
                 </div>
 
                 {/* Challan section */}
-                {SHOW_EPARIVAHAN_UI && vehicleNumber && (
+                {vehicleNumber && (
                   <EparivahanChallanSection vehicleNumber={vehicleNumber} />
                 )}
 
