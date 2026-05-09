@@ -164,6 +164,7 @@ export class AdminService {
   async updateLead(id: string, dto: {
     crmStatus?: string;
     paymentStatus?: string;
+    challanSettled?: string;
     totalChallan?: number | null;
     paidAmount?: number | null;
     settledAmount?: number | null;

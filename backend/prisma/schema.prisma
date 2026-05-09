@@ -423,6 +423,7 @@ model Lead {
   // CRM fields
   crmStatus        String   @default("new")      // new | follow_up | converted | dead
   paymentStatus    String   @default("pending")   // pending | payment_done
+  challanSettled   String   @default("no")        // yes | no | initiated
   totalChallan     Int?
   paidAmount       Int?
   settledAmount    Int?

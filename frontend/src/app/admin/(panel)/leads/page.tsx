@@ -34,6 +34,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
   const [form, setForm] = useState({
     crmStatus: lead.crmStatus ?? "new",
     paymentStatus: lead.paymentStatus ?? "pending",
+    challanSettled: lead.challanSettled ?? "no",
     totalChallan: lead.totalChallan ?? "",
     paidAmount: lead.paidAmount ?? "",
     settledAmount: lead.settledAmount ?? "",
@@ -44,9 +45,9 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
     setForm((prev) => {
       const next = { ...prev, ...patch };
       const total = Number(next.totalChallan);
-      const settled = Number(next.settledAmount);
-      if (total > 0 && settled > 0) {
-        next.discountGiven = String(Math.max(0, total - settled));
+      const paid = Number(next.paidAmount);
+      if (total > 0 && paid > 0) {
+        next.discountGiven = String(Math.max(0, total - paid));
       }
       return next;
     });
@@ -65,6 +66,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
       const updated = await adminApi.updateLead(lead.id, {
         crmStatus: form.crmStatus,
         paymentStatus: form.paymentStatus,
+        challanSettled: form.challanSettled,
         totalChallan: form.totalChallan !== "" ? Number(form.totalChallan) : null,
         paidAmount: form.paidAmount !== "" ? Number(form.paidAmount) : null,
         settledAmount: form.settledAmount !== "" ? Number(form.settledAmount) : null,
@@ -183,6 +185,18 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                     ))}
                   </select>
                 </div>
+                <div className="col-span-2">
+                  <label className={labelCls}>Challan Settled</label>
+                  <select
+                    value={form.challanSettled}
+                    onChange={(e) => updateForm({ challanSettled: e.target.value })}
+                    className={inputCls}
+                  >
+                    <option value="no">No</option>
+                    <option value="initiated">Initiated</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -230,7 +244,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                   placeholder="Auto-calculated"
                   className={`${inputCls} bg-gray-50 text-gray-500 cursor-not-allowed`}
                 />
-                <p className="text-[10px] text-gray-400 mt-1">= Total − Settled</p>
+                <p className="text-[10px] text-gray-400 mt-1">= Total − Paid</p>
               </div>
             </div>
           </div>

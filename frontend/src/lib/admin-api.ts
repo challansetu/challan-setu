@@ -92,6 +92,7 @@ export const adminApi = {
   updateLead: async (id: string, data: {
     crmStatus?: string;
     paymentStatus?: string;
+    challanSettled?: string;
     totalChallan?: number | null;
     paidAmount?: number | null;
     settledAmount?: number | null;

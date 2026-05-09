@@ -86,6 +86,7 @@ export class AdminController {
     @Body() body: {
       crmStatus?: string;
       paymentStatus?: string;
+      challanSettled?: string;
       totalChallan?: number | null;
       paidAmount?: number | null;
       settledAmount?: number | null;
