@@ -172,12 +172,75 @@ async def _solve_2captcha(image_bytes: bytes) -> str:
     raise RuntimeError("2Captcha timed out")
 
 
+_CAPTCHA_RE = re.compile(r'^[a-zA-Z0-9]{4,8}$')
+_ddddocr_instance = None
+
+
+def _get_ocr():
+    global _ddddocr_instance
+    if _ddddocr_instance is None:
+        import ddddocr
+        _ddddocr_instance = ddddocr.DdddOcr(show_ad=False)
+    return _ddddocr_instance
+
+
+def _preprocess_captcha(image_bytes: bytes, mode: int) -> bytes:
+    """Return image bytes after applying a preprocessing pipeline."""
+    try:
+        from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+        import io
+        img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+
+        if mode == 1:
+            # High contrast + sharpen
+            img = img.convert('L')
+            img = ImageEnhance.Contrast(img).enhance(3.0)
+            img = img.filter(ImageFilter.SHARPEN)
+        elif mode == 2:
+            # 2× nearest-neighbour resize + binary threshold
+            img = img.convert('L')
+            img = img.resize((img.width * 2, img.height * 2), Image.NEAREST)
+            img = img.point(lambda p: 255 if p > 127 else 0)
+        elif mode == 3:
+            # Invert + contrast boost (helps on dark-background CAPTCHAs)
+            img = img.convert('L')
+            img = ImageOps.invert(img)
+            img = ImageEnhance.Contrast(img).enhance(2.0)
+        # mode == 0: raw, no changes
+
+        buf = __import__('io').BytesIO()
+        img.save(buf, format='PNG')
+        return buf.getvalue()
+    except Exception:
+        return image_bytes
+
+
 async def _solve_ddddocr(image_bytes: bytes) -> str:
     try:
-        import ddddocr
-        ocr = ddddocr.DdddOcr(show_ad=False)
-        result = ocr.classification(image_bytes)
-        return result.strip()
+        from collections import Counter
+        ocr = _get_ocr()
+        candidates = []
+
+        for mode in range(4):
+            processed = _preprocess_captcha(image_bytes, mode)
+            try:
+                result = ocr.classification(processed).strip()
+                if _CAPTCHA_RE.match(result):
+                    candidates.append(result)
+                    log.debug("ddddocr mode=%d → '%s'", mode, result)
+            except Exception:
+                continue
+
+        if candidates:
+            winner, count = Counter(candidates).most_common(1)[0]
+            log.info("ddddocr consensus: '%s' (%d/%d votes)", winner, count, len(candidates))
+            return winner
+
+        # No valid candidates — fall back to raw result anyway
+        fallback = ocr.classification(image_bytes).strip()
+        log.warning("ddddocr no valid candidate, using raw fallback: '%s'", fallback)
+        return fallback
+
     except Exception as e:
         log.warning("ddddocr failed: %s", e)
         return ""
@@ -453,11 +516,18 @@ class EparivahanScraper:
 
                         if status == "Failed":
                             msg = str(search_resp.get("message", "Search failed"))
-                            # Only treat explicit "no challan" responses as empty results.
-                            # RECORD_NOT_FOUND is intentionally excluded — it means the
-                            # vehicle number doesn't exist in VAHAN (different from no challans).
+                            # CHALLAN_NOT_FOUND can also appear when the CAPTCHA is wrong
+                            # (eparivahan doesn't always say "captcha" in the message).
+                            # Retry up to 3 attempts before trusting it as a genuine clean record.
                             if msg in ("CHALLAN_NOT_FOUND", "NO_CHALLAN_FOUND"):
-                                log.info("eparivahan confirmed no challans for %s", vrn)
+                                if attempt < 2:
+                                    log.warning(
+                                        "CHALLAN_NOT_FOUND for %s on attempt %d — may be wrong CAPTCHA, retrying",
+                                        vrn, attempt + 1,
+                                    )
+                                    await asyncio.sleep(1.0)
+                                    continue
+                                log.info("eparivahan confirmed no challans for %s (consistent across 3 attempts)", vrn)
                                 return {"otp_required": False, "challans": [], "confirmed": True}
                             if "captcha" in msg.lower() and attempt < 2:
                                 log.warning("Captcha wrong for %s, retrying (attempt %d)", vrn, attempt + 1)
