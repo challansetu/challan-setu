@@ -61,10 +61,10 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex items-end" onClick={onClose}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
-        className="relative w-full max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pt-5 pb-10 shadow-2xl"
+        className="relative w-full max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white px-5 pt-5 pb-28 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
