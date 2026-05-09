@@ -136,37 +136,46 @@ export function LeadCaptureModal({
     setSubmitState('loading');
     setErrorMessage('');
 
-    try {
-      const response = await leadsApi.create({
-        fullName: normalizedName,
-        mobileNumber,
-        vehicleNumber,
-        consentAccepted: true,
-        source,
-        city,
-      });
+    const payload = {
+      fullName: normalizedName,
+      mobileNumber,
+      vehicleNumber,
+      consentAccepted: true as const,
+      source,
+      city,
+    };
 
-      setSubmitState('success');
-      const leadId = response?.data?.leadId;
-      const leadStatus = response?.data?.leadStatus;
-      const createdAt = response?.data?.createdAt;
-      redirectTimerRef.current = setTimeout(() => {
-        const params = new URLSearchParams({
-          vehicle: vehicleNumber,
-          ...(leadId ? { lead: leadId } : {}),
-          ...(leadStatus ? { status: leadStatus } : {}),
-          ...(createdAt ? { createdAt } : {}),
-          ...(city ? { city } : {}),
-        });
-        router.push(`/thank-you?${params.toString()}`);
-      }, 700);
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        'We could not submit your request right now. Please try again.';
-      setErrorMessage(Array.isArray(message) ? message[0] : message);
-      setSubmitState('error');
+    let response;
+    try {
+      response = await leadsApi.create(payload);
+    } catch {
+      // retry once on timeout / network error (handles cold starts)
+      try {
+        response = await leadsApi.create(payload);
+      } catch (error: any) {
+        const message =
+          error.response?.data?.message ||
+          'We could not submit your request right now. Please try again.';
+        setErrorMessage(Array.isArray(message) ? message[0] : message);
+        setSubmitState('error');
+        return;
+      }
     }
+
+    setSubmitState('success');
+    const leadId = response?.data?.leadId;
+    const leadStatus = response?.data?.leadStatus;
+    const createdAt = response?.data?.createdAt;
+    redirectTimerRef.current = setTimeout(() => {
+      const params = new URLSearchParams({
+        vehicle: vehicleNumber,
+        ...(leadId ? { lead: leadId } : {}),
+        ...(leadStatus ? { status: leadStatus } : {}),
+        ...(createdAt ? { createdAt } : {}),
+        ...(city ? { city } : {}),
+      });
+      router.push(`/thank-you?${params.toString()}`);
+    }, 700);
   }, [isFormValid, mobileNumber, normalizedName, onClose, router, vehicleNumber]);
 
   if (!open) return null;
