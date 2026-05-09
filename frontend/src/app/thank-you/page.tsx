@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/Button';
-import { EparivahanChallanSection } from '@/components/EparivahanChallanSection';
+import { EparivahanChallanSection, PublicChallanSection } from '@/components/EparivahanChallanSection';
 
 const WA_NUMBER = '918796323876';
 
@@ -124,9 +124,12 @@ export default function ThankYouPage({
                   </div>
                 </div>
 
-                {/* Challan section */}
+                {/* Challan sections */}
                 {vehicleNumber && (
-                  <EparivahanChallanSection vehicleNumber={vehicleNumber} />
+                  <>
+                    <PublicChallanSection vehicleNumber={vehicleNumber} />
+                    <EparivahanChallanSection vehicleNumber={vehicleNumber} />
+                  </>
                 )}
 
                 {/* Status banner */}

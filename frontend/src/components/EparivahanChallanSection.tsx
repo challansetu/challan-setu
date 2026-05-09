@@ -247,6 +247,45 @@ function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; con
   );
 }
 
+export function PublicChallanSection({ vehicleNumber }: Props) {
+  const [status, setStatus] = useState<'loading' | 'done' | 'error'>('loading');
+  const [challans, setChallans] = useState<ChallanEntry[]>([]);
+
+  useEffect(() => {
+    challansApi.getPublic(vehicleNumber)
+      .then(res => { setChallans(res.data.challans ?? []); setStatus('done'); })
+      .catch(() => setStatus('error'));
+  }, [vehicleNumber]);
+
+  if (status === 'loading') {
+    return (
+      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+        <Loader2 className="h-4 w-4 animate-spin text-blue-400 flex-shrink-0" />
+        <div>
+          <p className="text-sm font-semibold text-gray-700">Checking challan records…</p>
+          <p className="text-xs text-gray-400 mt-0.5">Fetching from CarInfo database</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="rounded-2xl bg-white shadow-sm px-5 py-4 flex items-center gap-3">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-amber-100">
+          <span className="text-sm">⚠️</span>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-gray-800">Could not fetch challan data</p>
+          <p className="text-xs text-gray-400 mt-0.5">Use the live check below for real-time results.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <ChallanResults challans={challans} confirmed={true} />;
+}
+
 export function EparivahanChallanSection({ vehicleNumber }: Props) {
   const [stage, setStage] = useState<Stage>({ name: 'idle' });
   const [otp, setOtp] = useState('');
@@ -296,7 +335,7 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
               <p className="text-[10px] font-black tracking-[0.2em] text-blue-600 uppercase">Live Challan Check</p>
             </div>
             <p className="text-sm text-gray-600 mb-4">
-              Verify pending challans directly from eparivahan using OTP sent to your registered mobile.
+              Get real-time challan data directly from eparivahan via OTP on your registered mobile.
             </p>
             <button
               onClick={handleSendOtp}
