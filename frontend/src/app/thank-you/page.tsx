@@ -95,10 +95,16 @@ export default function ThankYouPage({
         {/* ── Content area ── */}
         {/* Mobile: cards slide over fixed hero. Desktop: normal flow on gray bg */}
         <div className="relative z-10 rounded-t-3xl bg-[#F2F4F8] -mt-6 sm:mt-0 sm:rounded-none sm:shadow-none">
-          <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-4xl sm:px-8 sm:pt-10 sm:pb-20">
+          <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-6xl sm:px-10 sm:pt-10 sm:pb-20">
+
+            {/* Status banner — desktop only, above grid */}
+            <div className="hidden sm:block rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center mb-6">
+              <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
+              <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
+            </div>
 
             {/* ── Desktop two-column grid ── */}
-            <div className="sm:grid sm:grid-cols-2 sm:gap-6 sm:items-start space-y-4 sm:space-y-0">
+            <div className="sm:grid sm:grid-cols-[3fr_2fr] sm:gap-8 sm:items-start space-y-4 sm:space-y-0">
 
               {/* Left column */}
               <div className="space-y-4">
@@ -132,32 +138,17 @@ export default function ThankYouPage({
                   </>
                 )}
 
-                {/* Status banner */}
-                <div className="rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
+                {/* Status banner — mobile only (desktop version is above the grid) */}
+                <div className="sm:hidden rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
                   <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
                   <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
                 </div>
 
-                {/* Action buttons — desktop inline, replaces fixed bar */}
-                <div className="hidden sm:flex gap-3">
-                  <a href={whatsappMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button variant="success" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
-                      WhatsApp Us
-                      <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
-                    </Button>
-                  </a>
-                  <a href={screenshotMessage} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button variant="outline" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
-                      Share Challan
-                      <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                    </Button>
-                  </a>
-                </div>
 
               </div>
 
-              {/* Right column */}
-              <div className="space-y-4">
+              {/* Right column — sticky on desktop */}
+              <div className="space-y-4 sm:sticky sm:top-24 sm:self-start">
 
                 {/* What happens next */}
                 <div className="rounded-2xl bg-white shadow-sm px-5 py-5">
@@ -183,7 +174,23 @@ export default function ThankYouPage({
                   </div>
                 </div>
 
-                {/* Trust note — desktop only, placed in right col */}
+                {/* Action buttons — desktop only, in right col */}
+                <div className="hidden sm:flex flex-col gap-3">
+                  <a href={whatsappMessage} target="_blank" rel="noopener noreferrer">
+                    <Button variant="success" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
+                      WhatsApp Us
+                      <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
+                    </Button>
+                  </a>
+                  <a href={screenshotMessage} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" size="md" className="w-full rounded-xl whitespace-nowrap text-sm font-bold py-3">
+                      Share Challan Screenshot
+                      <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                    </Button>
+                  </a>
+                </div>
+
+                {/* Trust note — desktop only */}
                 <div className="hidden sm:flex items-center gap-2 px-1">
                   <ShieldCheck className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
                   <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>

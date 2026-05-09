@@ -62,15 +62,15 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-end" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex items-end sm:items-center sm:justify-center sm:p-6" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <div
-        className="relative w-full max-h-[90vh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white pb-6 shadow-2xl"
+        className="relative w-full max-h-[90vh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white pb-6 shadow-2xl sm:rounded-[28px] sm:max-w-lg sm:max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Handle */}
+        {/* Handle — mobile only */}
         <div className="sticky top-0 bg-white pt-3 pb-2 px-5 z-10">
-          <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-gray-200" />
+          <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
           <div className="flex items-center justify-between">
             <p className="text-xs font-black tracking-[0.18em] text-gray-400 uppercase">Challan Details</p>
             <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
