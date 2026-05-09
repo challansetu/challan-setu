@@ -419,6 +419,15 @@ model Lead {
   source           String   @default("homepage")
   city             String?
   leadStatus       String   @default("new")
+
+  // CRM fields
+  crmStatus        String   @default("new")      // new | follow_up | converted | dead
+  paymentStatus    String   @default("pending")   // pending | payment_done
+  totalChallan     Int?
+  paidAmount       Int?
+  settledAmount    Int?
+  discountGiven    Int?
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -426,6 +435,7 @@ model Lead {
   @@index([vehicleNumber])
   @@index([city])
   @@index([leadStatus])
+  @@index([crmStatus])
   @@index([source])
   @@index([createdAt])
   @@map("leads")

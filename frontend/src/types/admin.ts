@@ -51,6 +51,12 @@ export interface Lead {
   source: string;
   city: string | null;
   leadStatus: string;
+  crmStatus: string;
+  paymentStatus: string;
+  totalChallan: number | null;
+  paidAmount: number | null;
+  settledAmount: number | null;
+  discountGiven: number | null;
   createdAt: string;
   updatedAt: string;
 }

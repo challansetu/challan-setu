@@ -105,7 +105,7 @@ export class AdminService {
     }
 
     if (params.status) {
-      where.leadStatus = params.status;
+      where.crmStatus = params.status;
     }
 
     if (params.source) {
@@ -129,6 +129,25 @@ export class AdminService {
       limit,
       totalPages: Math.ceil(total / limit),
     };
+  }
+
+  async getLead(id: string) {
+    const lead = await this.prisma.lead.findUnique({ where: { id } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    return lead;
+  }
+
+  async updateLead(id: string, dto: {
+    crmStatus?: string;
+    paymentStatus?: string;
+    totalChallan?: number | null;
+    paidAmount?: number | null;
+    settledAmount?: number | null;
+    discountGiven?: number | null;
+  }) {
+    const lead = await this.prisma.lead.findUnique({ where: { id } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    return this.prisma.lead.update({ where: { id }, data: dto });
   }
 
   // ─── Users (filtered) ─────────────────────────────────────────────────────

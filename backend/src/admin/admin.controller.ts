@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, Req, Res, HttpCode, HttpStatus,
+  Controller, Get, Post, Put, Patch, Delete, Body, Param, Query, UseGuards, Req, Res, HttpCode, HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -65,6 +65,28 @@ export class AdminController {
     @Query('source') source?: string,
   ) {
     return this.adminService.getLeads({ page, limit, search, status, source });
+  }
+
+  @Get('leads/:id')
+  @ApiOperation({ summary: 'Get single lead detail' })
+  async getLead(@Param('id') id: string) {
+    return this.adminService.getLead(id);
+  }
+
+  @Patch('leads/:id')
+  @ApiOperation({ summary: 'Update lead CRM fields' })
+  async updateLead(
+    @Param('id') id: string,
+    @Body() body: {
+      crmStatus?: string;
+      paymentStatus?: string;
+      totalChallan?: number | null;
+      paidAmount?: number | null;
+      settledAmount?: number | null;
+      discountGiven?: number | null;
+    },
+  ) {
+    return this.adminService.updateLead(id, body);
   }
 
   // ─── Users ────────────────────────────────────────────────────────────────

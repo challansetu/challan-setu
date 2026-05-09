@@ -75,6 +75,23 @@ export const adminApi = {
     return res.data;
   },
 
+  leadDetail: async (id: string) => {
+    const res = await axiosInstance.get<import("@/types/admin").Lead>(`/admin/leads/${id}`);
+    return res.data;
+  },
+
+  updateLead: async (id: string, data: {
+    crmStatus?: string;
+    paymentStatus?: string;
+    totalChallan?: number | null;
+    paidAmount?: number | null;
+    settledAmount?: number | null;
+    discountGiven?: number | null;
+  }) => {
+    const res = await axiosInstance.patch<import("@/types/admin").Lead>(`/admin/leads/${id}`, data);
+    return res.data;
+  },
+
   users: async (params: ListUsersParams = {}) => {
     const res = await axiosInstance.get<UsersResponse>("/admin/users", {
       params,
