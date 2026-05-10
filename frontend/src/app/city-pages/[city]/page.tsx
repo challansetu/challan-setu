@@ -32,6 +32,7 @@ export async function generateMetadata({
       title: data.ogTitle,
       description: data.ogDescription,
       url: data.canonicalPath,
+      images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     },
   };
 }

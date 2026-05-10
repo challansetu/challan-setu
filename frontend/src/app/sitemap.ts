@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllCityPages } from '@/data/city-pages';
+import { getAllBlogPosts } from '@/data/blog';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
 
@@ -91,6 +92,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.95,
+    })),
+    // Blog
+    {
+      url: `${SITE_URL}/blog`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    ...getAllBlogPosts().map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
     })),
   ];
 }

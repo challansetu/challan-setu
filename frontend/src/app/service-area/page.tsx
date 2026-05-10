@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     title: 'ChallanSetu Service Area - Delhi, Noida, Gurgaon, Ghaziabad & Faridabad',
     description:
       'See which cities and challan types ChallanSetu covers. We are currently live in Delhi NCR.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 

@@ -1,0 +1,81 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,sans-serif">
+  <defs>
+    <linearGradient id="leftHalf" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="rightHalf" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c2d12"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left half -->
+  <rect x="0" y="0" width="400" height="450" fill="url(#leftHalf)"/>
+  <!-- Right half -->
+  <rect x="400" y="0" width="400" height="450" fill="url(#rightHalf)"/>
+
+  <!-- Dot overlays -->
+  <pattern id="dp3" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1" fill="white" opacity="0.07"/>
+  </pattern>
+  <rect width="800" height="450" fill="url(#dp3)"/>
+
+  <!-- Diagonal divider -->
+  <polygon points="380,0 420,0 420,450 380,450" fill="white" opacity="0.06"/>
+  <line x1="400" y1="0" x2="400" y2="450" stroke="white" stroke-width="2" opacity="0.15"/>
+
+  <!-- VS badge -->
+  <circle cx="400" cy="225" r="36" fill="white"/>
+  <text x="400" y="232" text-anchor="middle" font-size="16" font-weight="900" fill="#374151">VS</text>
+
+  <!-- ── LEFT: Online Challan ── -->
+  <text x="200" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(255,255,255,0.5)" letter-spacing="2">ONLINE</text>
+
+  <!-- Camera icon -->
+  <rect x="152" y="95" width="96" height="70" rx="12" fill="white" opacity="0.12"/>
+  <rect x="166" y="108" width="68" height="44" rx="8" fill="#3b82f6"/>
+  <circle cx="200" cy="130" r="13" fill="#dbeafe"/>
+  <circle cx="200" cy="130" r="8" fill="#3b82f6"/>
+  <rect x="191" y="104" width="18" height="9" rx="4" fill="#3b82f6"/>
+  <circle cx="224" cy="113" r="4" fill="#93c5fd"/>
+
+  <text x="200" y="198" text-anchor="middle" font-size="22" font-weight="900" fill="white">E-Challan</text>
+  <text x="200" y="222" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.6)">Camera-issued</text>
+
+  <!-- Left features -->
+  <rect x="65" y="250" width="270" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="200" y="271" text-anchor="middle" font-size="13" fill="white" font-weight="600">✓ Pay on Parivahan</text>
+
+  <rect x="65" y="292" width="270" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="200" y="313" text-anchor="middle" font-size="13" fill="white" font-weight="600">✓ Discount via Lok Adalat</text>
+
+  <rect x="65" y="334" width="270" height="32" rx="8" fill="rgba(134,239,172,0.15)"/>
+  <text x="200" y="355" text-anchor="middle" font-size="13" fill="#86efac" font-weight="700">Low complexity</text>
+
+  <!-- ── RIGHT: Court Challan ── -->
+  <text x="600" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(255,255,255,0.5)" letter-spacing="2">COURT</text>
+
+  <!-- Gavel icon -->
+  <rect x="552" y="95" width="96" height="70" rx="12" fill="white" opacity="0.12"/>
+  <rect x="568" y="108" width="64" height="20" rx="6" fill="#ea580c"/>
+  <rect x="568" y="128" width="64" height="20" rx="6" fill="#ea580c" transform="rotate(55 600 138)"/>
+  <rect x="594" y="138" width="14" height="30" rx="5" fill="#c2410c" transform="rotate(55 600 138)"/>
+
+  <text x="600" y="198" text-anchor="middle" font-size="22" font-weight="900" fill="white">Court Challan</text>
+  <text x="600" y="222" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.6)">Magistrate-referred</text>
+
+  <!-- Right features -->
+  <rect x="465" y="250" width="270" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="600" y="271" text-anchor="middle" font-size="13" fill="white" font-weight="600">✗ Can't pay online</text>
+
+  <rect x="465" y="292" width="270" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="600" y="313" text-anchor="middle" font-size="13" fill="white" font-weight="600">✓ Discount via Lok Adalat</text>
+
+  <rect x="465" y="334" width="270" height="32" rx="8" fill="rgba(252,165,165,0.15)"/>
+  <text x="600" y="355" text-anchor="middle" font-size="13" fill="#fca5a5" font-weight="700">Needs lawyer support</text>
+
+  <!-- Bottom strip -->
+  <rect x="0" y="408" width="800" height="42" fill="black" opacity="0.2"/>
+  <text x="400" y="433" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.6)" font-weight="600">Both can be settled for less — legally · challansetu.com</text>
+</svg>

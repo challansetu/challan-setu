@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Menu, X, HelpCircle, Info } from 'lucide-react';
+import { Menu, X, HelpCircle, Info, BookOpen } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from './ui/Button';
 
@@ -31,6 +31,11 @@ export function Navbar() {
             <Link href="/faq">
               <Button variant="ghost" size="sm" className="text-gray-600">
                 FAQ
+              </Button>
+            </Link>
+            <Link href="/blog">
+              <Button variant="ghost" size="sm" className="text-gray-600">
+                Blog
               </Button>
             </Link>
           </div>
@@ -64,6 +69,14 @@ export function Navbar() {
             >
               <HelpCircle className="w-4 h-4 text-gray-400" />
               <span className="text-sm font-medium">FAQ</span>
+            </Link>
+            <Link
+              href="/blog"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-surface-50 transition-colors"
+            >
+              <BookOpen className="w-4 h-4 text-gray-400" />
+              <span className="text-sm font-medium">Blog</span>
             </Link>
           </div>
         )}

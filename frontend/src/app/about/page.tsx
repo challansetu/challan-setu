@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'About ChallanSetu - Our Mission',
     description:
       'Learn about ChallanSetu - India\'s simplest platform to get challan assistance and settlement support, with savings up to 50% on eligible challans.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 

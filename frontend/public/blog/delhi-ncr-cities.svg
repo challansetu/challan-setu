@@ -1,0 +1,75 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,sans-serif">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eef2ff"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <linearGradient id="delhiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#4f46e5" flood-opacity="0.12"/>
+    </filter>
+    <filter id="delhiShadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#4f46e5" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="380" fill="url(#cardBg)" rx="20"/>
+
+  <!-- Subtle dot grid -->
+  <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.5" fill="#c7d2fe" opacity="0.5"/>
+  </pattern>
+  <rect width="800" height="380" fill="url(#dots)" rx="20"/>
+
+  <!-- Header -->
+  <text x="400" y="44" text-anchor="middle" font-size="18" font-weight="800" fill="#312e81">ChallanSetu Service Area</text>
+  <text x="400" y="66" text-anchor="middle" font-size="12" fill="#6366f1">5 cities across Delhi NCR — legal challan settlement covered</text>
+
+  <!-- Connection lines (dashed, from Delhi center outward) -->
+  <line x1="400" y1="195" x2="230" y2="245" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="400" y1="195" x2="570" y2="245" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="400" y1="220" x2="210" y2="310" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="400" y1="220" x2="590" y2="310" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- ── DELHI — centre, large ── -->
+  <rect x="320" y="155" width="160" height="80" rx="16" fill="url(#delhiGrad)" filter="url(#delhiShadow)"/>
+  <text x="400" y="187" text-anchor="middle" font-size="10" font-weight="700" fill="rgba(255,255,255,0.65)" letter-spacing="2">NATIONAL CAPITAL</text>
+  <text x="400" y="218" text-anchor="middle" font-size="24" font-weight="900" fill="white">Delhi</text>
+
+  <!-- Pin dot on Delhi card -->
+  <circle cx="400" cy="150" r="6" fill="#4f46e5"/>
+  <circle cx="400" cy="150" r="3" fill="white"/>
+
+  <!-- ── GURGAON — bottom left ── -->
+  <rect x="145" y="245" width="130" height="64" rx="12" fill="white" stroke="#c7d2fe" stroke-width="2" filter="url(#cardShadow)"/>
+  <text x="210" y="267" text-anchor="middle" font-size="9" font-weight="700" fill="#818cf8" letter-spacing="1">HARYANA</text>
+  <text x="210" y="292" text-anchor="middle" font-size="18" font-weight="800" fill="#4f46e5">Gurgaon</text>
+  <circle cx="210" cy="240" r="5" fill="#6366f1"/>
+  <circle cx="210" cy="240" r="2.5" fill="white"/>
+
+  <!-- ── NOIDA — right ── -->
+  <rect x="525" y="245" width="130" height="64" rx="12" fill="white" stroke="#c7d2fe" stroke-width="2" filter="url(#cardShadow)"/>
+  <text x="590" y="267" text-anchor="middle" font-size="9" font-weight="700" fill="#818cf8" letter-spacing="1">UTTAR PRADESH</text>
+  <text x="590" y="292" text-anchor="middle" font-size="18" font-weight="800" fill="#4f46e5">Noida</text>
+  <circle cx="590" cy="240" r="5" fill="#6366f1"/>
+  <circle cx="590" cy="240" r="2.5" fill="white"/>
+
+  <!-- ── FARIDABAD — bottom left ── -->
+  <rect x="130" y="318" width="145" height="42" rx="10" fill="white" stroke="#e0e7ff" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <text x="202" y="334" text-anchor="middle" font-size="8" fill="#a5b4fc" font-weight="600">HARYANA</text>
+  <text x="202" y="351" text-anchor="middle" font-size="15" font-weight="700" fill="#6366f1">Faridabad</text>
+
+  <!-- ── GHAZIABAD — bottom right ── -->
+  <rect x="525" y="318" width="155" height="42" rx="10" fill="white" stroke="#e0e7ff" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <text x="602" y="334" text-anchor="middle" font-size="8" fill="#a5b4fc" font-weight="600">UTTAR PRADESH</text>
+  <text x="602" y="351" text-anchor="middle" font-size="15" font-weight="700" fill="#6366f1">Ghaziabad</text>
+
+  <!-- Bottom banner -->
+  <rect x="220" y="365" width="360" height="0" rx="0" fill="none"/>
+  <rect x="200" y="356" width="400" height="22" rx="11" fill="#4f46e5" opacity="0.08"/>
+  <text x="400" y="371" text-anchor="middle" font-size="11" fill="#4338ca" font-weight="700">✓ All 5 cities served · No court visits needed</text>
+</svg>

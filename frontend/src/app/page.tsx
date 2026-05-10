@@ -12,6 +12,7 @@ import { Zap, CheckCircle2, MapPin, RefreshCw, Scale } from 'lucide-react';
 import { FeatureMarquee } from '@/components/FeatureMarquee';
 import { HOMEPAGE_FAQS } from '@/data/homepage-faqs';
 import landingData from '@/data/landing.json';
+import { BlogSection } from '@/components/BlogSection';
 
 const SavingsCalculator = dynamic(
   () => import('@/components/SavingsCalculator').then((m) => ({ default: m.SavingsCalculator })),
@@ -162,6 +163,9 @@ export default function LandingPage() {
 
             {/* Testimonials */}
             <TestimonialsCarousel />
+
+            {/* Blog guides */}
+            <BlogSection />
 
             {/* Homepage FAQ */}
             <HomepageFaqSection />
