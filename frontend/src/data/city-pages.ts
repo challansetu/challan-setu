@@ -179,10 +179,10 @@ const CITIES: CityPageData[] = [
     vehiclePrefix: 'DL',
     authority: 'Delhi Traffic Police',
     exampleVehicle: 'DL7SBY5194',
-    metaTitle: 'Pay Vehicle Challan in Delhi | Check Discount Eligibility | ChallanSetu',
+    metaTitle: 'Traffic Challan Discount in Delhi | ChallanSetu',
     metaDescription:
-      'Check your Delhi vehicle challan discount eligibility online. Submit your vehicle number and get support for eligible traffic challan settlement.',
-    h1: 'Pay Vehicle Challan in Delhi with Discount Support',
+      'Get a legal challan discount in Delhi through Lok Adalat. Our lawyers handle everything — you just pay less. Book a free call today.',
+    h1: 'Get a Legal Traffic Challan Discount in Delhi',
     heroSubheading:
       'Enter your vehicle number to check discount eligibility before paying your Delhi challan.',
     aboutParagraphs: [
@@ -220,10 +220,10 @@ const CITIES: CityPageData[] = [
     vehiclePrefix: 'HR',
     authority: 'Gurugram Traffic Police',
     exampleVehicle: 'HR26DZ5678',
-    metaTitle: 'Pay Vehicle Challan in Gurgaon | Gurugram E Challan Help | ChallanSetu',
+    metaTitle: 'Lok Adalat Challan Gurgaon | ChallanSetu',
     metaDescription:
-      'Check Gurgaon/Gurugram vehicle challan discount eligibility. Get support for eligible traffic challan settlement before you pay.',
-    h1: 'Pay Vehicle Challan in Gurgaon with Discount Support',
+      'Resolve your Gurgaon traffic challan at Lok Adalat with expert legal help. Save up to 50% — no court visits needed. Free case review.',
+    h1: 'Settle Your Gurgaon Challan via Lok Adalat',
     heroSubheading:
       'Enter your vehicle number to check discount eligibility before paying your Gurgaon or Gurugram challan.',
     aboutParagraphs: [
@@ -261,10 +261,10 @@ const CITIES: CityPageData[] = [
     vehiclePrefix: 'UP',
     authority: 'Noida Traffic Police',
     exampleVehicle: 'UP16DZ3281',
-    metaTitle: 'Pay Vehicle Challan in Noida | Check E Challan Eligibility | ChallanSetu',
+    metaTitle: 'Traffic Challan Settlement in Noida | ChallanSetu',
     metaDescription:
-      'Check Noida vehicle challan discount eligibility online. Submit your vehicle number and get support for eligible challan settlement.',
-    h1: 'Pay Vehicle Challan in Noida with Discount Support',
+      'Pending challan in Noida? Settle legally and pay up to 50% less. ChallanSetu lawyers know Noida courts inside out. Act before it escalates.',
+    h1: 'Settle Your Traffic Challan in Noida – Pay Less, Legally',
     heroSubheading:
       'Enter your vehicle number to check discount eligibility before paying your Noida challan.',
     aboutParagraphs: [
@@ -302,10 +302,10 @@ const CITIES: CityPageData[] = [
     vehiclePrefix: 'UP',
     authority: 'Ghaziabad Traffic Police',
     exampleVehicle: 'UP14BT7892',
-    metaTitle: 'Pay Vehicle Challan in Ghaziabad | Traffic Challan Support | ChallanSetu',
+    metaTitle: 'Reduce Traffic Challan Fine Ghaziabad | ChallanSetu',
     metaDescription:
-      'Check Ghaziabad vehicle challan discount eligibility and get support for eligible traffic challan settlement before you pay.',
-    h1: 'Pay Vehicle Challan in Ghaziabad with Discount Support',
+      'Unpaid challan in Ghaziabad can get your licence suspended. Reduce fines legally via Lok Adalat. ChallanSetu lawyers settle in days.',
+    h1: 'Reduce Your Traffic Challan Fine in Ghaziabad — Legally',
     heroSubheading:
       'Enter your vehicle number to check discount eligibility before paying your Ghaziabad challan.',
     aboutParagraphs: [
@@ -343,10 +343,10 @@ const CITIES: CityPageData[] = [
     vehiclePrefix: 'HR',
     authority: 'Faridabad Traffic Police',
     exampleVehicle: 'HR51CU2041',
-    metaTitle: 'Pay Vehicle Challan in Faridabad | Check Discount Eligibility | ChallanSetu',
+    metaTitle: 'Traffic Fine Settlement in Faridabad | ChallanSetu',
     metaDescription:
-      'Check Faridabad vehicle challan discount eligibility online. Submit your vehicle number and get support for eligible traffic challan settlement.',
-    h1: 'Pay Vehicle Challan in Faridabad with Discount Support',
+      'Don\'t pay full traffic fines in Faridabad. ChallanSetu settles challans via Lok Adalat — save up to 50%. Get a free assessment today.',
+    h1: 'Settle Traffic Fines in Faridabad at Up to 50% Off',
     heroSubheading:
       'Enter your vehicle number to check discount eligibility before paying your Faridabad challan.',
     aboutParagraphs: [

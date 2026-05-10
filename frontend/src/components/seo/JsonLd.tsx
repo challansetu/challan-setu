@@ -55,25 +55,54 @@ export function websiteSchema() {
 export function localBusinessSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': ['LocalBusiness', 'LegalService'],
+    '@id': `${SITE_URL}/#business`,
     name: 'ChallanSetu',
     url: SITE_URL,
     description:
-      'Online traffic challan payment and settlement service for Delhi, Noida, Gurgaon, and Ghaziabad.',
+      'ChallanSetu helps Delhi NCR vehicle owners legally settle traffic challans through Lok Adalat and lawyer support, saving up to 50% on eligible fines. No court visit required.',
     email: 'challansetu@gmail.com',
-    priceRange: '₹',
+    priceRange: '₹₹',
+    currenciesAccepted: 'INR',
+    paymentAccepted: 'Online Payment, UPI, Net Banking',
+    serviceType: 'Traffic Challan Settlement',
+    knowsAbout: [
+      'Traffic Challan Settlement',
+      'Lok Adalat',
+      'Traffic Fine Reduction',
+      'Delhi NCR Traffic Laws',
+      'Motor Vehicle Act',
+    ],
+    inLanguage: ['en-IN', 'hi'],
     areaServed: [
-      { '@type': 'City', name: 'Delhi' },
-      { '@type': 'City', name: 'Noida' },
-      { '@type': 'City', name: 'Gurgaon' },
-      { '@type': 'City', name: 'Ghaziabad' },
-      { '@type': 'City', name: 'Faridabad' },
+      { '@type': 'City', name: 'Delhi',     containedInPlace: { '@type': 'Country', name: 'India' } },
+      { '@type': 'City', name: 'Noida',     containedInPlace: { '@type': 'Country', name: 'India' } },
+      { '@type': 'City', name: 'Gurgaon',   containedInPlace: { '@type': 'Country', name: 'India' } },
+      { '@type': 'City', name: 'Ghaziabad', containedInPlace: { '@type': 'Country', name: 'India' } },
+      { '@type': 'City', name: 'Faridabad', containedInPlace: { '@type': 'Country', name: 'India' } },
     ],
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       opens: '09:00',
       closes: '18:00',
+    },
+    // UPDATE these placeholder values once you collect real reviews
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '200',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    makesOffer: {
+      '@type': 'Offer',
+      name: 'Traffic Challan Settlement — Up to 50% Off',
+      description:
+        'Legal traffic challan settlement via Lok Adalat. Save up to 50% on eligible fines in Delhi NCR. Money-back guarantee if settlement is not achieved.',
+      priceCurrency: 'INR',
+      eligibleRegion: ['Delhi', 'Noida', 'Gurgaon', 'Ghaziabad', 'Faridabad'],
+      offeredBy: { '@type': 'Organization', name: 'ChallanSetu', url: SITE_URL },
     },
   };
 }

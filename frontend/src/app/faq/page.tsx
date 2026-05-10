@@ -6,14 +6,14 @@ import { JsonLd, faqSchema, breadcrumbSchema } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Traffic Challan FAQ - Eligibility, Support & Process',
+  title: 'How to Reduce Traffic Challan Fine – FAQ | ChallanSetu',
   description:
-    'Answers to common questions about challan discount eligibility, court challan support, timelines, and Delhi NCR service coverage.',
+    'Can you legally reduce a traffic challan? Yes. Learn how Lok Adalat works, what documents you need, and how much you can save.',
   alternates: { canonical: '/faq' },
   openGraph: {
-    title: 'Traffic Challan FAQ | ChallanSetu',
+    title: 'How to Reduce Traffic Challan Fine – FAQ | ChallanSetu',
     description:
-      'Answers to common questions about challan eligibility, support, trust, and service area.',
+      'Can you legally reduce a traffic challan? Yes. Learn how Lok Adalat works, what documents you need, and how much you can save.',
   },
 };
 
@@ -138,7 +138,7 @@ export default function FaqPage() {
               <HelpCircle className="w-6 h-6 text-primary-600" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-              Frequently Asked Questions
+              How to Legally Reduce Your Traffic Challan Fine
             </h1>
             <p className="text-gray-500 text-lg">
               Everything you need to know about challan eligibility checks, settlement support, and the current ChallanSetu flow.

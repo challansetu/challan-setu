@@ -64,4 +64,12 @@ export const HOMEPAGE_FAQS = [
     q: 'Is ChallanSetu a government website?',
     a: 'No. ChallanSetu is not a government website. It provides challan assistance, support, and settlement guidance. Users can also verify their challan status through official government portals.',
   },
+  {
+    q: 'Is there a money-back guarantee?',
+    a: 'Yes. ChallanSetu offers a money-back guarantee for eligible cases where settlement is not achieved. Terms apply based on challan type, offence category, and case outcome.',
+  },
+  {
+    q: 'Do I need to visit court for challan settlement?',
+    a: 'No. In most cases you do not need to visit court. ChallanSetu manages the legal process through Lok Adalat or lawyer support on your behalf. You are updated at every step without needing to appear in person.',
+  },
 ] as const;

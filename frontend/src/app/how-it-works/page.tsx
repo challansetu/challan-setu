@@ -14,14 +14,14 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'How ChallanSetu Works - Challan Eligibility in 3 Steps',
+  title: 'How Lok Adalat Challan Settlement Works | ChallanSetu',
   description:
-    'See how ChallanSetu helps you submit a challan eligibility request, share your details securely, and receive the next step for eligible cases.',
+    'See how ChallanSetu settles your challan in 3 steps via Lok Adalat. No court visits, no stress — just a legal fine reduction up to 50%.',
   alternates: { canonical: '/how-it-works' },
   openGraph: {
-    title: 'How ChallanSetu Works - Challan Eligibility in 3 Steps',
+    title: 'How Lok Adalat Challan Settlement Works | ChallanSetu',
     description:
-      'Start with your vehicle number, submit your request securely, and receive the next step for eligible challans.',
+      'See how ChallanSetu settles your challan in 3 steps via Lok Adalat. No court visits, no stress — just a legal fine reduction up to 50%.',
   },
 };
 
@@ -137,7 +137,7 @@ export default function HowItWorksPage() {
           <div className="container-app text-center">
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-              How ChallanSetu Works
+              How ChallanSetu Settles Your Challan via Lok Adalat
             </h1>
             <p className="text-primary-100 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
               Start with your vehicle number, submit your request securely, and receive the next step for eligible challans.

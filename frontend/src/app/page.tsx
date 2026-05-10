@@ -61,10 +61,10 @@ export default function LandingPage() {
                     </span>
                     <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05]">
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        Save Up to 50%
+                        Settle &amp; Save
                       </span>
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        Before You Pay.
+                        Up to 50%, Legally.
                       </span>
                     </span>
                   </h1>
