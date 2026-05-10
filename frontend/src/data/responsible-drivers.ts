@@ -15,4 +15,9 @@ export const RESPONSIBLE_DRIVERS: ResponsibleDriver[] = [
     image: '/images/responsible-drivers/amit.png',
     alt: 'Amit Yadav - Responsible Driver',
   },
+  {
+    id: 3,
+    image: '/images/responsible-drivers/ashutosh.png',
+    alt: 'Ashutosh - Responsible Driver',
+  },
 ];

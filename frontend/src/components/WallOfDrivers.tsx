@@ -27,7 +27,7 @@ export function WallOfDrivers() {
           Community
         </p>
         <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none mb-4">
-          Wall of Responsible Drivers
+          Wall of Responsible Drivers 🇮🇳
         </h2>
         <p className="text-gray-400 text-base sm:text-lg max-w-md mx-auto">
           Real drivers. Real savings. Safer roads.
