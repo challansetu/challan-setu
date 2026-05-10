@@ -26,7 +26,7 @@ const TESTIMONIALS = [
     photo: '/testimonials/t3.webp',
   },
   {
-    name: 'Deepak Singh',
+    name: 'Ankit Suman',
     location: 'Ghaziabad',
     rating: 5,
     review: 'Helpful for understanding the next step before paying anything. The request page and status felt clear and professional.',
