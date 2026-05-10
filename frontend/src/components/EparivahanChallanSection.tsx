@@ -62,14 +62,15 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-end sm:items-center sm:justify-center sm:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center sm:justify-center sm:p-6" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      {/* Sheet — flex-col so header is always outside the scroll area */}
       <div
-        className="relative w-full max-h-[90vh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white pb-6 shadow-2xl sm:rounded-[28px] sm:max-w-lg sm:max-h-[85vh]"
+        className="relative w-full flex flex-col max-h-[90vh] rounded-t-[28px] bg-white shadow-2xl sm:rounded-[28px] sm:max-w-lg sm:max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Handle — mobile only */}
-        <div className="sticky top-0 bg-white pt-3 pb-2 px-5 z-10">
+        {/* Header — always visible, never scrolls away */}
+        <div className="flex-shrink-0 bg-white pt-3 pb-2 px-5 border-b border-gray-100 rounded-t-[28px] sm:rounded-t-[28px]">
           <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
           <div className="flex items-center justify-between">
             <p className="text-xs font-black tracking-[0.18em] text-gray-400 uppercase">Challan Details</p>
@@ -79,7 +80,8 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
           </div>
         </div>
 
-        <div className="px-5 pt-1 pb-24">
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-4 pb-10">
           {/* Amount hero */}
           <div className={`rounded-2xl px-5 py-5 mb-5 flex items-center justify-between ${isPaid ? 'bg-emerald-50' : 'bg-red-50'}`}>
             <div>
@@ -164,8 +166,8 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
               </ul>
             </div>
           )}
-        </div>
-      </div>
+        </div>{/* end scrollable content */}
+      </div>{/* end sheet */}
     </div>
   );
 }
@@ -385,15 +387,15 @@ export function EparivahanChallanSection({ vehicleNumber }: Props) {
   if (stage.name === 'otp_entry') {
     const sessionId = stage.sessionId;
     return (
-      <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
-        <div className="flex">
+      <div className="w-full min-w-0 rounded-2xl bg-white shadow-sm overflow-hidden">
+        <div className="flex min-w-0">
           <div className="w-1 flex-shrink-0 bg-emerald-400" />
-          <div className="flex-1 px-5 py-5">
+          <div className="flex-1 min-w-0 px-5 py-5">
             <div className="flex items-center gap-2 mb-1">
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               <p className="text-[10px] font-black tracking-[0.2em] text-emerald-600 uppercase">OTP Sent</p>
             </div>
-            <p className="text-sm font-semibold text-gray-800 mb-1 font-mono">{stage.otpMessage}</p>
+            <p className="text-sm font-semibold text-gray-800 mb-1 font-mono break-words">{stage.otpMessage}</p>
             <p className="text-xs text-gray-400 mb-4">Enter the OTP below to fetch your challan details.</p>
             <div className="flex gap-2">
               <input
