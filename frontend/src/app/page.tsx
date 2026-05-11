@@ -130,10 +130,10 @@ export default function LandingPage() {
                       <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary-50 text-primary-500 mb-3 group-hover:scale-110 transition-transform duration-300">
                         {stat.icon}
                       </div>
-                      <div className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-1 tracking-tight">
+                      <div className="text-4xl font-black tracking-tight leading-none text-gray-900 mb-1.5">
                         {stat.num}
                       </div>
-                      <div className="text-sm text-gray-500">{stat.label}</div>
+                      <div className="text-sm font-medium text-gray-500">{stat.label}</div>
                     </div>
                   ))}
                 </div>
