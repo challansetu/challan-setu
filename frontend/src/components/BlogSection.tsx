@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import postsData from "@/data/blog-posts.json";
 
-interface BlogPost {
+export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
@@ -20,9 +19,7 @@ function formatDate(iso: string) {
   });
 }
 
-export function BlogSection() {
-  const posts = (postsData as BlogPost[]).slice(0, 3);
-
+export function BlogSection({ posts }: { posts: BlogPost[] }) {
   return (
     <section aria-label="Traffic Challan Guides" className="pt-16 sm:pt-20 bg-white">
       {/* Header */}

@@ -1,4 +1,6 @@
 import dynamic from 'next/dynamic';
+import fs from 'fs';
+import path from 'path';
 
 import { JsonLd, faqSchema } from '@/components/seo/JsonLd';
 import { Navbar } from '@/components/Navbar';
@@ -29,7 +31,10 @@ const WhatsAppButton = dynamic(
   { ssr: false },
 );
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const postsPath = path.join(process.cwd(), 'src/data/blog-posts.json');
+  const posts = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
+
   return (
     <>
       <JsonLd data={faqSchema([...HOMEPAGE_FAQS])} />
@@ -166,7 +171,7 @@ export default function LandingPage() {
             <TestimonialsCarousel />
 
             {/* Blog guides */}
-            <BlogSection />
+            <BlogSection posts={posts} />
 
             {/* Wall of Responsible Drivers */}
             <WallOfDrivers />
