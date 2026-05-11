@@ -9,7 +9,7 @@ import { SettlementsService } from '../settlements/settlements.service';
 import { AdminJwtGuard } from './auth/admin-jwt.guard';
 import { AdminRolesGuard, AdminRoles } from './auth/admin-roles.guard';
 import { AdminRole, UserLifecycleStatus, TrackingStatus } from '@prisma/client';
-import { IsString, IsOptional, IsBoolean, IsEnum, MinLength } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsEnum, MinLength, IsNumber, IsPositive } from 'class-validator';
 import { CreateDiscountRuleDto } from './dto/create-discount-rule.dto';
 import { MarkSettledDto } from './dto/mark-settled.dto';
 
@@ -32,6 +32,18 @@ class ToggleActiveDto {
 class UpdateTrackingDto {
   @IsEnum(TrackingStatus) status: TrackingStatus;
   @IsOptional() @IsString() note?: string;
+}
+class CreateUserChallanDto {
+  @IsString() @MinLength(1) challanNumber: string;
+  @IsNumber() @IsPositive() amount: number;
+  @IsString() @MinLength(1) location: string;
+  @IsOptional() @IsNumber() settledAmount?: number | null;
+}
+class UpdateUserChallanDto {
+  @IsOptional() @IsString() challanNumber?: string;
+  @IsOptional() @IsNumber() @IsPositive() amount?: number;
+  @IsOptional() @IsString() location?: string;
+  @IsOptional() @IsNumber() settledAmount?: number | null;
 }
 
 @ApiTags('Admin')
@@ -174,6 +186,32 @@ export class AdminController {
   @HttpCode(HttpStatus.OK)
   async deleteNote(@Param('noteId') noteId: string, @Req() req: any) {
     return this.adminService.deleteNote(noteId, req.user.adminId, req.user.role);
+  }
+
+  // ─── User Challans ────────────────────────────────────────────────────────
+
+  @Get('users/:id/challans')
+  async getUserChallans(@Param('id') id: string) {
+    return this.adminService.getUserChallans(id);
+  }
+
+  @Post('users/:id/challans')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async createUserChallan(@Param('id') id: string, @Body() dto: CreateUserChallanDto) {
+    return this.adminService.createUserChallan(id, dto);
+  }
+
+  @Patch('users/:userId/challans/:challanId')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async updateUserChallan(@Param('challanId') challanId: string, @Body() dto: UpdateUserChallanDto) {
+    return this.adminService.updateUserChallan(challanId, dto);
+  }
+
+  @Delete('users/:userId/challans/:challanId')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @HttpCode(HttpStatus.OK)
+  async deleteUserChallan(@Param('challanId') challanId: string) {
+    return this.adminService.deleteUserChallan(challanId);
   }
 
   // ─── Orders ───────────────────────────────────────────────────────────────

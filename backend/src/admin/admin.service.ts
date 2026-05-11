@@ -768,6 +768,50 @@ export class AdminService {
     return { deleted: true, orderNumber: order.orderNumber };
   }
 
+  // ─── User Challans (CRM tracking) ────────────────────────────────────────
+
+  async getUserChallans(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.prisma.userChallan.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async createUserChallan(userId: string, data: {
+    challanNumber: string;
+    amount: number;
+    location: string;
+    settledAmount?: number | null;
+  }) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.prisma.userChallan.create({ data: { userId, ...data } });
+  }
+
+  async updateUserChallan(challanId: string, data: {
+    challanNumber?: string;
+    amount?: number;
+    location?: string;
+    settledAmount?: number | null;
+  }) {
+    const challan = await this.prisma.userChallan.findUnique({ where: { id: challanId } });
+    if (!challan) throw new NotFoundException('Challan not found');
+
+    return this.prisma.userChallan.update({ where: { id: challanId }, data });
+  }
+
+  async deleteUserChallan(challanId: string) {
+    const challan = await this.prisma.userChallan.findUnique({ where: { id: challanId } });
+    if (!challan) throw new NotFoundException('Challan not found');
+
+    await this.prisma.userChallan.delete({ where: { id: challanId } });
+    return { deleted: true };
+  }
+
   // ─── Legacy (keep existing callers working) ───────────────────────────────
 
   async createAuditLog(data: {

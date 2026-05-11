@@ -136,6 +136,17 @@ export interface ChallanSearch {
   source?: string;
 }
 
+export interface UserChallan {
+  id: string;
+  userId: string;
+  challanNumber: string;
+  amount: number;
+  location: string;
+  settledAmount: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface UserDetail extends User {
   orders: Order[];
   searches: ChallanSearch[];

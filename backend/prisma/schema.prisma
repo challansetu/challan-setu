@@ -56,6 +56,7 @@ model User {
   adminNotes      AdminNote[]
   statusHistory   UserStatusHistory[]
   auditLogs       AuditLog[]
+  userChallans    UserChallan[]
 
   @@index([lifecycleStatus])
   @@index([lastActiveAt])
@@ -499,6 +500,23 @@ model AuditLog {
   @@index([userId])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+// ─── User Challans (admin CRM tracking) ─────────────
+model UserChallan {
+  id            String   @id @default(cuid())
+  userId        String
+  challanNumber String
+  amount        Float
+  location      String
+  settledAmount Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_challans")
 }
 
 // ─── Discount Rules ──────────────────────────────────

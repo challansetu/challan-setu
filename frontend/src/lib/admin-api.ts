@@ -176,6 +176,40 @@ export const adminApi = {
     return res.data;
   },
 
+  getUserChallans: async (userId: string) => {
+    const res = await axiosInstance.get<import("@/types/admin").UserChallan[]>(
+      `/admin/users/${userId}/challans`
+    );
+    return res.data;
+  },
+
+  createUserChallan: async (
+    userId: string,
+    data: { challanNumber: string; amount: number; location: string; settledAmount?: number | null }
+  ) => {
+    const res = await axiosInstance.post<import("@/types/admin").UserChallan>(
+      `/admin/users/${userId}/challans`,
+      data
+    );
+    return res.data;
+  },
+
+  updateUserChallan: async (
+    userId: string,
+    challanId: string,
+    data: { challanNumber?: string; amount?: number; location?: string; settledAmount?: number | null }
+  ) => {
+    const res = await axiosInstance.patch<import("@/types/admin").UserChallan>(
+      `/admin/users/${userId}/challans/${challanId}`,
+      data
+    );
+    return res.data;
+  },
+
+  deleteUserChallan: async (userId: string, challanId: string) => {
+    await axiosInstance.delete(`/admin/users/${userId}/challans/${challanId}`);
+  },
+
   orders: async (params: ListOrdersParams = {}) => {
     const res = await axiosInstance.get<OrdersResponse>("/admin/orders", {
       params,
