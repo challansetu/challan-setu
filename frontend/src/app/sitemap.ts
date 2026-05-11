@@ -1,43 +1,72 @@
 import { MetadataRoute } from 'next';
+import fs from 'fs';
+import path from 'path';
 import { getAllCityPages } from '@/data/city-pages';
-import { getAllBlogPosts } from '@/data/blog';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
+
+interface BlogPost {
+  slug: string;
+  date: string;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
+  const postsPath = path.join(process.cwd(), 'src/data/blog-posts.json');
+  const blogPosts: BlogPost[] = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
+
   return [
+    // ── Homepage ──────────────────────────────────────────────────────────────
     {
       url: SITE_URL,
       lastModified: now,
-      changeFrequency: 'weekly',
+      changeFrequency: 'monthly',
       priority: 1.0,
     },
+
+    // ── Core static pages ─────────────────────────────────────────────────────
     {
       url: `${SITE_URL}/how-it-works`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.8,
     },
     {
       url: `${SITE_URL}/faq`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.8,
     },
     {
       url: `${SITE_URL}/service-area`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
+    {
+      url: `${SITE_URL}/about`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+
+    {
+      url: `${SITE_URL}/cities`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+
+    // ── City SEO landing pages (/pay-vehicle-challan-in-{city}) ───────────────
+    ...getAllCityPages().map((city) => ({
+      url: `${SITE_URL}${city.canonicalPath}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    })),
+
+    // ── Legal / policy pages ──────────────────────────────────────────────────
     {
       url: `${SITE_URL}/privacy-policy`,
       lastModified: now,
@@ -56,55 +85,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.4,
     },
-    {
-      url: `${SITE_URL}/cities`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/cities/delhi`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/cities/noida`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/cities/gurgaon`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/cities/ghaziabad`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    // City SEO landing pages (public URL: /pay-vehicle-challan-in-{city})
-    ...getAllCityPages().map((city) => ({
-      url: `${SITE_URL}${city.canonicalPath}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.95,
-    })),
-    // Blog
+
+    // ── Blog ──────────────────────────────────────────────────────────────────
     {
       url: `${SITE_URL}/blog`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
-    ...getAllBlogPosts().map((post) => ({
+    ...blogPosts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.publishedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.85,
+      lastModified: new Date(post.date),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
     })),
   ];
 }

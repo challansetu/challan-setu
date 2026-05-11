@@ -1,4 +1,9 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/Button';
