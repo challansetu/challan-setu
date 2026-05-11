@@ -176,6 +176,40 @@ export const adminApi = {
     return res.data;
   },
 
+  getLeadChallans: async (leadId: string) => {
+    const res = await axiosInstance.get<import("@/types/admin").LeadChallan[]>(
+      `/admin/leads/${leadId}/challans`
+    );
+    return res.data;
+  },
+
+  createLeadChallan: async (
+    leadId: string,
+    data: { challanNumber: string; amount: number; location: string; settledAmount?: number | null }
+  ) => {
+    const res = await axiosInstance.post<import("@/types/admin").LeadChallan>(
+      `/admin/leads/${leadId}/challans`,
+      data
+    );
+    return res.data;
+  },
+
+  updateLeadChallan: async (
+    leadId: string,
+    challanId: string,
+    data: { challanNumber?: string; amount?: number; location?: string; settledAmount?: number | null }
+  ) => {
+    const res = await axiosInstance.patch<import("@/types/admin").LeadChallan>(
+      `/admin/leads/${leadId}/challans/${challanId}`,
+      data
+    );
+    return res.data;
+  },
+
+  deleteLeadChallan: async (leadId: string, challanId: string) => {
+    await axiosInstance.delete(`/admin/leads/${leadId}/challans/${challanId}`);
+  },
+
   getUserChallans: async (userId: string) => {
     const res = await axiosInstance.get<import("@/types/admin").UserChallan[]>(
       `/admin/users/${userId}/challans`

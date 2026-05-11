@@ -188,6 +188,32 @@ export class AdminController {
     return this.adminService.deleteNote(noteId, req.user.adminId, req.user.role);
   }
 
+  // ─── Lead Challans ────────────────────────────────────────────────────────
+
+  @Get('leads/:id/challans')
+  async getLeadChallans(@Param('id') id: string) {
+    return this.adminService.getLeadChallans(id);
+  }
+
+  @Post('leads/:id/challans')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async createLeadChallan(@Param('id') id: string, @Body() dto: CreateUserChallanDto) {
+    return this.adminService.createLeadChallan(id, dto);
+  }
+
+  @Patch('leads/:leadId/challans/:challanId')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async updateLeadChallan(@Param('challanId') challanId: string, @Body() dto: UpdateUserChallanDto) {
+    return this.adminService.updateLeadChallan(challanId, dto);
+  }
+
+  @Delete('leads/:leadId/challans/:challanId')
+  @AdminRoles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @HttpCode(HttpStatus.OK)
+  async deleteLeadChallan(@Param('challanId') challanId: string) {
+    return this.adminService.deleteLeadChallan(challanId);
+  }
+
   // ─── User Challans ────────────────────────────────────────────────────────
 
   @Get('users/:id/challans')

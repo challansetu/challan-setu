@@ -3,13 +3,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
-import { Search, X, Phone, Car, MapPin, Calendar, Globe } from "lucide-react";
+import { Search, X, Phone, Car, MapPin, Calendar, Globe, Plus, Pencil, Trash2, Check, Loader2, ChevronDown, TrendingDown, FileText } from "lucide-react";
 import { adminApi } from "@/lib/admin-api";
 import { Badge } from "@/components/admin/ui/Badge";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SkeletonTable } from "@/components/admin/ui/Skeleton";
 import { formatDate } from "@/lib/utils";
-import type { Lead, LeadsResponse } from "@/types/admin";
+import type { Lead, LeadsResponse, LeadChallan } from "@/types/admin";
 
 const CRM_STATUSES = [
   { value: "new", label: "New" },
@@ -29,6 +29,238 @@ const CRM_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "ye
   converted: "green",
   dead: "red",
 };
+
+const CHALLAN_LOCATIONS = ["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Chandigarh", "Himachal"];
+const EMPTY_CHALLAN = { challanNumber: "", amount: "", location: "Delhi", settledAmount: "" };
+
+function LeadChallansSection({ leadId }: { leadId: string }) {
+  const { data: challans, isLoading, mutate } = useSWR<LeadChallan[]>(
+    `lead-challans-${leadId}`,
+    () => adminApi.getLeadChallans(leadId),
+    { revalidateOnFocus: false }
+  );
+
+  const [form, setForm] = useState(EMPTY_CHALLAN);
+  const [saving, setSaving] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState(EMPTY_CHALLAN);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const totalCount = challans?.length ?? 0;
+  const totalAmount = challans?.reduce((s, c) => s + c.amount, 0) ?? 0;
+  const totalSettled = challans?.reduce((s, c) => s + (c.settledAmount ?? 0), 0) ?? 0;
+  const totalSaved = challans?.reduce((s, c) => s + (c.settledAmount != null ? c.amount - c.settledAmount : 0), 0) ?? 0;
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.challanNumber.trim() || !form.amount) return;
+    setSaving(true);
+    try {
+      await adminApi.createLeadChallan(leadId, {
+        challanNumber: form.challanNumber.trim(),
+        amount: parseFloat(form.amount),
+        location: form.location,
+        settledAmount: form.settledAmount ? parseFloat(form.settledAmount) : null,
+      });
+      setForm(EMPTY_CHALLAN);
+      await mutate();
+    } catch {
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdate = async (challanId: string) => {
+    setSaving(true);
+    try {
+      await adminApi.updateLeadChallan(leadId, challanId, {
+        challanNumber: editForm.challanNumber.trim(),
+        amount: parseFloat(editForm.amount),
+        location: editForm.location,
+        settledAmount: editForm.settledAmount ? parseFloat(editForm.settledAmount) : null,
+      });
+      setEditId(null);
+      await mutate();
+    } catch {
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (challanId: string) => {
+    setDeletingId(challanId);
+    try {
+      await adminApi.deleteLeadChallan(leadId, challanId);
+      await mutate();
+    } catch {
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const inputCls = "w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white";
+
+  return (
+    <div>
+      <p className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-3 flex items-center gap-1.5">
+        <FileText className="h-3 w-3" /> Challans
+      </p>
+
+      {/* Summary */}
+      {totalCount > 0 && (
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          {[
+            { label: "Count", value: totalCount, color: "text-gray-900" },
+            { label: "Total Fine", value: `₹${totalAmount.toLocaleString("en-IN")}`, color: "text-red-600" },
+            { label: "Settled At", value: `₹${totalSettled.toLocaleString("en-IN")}`, color: "text-blue-600" },
+            { label: "Saved", value: `₹${totalSaved.toLocaleString("en-IN")}`, color: "text-emerald-600" },
+          ].map((s) => (
+            <div key={s.label} className="bg-gray-50 rounded-lg p-2 text-center">
+              <div className={`text-sm font-bold ${s.color}`}>{s.value}</div>
+              <div className="text-[10px] text-gray-400">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add form */}
+      <form onSubmit={handleCreate} className="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-100 space-y-2">
+        <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Add Challan</p>
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="text"
+            placeholder="Challan number"
+            value={form.challanNumber}
+            onChange={(e) => setForm((f) => ({ ...f, challanNumber: e.target.value }))}
+            className={`col-span-2 ${inputCls}`}
+            required
+          />
+          <div className="relative">
+            <select
+              value={form.location}
+              onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
+              className={`appearance-none pr-7 ${inputCls}`}
+            >
+              {CHALLAN_LOCATIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
+          </div>
+          <input
+            type="number"
+            placeholder="Amount (₹)"
+            value={form.amount}
+            onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
+            className={inputCls}
+            min={0} step={0.01} required
+          />
+          <input
+            type="number"
+            placeholder="Settled at (₹)"
+            value={form.settledAmount}
+            onChange={(e) => setForm((f) => ({ ...f, settledAmount: e.target.value }))}
+            className={`col-span-2 ${inputCls}`}
+            min={0} step={0.01}
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={saving || !form.challanNumber.trim() || !form.amount}
+          className="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg px-3 py-1.5 transition-colors"
+        >
+          {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
+          Add
+        </button>
+      </form>
+
+      {/* List */}
+      {isLoading ? (
+        <div className="space-y-1.5">
+          {[1, 2].map((i) => <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse" />)}
+        </div>
+      ) : !challans?.length ? (
+        <p className="text-xs text-gray-400 text-center py-3">No challans added yet</p>
+      ) : (
+        <div className="space-y-1.5">
+          {challans.map((c) => {
+            const saved = c.settledAmount != null ? c.amount - c.settledAmount : null;
+            const isEditing = editId === c.id;
+
+            if (isEditing) {
+              return (
+                <div key={c.id} className="p-2.5 rounded-lg border border-indigo-200 bg-indigo-50 space-y-2">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <input type="text" value={editForm.challanNumber}
+                      onChange={(e) => setEditForm((f) => ({ ...f, challanNumber: e.target.value }))}
+                      className={`col-span-2 ${inputCls}`} />
+                    <div className="relative">
+                      <select value={editForm.location}
+                        onChange={(e) => setEditForm((f) => ({ ...f, location: e.target.value }))}
+                        className={`appearance-none pr-7 ${inputCls}`}>
+                        {CHALLAN_LOCATIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
+                    </div>
+                    <input type="number" value={editForm.amount}
+                      onChange={(e) => setEditForm((f) => ({ ...f, amount: e.target.value }))}
+                      className={inputCls} min={0} step={0.01} />
+                    <input type="number" placeholder="Settled at (₹)" value={editForm.settledAmount}
+                      onChange={(e) => setEditForm((f) => ({ ...f, settledAmount: e.target.value }))}
+                      className={`col-span-2 ${inputCls}`} min={0} step={0.01} />
+                  </div>
+                  <div className="flex gap-1.5">
+                    <button onClick={() => handleUpdate(c.id)} disabled={saving}
+                      className="flex items-center gap-1 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg px-2.5 py-1 transition-colors">
+                      {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />} Save
+                    </button>
+                    <button onClick={() => setEditId(null)}
+                      className="flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg px-2.5 py-1 transition-colors">
+                      <X className="w-3 h-3" /> Cancel
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div key={c.id} className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-100 bg-gray-50 group">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="font-mono text-xs font-semibold text-gray-900">{c.challanNumber}</span>
+                    <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full font-medium">{c.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5 text-xs flex-wrap">
+                    <span className="text-red-600 font-medium">₹{c.amount.toLocaleString("en-IN")}</span>
+                    {c.settledAmount != null && (
+                      <>
+                        <span className="text-gray-300">→</span>
+                        <span className="text-blue-600 font-medium">₹{c.settledAmount.toLocaleString("en-IN")}</span>
+                        {saved != null && saved > 0 && (
+                          <span className="flex items-center gap-0.5 text-emerald-600 font-semibold">
+                            <TrendingDown className="w-2.5 h-2.5" />₹{saved.toLocaleString("en-IN")} saved
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => { setEditId(c.id); setEditForm({ challanNumber: c.challanNumber, amount: String(c.amount), location: c.location, settledAmount: c.settledAmount != null ? String(c.settledAmount) : "" }); }}
+                    className="p-1 text-gray-400 hover:text-indigo-600 transition-colors rounded hover:bg-indigo-50">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => handleDelete(c.id)} disabled={deletingId === c.id}
+                    className="p-1 text-gray-400 hover:text-red-500 transition-colors rounded hover:bg-red-50 disabled:opacity-50">
+                    {deletingId === c.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => void; onUpdate: (updated: Lead) => void }) {
   const [form, setForm] = useState({
@@ -200,6 +432,9 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
               </div>
             </div>
           </div>
+
+          {/* Per-challan entries */}
+          <LeadChallansSection leadId={lead.id} />
 
           {/* Challan Financials */}
           <div>

@@ -409,6 +409,23 @@ model SafeDrivingPromise {
   @@map("safe_driving_promises")
 }
 
+// ─── Lead Challans (per-challan CRM tracking) ───────
+model LeadChallan {
+  id            String   @id @default(cuid())
+  leadId        String
+  challanNumber String
+  amount        Float
+  location      String
+  settledAmount Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@map("lead_challans")
+}
+
 // ─── Optional Lead model (keep if needed) ─────────────
 model Lead {
   id               String   @id @default(cuid())
@@ -432,6 +449,8 @@ model Lead {
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+
+  leadChallans     LeadChallan[]
 
   @@index([mobileNumber])
   @@index([vehicleNumber])

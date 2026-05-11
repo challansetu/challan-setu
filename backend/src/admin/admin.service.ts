@@ -768,6 +768,43 @@ export class AdminService {
     return { deleted: true, orderNumber: order.orderNumber };
   }
 
+  // ─── Lead Challans (per-challan CRM tracking) ────────────────────────────
+
+  async getLeadChallans(leadId: string) {
+    const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    return this.prisma.leadChallan.findMany({ where: { leadId }, orderBy: { createdAt: 'desc' } });
+  }
+
+  async createLeadChallan(leadId: string, data: {
+    challanNumber: string;
+    amount: number;
+    location: string;
+    settledAmount?: number | null;
+  }) {
+    const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    return this.prisma.leadChallan.create({ data: { leadId, ...data } });
+  }
+
+  async updateLeadChallan(challanId: string, data: {
+    challanNumber?: string;
+    amount?: number;
+    location?: string;
+    settledAmount?: number | null;
+  }) {
+    const challan = await this.prisma.leadChallan.findUnique({ where: { id: challanId } });
+    if (!challan) throw new NotFoundException('Challan not found');
+    return this.prisma.leadChallan.update({ where: { id: challanId }, data });
+  }
+
+  async deleteLeadChallan(challanId: string) {
+    const challan = await this.prisma.leadChallan.findUnique({ where: { id: challanId } });
+    if (!challan) throw new NotFoundException('Challan not found');
+    await this.prisma.leadChallan.delete({ where: { id: challanId } });
+    return { deleted: true };
+  }
+
   // ─── User Challans (CRM tracking) ────────────────────────────────────────
 
   async getUserChallans(userId: string) {
