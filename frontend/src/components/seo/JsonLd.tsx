@@ -59,6 +59,14 @@ export function localBusinessSchema() {
     '@id': `${SITE_URL}/#business`,
     name: 'ChallanSetu',
     url: SITE_URL,
+    telephone: '+91-8796323876',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Delhi',
+      addressRegion: 'Delhi NCR',
+      addressCountry: 'IN',
+    },
+    image: `${SITE_URL}/challan-logo.svg`,
     description:
       'ChallanSetu helps Delhi NCR vehicle owners legally settle traffic challans through Lok Adalat and lawyer support, saving up to 50% on eligible fines. No court visit required.',
     email: 'challansetu@gmail.com',
