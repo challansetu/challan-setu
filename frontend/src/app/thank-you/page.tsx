@@ -133,6 +133,11 @@ export default function ThankYouPage({
                 {/* Challan sections */}
                 {vehicleNumber && (
                   <>
+                    {/* Heading for scraped public data */}
+                    <div>
+                      <p className="text-sm font-bold text-gray-700">Reported Challans</p>
+                      <p className="text-xs text-gray-400 mt-0.5">From publicly available traffic records. May not reflect the latest status.</p>
+                    </div>
                     <PublicChallanSection vehicleNumber={vehicleNumber} />
                     <EparivahanChallanSection vehicleNumber={vehicleNumber} />
                   </>
