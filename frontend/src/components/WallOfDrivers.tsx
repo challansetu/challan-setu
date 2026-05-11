@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { RESPONSIBLE_DRIVERS } from '@/data/responsible-drivers';
 
 const CARD_WIDTH = 300;   // px — card width on desktop
-const GAP        = 20;    // px — gap between cards
-const SPEED      = 50;    // px/s — scroll speed
+const GAP = 20;    // px — gap between cards
+const SPEED = 50;    // px/s — scroll speed
 
 export function WallOfDrivers() {
   const drivers = RESPONSIBLE_DRIVERS;
@@ -13,12 +13,12 @@ export function WallOfDrivers() {
   const items = [...drivers, ...drivers];
 
   // One "lap" = original set width; duration = that distance / speed
-  const lapWidth  = drivers.length * (CARD_WIDTH + GAP);
-  const duration  = lapWidth / SPEED;
+  const lapWidth = drivers.length * (CARD_WIDTH + GAP);
+  const duration = lapWidth / SPEED;
 
   return (
     <section
-      aria-label="Wall of Responsible Drivers"
+      aria-label="Responsible Road Heroes"
       className="py-16 sm:py-24 bg-[#06080f] overflow-hidden"
     >
       {/* Header */}
@@ -27,7 +27,7 @@ export function WallOfDrivers() {
           Community
         </p>
         <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none mb-4">
-          Wall of Responsible Drivers 🇮🇳
+          Responsible Road Heroes 🇮🇳
         </h2>
         <p className="text-gray-400 text-base sm:text-lg max-w-md mx-auto">
           Real drivers. Real savings. Safer roads.

@@ -40,7 +40,7 @@ const POSTS: BlogPost[] = [
       "Got a traffic challan in Delhi? Learn how challan discount via Lok Adalat can cut your fine by up to 50%. Check eligibility free.",
     title: "Got a Traffic Challan in Delhi? Here’s How to Legally Pay Less",
     category: "Challan Guide",
-    publishedAt: "2026-05-10",
+    publishedAt: "2026-05-01",
     readingTime: 7,
     excerpt:
       "A Delhi traffic challan can run into thousands of rupees , but you don’t always have to pay the full amount. Here’s how Lok Adalat settlement works and how to get a legal challan discount in Delhi.",
@@ -281,7 +281,7 @@ const POSTS: BlogPost[] = [
       "Ignoring a traffic challan can block your RC renewal, suspend your licence, and grow your fine. Find out the real consequences and how to resolve pending challans.",
     title: "What Happens If You Don't Pay a Traffic Challan?",
     category: "Challan Guide",
-    publishedAt: "2026-05-10",
+    publishedAt: "2026-05-05",
     readingTime: 6,
     excerpt:
       "Ignoring a traffic challan is one of the costliest mistakes a vehicle owner can make. Here's exactly what happens — and how to fix it before it gets worse.",
