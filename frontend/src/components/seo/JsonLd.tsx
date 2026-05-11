@@ -62,8 +62,10 @@ export function localBusinessSchema() {
     telephone: '+91-8796323876',
     address: {
       '@type': 'PostalAddress',
+      streetAddress: 'Geeta Colony',
       addressLocality: 'Delhi',
       addressRegion: 'Delhi NCR',
+      postalCode: '110031',
       addressCountry: 'IN',
     },
     image: `${SITE_URL}/challan-logo.svg`,
