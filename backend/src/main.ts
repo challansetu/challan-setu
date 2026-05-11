@@ -6,6 +6,7 @@ import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import {
   DEFAULT_PORT,
   DEV_CORS_ORIGINS,
+  PROD_CORS_ORIGINS,
   SWAGGER_TITLE,
   SWAGGER_DESCRIPTION,
   SWAGGER_VERSION,
@@ -17,12 +18,24 @@ async function bootstrap() {
     rawBody: true, // Required for Razorpay webhook signature verification
   });
 
-  const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? (process.env.ALLOWED_ORIGINS ?? '').split(',').map((o) => o.trim()).filter(Boolean)
-    : DEV_CORS_ORIGINS;
+  const extraOrigins = (process.env.ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  const allowedOrigins =
+    process.env.NODE_ENV === 'production'
+      ? [...PROD_CORS_ORIGINS, ...extraOrigins]
+      : DEV_CORS_ORIGINS;
 
   app.enableCors({
-    origin: allowedOrigins.length ? allowedOrigins : false,
+    origin: (origin, callback) => {
+      // Allow server-to-server / Postman requests (no Origin header)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      logger.warn(`CORS blocked: ${origin}`);
+      callback(new Error(`Origin ${origin} not allowed`));
+    },
     credentials: true,
   });
 

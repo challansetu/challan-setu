@@ -27,6 +27,7 @@ export const PROVIDER_API_TIMEOUT_MS = 30000;
 
 // ─── CORS ───────────────────────────────────────────
 export const DEV_CORS_ORIGINS = ['http://localhost:3000', 'http://localhost:3001'];
+export const PROD_CORS_ORIGINS = ['https://challansetu.com', 'https://www.challansetu.com'];
 
 // ─── Business Rules ─────────────────────────────────
 export const DISCOUNT_PERCENTAGE = 40;
