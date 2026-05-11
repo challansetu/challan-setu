@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { CheckCircle2, Loader2, Calendar, MapPin, ShieldCheck, ArrowRight, X, Hash } from 'lucide-react';
 import { challansApi, type ChallanEntry } from '@/lib/api';
 
@@ -61,7 +62,7 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-end sm:items-center sm:justify-center sm:p-6" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       {/* Sheet — flex-col so header is always outside the scroll area */}
@@ -168,7 +169,8 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
           )}
         </div>{/* end scrollable content */}
       </div>{/* end sheet */}
-    </div>
+    </div>,
+    document.body
   );
 }
 
