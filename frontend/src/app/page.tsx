@@ -62,17 +62,7 @@ export default async function LandingPage() {
 
                 {/* ── Headline + form ── */}
                 <div className="flex-1 min-w-0 text-center w-full max-w-3xl mx-auto">
-                  {/* LCP anchor: logo image is preloaded and renders immediately */}
-                  <div className="flex justify-center mb-5">
-                    <Image
-                      src="/challan-logo.svg"
-                      alt="ChallanSetu"
-                      width={100}
-                      height={55}
-                      priority
-                      className="h-11 w-auto"
-                    />
-                  </div>
+
                   <h1 className="mb-5 px-2 lg:px-0 tracking-tight">
                     <span className="block text-2xl sm:text-3xl md:text-4xl font-medium text-white mb-2 leading-snug">
                       Got a traffic challan?
