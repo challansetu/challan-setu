@@ -185,7 +185,7 @@ export function HeroForm({
               {vehicleNumber || (
                 <span className="flex items-center">
                   {animatedText}
-                  <span className="inline-block w-px h-[18px] bg-gray-400/70 ml-0.5 animate-pulse" />
+                  <span className="inline-block w-px h-[18px] bg-gray-400/70 ml-0.5 animate-blink" />
                 </span>
               )}
             </div>

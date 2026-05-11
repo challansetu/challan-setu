@@ -77,10 +77,10 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
                 <span className="text-xs text-gray-400">{formatDate(post.date)}</span>
                 <Link
                   href={`/blog/${post.slug}`}
-                  aria-label={`Read more about ${post.title}`}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 group-hover:gap-2 transition-all"
                 >
-                  Read more <ArrowRight className="w-3.5 h-3.5" />
+                  Read more<span className="sr-only"> – {post.title}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>

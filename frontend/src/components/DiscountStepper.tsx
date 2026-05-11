@@ -53,12 +53,6 @@ export function DiscountStepper() {
 
   return (
     <section className="bg-white py-12 sm:py-20 lg:py-24">
-      <style jsx global>{`
-        @keyframes progressFillVertical {
-          from { height: 0%; }
-          to { height: 100%; }
-        }
-      `}</style>
       <div className="container-app">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col">
           <div className="mb-12 text-left w-full">

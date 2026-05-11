@@ -20,6 +20,13 @@
     "swr": "^2.4.1",
     "tailwind-merge": "^2.2.0"
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 years",
+    "not dead",
+    "not ie 11",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.48",
