@@ -106,6 +106,12 @@ export default function ThankYouPage({
 
             {/* Status banner — desktop only, above grid */}
             <div className="hidden sm:block rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center mb-6">
+              <div className="flex justify-center mb-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                  Agent assigned · Response within 30 min
+                </span>
+              </div>
               <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
               <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
               <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
@@ -134,6 +140,12 @@ export default function ThankYouPage({
 
                 {/* Status banner — mobile only (desktop version is above the grid) */}
                 <div className="sm:hidden rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
+                  <div className="flex justify-center mb-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+                      <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                      Agent assigned · Response within 30 min
+                    </span>
+                  </div>
                   <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
                   <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
                   <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
