@@ -128,12 +128,6 @@ export default function ThankYouPage({
                       <p className="text-2xl font-black leading-none tracking-widest text-gray-900 break-all">
                         {vehicleNumber || '—'}
                       </p>
-                      <div className="mt-4 grid grid-cols-2 gap-3">
-                        <div>
-                          <p className="text-xs text-gray-400">Request ID</p>
-                          <p className="mt-0.5 text-sm font-bold text-gray-800">{requestId}</p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
