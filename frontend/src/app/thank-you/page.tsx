@@ -9,6 +9,7 @@ import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/Button';
 import { EparivahanChallanSection, PublicChallanSection } from '@/components/EparivahanChallanSection';
 import { ConfettiEffect } from '@/components/ConfettiEffect';
+import { VehicleInfoCard } from '@/components/SearchAnotherVehicle';
 
 const WA_NUMBER = '918796323876';
 
@@ -128,20 +129,8 @@ export default function ThankYouPage({
               {/* Left column */}
               <div className="space-y-4">
 
-                {/* Vehicle info card */}
-                <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
-                  <div className="flex">
-                    <div className="w-1 flex-shrink-0 bg-blue-500" />
-                    <div className="flex-1 px-5 py-5">
-                      <p className="text-[10px] font-black tracking-[0.22em] text-blue-600 uppercase mb-2">
-                        Vehicle Information
-                      </p>
-                      <p className="text-2xl font-black leading-none tracking-widest text-gray-900 break-all">
-                        {vehicleNumber || '—'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {/* Vehicle info card with change vehicle */}
+                <VehicleInfoCard vehicleNumber={vehicleNumber} />
 
                 {/* Status banner — mobile only (desktop version is above the grid) */}
                 <div className="sm:hidden rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">

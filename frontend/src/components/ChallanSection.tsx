@@ -140,29 +140,25 @@ export function ChallanSection({ vehicleNumber }: Props) {
           const amount = Number(c.amountChallan) || 0;
 
           return (
-            <div key={i} className="overflow-hidden rounded-2xl bg-white shadow-sm">
-              {/* Offense name row */}
-              <div className="px-5 pt-4 pb-3 border-b border-gray-50">
-                <p className="text-[15px] font-bold text-gray-900 leading-snug">{offense}</p>
-              </div>
-              {/* Date + amount row */}
-              <div className="px-5 py-3 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 text-sm text-gray-400">
+            <div key={i} className="rounded-2xl bg-white shadow-sm px-4 py-3 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-gray-900 leading-snug truncate">{offense}</p>
+                <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-400">
                   <span className="inline-flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5" />
+                    <Calendar className="h-3 w-3" />
                     {formatDate(c.dateChallan)}
                   </span>
                   {c.locationChallan && (
-                    <span className="inline-flex items-center gap-1 truncate max-w-[100px]">
-                      <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                    <span className="inline-flex items-center gap-1 truncate max-w-[90px]">
+                      <MapPin className="h-3 w-3 flex-shrink-0" />
                       <span className="truncate">{c.locationChallan}</span>
                     </span>
                   )}
                 </div>
-                <p className={`text-base font-black flex-shrink-0 ${isPaid ? 'text-emerald-500' : 'text-red-500'}`}>
-                  ₹{amount.toLocaleString('en-IN')}
-                </p>
               </div>
+              <p className={`text-sm font-black flex-shrink-0 ${isPaid ? 'text-emerald-500' : 'text-red-500'}`}>
+                ₹{amount.toLocaleString('en-IN')}
+              </p>
             </div>
           );
         })}

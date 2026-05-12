@@ -168,6 +168,9 @@ export function LeadCaptureModal({
     }
 
     setSubmitState('success');
+    try {
+      localStorage.setItem('challan_user_info', JSON.stringify({ fullName: normalizedName, mobileNumber }));
+    } catch {}
     const leadId = response?.data?.leadId;
     const leadStatus = response?.data?.leadStatus;
     const createdAt = response?.data?.createdAt;
