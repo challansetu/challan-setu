@@ -105,16 +105,21 @@ export default function ThankYouPage({
           <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-6xl sm:px-10 sm:pt-10 sm:pb-20">
 
             {/* Status banner — desktop only, above grid */}
-            <div className="hidden sm:block rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center mb-6">
-              <div className="flex justify-center mb-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                  Agent assigned · Response within 30 min
-                </span>
+            <div className="hidden sm:block rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden mb-6">
+              <div className="flex items-center gap-2 bg-green-50 border-b border-green-100 px-5 py-2.5">
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+                <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
               </div>
-              <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
-              <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
-              <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
+              <div className="px-5 py-4 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-bold text-amber-900">Our team will contact you shortly</p>
+                  <p className="mt-1 text-xs text-amber-600/90 leading-relaxed">You'll receive a call or WhatsApp message within 30 minutes</p>
+                </div>
+                <div className="flex-shrink-0 text-right">
+                  <p className="text-[10px] font-black tracking-widest uppercase text-amber-400">Request ID</p>
+                  <p className="mt-0.5 font-mono text-sm font-bold text-amber-800">{requestId}</p>
+                </div>
+              </div>
             </div>
 
             {/* ── Desktop two-column grid ── */}
@@ -139,16 +144,20 @@ export default function ThankYouPage({
                 </div>
 
                 {/* Status banner — mobile only (desktop version is above the grid) */}
-                <div className="sm:hidden rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
-                  <div className="flex justify-center mb-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                      Agent assigned · Response within 30 min
-                    </span>
+                <div className="sm:hidden rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+                  <div className="flex items-center gap-2 bg-green-50 border-b border-green-100 px-5 py-2.5">
+                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+                    <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
                   </div>
-                  <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
-                  <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
-                  <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
+                  <div className="px-5 py-4 flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">Our team will contact you shortly</p>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <p className="text-[10px] font-black tracking-widest uppercase text-gray-400">Request ID</p>
+                      <p className="mt-0.5 font-mono text-sm font-bold text-gray-800">{requestId}</p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Challan sections */}
