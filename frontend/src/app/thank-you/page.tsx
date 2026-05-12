@@ -108,6 +108,7 @@ export default function ThankYouPage({
             <div className="hidden sm:block rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center mb-6">
               <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
               <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
+              <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
             </div>
 
             {/* ── Desktop two-column grid ── */}
@@ -137,6 +138,13 @@ export default function ThankYouPage({
                   </div>
                 </div>
 
+                {/* Status banner — mobile only (desktop version is above the grid) */}
+                <div className="sm:hidden rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
+                  <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
+                  <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
+                  <p className="mt-2 text-xs font-semibold text-amber-700">Request ID: {requestId}</p>
+                </div>
+
                 {/* Challan sections */}
                 {vehicleNumber && (
                   <>
@@ -149,12 +157,6 @@ export default function ThankYouPage({
                     <EparivahanChallanSection vehicleNumber={vehicleNumber} />
                   </>
                 )}
-
-                {/* Status banner — mobile only (desktop version is above the grid) */}
-                <div className="sm:hidden rounded-2xl bg-amber-50 border border-amber-100 px-5 py-4 text-center">
-                  <p className="text-sm font-bold text-amber-800">Our team will contact you shortly</p>
-                  <p className="mt-0.5 text-xs text-amber-600">You'll receive a call or WhatsApp message within 30 minutes</p>
-                </div>
 
 
               </div>
