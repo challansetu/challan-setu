@@ -8,6 +8,7 @@ import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/Button';
 import { EparivahanChallanSection, PublicChallanSection } from '@/components/EparivahanChallanSection';
+import { ConfettiEffect } from '@/components/ConfettiEffect';
 
 const WA_NUMBER = '918796323876';
 
@@ -74,6 +75,7 @@ export default function ThankYouPage({
 
   return (
     <>
+      <ConfettiEffect />
       <Navbar />
 
       <main className="relative min-h-screen bg-[#F2F4F8]">
