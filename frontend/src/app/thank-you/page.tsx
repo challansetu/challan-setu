@@ -106,7 +106,7 @@ export default function ThankYouPage({
           <div className="px-4 pt-5 pb-28 max-w-lg mx-auto sm:max-w-6xl sm:px-10 sm:pt-10 sm:pb-20">
 
             {/* Status banner — desktop only, above grid */}
-            <div className="hidden sm:block rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden mb-6">
+            <div className="hidden sm:block rounded-2xl border border-amber-100 shadow-sm overflow-hidden mb-6 bg-gradient-to-br from-amber-50 to-orange-50">
               <div className="flex items-center gap-2 bg-green-50 border-b border-green-100 px-5 py-2.5">
                 <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
                 <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
@@ -133,18 +133,18 @@ export default function ThankYouPage({
                 <VehicleInfoCard vehicleNumber={vehicleNumber} />
 
                 {/* Status banner — mobile only (desktop version is above the grid) */}
-                <div className="sm:hidden rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+                <div className="sm:hidden rounded-2xl border border-amber-100 shadow-sm overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
                   <div className="flex items-center gap-2 bg-green-50 border-b border-green-100 px-5 py-2.5">
                     <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
                     <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
                   </div>
                   <div className="px-5 py-4 flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-sm font-bold text-gray-900">Our team will contact you shortly</p>
+                      <p className="text-sm font-bold text-amber-900">Our team will contact you shortly</p>
                     </div>
                     <div className="flex-shrink-0 text-right">
-                      <p className="text-[10px] font-black tracking-widest uppercase text-gray-400">Request ID</p>
-                      <p className="mt-0.5 font-mono text-sm font-bold text-gray-800">{requestId}</p>
+                      <p className="text-[10px] font-black tracking-widest uppercase text-amber-400">Request ID</p>
+                      <p className="mt-0.5 font-mono text-sm font-bold text-amber-800">{requestId}</p>
                     </div>
                   </div>
                 </div>

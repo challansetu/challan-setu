@@ -108,22 +108,14 @@ export function ChallanSection({ vehicleNumber }: Props) {
       </div>
 
       {/* Stat boxes */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-red-50 px-4 py-5 text-center">
-          <p className="text-3xl font-black text-red-500 leading-none">
-            {formatAmountShort(unpaidAmount)}
-          </p>
-          <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">
-            Total Due
-          </p>
+      <div className="rounded-2xl bg-white shadow-sm flex divide-x divide-gray-100">
+        <div className="flex-1 px-4 py-3 text-center">
+          <p className="text-lg font-black text-red-500 leading-none">{formatAmountShort(unpaidAmount)}</p>
+          <p className="mt-1 text-[10px] font-bold tracking-[0.15em] text-gray-400 uppercase">Total Due</p>
         </div>
-        <div className="rounded-2xl bg-green-50 px-4 py-5 text-center">
-          <p className="text-4xl font-black text-green-500 leading-none">
-            {challans.length}
-          </p>
-          <p className="mt-2 text-[10px] font-black tracking-[0.2em] text-gray-400 uppercase">
-            Violations
-          </p>
+        <div className="flex-1 px-4 py-3 text-center">
+          <p className="text-lg font-black text-gray-800 leading-none">{challans.length}</p>
+          <p className="mt-1 text-[10px] font-bold tracking-[0.15em] text-gray-400 uppercase">Violations</p>
         </div>
       </div>
 
