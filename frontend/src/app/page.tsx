@@ -48,8 +48,8 @@ export default async function LandingPage() {
           {/* Hero — sticky below navbar on mobile; content sheet slides over it */}
           <section className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
             <div className="absolute inset-0 pattern-dots opacity-40" />
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary-300/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
+            <div className="absolute top-0 right-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] bg-primary-400/10 rounded-full blur-3xl -translate-y-1/2 sm:-translate-y-1/2 sm:translate-x-1/4" />
+            <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-primary-300/10 rounded-full blur-3xl translate-y-1/2 sm:translate-y-1/2 sm:-translate-x-1/4" />
 
             <div className="container-app relative">
               {/*

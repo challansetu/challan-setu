@@ -5,13 +5,6 @@ import Image from 'next/image';
 
 const TESTIMONIALS = [
   {
-    name: 'Yash Gupta',
-    location: 'Delhi',
-    rating: 5,
-    review: 'The request flow was simple and clear. I submitted my vehicle number and got the next step without any confusion.',
-    photo: '/testimonials/t1.webp',
-  },
-  {
     name: 'Rahul Sharma',
     location: 'Noida',
     rating: 5,
