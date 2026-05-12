@@ -34,7 +34,7 @@ async function bootstrap() {
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) return callback(null, true);
       logger.warn(`CORS blocked: ${origin}`);
-      callback(new Error(`Origin ${origin} not allowed`));
+      callback(null, false);
     },
     credentials: true,
   });

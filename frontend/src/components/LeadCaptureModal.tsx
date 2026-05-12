@@ -7,7 +7,7 @@ import { ArrowRight, RotateCw, X } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { leadsApi } from '@/lib/api';
+import api, { leadsApi } from '@/lib/api';
 import { NAME_MAX_LENGTH, NAME_MIN_LENGTH, PHONE_MAX_DIGITS, PHONE_REGEX } from '@/lib/constants';
 import messages from '@/data/messages.json';
 
@@ -56,6 +56,10 @@ export function LeadCaptureModal({
       fullName: false,
       mobileNumber: false,
     });
+
+    // Warm up the backend while the user fills in the form so cold starts
+    // don't hit during the actual submission.
+    api.get('/health', { timeout: 30000 }).catch(() => {});
   }, [open, vehicleNumber]);
 
   useEffect(() => {
@@ -149,7 +153,8 @@ export function LeadCaptureModal({
     try {
       response = await leadsApi.create(payload);
     } catch {
-      // retry once on timeout / network error (handles cold starts)
+      // retry once after a delay — gives Railway's cold-starting backend time to wake up
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       try {
         response = await leadsApi.create(payload);
       } catch (error: any) {
@@ -176,7 +181,7 @@ export function LeadCaptureModal({
       });
       router.push(`/thank-you?${params.toString()}`);
     }, 700);
-  }, [isFormValid, mobileNumber, normalizedName, onClose, router, vehicleNumber]);
+  }, [city, isFormValid, mobileNumber, normalizedName, onClose, router, source, vehicleNumber]);
 
   if (!open) return null;
 
