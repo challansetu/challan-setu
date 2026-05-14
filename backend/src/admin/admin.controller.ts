@@ -36,12 +36,14 @@ class UpdateTrackingDto {
 }
 class CreateUserChallanDto {
   @IsString() @MinLength(1) challanNumber: string;
+  @IsOptional() @IsNumber() realAmount?: number | null;
   @IsNumber() @IsPositive() amount: number;
   @IsString() @MinLength(1) location: string;
   @IsOptional() @IsNumber() settledAmount?: number | null;
 }
 class UpdateUserChallanDto {
   @IsOptional() @IsString() challanNumber?: string;
+  @IsOptional() @IsNumber() realAmount?: number | null;
   @IsOptional() @IsNumber() @IsPositive() amount?: number;
   @IsOptional() @IsString() location?: string;
   @IsOptional() @IsNumber() settledAmount?: number | null;

@@ -140,6 +140,7 @@ export interface LeadChallan {
   id: string;
   leadId: string;
   challanNumber: string;
+  realAmount: number | null;
   amount: number;
   location: string;
   settledAmount: number | null;

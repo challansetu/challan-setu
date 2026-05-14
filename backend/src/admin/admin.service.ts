@@ -778,6 +778,7 @@ export class AdminService {
 
   async createLeadChallan(leadId: string, data: {
     challanNumber: string;
+    realAmount?: number | null;
     amount: number;
     location: string;
     settledAmount?: number | null;
@@ -789,6 +790,7 @@ export class AdminService {
 
   async updateLeadChallan(challanId: string, data: {
     challanNumber?: string;
+    realAmount?: number | null;
     amount?: number;
     location?: string;
     settledAmount?: number | null;

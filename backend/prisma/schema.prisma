@@ -414,6 +414,7 @@ model LeadChallan {
   id            String   @id @default(cuid())
   leadId        String
   challanNumber String
+  realAmount    Float?
   amount        Float
   location      String
   settledAmount Float?

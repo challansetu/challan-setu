@@ -31,9 +31,11 @@ const CRM_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "ye
 };
 
 const CHALLAN_LOCATIONS = ["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Chandigarh", "Himachal"];
-const EMPTY_CHALLAN = { challanNumber: "", amount: "", location: "Delhi", settledAmount: "" };
+const EMPTY_CHALLAN = { challanNumber: "", realAmount: "", amount: "", location: "Delhi", settledAmount: "" };
 
-function LeadChallansSection({ leadId }: { leadId: string }) {
+type ChallanTotals = { totalRealAmount: number; totalAmountPaid: number; totalSettled: number };
+
+function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTotalsChange?: (t: ChallanTotals) => void }) {
   const { data: challans, isLoading, mutate } = useSWR<LeadChallan[]>(
     `lead-challans-${leadId}`,
     () => adminApi.getLeadChallans(leadId),
@@ -47,9 +49,16 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const totalCount = challans?.length ?? 0;
-  const totalAmount = challans?.reduce((s, c) => s + c.amount, 0) ?? 0;
+  const totalRealAmount = challans?.reduce((s, c) => s + (c.realAmount ?? 0), 0) ?? 0;
+  const totalAmountPaid = challans?.reduce((s, c) => s + c.amount, 0) ?? 0;
   const totalSettled = challans?.reduce((s, c) => s + (c.settledAmount ?? 0), 0) ?? 0;
-  const totalSaved = challans?.reduce((s, c) => s + (c.settledAmount != null ? c.amount - c.settledAmount : 0), 0) ?? 0;
+  const totalProfit = challans?.reduce((s, c) => s + (c.settledAmount != null ? c.amount - c.settledAmount : 0), 0) ?? 0;
+
+  useEffect(() => {
+    if (challans) {
+      onTotalsChange?.({ totalRealAmount, totalAmountPaid, totalSettled });
+    }
+  }, [challans]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +67,7 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
     try {
       await adminApi.createLeadChallan(leadId, {
         challanNumber: form.challanNumber.trim(),
+        realAmount: form.realAmount ? parseFloat(form.realAmount) : null,
         amount: parseFloat(form.amount),
         location: form.location,
         settledAmount: form.settledAmount ? parseFloat(form.settledAmount) : null,
@@ -75,6 +85,7 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
     try {
       await adminApi.updateLeadChallan(leadId, challanId, {
         challanNumber: editForm.challanNumber.trim(),
+        realAmount: editForm.realAmount ? parseFloat(editForm.realAmount) : null,
         amount: parseFloat(editForm.amount),
         location: editForm.location,
         settledAmount: editForm.settledAmount ? parseFloat(editForm.settledAmount) : null,
@@ -111,9 +122,9 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
         <div className="grid grid-cols-2 gap-2 mb-3">
           {[
             { label: "Count", value: totalCount, color: "text-gray-900" },
-            { label: "Total Fine", value: `₹${totalAmount.toLocaleString("en-IN")}`, color: "text-red-600" },
-            { label: "Settled At", value: `₹${totalSettled.toLocaleString("en-IN")}`, color: "text-blue-600" },
-            { label: "Saved", value: `₹${totalSaved.toLocaleString("en-IN")}`, color: "text-emerald-600" },
+            { label: "Real Fine", value: `₹${totalRealAmount.toLocaleString("en-IN")}`, color: "text-red-600" },
+            { label: "Settled At", value: `₹${totalSettled.toLocaleString("en-IN")}`, color: "text-orange-500" },
+            { label: "Profit", value: `₹${totalProfit.toLocaleString("en-IN")}`, color: "text-emerald-600" },
           ].map((s) => (
             <div key={s.label} className="bg-gray-50 rounded-lg p-2 text-center">
               <div className={`text-sm font-bold ${s.color}`}>{s.value}</div>
@@ -147,7 +158,15 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
           </div>
           <input
             type="number"
-            placeholder="Amount (₹)"
+            placeholder="Real Amount (₹)"
+            value={form.realAmount}
+            onChange={(e) => setForm((f) => ({ ...f, realAmount: e.target.value }))}
+            className={inputCls}
+            min={0} step={0.01}
+          />
+          <input
+            type="number"
+            placeholder="Amt paid by owner (₹)"
             value={form.amount}
             onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
             className={inputCls}
@@ -182,7 +201,7 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
       ) : (
         <div className="space-y-1.5">
           {challans.map((c) => {
-            const saved = c.settledAmount != null ? c.amount - c.settledAmount : null;
+            const profit = c.settledAmount != null ? c.amount - c.settledAmount : null;
             const isEditing = editId === c.id;
 
             if (isEditing) {
@@ -200,7 +219,10 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
                       </select>
                       <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
                     </div>
-                    <input type="number" value={editForm.amount}
+                    <input type="number" placeholder="Real Amount (₹)" value={editForm.realAmount}
+                      onChange={(e) => setEditForm((f) => ({ ...f, realAmount: e.target.value }))}
+                      className={inputCls} min={0} step={0.01} />
+                    <input type="number" placeholder="Amt paid by owner (₹)" value={editForm.amount}
                       onChange={(e) => setEditForm((f) => ({ ...f, amount: e.target.value }))}
                       className={inputCls} min={0} step={0.01} />
                     <input type="number" placeholder="Settled at (₹)" value={editForm.settledAmount}
@@ -228,15 +250,18 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
                     <span className="font-mono text-xs font-semibold text-gray-900">{c.challanNumber}</span>
                     <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full font-medium">{c.location}</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 text-xs flex-wrap">
-                    <span className="text-red-600 font-medium">₹{c.amount.toLocaleString("en-IN")}</span>
+                  <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap">
+                    {c.realAmount != null && (
+                      <span className="text-red-500 font-medium">₹{c.realAmount.toLocaleString("en-IN")}</span>
+                    )}
+                    <span className="text-blue-600 font-medium">₹{c.amount.toLocaleString("en-IN")} owner</span>
                     {c.settledAmount != null && (
                       <>
                         <span className="text-gray-300">→</span>
-                        <span className="text-blue-600 font-medium">₹{c.settledAmount.toLocaleString("en-IN")}</span>
-                        {saved != null && saved > 0 && (
+                        <span className="text-orange-500 font-medium">₹{c.settledAmount.toLocaleString("en-IN")} settled</span>
+                        {profit != null && profit > 0 && (
                           <span className="flex items-center gap-0.5 text-emerald-600 font-semibold">
-                            <TrendingDown className="w-2.5 h-2.5" />₹{saved.toLocaleString("en-IN")} saved
+                            <TrendingDown className="w-2.5 h-2.5" />₹{profit.toLocaleString("en-IN")} profit
                           </span>
                         )}
                       </>
@@ -244,7 +269,7 @@ function LeadChallansSection({ leadId }: { leadId: string }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => { setEditId(c.id); setEditForm({ challanNumber: c.challanNumber, amount: String(c.amount), location: c.location, settledAmount: c.settledAmount != null ? String(c.settledAmount) : "" }); }}
+                  <button onClick={() => { setEditId(c.id); setEditForm({ challanNumber: c.challanNumber, realAmount: c.realAmount != null ? String(c.realAmount) : "", amount: String(c.amount), location: c.location, settledAmount: c.settledAmount != null ? String(c.settledAmount) : "" }); }}
                     className="p-1 text-gray-400 hover:text-indigo-600 transition-colors rounded hover:bg-indigo-50">
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
@@ -273,16 +298,19 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
     discountGiven: lead.discountGiven ?? "",
   });
 
+  const handleChallansChange = useCallback((totals: ChallanTotals) => {
+    const profit = Math.max(0, totals.totalAmountPaid - totals.totalSettled);
+    setForm((prev) => ({
+      ...prev,
+      totalChallan: String(totals.totalRealAmount),
+      paidAmount: String(totals.totalAmountPaid),
+      settledAmount: String(totals.totalSettled),
+      discountGiven: String(profit),
+    }));
+  }, []);
+
   const updateForm = (patch: Partial<typeof form>) => {
-    setForm((prev) => {
-      const next = { ...prev, ...patch };
-      const total = Number(next.totalChallan);
-      const paid = Number(next.paidAmount);
-      if (total > 0 && paid > 0) {
-        next.discountGiven = String(Math.max(0, total - paid));
-      }
-      return next;
-    });
+    setForm((prev) => ({ ...prev, ...patch }));
   };
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -434,30 +462,31 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
           </div>
 
           {/* Per-challan entries */}
-          <LeadChallansSection leadId={lead.id} />
+          <LeadChallansSection leadId={lead.id} onTotalsChange={handleChallansChange} />
 
           {/* Challan Financials */}
           <div>
-            <p className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-3">Challan Financials</p>
+            <p className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-1">Challan Financials</p>
+            <p className="text-[10px] text-gray-400 mb-3">Auto-calculated from challans above</p>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className={labelCls}>Total Challan (₹)</label>
                 <input
                   type="number"
                   value={form.totalChallan}
-                  onChange={(e) => updateForm({ totalChallan: e.target.value })}
+                  readOnly
                   placeholder="0"
-                  className={inputCls}
+                  className={`${inputCls} bg-gray-50 text-gray-500 cursor-default`}
                 />
               </div>
               <div>
-                <label className={labelCls}>Paid Amount (₹)</label>
+                <label className={labelCls}>Paid by Owner (₹)</label>
                 <input
                   type="number"
                   value={form.paidAmount}
-                  onChange={(e) => updateForm({ paidAmount: e.target.value })}
+                  readOnly
                   placeholder="0"
-                  className={inputCls}
+                  className={`${inputCls} bg-gray-50 text-gray-500 cursor-default`}
                 />
               </div>
               <div>
@@ -465,21 +494,21 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                 <input
                   type="number"
                   value={form.settledAmount}
-                  onChange={(e) => updateForm({ settledAmount: e.target.value })}
+                  readOnly
                   placeholder="0"
-                  className={inputCls}
+                  className={`${inputCls} bg-gray-50 text-gray-500 cursor-default`}
                 />
               </div>
               <div>
-                <label className={labelCls}>Discount Given (₹)</label>
+                <label className={labelCls}>Profit (₹)</label>
                 <input
                   type="number"
                   value={form.discountGiven}
                   readOnly
-                  placeholder="Auto-calculated"
-                  className={`${inputCls} bg-gray-50 text-gray-500 cursor-not-allowed`}
+                  placeholder="0"
+                  className={`${inputCls} bg-gray-50 text-emerald-600 font-semibold cursor-default`}
                 />
-                <p className="text-[10px] text-gray-400 mt-1">= Total − Paid</p>
+                <p className="text-[10px] text-gray-400 mt-1">= Paid by owner − Settled</p>
               </div>
             </div>
           </div>

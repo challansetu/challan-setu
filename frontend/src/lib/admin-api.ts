@@ -187,7 +187,7 @@ export const adminApi = {
 
   createLeadChallan: async (
     leadId: string,
-    data: { challanNumber: string; amount: number; location: string; settledAmount?: number | null }
+    data: { challanNumber: string; realAmount?: number | null; amount: number; location: string; settledAmount?: number | null }
   ) => {
     const res = await axiosInstance.post<import("@/types/admin").LeadChallan>(
       `/admin/leads/${leadId}/challans`,
@@ -199,7 +199,7 @@ export const adminApi = {
   updateLeadChallan: async (
     leadId: string,
     challanId: string,
-    data: { challanNumber?: string; amount?: number; location?: string; settledAmount?: number | null }
+    data: { challanNumber?: string; realAmount?: number | null; amount?: number; location?: string; settledAmount?: number | null }
   ) => {
     const res = await axiosInstance.patch<import("@/types/admin").LeadChallan>(
       `/admin/leads/${leadId}/challans/${challanId}`,
