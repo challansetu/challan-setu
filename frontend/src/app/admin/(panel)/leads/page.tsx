@@ -44,6 +44,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
 
   const [form, setForm] = useState(EMPTY_CHALLAN);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState(EMPTY_CHALLAN);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -64,6 +65,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
     e.preventDefault();
     if (!form.challanNumber.trim() || !form.amount) return;
     setSaving(true);
+    setSaveError(null);
     try {
       await adminApi.createLeadChallan(leadId, {
         challanNumber: form.challanNumber.trim(),
@@ -74,7 +76,9 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
       });
       setForm(EMPTY_CHALLAN);
       await mutate();
-    } catch {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to add challan";
+      setSaveError(msg);
     } finally {
       setSaving(false);
     }
@@ -181,14 +185,17 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
             min={0} step={0.01}
           />
         </div>
-        <button
-          type="submit"
-          disabled={saving || !form.challanNumber.trim() || !form.amount}
-          className="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg px-3 py-1.5 transition-colors"
-        >
-          {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
-          Add
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            disabled={saving || !form.challanNumber.trim() || !form.amount}
+            className="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg px-3 py-1.5 transition-colors"
+          >
+            {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
+            Add
+          </button>
+          {saveError && <p className="text-xs text-red-600 font-medium">{saveError}</p>}
+        </div>
       </form>
 
       {/* List */}
