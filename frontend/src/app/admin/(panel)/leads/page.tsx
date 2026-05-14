@@ -620,7 +620,7 @@ export default function LeadsPage() {
           { label: "Dead", value: stats?.dead ?? "—", color: "text-red-500" },
           { label: "Payment Done", value: stats?.paymentDone ?? "—", color: "text-blue-600" },
           { label: "Revenue", value: stats ? `₹${(stats.totalRevenue).toLocaleString("en-IN")}` : "—", color: "text-green-600" },
-          { label: "Discount", value: stats ? `₹${(stats.totalDiscount).toLocaleString("en-IN")}` : "—", color: "text-orange-500" },
+          { label: "Profit", value: stats ? `₹${(stats.totalDiscount).toLocaleString("en-IN")}` : "—", color: "text-orange-500" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-xl shadow-sm px-4 py-3">
             <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
