@@ -17,6 +17,8 @@ import type {
   ListSettlementsParams,
   ListAuditLogsParams,
   ChallanSearch,
+  QrScanSummary,
+  QrScansResponse,
 } from "@/types/admin";
 
 const axiosInstance = axios.create({
@@ -312,6 +314,16 @@ export const adminApi = {
       responseType: "blob",
     });
     return res.data as Blob;
+  },
+
+  qrScansSummary: async () => {
+    const res = await axiosInstance.get<QrScanSummary>("/admin/qr-scans/summary");
+    return res.data;
+  },
+
+  qrScans: async (params: { source?: string; page?: number; limit?: number } = {}) => {
+    const res = await axiosInstance.get<QrScansResponse>("/admin/qr-scans", { params });
+    return res.data;
   },
 
 };

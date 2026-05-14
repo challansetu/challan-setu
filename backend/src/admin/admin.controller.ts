@@ -6,6 +6,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { PricingService } from '../pricing/pricing.service';
 import { SettlementsService } from '../settlements/settlements.service';
+import { QrScansService } from '../qr-scans/qr-scans.service';
 import { AdminJwtGuard } from './auth/admin-jwt.guard';
 import { AdminRolesGuard, AdminRoles } from './auth/admin-roles.guard';
 import { AdminRole, UserLifecycleStatus, TrackingStatus } from '@prisma/client';
@@ -55,6 +56,7 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly settlementsService: SettlementsService,
     private readonly pricingService: PricingService,
+    private readonly qrScansService: QrScansService,
   ) {}
 
   // ─── Dashboard ────────────────────────────────────────────────────────────
@@ -348,6 +350,24 @@ export class AdminController {
     res!.setHeader('Content-Type', 'text/csv');
     res!.setHeader('Content-Disposition', 'attachment; filename="orders.csv"');
     res!.send(csv);
+  }
+
+  // ─── QR Scans ─────────────────────────────────────────────────────────────
+
+  @Get('qr-scans/summary')
+  @ApiOperation({ summary: 'QR scan analytics summary' })
+  async getQrScansSummary() {
+    return this.qrScansService.getSummary();
+  }
+
+  @Get('qr-scans')
+  @ApiOperation({ summary: 'Paginated QR scan records' })
+  async getQrScans(
+    @Query('source') source?: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 20,
+  ) {
+    return this.qrScansService.getScans({ source, page: Number(page), limit: Number(limit) });
   }
 
   // ─── Discount Rules ───────────────────────────────────────────────────────

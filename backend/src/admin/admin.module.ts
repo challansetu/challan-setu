@@ -10,6 +10,7 @@ import { AdminRolesGuard } from './auth/admin-roles.guard';
 import { SettlementsModule } from '../settlements/settlements.module';
 import { PricingModule } from '../pricing/pricing.module';
 import { PrismaModule } from '../config/prisma.module';
+import { QrScansModule } from '../qr-scans/qr-scans.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrismaModule } from '../config/prisma.module';
     PrismaModule,
     SettlementsModule,
     PricingModule,
+    QrScansModule,
   ],
   controllers: [AdminController, AdminAuthController],
   providers: [AdminService, AdminAuthService, AdminJwtStrategy, AdminRolesGuard],

@@ -26,6 +26,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { QueueModule } from './queue/queue.module';
 
 import { LeadsModule } from './leads/leads.module';
+import { QrScansModule } from './qr-scans/qr-scans.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { LeadsModule } from './leads/leads.module';
     NotificationsModule,
     QueueModule,
     LeadsModule,
+    QrScansModule,
   ],
 })
 export class AppModule {}

@@ -353,3 +353,33 @@ export interface ListAuditLogsParams {
   dateFrom?: string;
   dateTo?: string;
 }
+
+export interface QrScan {
+  id: string;
+  source: string;
+  ip: string | null;
+  userAgent: string | null;
+  referrer: string | null;
+  isBot: boolean;
+  createdAt: string;
+}
+
+export interface QrScanSourceCount {
+  source: string;
+  count: number;
+}
+
+export interface QrScanSummary {
+  totalScans: number;
+  todayScans: number;
+  last7DaysScans: number;
+  bySource: QrScanSourceCount[];
+}
+
+export interface QrScansResponse {
+  scans: QrScan[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

@@ -12,6 +12,7 @@ import {
   CreditCard,
   Banknote,
   ScrollText,
+  QrCode,
   Menu,
   X,
   LogOut,
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
   { href: "/admin/settlements", label: "Settlements", icon: Banknote },
   { href: "/admin/audit-logs", label: "Audit Logs", icon: ScrollText },
+  { href: "/admin/qr-scans", label: "QR Scans", icon: QrCode },
 ];
 
 interface AdminShellProps {

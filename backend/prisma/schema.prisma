@@ -538,6 +538,22 @@ model UserChallan {
   @@map("user_challans")
 }
 
+// ─── QR Scan Tracking ────────────────────────────────
+model QrScan {
+  id        String   @id @default(cuid())
+  source    String
+  ip        String?
+  userAgent String?
+  referrer  String?
+  isBot     Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([source])
+  @@index([createdAt])
+  @@index([source, createdAt])
+  @@map("qr_scans")
+}
+
 // ─── Discount Rules ──────────────────────────────────
 enum DiscountType {
   PERCENTAGE
