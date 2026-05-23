@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, itemListSchema } from '@/components/seo/JsonLd';
 import { ArrowRight, MapPin, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -59,6 +59,11 @@ export default function CitiesPage() {
   return (
     <>
       <JsonLd data={breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Cities', url: '/cities' }])} />
+      <JsonLd
+        data={itemListSchema(
+          CITIES.map((c) => ({ name: `${c.name} Traffic Challan Support`, url: c.href, description: c.desc }))
+        )}
+      />
       <Navbar />
       <main className="flex-1 bg-surface-50">
         {/* Hero */}

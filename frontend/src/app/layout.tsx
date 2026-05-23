@@ -6,7 +6,7 @@ import { JsonLd, organizationSchema, websiteSchema, localBusinessSchema } from '
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || siteData.siteUrl;
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -36,20 +36,11 @@ export const metadata: Metadata = {
     siteName: siteData.siteName,
     title: siteData.meta.title,
     description: siteData.meta.description,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'ChallanSetu - Traffic Challan Assistance & Settlement Support',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteData.meta.title,
     description: siteData.meta.description,
-    images: ['/og-image.png'],
     creator: '@challansetu',
   },
   alternates: {
@@ -57,7 +48,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/challan-logo.svg',
-    apple: '/apple-touch-icon.png',
+    apple: '/challan-logo.svg',
   },
 };
 

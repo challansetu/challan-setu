@@ -3,24 +3,33 @@ import fs from 'fs';
 import path from 'path';
 import { getAllCityPages } from '@/data/city-pages';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 interface BlogPost {
   slug: string;
   date: string;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+// Site launched / last major update dates — update these when content changes
+const LAUNCH_DATE        = new Date('2026-05-11'); // site went live
+const CONTENT_DATE       = new Date('2026-05-24'); // last content update (homepage, FAQs)
+const LEGAL_DATE         = new Date('2026-05-01'); // privacy / terms / refund
 
+export default function sitemap(): MetadataRoute.Sitemap {
   const postsPath = path.join(process.cwd(), 'src/data/blog-posts.json');
   const blogPosts: BlogPost[] = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
+
+  // Latest blog post date drives the blog listing freshness
+  const latestPostDate = blogPosts.reduce<Date>((latest, p) => {
+    const d = new Date(p.date);
+    return d > latest ? d : latest;
+  }, LAUNCH_DATE);
 
   return [
     // ── Homepage ──────────────────────────────────────────────────────────────
     {
       url: SITE_URL,
-      lastModified: now,
+      lastModified: CONTENT_DATE,
       changeFrequency: 'monthly',
       priority: 1.0,
     },
@@ -28,32 +37,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Core static pages ─────────────────────────────────────────────────────
     {
       url: `${SITE_URL}/how-it-works`,
-      lastModified: now,
+      lastModified: CONTENT_DATE,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/faq`,
-      lastModified: now,
+      lastModified: CONTENT_DATE,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/service-area`,
-      lastModified: now,
+      lastModified: LAUNCH_DATE,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/about`,
-      lastModified: now,
+      lastModified: LAUNCH_DATE,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-
     {
       url: `${SITE_URL}/cities`,
-      lastModified: now,
+      lastModified: LAUNCH_DATE,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
@@ -61,7 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── City SEO landing pages (/pay-vehicle-challan-in-{city}) ───────────────
     ...getAllCityPages().map((city) => ({
       url: `${SITE_URL}${city.canonicalPath}`,
-      lastModified: now,
+      lastModified: LAUNCH_DATE,
       changeFrequency: 'monthly' as const,
       priority: 0.9,
     })),
@@ -69,19 +77,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Legal / policy pages ──────────────────────────────────────────────────
     {
       url: `${SITE_URL}/privacy-policy`,
-      lastModified: now,
+      lastModified: LEGAL_DATE,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${SITE_URL}/terms-of-service`,
-      lastModified: now,
+      lastModified: LEGAL_DATE,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${SITE_URL}/refund-policy`,
-      lastModified: now,
+      lastModified: LEGAL_DATE,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
@@ -89,7 +97,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Blog ──────────────────────────────────────────────────────────────────
     {
       url: `${SITE_URL}/blog`,
-      lastModified: now,
+      lastModified: latestPostDate,
       changeFrequency: 'weekly',
       priority: 0.8,
     },

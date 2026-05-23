@@ -1,0 +1,56 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="pill2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="100%" stop-color="#6ee7b7"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg2)"/>
+  <circle cx="680" cy="-30" r="200" fill="white" opacity="0.05"/>
+  <circle cx="730" cy="480" r="160" fill="white" opacity="0.04"/>
+  <circle cx="40" cy="380" r="130" fill="white" opacity="0.04"/>
+
+  <pattern id="dp2" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1" fill="white" opacity="0.07"/>
+  </pattern>
+  <rect width="800" height="450" fill="url(#dp2)"/>
+
+  <!-- Category pill -->
+  <rect x="60" y="60" width="130" height="28" rx="14" fill="white" opacity="0.12"/>
+  <text x="125" y="79" text-anchor="middle" font-size="11" font-weight="700" fill="white" letter-spacing="1">CHALLAN GUIDE</text>
+
+  <!-- Main headline -->
+  <text x="60" y="148" font-size="40" font-weight="900" fill="white" letter-spacing="-0.5">How to Check</text>
+  <text x="60" y="198" font-size="40" font-weight="900" fill="white" letter-spacing="-0.5">Pending Challan</text>
+  <text x="60" y="248" font-size="40" font-weight="900" fill="#a5f3fc" letter-spacing="-0.5">in Delhi</text>
+
+  <rect x="60" y="270" width="60" height="3" rx="2" fill="url(#pill2)"/>
+
+  <!-- Step badges -->
+  <rect x="60" y="295" width="88" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="104" y="316" text-anchor="middle" font-size="12" fill="white" opacity="0.9">Parivahan</text>
+
+  <rect x="158" y="295" width="88" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="202" y="316" text-anchor="middle" font-size="12" fill="white" opacity="0.9">mParivahan</text>
+
+  <rect x="256" y="295" width="100" height="32" rx="8" fill="white" opacity="0.1"/>
+  <text x="306" y="316" text-anchor="middle" font-size="12" fill="white" opacity="0.9">Traffic Portal</text>
+
+  <!-- Right visual — phone with search -->
+  <rect x="530" y="100" width="160" height="260" rx="22" fill="white" opacity="0.08"/>
+  <rect x="542" y="118" width="136" height="224" rx="14" fill="white" opacity="0.06"/>
+  <rect x="556" y="148" width="108" height="28" rx="8" fill="white" opacity="0.15"/>
+  <text x="610" y="167" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.6)">DL 7S BY 5194</text>
+  <rect x="556" y="188" width="108" height="70" rx="8" fill="#10b981" opacity="0.25"/>
+  <text x="610" y="218" text-anchor="middle" font-size="24" font-weight="900" fill="#6ee7b7">2</text>
+  <text x="610" y="238" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">Pending Challans</text>
+  <rect x="556" y="270" width="108" height="28" rx="8" fill="#4f46e5" opacity="0.6"/>
+  <text x="610" y="289" text-anchor="middle" font-size="11" font-weight="700" fill="white">Check Details</text>
+
+  <text x="60" y="415" font-size="12" fill="rgba(255,255,255,0.4)">challansetu.com</text>
+</svg>

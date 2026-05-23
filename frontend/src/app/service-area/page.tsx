@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, webPageSchema } from '@/components/seo/JsonLd';
 import { MapPin, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -64,6 +64,13 @@ export default function ServiceAreaPage() {
           { name: 'Home', url: '/' },
           { name: 'Service Area', url: '/service-area' },
         ])}
+      />
+      <JsonLd
+        data={webPageSchema({
+          title: 'Service Area - Delhi, Noida, Gurgaon, Ghaziabad & Faridabad | ChallanSetu',
+          description: 'ChallanSetu currently serves Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. See which challans are covered across Delhi NCR.',
+          url: '/service-area',
+        })}
       />
       <Navbar />
       <main className="flex-1 bg-surface-50">

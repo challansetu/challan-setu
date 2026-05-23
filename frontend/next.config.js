@@ -31,6 +31,20 @@ const nextConfig = {
     ],
   },
 
+  // Redirect non-www → www to avoid duplicate content indexing
+  async redirects() {
+    return isProduction
+      ? [
+          {
+            source: '/:path*',
+            has: [{ type: 'host', value: 'challansetu.com' }],
+            destination: 'https://www.challansetu.com/:path*',
+            permanent: true,
+          },
+        ]
+      : [];
+  },
+
   // Rewrites for API proxying (optional; frontend can also call backend directly)
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';

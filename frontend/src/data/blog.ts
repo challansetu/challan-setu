@@ -642,6 +642,435 @@ const POSTS: BlogPost[] = [
     ctaHtml:
       "Whether you have an e-challan sitting on Parivahan or an old court challan you've been avoiding, both can be resolved for less than the full amount — legally. Visit <a href='/' class='font-semibold underline underline-offset-2'>challansetu.com</a>, enter your vehicle number, and get a free review of your specific situation. ChallanSetu handles both e-challans and court challans across Delhi NCR, with real lawyers managing the Lok Adalat process on your behalf.",
   },
+
+  // ─── Post 4: How to Check Pending Challan in Delhi ───────────────────────────
+  {
+    slug: "how-to-check-pending-challan-delhi",
+    coverImage: "/blog/cover-check-challan.svg",
+    metaTitle: "How to Check Pending Challan in Delhi (4 Free Methods) | ChallanSetu",
+    metaDescription:
+      "Check pending challans on your Delhi vehicle number in minutes. 4 free methods: Parivahan portal, mParivahan app, Delhi Traffic Police site, and ChallanSetu.",
+    title: "How to Check Pending Challan in Delhi (4 Ways That Actually Work)",
+    category: "Challan Guide",
+    publishedAt: "2026-05-15",
+    readingTime: 5,
+    excerpt:
+      "Not sure if you have pending challans? Here are 4 free ways to check your vehicle's challan status in Delhi — including what to do once you find them.",
+    sections: [
+      {
+        blocks: [
+          {
+            kind: "p",
+            html: "Thousands of Delhi drivers discover they have pending challans only when their RC renewal gets blocked, or when they're stopped at a police checkpoint. Camera-issued e-challans are generated automatically and never physically served — so you can accumulate fines without ever knowing. Checking takes under two minutes and costs nothing.",
+          },
+          {
+            kind: "p",
+            html: "Here are the four methods that actually work, in order of reliability.",
+          },
+        ],
+      },
+      {
+        heading: "Method 1: Parivahan Portal (Most Reliable)",
+        blocks: [
+          {
+            kind: "p",
+            html: "The <strong>Parivahan portal</strong> (parivahan.gov.in) is the official government database for all e-challans issued across India. It's the primary source — every other method pulls from here.",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Go to parivahan.gov.in/parivahan",
+                html: "Open the site on any browser. No login or app download needed.",
+              },
+              {
+                title: 'Click "Online Services" → "e-Challan"',
+                html: "This takes you to the challan check section. Look for \"Check Challan Status\" in the menu.",
+              },
+              {
+                title: "Enter your vehicle number",
+                html: "Type your registration number exactly as it appears on your RC — for example, DL7SBY5194. You can also search by challan number or driving licence number.",
+              },
+              {
+                title: "Enter the captcha and submit",
+                html: "All pending challans linked to your vehicle number will appear — including the offence, date, location, and fine amount.",
+              },
+            ],
+          },
+          {
+            kind: "highlights",
+            items: [
+              "Shows all camera-issued and handheld-device challans",
+              "Displays challan status: pending, paid, or disposed",
+              "Works for Delhi, UP, Haryana, and all other states",
+              "Free, no login required",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Method 2: mParivahan App",
+        blocks: [
+          {
+            kind: "p",
+            html: "The <strong>mParivahan app</strong> (available on Android and iOS) is the official mobile app from the Ministry of Road Transport. It gives you the same challan data as the Parivahan website but with a cleaner interface.",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Download mParivahan from the Play Store or App Store",
+                html: "Search for \"mParivahan\" — the official app by NIC (National Informatics Centre).",
+              },
+              {
+                title: "Tap \"RC\" or search your vehicle number",
+                html: "Enter your registration number in the vehicle search. The app shows RC details, insurance status, and pending challans.",
+              },
+              {
+                title: "Check the Challan tab",
+                html: "Scroll to the challan section to see all pending fines with dates and amounts.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "The app also lets you store your RC and driving licence digitally, which is legally accepted at traffic checkpoints under the Motor Vehicles Act.",
+          },
+        ],
+      },
+      {
+        heading: "Method 3: Delhi Traffic Police Portal",
+        blocks: [
+          {
+            kind: "p",
+            html: "The <strong>Delhi Traffic Police website</strong> (delhitrafficpolice.nic.in) has its own challan check for Delhi-specific violations — particularly useful for older challans and those issued by Delhi Traffic Police directly.",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Visit delhitrafficpolice.nic.in",
+                html: "Go to the official Delhi Traffic Police site.",
+              },
+              {
+                title: 'Click "Check Your Challan"',
+                html: "Usually listed under Services or e-Services in the navigation.",
+              },
+              {
+                title: "Enter vehicle number or challan number",
+                html: "Results show pending challans issued by Delhi Traffic Police, with the option to pay online.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "Note: This portal is separate from Parivahan. A challan may appear on one but not the other depending on when it was issued. Checking both is safest.",
+          },
+        ],
+      },
+      {
+        heading: "Method 4: Check via ChallanSetu",
+        blocks: [
+          {
+            kind: "p",
+            html: "If you want to check your challan status <em>and</em> find out whether you're eligible for a legal discount in the same step, <a href='/' class='text-primary-600 underline underline-offset-2 hover:text-primary-700'>ChallanSetu</a> is the fastest route.",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Enter your vehicle number on challansetu.com",
+                html: "No login, no payment required at this stage.",
+              },
+              {
+                title: "Our team checks your challan details",
+                html: "We verify the challan status, type, and whether it qualifies for a Lok Adalat settlement discount.",
+              },
+              {
+                title: "You receive the available options",
+                html: "If your challan is eligible for a reduction, we share the best available option before you pay anything.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "This is the only method that doesn't just <em>show</em> you the challan — it also tells you whether you can legally pay less.",
+          },
+        ],
+      },
+      {
+        heading: "What to Do After You Find a Pending Challan",
+        blocks: [
+          {
+            kind: "p",
+            html: "Once you've confirmed a pending challan, you have three options:",
+          },
+          {
+            kind: "strong_bullets",
+            items: [
+              {
+                label: "Pay full on Parivahan",
+                text: "Fastest option. Use Parivahan's online payment — UPI, net banking, or card. The challan is cleared within 24–48 hours.",
+              },
+              {
+                label: "Contest it (if wrongly issued)",
+                text: "If you believe the challan was issued in error — wrong vehicle number, camera malfunction, wrong location — you can file a representation with the issuing authority. Success rate varies.",
+              },
+              {
+                label: "Settle for less via Lok Adalat",
+                text: "For eligible challans, a Lok Adalat settlement can reduce the fine by 30–50%. This requires a lawyer to file and represent the case. ChallanSetu manages this entire process.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "The most important thing: <strong>don't ignore a pending challan</strong>. It won't expire, and it will create problems at the worst possible time — RC renewal, insurance claim, or a police checkpoint.",
+          },
+          {
+            kind: "p",
+            html: "For the full picture on what happens when challans go unpaid, see our guide: <a href='/blog/what-happens-if-you-dont-pay-challan' class='text-primary-600 underline underline-offset-2 hover:text-primary-700'>What Happens If You Don't Pay a Traffic Challan</a>.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "How do I check my challan status by vehicle number in Delhi?",
+        a: "Go to parivahan.gov.in, click Online Services → e-Challan → Check Challan Status, and enter your vehicle registration number. All pending challans linked to your vehicle will appear. Alternatively, use the mParivahan app for the same data in a mobile-friendly format.",
+      },
+      {
+        q: "Why is my challan not showing on Parivahan?",
+        a: "Challans can take 24–72 hours to appear on Parivahan after being issued. If a challan issued more than a week ago still doesn't appear, it may be a court challan rather than an e-challan — court challans are managed separately and may not always show on the Parivahan portal. Contact ChallanSetu for help tracing it.",
+      },
+      {
+        q: "Can I pay my Delhi challan online?",
+        a: "Yes. Once you find your challan on Parivahan, you can pay directly using UPI, net banking, or debit/credit card. However, paying full online means no discount. If your challan is eligible for Lok Adalat settlement, you could legally pay 30–50% less.",
+      },
+      {
+        q: "Does checking challan status cost anything?",
+        a: "No. Checking your challan status on Parivahan, mParivahan, Delhi Traffic Police portal, or ChallanSetu is completely free.",
+      },
+    ],
+    ctaHtml:
+      "Found a pending challan? Before you pay the full amount on Parivahan, check whether you're eligible for a legal discount. Visit <a href='/' class='font-semibold underline underline-offset-2'>challansetu.com</a>, enter your vehicle number, and our team will review your challan and share the best available settlement option — at no upfront cost. If a legal discount is possible, a real lawyer handles the entire Lok Adalat process on your behalf.",
+  },
+
+  // ─── Post 5: What is Lok Adalat ──────────────────────────────────────────────
+  {
+    slug: "lok-adalat-challan-settlement",
+    coverImage: "/blog/cover-lok-adalat.svg",
+    metaTitle: "What is Lok Adalat? How It Reduces Your Traffic Challan Fine | ChallanSetu",
+    metaDescription:
+      "Lok Adalat is a government-recognised legal forum that can cut your traffic challan fine by 30–50%. Learn how it works, who's eligible, and how to use it.",
+    title: "What is Lok Adalat? How It Can Cut Your Traffic Fine by 50%",
+    category: "Settlement Guide",
+    publishedAt: "2026-05-20",
+    readingTime: 6,
+    excerpt:
+      "Lok Adalat is the legal route thousands of Delhi drivers use to settle traffic challans at a reduced amount. Here's exactly how it works and who qualifies.",
+    sections: [
+      {
+        blocks: [
+          {
+            kind: "p",
+            html: "Every year, millions of traffic challans are issued across Delhi NCR. Most people assume they have two choices: pay the full fine on Parivahan, or ignore it and hope for the best. There's a third option that most people don't know about — one that's completely legal, government-sanctioned, and can cut your fine by 30 to 50%.",
+          },
+          {
+            kind: "p",
+            html: "It's called <strong>Lok Adalat</strong>. And it's been working quietly for decades.",
+          },
+        ],
+      },
+      {
+        heading: "What is Lok Adalat?",
+        blocks: [
+          {
+            kind: "p",
+            html: "<strong>Lok Adalat</strong> (literally, \"People's Court\") is a legal forum established under the <strong>Legal Services Authorities Act, 1987</strong>. It's a formal part of India's justice system — not a shortcut, not a grey area, not a bribe. It's the government's own alternative dispute resolution mechanism.",
+          },
+          {
+            kind: "p",
+            html: "Lok Adalats are organised by State Legal Services Authorities (SLSAs) and District Legal Services Authorities (DLSAs) at regular intervals — monthly in most cities, more frequently in Delhi. They handle a wide range of cases: motor accident claims, electricity disputes, matrimonial matters, and most relevantly for vehicle owners, <strong>traffic challan cases</strong>.",
+          },
+          {
+            kind: "p",
+            html: "The key principle: both parties — in this case, the vehicle owner and the traffic authority — agree to a settlement. Once agreed, the Lok Adalat issues an award that is <strong>final and binding</strong>. The case is permanently closed. No appeal, no re-opening, no future liability.",
+          },
+          {
+            kind: "highlights",
+            items: [
+              "Established under the Legal Services Authorities Act, 1987",
+              "Organised by official State and District Legal Services Authorities",
+              "Awards are final, binding, and cannot be appealed",
+              "Used for thousands of traffic challan cases every month across India",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Why Does Lok Adalat Allow a Fine Reduction?",
+        blocks: [
+          {
+            kind: "p",
+            html: "The fine amounts set under the Motor Vehicles Act represent the <em>maximum</em> the government can collect — not a fixed amount that must be collected in every case. Lok Adalat operates on the principle of mutual settlement: if the vehicle owner agrees to pay a reduced but still meaningful amount, and the traffic authority accepts it, both sides benefit.",
+          },
+          {
+            kind: "p",
+            html: "From the government's perspective, a guaranteed partial payment today is better than a disputed case that drags through courts for years and may yield nothing. From the vehicle owner's perspective, they pay less and the case is permanently closed.",
+          },
+          {
+            kind: "p",
+            html: "This is not a loophole. It is how the system was designed to work.",
+          },
+          {
+            kind: "table",
+            headers: ["", "Paying on Parivahan", "Lok Adalat Settlement"],
+            rows: [
+              ["Amount paid", "100% of fine", "30–70% of fine typically"],
+              ["Case status after", "Paid, closed", "Permanently settled, closed"],
+              ["Time required", "Immediate", "15–45 days"],
+              ["Lawyer needed", "No", "Yes — for best outcome"],
+              ["Legal validity", "Yes", "Yes — court-issued award"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "How Does Lok Adalat Work for Traffic Challans?",
+        blocks: [
+          {
+            kind: "p",
+            html: "The process has specific steps, and knowing them helps you understand why professional help makes a real difference:",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Identify the challan and jurisdiction",
+                html: "The challan must be matched to the correct Lok Adalat jurisdiction — typically the district court in the area where the violation occurred. Delhi has multiple district courts: Tis Hazari, Saket, Rohini, Karkardooma, Dwarka, and Patiala House.",
+              },
+              {
+                title: "File a representation",
+                html: "A formal application is filed with the relevant DLSA or traffic court, requesting the challan case be referred to the next Lok Adalat session. This requires the correct paperwork, challan details, and vehicle documents.",
+              },
+              {
+                title: "Attend the Lok Adalat session",
+                html: "On the session date, a lawyer presents your case to the Lok Adalat panel. The panel includes a sitting or retired judge. The lawyer negotiates the settlement amount on your behalf — you don't need to appear.",
+              },
+              {
+                title: "Settlement award issued",
+                html: "If both sides agree, the Lok Adalat panel issues a formal award. You pay only the settled amount. The case is permanently closed and recorded in court records.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "The reason most vehicle owners never use this process isn't that it's difficult — it's that they don't know how to navigate it. Finding the right Lok Adalat session, filing the representation correctly, and knowing the realistic settlement range for your offence type requires experience. One wrong step and the case misses that session entirely.",
+          },
+        ],
+      },
+      {
+        heading: "Which Challans Are Eligible for Lok Adalat Settlement?",
+        blocks: [
+          {
+            kind: "p",
+            html: "Most standard traffic violations qualify. Here's what generally applies:",
+          },
+          {
+            kind: "strong_bullets",
+            items: [
+              {
+                label: "Overspeeding",
+                text: "Camera-issued speed challans from NH-48, NH-9, Outer Ring Road, and city corridors. Very commonly settled via Lok Adalat.",
+              },
+              {
+                label: "Red light jumping",
+                text: "RLVD camera challans and handheld-device challans both qualify.",
+              },
+              {
+                label: "No helmet / no seatbelt",
+                text: "Standard equipment violation challans are routinely handled.",
+              },
+              {
+                label: "Mobile use while driving",
+                text: "Eligible, including the higher ₹5,000 fine under the amended MV Act.",
+              },
+              {
+                label: "Court challans",
+                text: "Challans that have already moved to a traffic magistrate court are also eligible — these are actually where Lok Adalat makes the biggest financial difference.",
+              },
+              {
+                label: "Old pending challans",
+                text: "Age of challan generally doesn't disqualify it. Challans pending for 2–5 years have been successfully settled.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "<strong>What doesn't qualify:</strong> Challans linked to accidents causing injury or death, drunk driving cases that have become criminal matters, and challans where a final court order has already been passed.",
+          },
+        ],
+      },
+      {
+        heading: "How ChallanSetu Handles the Lok Adalat Process for You",
+        blocks: [
+          {
+            kind: "p",
+            html: "ChallanSetu was built specifically for this: getting Delhi NCR vehicle owners through the Lok Adalat process without needing to understand every step themselves.",
+          },
+          {
+            kind: "steps",
+            items: [
+              {
+                title: "Submit your vehicle number",
+                html: "Visit <a href='/' class='text-primary-600 underline underline-offset-2 hover:text-primary-700'>challansetu.com</a> and enter your vehicle registration number. No payment required at this stage.",
+              },
+              {
+                title: "We verify your challan details",
+                html: "Our team checks the challan type, amount, jurisdiction, and Lok Adalat eligibility. You receive the assessment and the realistic savings range before you commit.",
+              },
+              {
+                title: "A lawyer handles the entire filing",
+                html: "Once you proceed, a dedicated lawyer is assigned to your case. They file the representation, track the Lok Adalat session date, and negotiate the settlement on your behalf.",
+              },
+              {
+                title: "You pay only the settled amount",
+                html: "After the session, you pay the agreed reduced amount. The case is permanently closed. You receive written confirmation.",
+              },
+            ],
+          },
+          {
+            kind: "p",
+            html: "If settlement isn't achieved: <strong>full money-back guarantee</strong>. No fine reduction, no charge.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is Lok Adalat settlement legal?",
+        a: "Yes, completely legal. Lok Adalat is a statutory body established under the Legal Services Authorities Act, 1987. Settlements made through Lok Adalat carry the same legal weight as a court decree. The process is used by thousands of people every month across India for traffic challans, motor accident claims, and other disputes.",
+      },
+      {
+        q: "How much can I save on my challan through Lok Adalat?",
+        a: "Typically 30–50% of the original fine amount for standard traffic violations in Delhi NCR. The actual saving depends on the offence type, challan age, whether it's a court challan, and the settlement negotiated on the day. ChallanSetu provides a realistic estimate after reviewing your specific challan — before you pay anything.",
+      },
+      {
+        q: "Do I need to go to court for Lok Adalat settlement?",
+        a: "No. If you use a service like ChallanSetu, the assigned lawyer represents your case at the Lok Adalat session. You don't need to appear in person, take time off work, or visit any court or government office.",
+      },
+      {
+        q: "How long does Lok Adalat challan settlement take?",
+        a: "Typically 15 to 45 days from filing, depending on when the next Lok Adalat session is scheduled in your jurisdiction. Delhi holds Lok Adalat sessions frequently — usually monthly at each district court. Once the session date is confirmed, the lawyer attends and the settlement is usually concluded the same day.",
+      },
+      {
+        q: "What if my Lok Adalat settlement doesn't go through?",
+        a: "If the settlement isn't achieved — either the session is postponed or a settlement amount can't be agreed — ChallanSetu offers a full money-back guarantee on its service fee. You would not have paid any challan amount at that point, so your only exposure is zero.",
+      },
+    ],
+    ctaHtml:
+      "If you have a pending traffic challan in Delhi, Noida, Gurgaon, Ghaziabad, or Faridabad, you don't have to pay the full amount. Visit <a href='/' class='font-semibold underline underline-offset-2'>challansetu.com</a>, enter your vehicle number, and our team will check whether your challan qualifies for a Lok Adalat settlement discount — completely free, no upfront payment. A real lawyer handles the entire process, and if settlement doesn't happen, you get your money back.",
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

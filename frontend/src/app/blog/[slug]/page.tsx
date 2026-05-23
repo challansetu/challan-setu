@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema, faqSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, faqSchema, articleSchema } from '@/components/seo/JsonLd';
 import { getBlogPost, getAllBlogSlugs, type BlogBlock } from '@/data/blog';
 import { Clock, Tag, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 // ─── Static generation ────────────────────────────────────────────────────────
 
@@ -36,13 +36,11 @@ export async function generateMetadata({
       url: `${SITE_URL}/blog/${post.slug}`,
       type: 'article',
       publishedTime: post.publishedAt,
-      images: [{ url: coverImage, width: 800, height: 450, alt: post.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.metaTitle,
       description: post.metaDescription,
-      images: [coverImage],
     },
   };
 }
@@ -198,6 +196,15 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           { name: 'Blog', url: '/blog' },
           { name: post.title, url: `/blog/${post.slug}` },
         ])}
+      />
+      <JsonLd
+        data={articleSchema({
+          headline: post.metaTitle,
+          description: post.metaDescription,
+          image: `${SITE_URL}${post.coverImage}`,
+          datePublished: post.publishedAt,
+          url: `/blog/${post.slug}`,
+        })}
       />
       {post.faqs.length > 0 && <JsonLd data={faqSchema(post.faqs)} />}
 

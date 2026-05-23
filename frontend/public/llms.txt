@@ -1,0 +1,42 @@
+# ChallanSetu
+
+> Challan Setu helps Delhi NCR vehicle owners legally settle traffic challans through Lok Adalat and lawyer support, saving up to 50% on eligible fines. No court visit required. Zero convenience fee. Money-back guarantee if settlement is not achieved.
+
+ChallanSetu is an independent private platform — not affiliated with any government department, traffic police, or RTO. It provides challan assistance, settlement guidance, and legal support via Lok Adalat for vehicle owners in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad.
+
+## Core Pages
+
+- [Home](https://www.challansetu.com): Submit vehicle number to check traffic challan discount eligibility. Save up to 50% on fines via Lok Adalat settlement. Serving Delhi NCR.
+- [How It Works](https://www.challansetu.com/how-it-works): 3-step process — submit vehicle number, share challan details, receive settlement option. No upfront payment. No court visit.
+- [FAQ](https://www.challansetu.com/faq): Answers to common questions about challan eligibility, Lok Adalat settlement, safety, payment, and the ChallanSetu process.
+- [Cities](https://www.challansetu.com/cities): Traffic challan support available in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad.
+- [Service Area](https://www.challansetu.com/service-area): Detailed challan coverage information for Delhi NCR — which challan types are supported in each city.
+- [About](https://www.challansetu.com/about): ChallanSetu's mission, values, contact details, and service area.
+
+## City Pages
+
+- [Delhi Challan Settlement](https://www.challansetu.com/pay-vehicle-challan-in-delhi): Traffic challan assistance and Lok Adalat settlement for DL-registered vehicles in Delhi.
+- [Noida Challan Settlement](https://www.challansetu.com/pay-vehicle-challan-in-noida): Traffic challan help for UP-registered vehicles in Noida (Gautam Buddha Nagar).
+- [Gurgaon Challan Settlement](https://www.challansetu.com/pay-vehicle-challan-in-gurgaon): Traffic challan help for HR-registered vehicles in Gurgaon (Gurugram).
+- [Ghaziabad Challan Settlement](https://www.challansetu.com/pay-vehicle-challan-in-ghaziabad): Traffic challan help for UP-registered vehicles in Ghaziabad.
+- [Faridabad Challan Settlement](https://www.challansetu.com/pay-vehicle-challan-in-faridabad): Traffic challan help for HR-registered vehicles in Faridabad.
+
+## Blog
+
+- [Got a Traffic Challan in Delhi? Here's How to Legally Pay Less](https://www.challansetu.com/blog/challan-discount-delhi): Complete guide to challan discount via Lok Adalat in Delhi. Explains e-challan vs court challan, eligibility, and savings.
+- [What Happens If You Don't Pay a Traffic Challan?](https://www.challansetu.com/blog/what-happens-if-you-dont-pay-challan): Consequences of ignoring traffic challans — RC renewal block, licence suspension, court summons, and how to resolve.
+- [Court Challan vs Online Challan — What's the Difference?](https://www.challansetu.com/blog/court-challan-vs-online-challan): Explains the difference between e-challans and court challans and legal options for each.
+- [How to Check Pending Challan in Delhi](https://www.challansetu.com/blog/how-to-check-pending-challan-delhi): 4 free methods — Parivahan portal, mParivahan app, Delhi Traffic Police site, and ChallanSetu.
+- [What is Lok Adalat? How It Can Cut Your Traffic Fine by 50%](https://www.challansetu.com/blog/lok-adalat-challan-settlement): Full explanation of Lok Adalat, how it works for traffic challans, eligibility, typical savings, and the ChallanSetu process.
+
+## Key Facts
+
+- Service area: Delhi, Noida, Gurgaon, Ghaziabad, Faridabad (Delhi NCR)
+- Typical savings: 30–50% on eligible traffic challans
+- Process: Lok Adalat settlement managed by a dedicated lawyer
+- Court visit required: No
+- Upfront payment: Not required to check eligibility
+- Guarantee: Full money-back if settlement is not achieved
+- Contact: challansetu@gmail.com
+- Phone: +91-8796323876
+- Support hours: Monday–Saturday, 9am–6pm IST

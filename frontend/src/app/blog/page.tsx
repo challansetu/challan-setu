@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, itemListSchema } from '@/components/seo/JsonLd';
 import { getAllBlogPosts } from '@/data/blog';
 import { Clock, ArrowRight, Tag } from 'lucide-react';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 export const metadata: Metadata = {
   title: { absolute: 'Traffic Challan Help & Guides | ChallanSetu Blog' },
@@ -40,6 +40,11 @@ export default function BlogIndexPage() {
           { name: 'Home', url: '/' },
           { name: 'Blog', url: '/blog' },
         ])}
+      />
+      <JsonLd
+        data={itemListSchema(
+          posts.map((p) => ({ name: p.title, url: `/blog/${p.slug}`, description: p.excerpt }))
+        )}
       />
       <Navbar />
       <main className="flex-1">

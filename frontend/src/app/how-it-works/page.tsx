@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, serviceSchema, breadcrumbSchema } from '@/components/seo/JsonLd';
+import { JsonLd, serviceSchema, breadcrumbSchema, howToSchema, faqSchema } from '@/components/seo/JsonLd';
 import {
   Search,
     CheckCircle2,
@@ -125,6 +125,15 @@ export default function HowItWorksPage() {
           url: '/how-it-works',
         })}
       />
+      <JsonLd
+        data={howToSchema({
+          name: 'How to Settle Your Traffic Challan via Lok Adalat with ChallanSetu',
+          description:
+            'A 3-step guide to getting your traffic challan discount eligibility checked and settled through ChallanSetu in Delhi NCR.',
+          steps: STEPS.map((s) => ({ name: s.title, text: s.description })),
+        })}
+      />
+      <JsonLd data={faqSchema(FAQS.map((f) => ({ q: f.q, a: f.a })))} />
       <JsonLd
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },

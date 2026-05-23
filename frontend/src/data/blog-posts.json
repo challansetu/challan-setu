@@ -22,5 +22,21 @@
     "date": "2026-05-10",
     "image": "/blog/cover-court-vs-online.svg",
     "category": "Challan Guide"
+  },
+  {
+    "slug": "how-to-check-pending-challan-delhi",
+    "title": "How to Check Pending Challan in Delhi (4 Ways That Actually Work)",
+    "excerpt": "Not sure if you have pending challans? Here are 4 free ways to check your vehicle's challan status in Delhi — including what to do once you find them.",
+    "date": "2026-05-15",
+    "image": "/blog/cover-check-challan.svg",
+    "category": "Challan Guide"
+  },
+  {
+    "slug": "lok-adalat-challan-settlement",
+    "title": "What is Lok Adalat? How It Can Cut Your Traffic Fine by 50%",
+    "excerpt": "Lok Adalat is the legal route thousands of Delhi drivers use to settle traffic challans at a reduced amount. Here's exactly how it works and who qualifies.",
+    "date": "2026-05-20",
+    "image": "/blog/cover-lok-adalat.svg",
+    "category": "Settlement Guide"
   }
 ]

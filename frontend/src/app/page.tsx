@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import Image from 'next/image';
 
-import { JsonLd, faqSchema } from '@/components/seo/JsonLd';
+import { JsonLd, faqSchema, webPageSchema } from '@/components/seo/JsonLd';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { HeroForm } from '@/components/HeroForm';
@@ -39,6 +39,14 @@ export default async function LandingPage() {
   return (
     <>
       <JsonLd data={faqSchema([...HOMEPAGE_FAQS])} />
+      <JsonLd
+        data={webPageSchema({
+          title: 'ChallanSetu – Settle Traffic Challans & Save 50%',
+          description:
+            'Challan Setu helps you settle traffic challans legally and save up to 50% on fines via Lok Adalat. Trusted by Delhi NCR vehicle owners.',
+          url: '/',
+        })}
+      />
       <Navbar />
       <main className="flex-1">
 

@@ -13,17 +13,18 @@ export function JsonLd({ data }: JsonLdProps) {
 
 // ─── Reusable schema builders ─────────────────────────────────────────────────
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://challansetu.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'ChallanSetu',
+    alternateName: ['Challan Setu', 'challansetu'],
     url: SITE_URL,
-    logo: `${SITE_URL}/logo.png`,
+    logo: `${SITE_URL}/challan-logo.svg`,
     description:
-      'ChallanSetu helps vehicle owners get challan assistance and settlement support in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad with savings that can go up to 50% on eligible challans and zero convenience fee.',
+      'Challan Setu helps vehicle owners get challan assistance and settlement support in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad with savings that can go up to 50% on eligible challans and zero convenience fee.',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',
@@ -31,7 +32,10 @@ export function organizationSchema() {
       availableLanguage: ['Hindi', 'English'],
     },
     areaServed: ['Delhi', 'Noida', 'Gurgaon', 'Ghaziabad', 'Faridabad'],
-    sameAs: [],
+    sameAs: [
+      'https://www.instagram.com/challansetu/',
+      'https://www.linkedin.com/company/challan-setu/',
+    ],
   };
 }
 
@@ -70,7 +74,7 @@ export function localBusinessSchema() {
     },
     image: `${SITE_URL}/challan-logo.svg`,
     description:
-      'ChallanSetu helps Delhi NCR vehicle owners legally settle traffic challans through Lok Adalat and lawyer support, saving up to 50% on eligible fines. No court visit required.',
+      'Challan Setu helps Delhi NCR vehicle owners legally settle traffic challans through Lok Adalat and lawyer support, saving up to 50% on eligible fines. No court visit required.',
     email: 'challansetu@gmail.com',
     priceRange: '₹₹',
     currenciesAccepted: 'INR',
@@ -156,6 +160,87 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
       name: item.name,
       item: `${SITE_URL}${item.url}`,
     })),
+  };
+}
+
+export function itemListSchema(items: { name: string; url: string; description?: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: `${SITE_URL}${item.url}`,
+      ...(item.description ? { description: item.description } : {}),
+    })),
+  };
+}
+
+export function howToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description: string;
+  steps: { name: string; text: string }[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
+export function articleSchema({
+  headline,
+  description,
+  image,
+  datePublished,
+  dateModified,
+  url,
+}: {
+  headline: string;
+  description: string;
+  image: string;
+  datePublished: string;
+  dateModified?: string;
+  url: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    image,
+    author: {
+      '@type': 'Organization',
+      name: 'ChallanSetu',
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ChallanSetu',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/challan-logo.svg`,
+      },
+    },
+    datePublished,
+    dateModified: dateModified ?? datePublished,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}${url}`,
+    },
   };
 }
 

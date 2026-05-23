@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, webPageSchema } from '@/components/seo/JsonLd';
 import { Shield, MapPin, Zap, HeartHandshake, ArrowRight, Mail, Clock } from 'lucide-react';
 import siteData from '@/data/site.json';
 
@@ -54,6 +54,13 @@ export default function AboutPage() {
           { name: 'Home', url: '/' },
           { name: 'About', url: '/about' },
         ])}
+      />
+      <JsonLd
+        data={webPageSchema({
+          title: 'About ChallanSetu - Our Mission',
+          description: 'ChallanSetu is on a mission to make traffic challan payment simple, affordable, and stress-free for vehicle owners across Delhi, Noida, Gurgaon & Ghaziabad.',
+          url: '/about',
+        })}
       />
       <Navbar />
       <main className="flex-1 bg-surface-50">
