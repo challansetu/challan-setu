@@ -158,7 +158,7 @@ export default function ThankYouPage({
                       <p className="text-xs text-gray-400 mt-0.5">From publicly available traffic records. May not reflect the latest status.</p>
                     </div>
                     <PublicChallanSection vehicleNumber={vehicleNumber} />
-                    <EparivahanChallanSection vehicleNumber={vehicleNumber} />
+                    {/* <EparivahanChallanSection vehicleNumber={vehicleNumber} /> */}
                   </>
                 )}
 

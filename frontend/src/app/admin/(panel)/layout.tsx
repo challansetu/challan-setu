@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { SWRConfig } from "swr";
 import { AdminShell } from "@/components/admin/layout/AdminShell";
 import { ToastProvider } from "@/components/admin/ui/Toast";
 
@@ -8,8 +11,10 @@ export default function PanelLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ToastProvider>
-      <AdminShell>{children}</AdminShell>
-    </ToastProvider>
+    <SWRConfig value={{ revalidateOnFocus: false, dedupingInterval: 10_000 }}>
+      <ToastProvider>
+        <AdminShell>{children}</AdminShell>
+      </ToastProvider>
+    </SWRConfig>
   );
 }

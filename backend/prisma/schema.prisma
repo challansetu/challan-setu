@@ -271,6 +271,8 @@ model Order {
   @@index([userId])
   @@index([orderNumber])
   @@index([status])
+  @@index([createdAt])
+  @@index([status, createdAt])
   @@map("orders")
 }
 
@@ -340,6 +342,8 @@ model Payment {
 
   @@index([razorpayOrderId])
   @@index([razorpayPaymentId])
+  @@index([status])
+  @@index([createdAt])
   @@map("payments")
 }
 
@@ -379,7 +383,7 @@ model Settlement {
 
   order              Order               @relation(fields: [orderId], references: [id])
 
-
+  @@index([status])
   @@map("settlements")
 }
 

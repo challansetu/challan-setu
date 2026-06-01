@@ -5,12 +5,27 @@ import { UserLifecycleStatus, AdminRole, TrackingStatus } from '@prisma/client';
 @Injectable()
 export class AdminService {
   private readonly logger = new Logger(AdminService.name);
+  private readonly cache = new Map<string, { value: any; expiresAt: number }>();
 
   constructor(private readonly prisma: PrismaService) {}
+
+  private getCached<T>(key: string): T | undefined {
+    const entry = this.cache.get(key);
+    if (entry && entry.expiresAt > Date.now()) return entry.value as T;
+    this.cache.delete(key);
+    return undefined;
+  }
+
+  private setCached(key: string, value: any, ttlMs: number) {
+    this.cache.set(key, { value, expiresAt: Date.now() + ttlMs });
+  }
 
   // ─── Dashboard ────────────────────────────────────────────────────────────
 
   async getDashboardStats() {
+    const cached = this.getCached<any>('dashboard');
+    if (cached) return cached;
+
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
@@ -61,7 +76,7 @@ export class AdminService {
       }),
     ]);
 
-    return {
+    const result = {
       summary: {
         totalUsers,
         newUsersToday,
@@ -80,6 +95,8 @@ export class AdminService {
       recentOrders,
       activityFeed: recentActivity,
     };
+    this.setCached('dashboard', result, 60_000);
+    return result;
   }
 
   async getLeads(params: {
@@ -132,6 +149,9 @@ export class AdminService {
   }
 
   async getLeadsStats() {
+    const cached = this.getCached<any>('leads-stats');
+    if (cached) return cached;
+
     const [total, converted, dead, followUp, paymentDone, agg] = await Promise.all([
       this.prisma.lead.count(),
       this.prisma.lead.count({ where: { crmStatus: 'converted' } }),
@@ -142,7 +162,7 @@ export class AdminService {
         _sum: { paidAmount: true, settledAmount: true, discountGiven: true, totalChallan: true },
       }),
     ]);
-    return {
+    const result = {
       total,
       converted,
       dead,
@@ -153,6 +173,8 @@ export class AdminService {
       totalDiscount: agg._sum.discountGiven ?? 0,
       totalChallanValue: agg._sum.totalChallan ?? 0,
     };
+    this.setCached('leads-stats', result, 30_000);
+    return result;
   }
 
   async getLead(id: string) {
