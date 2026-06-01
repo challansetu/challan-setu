@@ -19,6 +19,7 @@ interface HeroFormProps {
   city?: string;
   formId?: string;
   showCalculatorLink?: boolean;
+  buttonLabel?: string;
 }
 
 function formatVehicleNumber(val: string) {
@@ -94,6 +95,7 @@ export function HeroForm({
   city,
   formId = 'hero-lead-form',
   showCalculatorLink = true,
+  buttonLabel,
 }: HeroFormProps) {
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [leadModalOpen, setLeadModalOpen] = useState(false);
@@ -196,7 +198,7 @@ export function HeroForm({
             size="lg"
             className="whitespace-nowrap bg-white text-gray-900 hover:bg-gray-50 focus-visible:ring-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] hover:scale-[1.02] w-full sm:w-auto font-bold"
           >
-            {landingData.hero.searchButton}
+            {buttonLabel ?? landingData.hero.searchButton}
             <ArrowRight className="w-5 h-5" />
           </Button>
         </div>
@@ -306,7 +308,7 @@ export function HeroForm({
                 disabled={!overlayVehicle.trim()}
                 className="w-full rounded-2xl h-14"
               >
-                {landingData.hero.searchButton}
+                {buttonLabel ?? landingData.hero.searchButton}
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </div>

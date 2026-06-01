@@ -69,8 +69,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={websiteSchema()} />
         <JsonLd data={localBusinessSchema()} />
       </head>
-      <body className={inter.className}>
-        <div className="min-h-screen flex flex-col w-full max-w-full overflow-x-hidden">{children}</div>
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <div className="min-h-screen flex flex-col w-full max-w-full">{children}</div>
       </body>
     </html>
   );

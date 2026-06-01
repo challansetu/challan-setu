@@ -3,9 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, BadgePercent, Info, Sparkles, ShieldCheck } from 'lucide-react';
-import { RotatingText } from '@/components/RotatingText';
-
+import { ArrowRight, BadgePercent, Info, Sparkles } from 'lucide-react';
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PLATFORM_A_CONVENIENCE_RATE = 0.03;
@@ -32,11 +30,6 @@ const DEMO_B        = calcPlatformB(DEMO_AMOUNT);
 const DEMO_SAVE_A   = DEMO_A - DEMO_OUR;
 const DEMO_SAVE_B   = DEMO_B - DEMO_OUR;
 const DEMO_MAX_SAVE = Math.max(DEMO_SAVE_A, DEMO_SAVE_B);
-const ROTATING_NUDGES = [
-  'Compare before you pay',
-  'Pending challans can lead to bigger penalties',
-  'Get expert support for challan settlement',
-] as const;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -92,17 +85,6 @@ export function SavingsCalculator() {
               </h2>
             </div>
 
-            <div className="mb-4 flex items-center justify-center text-center min-h-[1.25rem] px-2">
-              <div className="inline-flex max-w-full items-center justify-center gap-1.5 text-[11px] sm:text-xs font-medium text-gray-500">
-                <BadgePercent className="w-3 h-3 text-primary-400 flex-shrink-0" />
-                <RotatingText
-                  texts={[...ROTATING_NUDGES]}
-                  displayDuration={2700}
-                  animDuration={320}
-                  className="max-w-[260px] sm:max-w-[340px] leading-tight"
-                />
-              </div>
-            </div>
 
             {/* Widget card */}
             <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_2px_16px_rgba(0,0,0,0.07),0_0_0_1px_rgba(99,102,241,0.06)] overflow-hidden">
@@ -145,8 +127,8 @@ export function SavingsCalculator() {
                 {/* ChallanSetu row */}
                 <div className="flex items-center gap-1.5 sm:gap-2 bg-accent-50 border-2 border-accent-300 rounded-xl px-3 sm:px-4 py-3 mb-3">
                   <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-accent-500 flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-900 flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden">
+                      <Image src="/challan-logo.svg" alt="ChallanSetu" width={32} height={32} className="w-full h-full object-contain p-0.5" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] sm:text-sm font-bold text-gray-900 leading-none mb-0.5 sm:mb-1 mt-0.5">ChallanSetu</p>

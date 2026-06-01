@@ -5,23 +5,19 @@ import React, { useState, useEffect, useRef } from 'react';
 const steps = [
   {
     title: 'Enter your vehicle number',
-    description:
-      'Start on the homepage with your vehicle number so we know which challan request needs to be reviewed.',
+    description: 'So we know which challan to review.',
   },
   {
     title: 'Share your contact details',
-    description:
-      'Add your full name, mobile number and submit it.',
+    description: 'Your name and mobile number.',
   },
   {
     title: 'We verify your challan details',
-    description:
-      'Our team checks the challan details and evaluates the best available discount path for your case.',
+    description: 'Our team checks and finds the best discount path.',
   },
   {
     title: 'You get the best available option',
-    description:
-      'We contact you shortly with the next step and the best discount option available, which can go up to 50% depending on the challan.',
+    description: 'We call you with the discount option — up to 50% off.',
   },
 ];
 
@@ -62,8 +58,8 @@ export function DiscountStepper() {
             <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
               How it works
             </h2>
-            <p className="text-gray-500 text-[15px] sm:text-lg leading-relaxed mt-6">
-              From request to follow-up, here&apos;s what happens after you share your vehicle details.
+            <p className="text-gray-500 text-sm leading-relaxed mt-3">
+              What happens after you submit your vehicle number.
             </p>
           </div>
 

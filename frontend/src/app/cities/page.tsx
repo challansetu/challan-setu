@@ -115,7 +115,7 @@ export default function CitiesPage() {
             <h2 className="text-2xl font-bold text-white mb-3">Not sure which city? Just enter your vehicle number</h2>
             <p className="text-primary-100 mb-6">Start your challan assistance request securely with your vehicle number.</p>
             <Link href="/" className="flex w-full max-w-md mx-auto justify-center items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg">
-              Check Eligibility <ArrowRight className="w-4 h-4" />
+              Check Challan <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>

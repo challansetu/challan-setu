@@ -224,7 +224,7 @@ export default function FaqPage() {
               href="/"
               className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors"
             >
-              Check Eligibility
+              Check Challan
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

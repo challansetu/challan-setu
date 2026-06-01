@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { AlertTriangle, ArrowRight, Search } from 'lucide-react';
 import { JsonLd, faqSchema } from '@/components/seo/JsonLd';
 import type { CityViolation } from '@/data/city-pages';
+import { OffencesList } from '@/components/OffencesList';
 
 // ─── National fallback data ───────────────────────────────────────────────────
 // Motor Vehicles (Amendment) Act 2019 standard penalty schedule.
@@ -164,99 +165,7 @@ export function TopChallanOffencesSection({
           </p>
         </div>
 
-        {/* ── Desktop table (sm+) ──────────────────────────────────────────── */}
-        <div className="hidden sm:block rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-          <table className="w-full text-sm">
-            <caption className="sr-only">
-              {isNational
-                ? 'Common traffic violations and challan fine amounts in India'
-                : `Common traffic violations and challan fine amounts in ${city}`}
-            </caption>
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th
-                  scope="col"
-                  className="text-left px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide"
-                >
-                  Traffic Offence
-                </th>
-                <th
-                  scope="col"
-                  className="text-right px-5 py-3.5 text-xs font-bold text-red-600 uppercase tracking-wide w-40"
-                >
-                  Govt Fine Amount
-                </th>
-                <th
-                  scope="col"
-                  className="text-left px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-44"
-                >
-                  Legal Section
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {violations.map((v, i) => (
-                <tr
-                  key={i}
-                  className="hover:bg-gray-50/60 transition-colors"
-                >
-                  {/* Offence — allow wrap, never truncate silently */}
-                  <td className="px-5 py-4 text-gray-900 font-medium leading-snug">
-                    {v.offence.trim()}
-                  </td>
-                  {/* Fine — tabular nums, never wraps unexpectedly */}
-                  <td className="px-5 py-4 text-right">
-                    <div className="inline-flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
-                      <span className="text-sm font-bold text-red-600 tabular-nums tracking-tight whitespace-nowrap">
-                        {v.fine?.trim() || 'Penalty varies'}
-                      </span>
-                    </div>
-                  </td>
-                  {/* Section — smaller, muted */}
-                  <td className="px-5 py-4 text-xs text-gray-400">
-                    {v.section?.trim() || '—'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* ── Mobile cards (below sm) ──────────────────────────────────────── */}
-        {/* Each violation becomes a self-contained card — no horizontal scroll */}
-        <ul className="sm:hidden space-y-2" aria-label={`Common traffic violations${isNational ? '' : ` in ${city}`}`}>
-          {violations.map((v, i) => (
-            <li
-              key={i}
-              className="bg-white rounded-xl border border-gray-100 px-4 py-4 shadow-sm"
-            >
-              {/* Top row: offence name + fine side by side */}
-              <div className="flex items-start justify-between gap-3 min-w-0">
-                <div className="flex flex-col gap-1 min-w-0">
-                  <p className="text-base font-bold text-gray-900 leading-snug min-w-0 break-words">
-                    {v.offence.trim()}
-                  </p>
-                  {/* Legal section badge moved up slightly for better flow */}
-                  {v.section?.trim() && (
-                    <p className="text-[11px] text-gray-400">
-                      {v.section.trim()}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-col items-end flex-shrink-0 ml-2 mt-0.5">
-                  <span className="text-[10px] font-bold uppercase text-red-500/80 tracking-widest leading-none mb-1.5">Govt Fine</span>
-                  <div className="flex items-center gap-1.5">
-                    <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
-                    <span className="text-sm font-bold text-red-600 tabular-nums tracking-tight whitespace-nowrap">
-                      {v.fine?.trim() || 'Penalty varies'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <OffencesList violations={violations} />
 
         {/* ── Disclaimer ──────────────────────────────────────────────────── */}
         <div className="flex items-start gap-2 mt-4">

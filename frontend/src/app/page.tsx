@@ -17,6 +17,7 @@ import { HOMEPAGE_FAQS } from '@/data/homepage-faqs';
 import landingData from '@/data/landing.json';
 import { BlogSection } from '@/components/BlogSection';
 import { WallOfDrivers } from '@/components/WallOfDrivers';
+import { StatesChallanSection } from '@/components/StatesChallanSection';
 
 const SavingsCalculator = dynamic(
   () => import('@/components/SavingsCalculator').then((m) => ({ default: m.SavingsCalculator })),
@@ -75,7 +76,7 @@ export default async function LandingPage() {
                     <span className="block text-2xl sm:text-3xl md:text-4xl font-medium text-white mb-2 leading-snug">
                       Got a traffic challan?
                     </span>
-                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05]">
+                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.15] pb-1">
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
                         Settle &amp; Save
                       </span>
@@ -85,9 +86,6 @@ export default async function LandingPage() {
                     </span>
                   </h1>
 
-                  <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-md mx-auto mb-10 leading-relaxed px-4 lg:px-0">
-                    Enter your vehicle number to start your challan assistance request securely.
-                  </p>
 
                   {/* Client island: form + modal only */}
                   <HeroForm />
@@ -122,32 +120,27 @@ export default async function LandingPage() {
               intro="Review common traffic offences and indicative government fine amounts before you move ahead with your challan request."
             />
 
+            {/* States Challan */}
+            <StatesChallanSection />
+
             {/* Trust Stats */}
-            <section className="py-12 bg-surface-50 pattern-grid">
+            <section className="py-10 bg-white border-y border-gray-100">
               <div className="container-app">
-                <div className="mb-10">
-                  <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-                    Our impact
-                  </p>
-                  <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
-                    By the numbers
-                  </h2>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100">
                   {[
-                    { ...landingData.trustStats[0], icon: <CheckCircle2 className="w-5 h-5" /> },
-                    { ...landingData.trustStats[1], icon: <Zap className="w-5 h-5" /> },
-                    { ...landingData.trustStats[2], icon: <MapPin className="w-5 h-5" /> },
-                    { ...landingData.trustStats[3], icon: <RefreshCw className="w-5 h-5" /> },
+                    { ...landingData.trustStats[0], icon: <CheckCircle2 className="w-4 h-4" /> },
+                    { ...landingData.trustStats[1], icon: <Zap className="w-4 h-4" /> },
+                    { ...landingData.trustStats[2], icon: <MapPin className="w-4 h-4" /> },
+                    { ...landingData.trustStats[3], icon: <RefreshCw className="w-4 h-4" /> },
                   ].map((stat, i) => (
-                    <div key={i} className="text-center group bg-white rounded-2xl p-5 border border-gray-100">
-                      <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary-50 text-primary-500 mb-3 group-hover:scale-110 transition-transform duration-300">
-                        {stat.icon}
-                      </div>
-                      <div className="text-4xl font-black tracking-tight leading-none text-gray-900 mb-1.5">
+                    <div key={i} className="flex flex-col items-center justify-center gap-1 px-6 py-6 text-center">
+                      <div className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900 leading-none">
                         {stat.num}
                       </div>
-                      <div className="text-sm font-medium text-gray-500">{stat.label}</div>
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 mt-1">
+                        <span className="text-primary-400">{stat.icon}</span>
+                        {stat.label}
+                      </div>
                     </div>
                   ))}
                 </div>
