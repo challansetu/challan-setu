@@ -63,13 +63,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className="scroll-smooth">
+    <html lang="en-IN" className="scroll-smooth [overflow-x:clip]">
       <head>
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
         <JsonLd data={localBusinessSchema()} />
       </head>
-      <body className={`${inter.className} overflow-x-hidden`}>
+      <body className={`${inter.className} [overflow-x:clip]`}>
         <div className="min-h-screen flex flex-col w-full max-w-full">{children}</div>
       </body>
     </html>
