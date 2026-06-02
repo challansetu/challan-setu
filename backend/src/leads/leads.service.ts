@@ -18,7 +18,6 @@ export class LeadsService {
         consentTimestamp: new Date(),
         source: dto.source ?? 'homepage',
         city: dto.city ?? null,
-        notes: dto.notes ?? null,
         leadStatus: 'new',
       },
     });
@@ -42,7 +41,6 @@ export class LeadsService {
     vehicleNumber: string;
     source: string;
     city: string | null;
-    notes: string | null;
     createdAt: Date;
   }) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -57,7 +55,6 @@ export class LeadsService {
       `👤 ${lead.fullName}`,
       `📱 ${lead.mobileNumber}`,
       `🔢 ${lead.vehicleNumber}`,
-      ...(lead.notes ? [`📋 ${lead.notes}`] : []),
       `📍 ${lead.city ?? '—'} | ${lead.source}`,
       `🕐 ${ist} IST`,
       `🆔 \`${lead.id}\``,
