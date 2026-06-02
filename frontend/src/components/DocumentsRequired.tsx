@@ -27,7 +27,11 @@ export function DocumentsRequired() {
   return (
     <section className="pt-2 pb-10 bg-white">
       <div className="container-app">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Documents Required</h2>
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Documents Required</h2>
+          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+        </div>
         <div className="grid grid-cols-4 gap-3">
           {DOCS.map((doc) => (
             <div key={doc.title} className="flex flex-col gap-2">

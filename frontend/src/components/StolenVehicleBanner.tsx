@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export function StolenVehicleBanner() {
   return (
-    <section className="py-10 bg-white">
+    <section className="pt-0 pb-4 bg-white">
       <div className="container-app">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Reclaiming the Stolen Vehicle</h2>
         <div className="relative rounded-2xl overflow-hidden bg-[#eeeeff] border border-primary-100 flex flex-row items-stretch h-[200px] sm:h-[220px]">

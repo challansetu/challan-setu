@@ -107,9 +107,9 @@ export default async function LandingPage() {
             </div>
 
             {/* Why Trust Us */}
-            <section className="py-10 bg-white">
+            <section className="pt-4 pb-10 bg-white">
               <div className="container-app">
-                <div className="text-left mb-12">
+                <div className="text-left mb-4">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
                     {landingData.whyChoose.title}
                   </h2>

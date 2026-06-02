@@ -51,7 +51,7 @@ export function DiscountStepper() {
     <section className="bg-surface-50 py-10">
       <div className="px-6 sm:px-8 max-w-xl mx-auto md:mx-0 md:max-w-none">
         <div className="flex flex-col">
-          <div className="mb-12 text-left w-full">
+          <div className="mb-6 text-left w-full">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
               How it works
             </h2>
