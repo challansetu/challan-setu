@@ -26,10 +26,7 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
       <div className="container-app">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-              Learn &amp; save
-            </p>
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
               Traffic Challan Guides
             </h2>
           </div>

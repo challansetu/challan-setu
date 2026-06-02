@@ -48,14 +48,11 @@ export function DiscountStepper() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <section className="bg-white py-12 sm:py-20 lg:py-24">
-      <div className="container-app">
-        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col">
+    <section className="bg-surface-50 py-10">
+      <div className="px-6 sm:px-8 max-w-xl mx-auto md:mx-0 md:max-w-none">
+        <div className="flex flex-col">
           <div className="mb-12 text-left w-full">
-            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-              Step by step
-            </p>
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
               How it works
             </h2>
             <p className="text-gray-500 text-sm leading-relaxed mt-3">

@@ -105,11 +105,36 @@ export default async function LandingPage() {
               <SocialProofTicker />
             </div>
 
-            {/* Savings Calculator */}
-            <SavingsCalculator />
+            {/* Why Trust Us */}
+            <section className="py-10 bg-white">
+              <div className="container-app">
+                <div className="text-left mb-12">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
+                    {landingData.whyChoose.title}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto">
+                  {[
+                    { img: '/images/why-no-court.png', title: 'No Court Visit Required' },
+                    { img: '/images/why-one-portal.png', title: 'One Portal for All Challans' },
+                    { img: '/images/why-expert-lawyer.png', title: 'Backed by Legal Experts' },
+                  ].map((item, i) => (
+                    <div key={i} className="flex flex-col items-center text-center gap-3">
+                      <div className="w-full aspect-square rounded-2xl bg-[rgb(233,233,234)] flex items-center justify-center overflow-hidden">
+                        <Image src={item.img} alt={item.title} width={280} height={280} unoptimized className="w-full h-full object-cover" />
+                      </div>
+                      <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">{item.title}</h3>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
-            {/* Discount Stepper */}
-            <DiscountStepper />
+            {/* Savings Calculator + How it Works — side by side on desktop */}
+            <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-100 bg-surface-50">
+              <SavingsCalculator />
+              <DiscountStepper />
+            </div>
 
             {/* Challan Offences */}
             <TopChallanOffencesSection
@@ -126,15 +151,15 @@ export default async function LandingPage() {
             {/* Trust Stats */}
             <section className="py-10 bg-white border-y border-gray-100">
               <div className="container-app">
-                <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100">
+                <div className="grid grid-cols-2 md:grid-cols-4 border border-gray-100 rounded-xl overflow-hidden">
                   {[
                     { ...landingData.trustStats[0], icon: <CheckCircle2 className="w-4 h-4" /> },
                     { ...landingData.trustStats[1], icon: <Zap className="w-4 h-4" /> },
                     { ...landingData.trustStats[2], icon: <MapPin className="w-4 h-4" /> },
                     { ...landingData.trustStats[3], icon: <RefreshCw className="w-4 h-4" /> },
                   ].map((stat, i) => (
-                    <div key={i} className="flex flex-col items-center justify-center gap-1 px-6 py-6 text-center">
-                      <div className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900 leading-none">
+                    <div key={i} className={`flex flex-col items-center justify-center gap-1 px-6 py-6 text-center border-gray-100 ${i % 2 === 0 ? 'border-r' : ''} ${i < 2 ? 'border-b md:border-b-0' : ''} ${i < 3 ? 'md:border-r' : ''}`}>
+                      <div className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 leading-none">
                         {stat.num}
                       </div>
                       <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 mt-1">
@@ -145,28 +170,6 @@ export default async function LandingPage() {
                   ))}
                 </div>
               </div>
-            </section>
-
-            {/* Why Trust Us */}
-            <section className="py-16 sm:py-20 bg-white overflow-hidden">
-              <div className="container-app mb-10">
-                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-                  Why us
-                </p>
-                <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
-                  {landingData.whyChoose.title}
-                </h2>
-              </div>
-              <FeatureMarquee
-                speed={45}
-                features={[
-                  { icon: <RefreshCw className="w-5 h-5" />, ...landingData.whyChoose.features[0] },
-                  { icon: <Zap className="w-5 h-5" />, ...landingData.whyChoose.features[1] },
-                  { icon: <CheckCircle2 className="w-5 h-5" />, ...landingData.whyChoose.features[2] },
-                  { icon: <Scale className="w-5 h-5" />, ...landingData.whyChoose.features[3] },
-                  { icon: <MapPin className="w-5 h-5" />, ...landingData.whyChoose.features[4] },
-                ]}
-              />
             </section>
 
             {/* Testimonials */}
@@ -182,14 +185,14 @@ export default async function LandingPage() {
             <HomepageFaqSection />
 
             {/* CTA Section */}
-            <section className="py-16 sm:py-20 bg-gradient-hero text-white relative overflow-hidden">
+            <section className="py-10 bg-gradient-hero text-white relative overflow-hidden">
               <div className="absolute inset-0 pattern-dots opacity-30" />
               <div className="container-app relative text-center">
                 <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/10">
                   <CheckCircle2 className="w-4 h-4 text-accent-300" />
                   <span className="text-sm text-white/90">{landingData.cta.badge}</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-none mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold leading-none mb-4">
                   {landingData.cta.title}
                 </h2>
                 <p className="text-primary-200/80 mb-8 max-w-lg mx-auto">

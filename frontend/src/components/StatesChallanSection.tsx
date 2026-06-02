@@ -54,12 +54,9 @@ export function StatesChallanSection() {
   const visible = expanded ? STATES : STATES.slice(0, visibleCount);
 
   return (
-    <section className="py-14 sm:py-20 bg-surface-50">
+    <section className="py-10 bg-surface-50">
       <div className="container-app mb-10">
-        <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-          State-wise challan
-        </p>
-        <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
           Check E-Challan by State
         </h2>
         <p className="mt-3 text-gray-500 text-sm sm:text-base max-w-lg">

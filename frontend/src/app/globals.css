@@ -27,6 +27,10 @@
     --color-surface: 255 255 255;
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  }
+
   html {
     overscroll-behavior: none;
     scroll-behavior: smooth;

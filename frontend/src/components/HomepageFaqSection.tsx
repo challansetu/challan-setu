@@ -8,13 +8,10 @@ export function HomepageFaqSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="py-12 sm:py-16 bg-white">
+    <section className="py-10 bg-white">
       <div className="container-app max-w-4xl">
         <div className="mb-8">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-            FAQ
-          </p>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none mb-4">
             {HOMEPAGE_FAQ_TITLE}
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed max-w-2xl">

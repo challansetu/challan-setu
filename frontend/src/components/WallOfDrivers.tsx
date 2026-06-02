@@ -19,14 +19,14 @@ export function WallOfDrivers() {
   return (
     <section
       aria-label="Responsible Road Heroes"
-      className="py-16 sm:py-24 bg-[#06080f] overflow-hidden"
+      className="py-10 bg-[#06080f] overflow-hidden"
     >
       {/* Header */}
-      <div className="container-app text-center mb-10 sm:mb-14">
+      <div className="container-app text-left mb-10 sm:mb-14">
         <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3 text-primary-400">
           Community
         </p>
-        <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-white leading-none mb-4">
           Responsible Road Heroes 🇮🇳
         </h2>
         <p className="text-gray-400 text-base sm:text-lg max-w-md mx-auto">

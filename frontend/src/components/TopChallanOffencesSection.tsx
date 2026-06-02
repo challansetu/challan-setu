@@ -145,18 +145,15 @@ export function TopChallanOffencesSection({
   return (
     <section
       aria-labelledby="top-offences-heading"
-      className="py-12 sm:py-16 bg-white"
+      className="py-10 bg-white"
     >
       <div className="container-app max-w-4xl">
 
         {/* ── Header ──────────────────────────────────────────────────────── */}
         <div className="mb-8">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-            Traffic Challan Reference
-          </p>
           <h2
             id="top-offences-heading"
-            className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none mb-4"
+            className="text-xl sm:text-2xl font-bold text-gray-900 leading-none mb-4"
           >
             {sectionTitle}
           </h2>

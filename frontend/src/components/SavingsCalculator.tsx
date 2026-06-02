@@ -68,19 +68,16 @@ export function SavingsCalculator() {
   }
 
   return (
-    <section id="savings-calculator" className="py-10 sm:py-14 bg-surface-50">
-      <div className="container-app">
+    <section id="savings-calculator" className="py-10 bg-surface-50">
+      <div className="px-6 sm:px-8 max-w-xl mx-auto md:mx-0 md:max-w-none">
 
-        <div className="max-w-lg mx-auto">
+        <div className="w-full">
 
           <div className="w-full">
 
             {/* Header */}
             <div className="mb-6">
-              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1.5 text-primary-500">
-                Save more
-              </p>
-              <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-gray-900 leading-none">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
                 Live price comparison
               </h2>
             </div>

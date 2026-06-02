@@ -112,7 +112,7 @@ export function TestimonialsCarousel() {
   };
 
   return (
-    <section className="py-12 sm:py-20 bg-gray-950 overflow-hidden">
+    <section className="py-10 bg-gray-950 overflow-hidden">
       <div className="container-app">
 
         {/* Heading */}
@@ -120,7 +120,7 @@ export function TestimonialsCarousel() {
           <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary-400">
             Happy customers
           </p>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none">
+          <h2 className="text-xl sm:text-2xl font-bold text-white leading-none">
             What our customers say
           </h2>
         </div>

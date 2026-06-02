@@ -180,16 +180,22 @@ export function HeroForm({
               tabIndex={0}
               onClick={openOverlay}
               onKeyDown={(e) => e.key === 'Enter' && openOverlay()}
-              className={`w-full h-12 flex items-center px-4 rounded-xl bg-white shadow-lg text-base font-medium text-gray-900 cursor-pointer select-none ${
+              className={`w-full h-12 flex items-center rounded-xl bg-white shadow-lg text-base font-medium text-gray-900 cursor-pointer select-none overflow-hidden ${
                 vehicleNumber ? '' : 'text-gray-400'
               }`}
             >
-              {vehicleNumber || (
-                <span className="flex items-center">
-                  {animatedText}
-                  <span className="inline-block w-px h-[18px] bg-gray-400/70 ml-0.5 animate-blink" />
-                </span>
-              )}
+              {/* India flag prefix */}
+              <span className="flex items-center px-3 border-r border-gray-200 h-full flex-shrink-0">
+                <span className="text-lg leading-none">🇮🇳</span>
+              </span>
+              <span className="px-3 flex items-center flex-1">
+                {vehicleNumber || (
+                  <span className="flex items-center">
+                    {animatedText}
+                    <span className="inline-block w-px h-[18px] bg-gray-400/70 ml-0.5 animate-blink" />
+                  </span>
+                )}
+              </span>
             </div>
           </div>
 
