@@ -18,11 +18,11 @@ export class LeadsService {
         consentTimestamp: new Date(),
         source: dto.source ?? 'homepage',
         city: dto.city ?? null,
+        notes: dto.notes ?? null,
         leadStatus: 'new',
       },
     });
 
-    // Fire-and-forget: notify Telegram (no challan fetch — website shows it)
     this.notifyTelegram(lead).catch((err) =>
       this.logger.warn(`Telegram notify failed: ${err?.message}`),
     );
@@ -42,21 +42,22 @@ export class LeadsService {
     vehicleNumber: string;
     source: string;
     city: string | null;
+    notes: string | null;
     createdAt: Date;
   }) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     if (!token || !chatId) return;
 
-    const ist = lead.createdAt.toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-    });
+    const ist = lead.createdAt.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    const isRecovery = lead.source === 'vehicle_recovery';
 
     const text = [
-      `🚗 *New Lead*`,
+      isRecovery ? `🚨 *Vehicle Recovery Lead*` : `🚗 *New Lead*`,
       `👤 ${lead.fullName}`,
       `📱 ${lead.mobileNumber}`,
       `🔢 ${lead.vehicleNumber}`,
+      ...(lead.notes ? [`📋 ${lead.notes}`] : []),
       `📍 ${lead.city ?? '—'} | ${lead.source}`,
       `🕐 ${ist} IST`,
       `🆔 \`${lead.id}\``,

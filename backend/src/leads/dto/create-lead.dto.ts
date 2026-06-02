@@ -30,7 +30,7 @@ export class CreateLeadDto {
   @ApiProperty({ example: 'city_page', required: false })
   @IsOptional()
   @IsString()
-  @Matches(/^(homepage|city_page)$/)
+  @Matches(/^(homepage|city_page|vehicle_recovery)$/)
   source?: string;
 
   @ApiProperty({ example: 'faridabad', required: false })
@@ -39,4 +39,10 @@ export class CreateLeadDto {
   @Transform(({ value }) => typeof value === 'string' ? value.trim().toLowerCase() : value)
   @Matches(/^[a-z-]+$/, { message: 'Invalid city slug' })
   city?: string;
+
+  @ApiProperty({ example: '[VEHICLE RECOVERY] FIR: 123/2024', required: false })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
 }

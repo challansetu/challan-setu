@@ -441,6 +441,7 @@ model Lead {
   consentTimestamp DateTime
   source           String   @default("homepage")
   city             String?
+  notes            String?
   leadStatus       String   @default("new")
 
   // CRM fields

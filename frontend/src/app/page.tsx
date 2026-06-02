@@ -18,6 +18,7 @@ import landingData from '@/data/landing.json';
 import { BlogSection } from '@/components/BlogSection';
 import { WallOfDrivers } from '@/components/WallOfDrivers';
 import { StatesChallanSection } from '@/components/StatesChallanSection';
+import { StolenVehicleBanner } from '@/components/StolenVehicleBanner';
 
 const SavingsCalculator = dynamic(
   () => import('@/components/SavingsCalculator').then((m) => ({ default: m.SavingsCalculator })),
@@ -171,6 +172,9 @@ export default async function LandingPage() {
                 </div>
               </div>
             </section>
+
+            {/* Stolen Vehicle Recovery Banner */}
+            <StolenVehicleBanner />
 
             {/* Testimonials */}
             <TestimonialsCarousel />

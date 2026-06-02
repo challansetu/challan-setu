@@ -48,4 +48,19 @@ export const leadsApi = {
   }) => api.post('/leads', data, { timeout: 25000 }),
 };
 
+// ─── Recovery Leads ─────────────────────────────────
+export const recoveryLeadsApi = {
+  create: (data: {
+    fullName: string;
+    mobileNumber: string;
+    vehicleNumber: string;
+    firNumber: string;
+    consentAccepted: boolean;
+  }) => api.post('/leads', {
+    ...data,
+    source: 'vehicle_recovery',
+    notes: `[VEHICLE RECOVERY] FIR: ${data.firNumber}`,
+  }, { timeout: 25000 }),
+};
+
 export default api;
