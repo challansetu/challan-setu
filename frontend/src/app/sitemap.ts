@@ -14,6 +14,18 @@ interface BlogPost {
 const LAUNCH_DATE        = new Date('2026-05-11'); // site went live
 const CONTENT_DATE       = new Date('2026-05-24'); // last content update (homepage, FAQs)
 const LEGAL_DATE         = new Date('2026-05-01'); // privacy / terms / refund
+const STATE_DATE         = new Date('2026-06-02'); // state e-challan pages added
+
+const STATE_SLUGS = [
+  'andaman-nicobar', 'andhra-pradesh', 'arunachal-pradesh', 'assam',
+  'bihar', 'chhattisgarh', 'dadra-nagar-haveli', 'daman-diu', 'delhi',
+  'goa', 'gujarat', 'haryana', 'himachal-pradesh', 'jammu-kashmir',
+  'jharkhand', 'karnataka', 'kerala', 'ladakh', 'lakshadweep',
+  'madhya-pradesh', 'maharashtra', 'manipur', 'meghalaya', 'mizoram',
+  'nagaland', 'odisha', 'punjab', 'rajasthan', 'sikkim',
+  'tamil-nadu', 'telangana', 'tripura', 'uttar-pradesh',
+  'uttarakhand', 'west-bengal',
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const postsPath = path.join(process.cwd(), 'src/data/blog-posts.json');
@@ -93,6 +105,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.4,
     },
+
+    // ── State e-challan pages (/e-challan/{slug}) ─────────────────────────────
+    ...STATE_SLUGS.map((slug) => ({
+      url: `${SITE_URL}/e-challan/${slug}`,
+      lastModified: STATE_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    })),
 
     // ── Blog ──────────────────────────────────────────────────────────────────
     {
