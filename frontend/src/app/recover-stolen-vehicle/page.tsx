@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { RecoveryForm } from './RecoveryForm';
+import { DocumentsRequired } from '@/components/DocumentsRequired';
 
 export const metadata: Metadata = {
   title: 'Recover Your Stolen Vehicle | ChallanSetu',
@@ -83,6 +84,8 @@ export default function RecoverStolenVehiclePage() {
 
               </div>
             </section>
+
+            <DocumentsRequired />
 
             <Footer />
           </div>

@@ -1,20 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 const WA_NUMBER = '918796323876'; // 91 = India country code
 const WA_MESSAGE = encodeURIComponent('Hi Challan Setu, I want to check discount eligibility for my vehicle challan. Please help me.');
 const WA_URL = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 
 export function WhatsAppButton() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setVisible(true);
-  }, []);
-
-  if (!visible) return null;
-
   return (
     <div className="fixed bottom-6 lg:bottom-6 right-5 z-50 flex flex-col items-center gap-2">
       {/* Tooltip */}

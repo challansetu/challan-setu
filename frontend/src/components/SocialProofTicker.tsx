@@ -10,7 +10,6 @@ import {
   LOCALE,
 } from '@/lib/constants';
 import socialProofData from '@/data/social-proof.json';
-import messages from '@/data/messages.json';
 
 const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 const fmt = (n: number) => new Intl.NumberFormat(LOCALE).format(n);
@@ -54,8 +53,16 @@ function ProofPill({
   );
 }
 
+// Static seed shown on SSR and before JS hydrates — no randomness
+const SSR_MSG: Msg = {
+  name: socialProofData.names[0],
+  type: socialProofData.challanTypes[0],
+  amount: socialProofData.amounts[4],
+  mins: SOCIAL_PROOF_MIN_MINUTES + 3,
+};
+
 export function SocialProofTicker() {
-  const [msg, setMsg] = useState<Msg | null>(null);
+  const [msg, setMsg] = useState<Msg>(SSR_MSG);
   const [visible, setVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -77,22 +84,6 @@ export function SocialProofTicker() {
     const id = setInterval(cycle, SOCIAL_PROOF_CYCLE_MS);
     return () => clearInterval(id);
   }, [cycle, mounted]);
-
-  if (!mounted || !msg) {
-    return (
-      <div className="flex w-full justify-center px-4">
-        <ProofPill>
-          <span className="relative flex h-2.5 w-2.5 flex-shrink-0 sm:h-3 sm:w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.22)] sm:h-3 sm:w-3" />
-          </span>
-          <p className="text-[13px] font-medium tracking-tight text-slate-400 sm:text-sm">
-            {messages.common.loading}
-          </p>
-        </ProofPill>
-      </div>
-    );
-  }
 
   return (
     <div className="flex w-full justify-center px-4">
