@@ -54,12 +54,11 @@ export const recoveryLeadsApi = {
     fullName: string;
     mobileNumber: string;
     vehicleNumber: string;
-    firNumber: string;
     consentAccepted: boolean;
   }) => api.post('/leads', {
     ...data,
     source: 'vehicle_recovery',
-    notes: `[VEHICLE RECOVERY] FIR: ${data.firNumber}`,
+    notes: '[VEHICLE RECOVERY]',
   }, { timeout: 25000 }),
 };
 

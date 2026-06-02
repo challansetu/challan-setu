@@ -12,7 +12,6 @@ type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 
 export function RecoveryForm({ hero }: RecoveryFormProps) {
   const [vehicle, setVehicle]   = useState('');
-  const [fir, setFir]           = useState('');
   const [phone, setPhone]       = useState('');
   const [fullName, setFullName] = useState('');
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
@@ -34,7 +33,6 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
       fullName: fullName.trim(),
       mobileNumber: phone,
       vehicleNumber: vehicle.toUpperCase().replace(/\s/g, ''),
-      firNumber: fir.trim(),
       consentAccepted: true as const,
     };
 
@@ -81,24 +79,18 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
 
       <input
         value={vehicle}
-        onChange={(e) => setVehicle(e.target.value)}
+        onChange={(e) => setVehicle(e.target.value.toUpperCase())}
         placeholder="Vehicle number (e.g. DL 7S BY 5194)"
         autoCapitalize="characters"
         className={inputCls}
       />
 
-      <input
-        value={fir}
-        onChange={(e) => setFir(e.target.value)}
-        placeholder="FIR number (e.g. 123/2024)"
-        className={inputCls}
-      />
-
       {/* Phone */}
-      <div className={`flex items-center overflow-hidden ${hero
-        ? 'h-14 rounded-2xl bg-white shadow-lg'
-        : 'rounded-xl border border-gray-200 bg-gray-50 focus-within:ring-2 focus-within:ring-primary-400 focus-within:bg-white transition-colors'}`}>
-        <span className="pl-5 text-xl flex-shrink-0">🇮🇳</span>
+      <div className={`flex items-center ${hero
+        ? 'h-14 rounded-2xl bg-white shadow-lg overflow-hidden'
+        : 'rounded-xl border border-gray-200 bg-gray-50 focus-within:ring-2 focus-within:ring-primary-400 focus-within:bg-white transition-colors overflow-hidden'}`}>
+        <span className="pl-4 pr-2 text-xl flex-shrink-0 leading-none">🇮🇳</span>
+        <span className={`flex-shrink-0 w-px self-stretch ${hero ? 'bg-gray-200' : 'bg-gray-200'} my-3`} />
         <input
           value={phone}
           onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
