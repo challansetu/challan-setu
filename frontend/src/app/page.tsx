@@ -131,6 +131,9 @@ export default async function LandingPage() {
               </div>
             </section>
 
+            {/* Stolen Vehicle Recovery Banner */}
+            <StolenVehicleBanner />
+
             {/* Savings Calculator + How it Works — side by side on desktop */}
             <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-100 bg-surface-50">
               <SavingsCalculator />
@@ -172,9 +175,6 @@ export default async function LandingPage() {
                 </div>
               </div>
             </section>
-
-            {/* Stolen Vehicle Recovery Banner */}
-            <StolenVehicleBanner />
 
             {/* Testimonials */}
             <TestimonialsCarousel />

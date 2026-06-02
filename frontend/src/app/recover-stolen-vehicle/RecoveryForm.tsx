@@ -56,15 +56,34 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
   if (submitState === 'success') {
     return (
       <div className={`w-full ${hero ? 'max-w-lg mx-auto' : ''}`}>
-        <div className={`rounded-2xl p-8 text-center ${hero ? 'bg-white shadow-lg' : 'bg-green-50 border border-green-100'}`}>
-          <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-7 h-7 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
+        {hero ? (
+          <div className="text-center py-4">
+            <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-900/30">
+              <svg className="w-8 h-8" viewBox="0 0 36 36" fill="none">
+                <path d="M8 18.5L14.5 25.5L28 11" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-white mb-1">Request received!</h3>
+            <p className="text-white/70 text-sm mb-5">
+              Our team will call you on <span className="font-bold text-white">{phone}</span> within 30 minutes.
+            </p>
+            <a href="https://wa.me/918796323876"
+              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors">
+              💬 WhatsApp us your documents
+            </a>
+            <p className="text-white/40 text-xs mt-4">No upfront payment · Legal experts only</p>
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Request received!</h3>
-          <p className="text-gray-500 text-sm">Our team will call you on <strong>{phone}</strong> shortly.</p>
-        </div>
+        ) : (
+          <div className="rounded-2xl px-6 py-6 text-center bg-green-50 border border-green-100">
+            <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-3">
+              <svg className="w-7 h-7" viewBox="0 0 36 36" fill="none">
+                <path d="M8 18.5L14.5 25.5L28 11" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Request received!</h3>
+            <p className="text-gray-500 text-sm">Our team will call you on <strong>{phone}</strong> within 30 minutes.</p>
+          </div>
+        )}
       </div>
     );
   }

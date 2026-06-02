@@ -23,7 +23,7 @@ export default function RecoverStolenVehiclePage() {
       <main className="flex-1">
 
         {/* ── Same sticky hero + content sheet pattern as homepage ── */}
-        <div className="relative">
+        <div className="relative bg-gradient-hero">
 
           {/* Hero — sticky on mobile */}
           <section className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
@@ -32,7 +32,7 @@ export default function RecoverStolenVehiclePage() {
             <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-red-400/10 rounded-full blur-3xl translate-y-1/2 sm:-translate-x-1/4" />
 
             <div className="container-app relative">
-              <div className="py-10 lg:py-16 flex flex-col items-center justify-center gap-4">
+              <div className="pt-10 pb-20 lg:pt-16 lg:pb-24 flex flex-col items-center justify-center gap-4">
                 <div className="text-center w-full max-w-2xl mx-auto">
 
                   <h1 className="mb-4 tracking-tight">
