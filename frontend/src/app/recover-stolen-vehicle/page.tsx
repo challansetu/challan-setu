@@ -4,6 +4,10 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { RecoveryForm } from './RecoveryForm';
 import { DocumentsRequired } from '@/components/DocumentsRequired';
+import { WhatWeHandle } from '@/components/WhatWeHandle';
+import { RecoveryFaqSection } from '@/components/RecoveryFaqSection';
+import { JsonLd, faqSchema } from '@/components/seo/JsonLd';
+import { RECOVERY_FAQS } from '@/data/recovery-faqs';
 
 export const metadata: Metadata = {
   title: 'Recover Your Stolen Vehicle | ChallanSetu',
@@ -20,6 +24,7 @@ const steps = [
 export default function RecoverStolenVehiclePage() {
   return (
     <>
+      <JsonLd data={faqSchema(RECOVERY_FAQS)} />
       <Navbar />
       <main className="flex-1">
 
@@ -57,14 +62,14 @@ export default function RecoverStolenVehiclePage() {
           <div className="relative z-10 bg-white rounded-t-2xl sm:rounded-none -mt-8 sm:mt-0">
 
             {/* How it works */}
-            <section className="py-10 bg-white">
+            <section className="py-8 bg-white">
               <div className="container-app">
                 <div className="flex items-center justify-center gap-3 mb-6">
                   <span className="w-10 h-0.5 rounded-full bg-primary-300" />
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">How it Works</h2>
                   <span className="w-10 h-0.5 rounded-full bg-primary-300" />
                 </div>
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
                   {steps.map((step, i) => (
                     <div key={i} className="flex flex-col gap-2">
                       <div className="relative">
@@ -89,7 +94,11 @@ export default function RecoverStolenVehiclePage() {
               </div>
             </section>
 
+            <WhatWeHandle />
+
             <DocumentsRequired />
+
+            <RecoveryFaqSection />
 
             <Footer />
           </div>
