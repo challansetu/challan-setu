@@ -661,6 +661,7 @@ export default function LeadsPage() {
             <option value="">All Sources</option>
             <option value="homepage">Homepage</option>
             <option value="city_page">City Page</option>
+            <option value="vehicle_recovery">Vehicle Recovery</option>
           </select>
         </div>
       </div>
