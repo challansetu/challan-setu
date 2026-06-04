@@ -45,7 +45,10 @@ export class LeadsService {
   }) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
-    if (!token || !chatId) return;
+    if (!token || !chatId) {
+      this.logger.warn(`Telegram skipped: token=${!!token} chatId=${!!chatId}`);
+      return;
+    }
 
     const ist = lead.createdAt.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     const isRecovery = lead.source === 'vehicle_recovery';
@@ -60,10 +63,19 @@ export class LeadsService {
       `🆔 \`${lead.id}\``,
     ].join('\n');
 
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    this.logger.log(`Sending Telegram notification for lead ${lead.id} source=${lead.source}`);
+
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
     });
+
+    if (!res.ok) {
+      const body = await res.text();
+      this.logger.warn(`Telegram API error: status=${res.status} body=${body}`);
+    } else {
+      this.logger.log(`Telegram notification sent successfully for lead ${lead.id}`);
+    }
   }
 }
