@@ -54,13 +54,13 @@ export class LeadsService {
     const isRecovery = lead.source === 'vehicle_recovery';
 
     const text = [
-      isRecovery ? `🚨 *Vehicle Recovery Lead*` : `🚗 *New Lead*`,
+      isRecovery ? `🚨 <b>Vehicle Recovery Lead</b>` : `🚗 <b>New Lead</b>`,
       `👤 ${lead.fullName}`,
       `📱 ${lead.mobileNumber}`,
       `🔢 ${lead.vehicleNumber}`,
       `📍 ${lead.city ?? '—'} | ${lead.source}`,
       `🕐 ${ist} IST`,
-      `🆔 \`${lead.id}\``,
+      `🆔 <code>${lead.id}</code>`,
     ].join('\n');
 
     this.logger.log(`Sending Telegram notification for lead ${lead.id} source=${lead.source}`);
@@ -68,7 +68,7 @@ export class LeadsService {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
     });
 
     if (!res.ok) {
