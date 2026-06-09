@@ -6,12 +6,53 @@ import { RecoveryForm } from './RecoveryForm';
 import { DocumentsRequired } from '@/components/DocumentsRequired';
 import { WhatWeHandle } from '@/components/WhatWeHandle';
 import { RecoveryFaqSection } from '@/components/RecoveryFaqSection';
-import { JsonLd, faqSchema } from '@/components/seo/JsonLd';
+import { JsonLd, faqSchema, breadcrumbSchema, serviceSchema } from '@/components/seo/JsonLd';
 import { RECOVERY_FAQS } from '@/data/recovery-faqs';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
+const PAGE_URL = '/recover-stolen-vehicle';
+const PAGE_TITLE = 'Recover Stolen Vehicle in India | Superdari Application | ChallanSetu';
+const PAGE_DESC = 'Vehicle stolen and recovered by police? ChallanSetu handles your Superdari application, FIR follow-up, court filing and vehicle release end-to-end. Get started on WhatsApp.';
+
 export const metadata: Metadata = {
-  title: 'Recover Your Stolen Vehicle | ChallanSetu',
-  description: 'We handle your stolen vehicle recovery end-to-end — FIR follow-up, Superdari application, court filing, and vehicle release. Share documents on WhatsApp.',
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+
+  // ── Canonical (fix: was pointing to homepage) ──────────────────────────────
+  alternates: {
+    canonical: `${SITE_URL}${PAGE_URL}`,
+  },
+
+  // ── Open Graph (fix: was using homepage OG tags) ───────────────────────────
+  openGraph: {
+    title: 'Recover Your Stolen Vehicle Legally | ChallanSetu',
+    description: PAGE_DESC,
+    url: `${SITE_URL}${PAGE_URL}`,
+    siteName: 'ChallanSetu',
+    locale: 'en_IN',
+    type: 'website',
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image?a6e433b546d61721`,
+        width: 1200,
+        height: 630,
+        alt: 'ChallanSetu — Recover Stolen Vehicle via Superdari',
+      },
+    ],
+  },
+
+  // ── Twitter Card ───────────────────────────────────────────────────────────
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Recover Your Stolen Vehicle Legally | ChallanSetu',
+    description: PAGE_DESC,
+  },
+
+  // ── Robots ─────────────────────────────────────────────────────────────────
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const steps = [
@@ -24,7 +65,22 @@ const steps = [
 export default function RecoverStolenVehiclePage() {
   return (
     <>
+      {/* FAQ Schema */}
       <JsonLd data={faqSchema(RECOVERY_FAQS)} />
+
+      {/* Service Schema */}
+      <JsonLd data={serviceSchema({
+        name: 'Stolen Vehicle Recovery — Superdari Application',
+        description: PAGE_DESC,
+        url: PAGE_URL,
+      })} />
+
+      {/* Breadcrumb Schema */}
+      <JsonLd data={breadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Recover Stolen Vehicle', url: PAGE_URL },
+      ])} />
+
       <Navbar />
       <main className="flex-1">
 
@@ -41,14 +97,14 @@ export default function RecoverStolenVehiclePage() {
                 <div className="text-center w-full max-w-2xl mx-auto">
                   <h1 className="mb-4 tracking-tight">
                     <span className="block text-2xl sm:text-3xl font-medium text-white mb-1 leading-snug">
-                      Vehicle stolen & recovered by police?
+                      Vehicle Stolen &amp; Recovered by Police?
                     </span>
-                    <span className="block text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.15] pb-1">
+                    <span className="block text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.2] pb-3">
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        We'll Get It
+                        We&apos;ll Get It Back.
                       </span>
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        Back. Legally.
+                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200 pb-1">
+                        Legally.
                       </span>
                     </span>
                   </h1>

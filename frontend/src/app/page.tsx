@@ -77,11 +77,11 @@ export default async function LandingPage() {
                     <span className="block text-2xl sm:text-3xl md:text-4xl font-medium text-white mb-2 leading-snug">
                       Got a traffic challan?
                     </span>
-                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.15] pb-1">
+                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.2] pb-3">
                       <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
                         Settle &amp; Save
                       </span>
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
+                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200 pb-1">
                         Up to 50%, Legally.
                       </span>
                     </span>
