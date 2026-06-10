@@ -106,13 +106,13 @@ export default async function LandingPage() {
 
             {/* Why Trust Us */}
             <section className="pt-4 pb-10 bg-white">
-              <div className="container-app">
-                <div className="text-left mb-4">
+              <div className="container-app max-w-5xl">
+                <div className="text-left mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
                     {landingData.whyChoose.title}
                   </h2>
                 </div>
-                <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto">
+                <div className="grid grid-cols-3 gap-4 sm:gap-8">
                   {[
                     { img: '/images/why-no-court.png', title: 'No Court Visit Required' },
                     { img: '/images/why-one-portal.png', title: 'One Portal for All Challans' },
@@ -133,9 +133,13 @@ export default async function LandingPage() {
             <StolenVehicleBanner />
 
             {/* Savings Calculator + How it Works — side by side on desktop */}
-            <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-100 bg-surface-50">
-              <SavingsCalculator />
-              <DiscountStepper />
+            <div className="bg-surface-50">
+              <div className="max-w-5xl mx-auto">
+                <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-100">
+                  <SavingsCalculator />
+                  <DiscountStepper />
+                </div>
+              </div>
             </div>
 
             {/* Challan Offences */}
