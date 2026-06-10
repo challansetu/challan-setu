@@ -1,0 +1,10 @@
+export { SectionHeading } from './SectionHeading';
+export { RenewalBanner } from './RenewalBanner';
+export { InsuranceCoverageTable } from './InsuranceCoverageTable';
+export { HowItWorks } from './HowItWorks';
+export { NcbSlabTable } from './NcbSlabTable';
+export { VehicleTypesGrid } from './VehicleTypesGrid';
+export { PremiumFactorsList } from './PremiumFactorsList';
+export { LapseRisksList } from './LapseRisksList';
+export { DocumentsNeeded } from './DocumentsNeeded';
+export { InsuranceCta } from './InsuranceCta';
