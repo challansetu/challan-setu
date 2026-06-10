@@ -68,7 +68,7 @@ export function SavingsCalculator() {
   }
 
   return (
-    <section id="savings-calculator" className="py-10">
+    <section id="savings-calculator" className="py-10 md:pr-8 lg:pr-10">
       <div className="w-full">
 
         <div className="w-full">

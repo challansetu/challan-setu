@@ -85,9 +85,9 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
           <div className="flex-none w-4" aria-hidden="true" />
         </div>
 
-        {/* Desktop: 4-column grid */}
-        <div className="hidden lg:grid grid-cols-4 gap-6">
-          {posts.slice(0, 4).map((post) => (
+        {/* Desktop: 3-column grid */}
+        <div className="hidden lg:grid grid-cols-3 gap-6">
+          {posts.slice(0, 3).map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
         </div>
