@@ -16,7 +16,7 @@ export function DiscountStepper() {
           <p className="text-gray-500 text-sm leading-relaxed mt-3">What happens after you submit your vehicle number.</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+        <div className="grid grid-cols-1 gap-y-7">
           {steps.map((step) => (
             <div key={step.step} className="flex items-start gap-4">
               <span className="text-4xl font-black leading-none shrink-0" style={{ color: BRAND_YELLOW }}>
