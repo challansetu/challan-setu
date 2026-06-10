@@ -185,24 +185,20 @@ export default async function LandingPage() {
               <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
               <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
               <div className="container-app relative text-center">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/10">
-                  <CheckCircle2 className="w-4 h-4" style={{ color: '#f5c842' }} />
-                  <span className="text-sm text-white/90">{landingData.cta.badge}</span>
-                </div>
                 <h2 className="text-xl sm:text-2xl font-bold leading-none mb-4">
                   {landingData.cta.title}
                 </h2>
                 <p className="text-white/60 mb-8 max-w-lg mx-auto">
                   {landingData.cta.subtitle}
                 </p>
-                <Link
+                <a
                   href="#hero-lead-form"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5"
                   style={{ background: '#f5c842', color: '#1c1c24' }}
                 >
                   <Scale className="w-4 h-4" />
                   Settle My Challan
-                </Link>
+                </a>
               </div>
             </section>
 
