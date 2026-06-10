@@ -106,7 +106,7 @@ export default async function LandingPage() {
 
             {/* Why Trust Us */}
             <section className="pt-4 pb-10 bg-white">
-              <div className="container-app max-w-5xl">
+              <div className="container-app">
                 <div className="text-left mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
                     {landingData.whyChoose.title}
@@ -133,14 +133,14 @@ export default async function LandingPage() {
             <StolenVehicleBanner />
 
             {/* Savings Calculator + How it Works — side by side on desktop */}
-            <div className="bg-surface-50">
-              <div className="max-w-5xl mx-auto">
+            <section className="bg-surface-50">
+              <div className="container-app">
                 <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-100">
                   <SavingsCalculator />
                   <DiscountStepper />
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* Challan Offences */}
             <TopChallanOffencesSection

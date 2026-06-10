@@ -68,8 +68,8 @@ export function SavingsCalculator() {
   }
 
   return (
-    <section id="savings-calculator" className="py-10 bg-surface-50">
-      <div className="px-6 sm:px-8 max-w-xl mx-auto md:mx-0 md:max-w-none">
+    <section id="savings-calculator" className="py-10">
+      <div className="w-full">
 
         <div className="w-full">
 
