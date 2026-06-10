@@ -42,9 +42,9 @@ function ProofPill({
     <div
       className={`
         relative flex w-full max-w-md items-center gap-2.5 overflow-hidden
-        rounded-full border border-emerald-100/80 bg-emerald-50/40
+        rounded-full border border-emerald-200 bg-emerald-50
         px-3.5 py-2.5 pl-3 sm:gap-3 sm:px-5 sm:py-3 sm:pl-4
-        shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] transition-shadow duration-300
+        shadow-[0_4px_24px_rgba(16,185,129,0.10)] hover:shadow-[0_8px_32px_rgba(16,185,129,0.18)] transition-shadow duration-300
         ${className}
       `}
     >
@@ -95,14 +95,14 @@ export function SocialProofTicker() {
       >
         {/* Live status dot */}
         <span className="relative flex h-2.5 w-2.5 flex-shrink-0 sm:h-3 sm:w-3">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/50" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.25)] sm:h-3 sm:w-3" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.30)] sm:h-3 sm:w-3" />
         </span>
 
         <p className="min-w-0 flex-1 text-left text-[13px] leading-snug tracking-tight text-slate-600 sm:text-sm">
           <span className="font-semibold text-slate-900">{msg.name}</span>
           <span className="font-normal text-slate-500"> paid </span>
-          <span className="font-bold tabular-nums text-emerald-700">₹{fmt(msg.amount)}</span>
+          <span className="font-bold tabular-nums text-emerald-800">₹{fmt(msg.amount)}</span>
           <span className="font-normal text-slate-500"> {msg.type}</span>
           <span className="mx-1.5 inline text-slate-300 sm:mx-2">·</span>
           <span className="whitespace-nowrap text-xs font-medium text-slate-400">{msg.mins}m ago</span>
