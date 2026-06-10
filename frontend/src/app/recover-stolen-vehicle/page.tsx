@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     url: `${SITE_URL}${PAGE_URL}`,
     siteName: 'ChallanSetu',
     locale: 'en_IN',
+
     type: 'website',
     images: [
       {
@@ -84,28 +85,22 @@ export default function RecoverStolenVehiclePage() {
       <Navbar />
       <main className="flex-1">
 
-        <div className="relative bg-gradient-hero">
+        <div className="relative" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
 
           {/* Hero */}
-          <section className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
-            <div className="absolute inset-0 pattern-dots opacity-40" />
-            <div className="absolute top-0 right-0 w-[200px] sm:w-[500px] h-[200px] sm:h-[500px] bg-primary-400/10 rounded-full blur-3xl -translate-y-1/2 sm:translate-x-1/4" />
-            <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-red-400/10 rounded-full blur-3xl translate-y-1/2 sm:-translate-x-1/4" />
+          <section className="overflow-hidden text-white py-14 sm:py-20" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
+            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+            <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
 
             <div className="container-app relative">
-              <div className="pt-10 pb-20 lg:pt-16 lg:pb-24 flex flex-col items-center justify-center gap-4">
+              <div className="flex flex-col items-center justify-center gap-4">
                 <div className="text-center w-full max-w-2xl mx-auto">
-                  <h1 className="mb-4 tracking-tight">
-                    <span className="block text-2xl sm:text-3xl font-medium text-white mb-1 leading-snug">
+                  <h1 className="mb-6 tracking-tight">
+                    <span className="block text-2xl sm:text-3xl font-medium text-white/70 mb-2 leading-snug">
                       Vehicle Stolen &amp; Recovered by Police?
                     </span>
-                    <span className="block text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.2] pb-3">
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        We&apos;ll Get It Back.
-                      </span>
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200 pb-1">
-                        Legally.
-                      </span>
+                    <span className="block text-4xl sm:text-5xl md:text-6xl font-black leading-[1.2] pb-3" style={{ color: '#f5c842' }}>
+                      We&apos;ll Get It Back. Legally.
                     </span>
                   </h1>
                   <RecoveryForm hero />
@@ -115,21 +110,21 @@ export default function RecoverStolenVehiclePage() {
           </section>
 
           {/* Content sheet */}
-          <div className="relative z-10 bg-white rounded-t-2xl sm:rounded-none -mt-8 sm:mt-0">
+          <div className="relative z-10 bg-white rounded-t-2xl sm:rounded-none">
 
             {/* How it works */}
             <section className="py-8 bg-white">
               <div className="container-app">
                 <div className="flex items-center justify-center gap-3 mb-6">
-                  <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+                  <span className="w-10 h-0.5 rounded-full bg-amber-300" />
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">How it Works</h2>
-                  <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+                  <span className="w-10 h-0.5 rounded-full bg-amber-300" />
                 </div>
                 <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
                   {steps.map((step, i) => (
                     <div key={i} className="flex flex-col gap-2">
                       <div className="relative">
-                        <div className="w-full aspect-square rounded-xl bg-[#c9b8f5] relative overflow-hidden">
+                        <div className="w-full aspect-square rounded-xl relative overflow-hidden" style={{ background: 'rgba(245,200,66,0.15)' }}>
                           <Image
                             src={step.img}
                             alt={step.title}
@@ -138,7 +133,7 @@ export default function RecoverStolenVehiclePage() {
                             unoptimized
                           />
                         </div>
-                        <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-primary-600 text-white text-[10px] font-bold flex items-center justify-center shadow">
+                        <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center shadow" style={{ background: '#1c1c24', color: '#f5c842' }}>
                           {i + 1}
                         </div>
                       </div>

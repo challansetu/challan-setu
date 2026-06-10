@@ -9,19 +9,14 @@ import { getCityPage, getAllCitySlugs } from '@/data/city-pages';
 import { ArrowRight, MapPin, BadgePercent, FileText, Landmark, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { TopChallanOffencesSection } from '@/components/TopChallanOffencesSection';
 
-// ─── Static Generation ────────────────────────────────────────────────────────
+const BRAND_DARK = '#1c1c24';
+const BRAND_YELLOW = '#f5c842';
 
 export function generateStaticParams() {
   return getAllCitySlugs().map((city) => ({ city }));
 }
 
-// ─── Dynamic Metadata ─────────────────────────────────────────────────────────
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { city: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
   const data = getCityPage(params.city);
   if (!data) return {};
   return {
@@ -36,7 +31,7 @@ export async function generateMetadata({
   };
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+const BADGE_ICONS = [ShieldCheck, BadgePercent, FileText];
 
 export default function CityPage({ params }: { params: { city: string } }) {
   const data = getCityPage(params.city);
@@ -44,7 +39,6 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
   return (
     <>
-      {/* ── Schema markup ───────────────────────────────────────────────── */}
       {cityPageSchemas({
         title: data.metaTitle,
         cityName: data.cityName,
@@ -61,22 +55,26 @@ export default function CityPage({ params }: { params: { city: string } }) {
       <main className="flex-1 bg-surface-50">
 
         {/* ── Hero ──────────────────────────────────────────────────────── */}
-        <section className="bg-gradient-to-br from-primary-700 via-primary-700 to-indigo-800 text-white py-14 sm:py-20">
-          <div className="container-app">
+        <section
+          className="relative overflow-hidden text-white py-14 sm:py-20"
+          style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
+        >
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+
+          <div className="container-app relative">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-primary-200 text-sm mb-5" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-2 text-white/50 text-sm mb-5" aria-label="Breadcrumb">
               <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-              <Link href="/cities" className="hover:text-white transition-colors">
-                All Cities
-              </Link>
+              <Link href="/cities" className="hover:text-white transition-colors">All Cities</Link>
               <span>/</span>
-              <span className="text-white font-medium">{data.cityName}</span>
+              <span className="text-white/80 font-medium">{data.cityName}</span>
             </nav>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 max-w-2xl leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 max-w-2xl leading-tight" style={{ color: BRAND_YELLOW }}>
               {data.h1}
             </h1>
-            <p className="text-primary-100/90 text-base sm:text-lg max-w-2xl mb-8 leading-relaxed">
+            <p className="text-white/70 text-base sm:text-lg max-w-2xl mb-8 leading-relaxed">
               {data.heroSubheading}
             </p>
             <HeroForm
@@ -89,20 +87,21 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Trust strip ───────────────────────────────────────────────── */}
-        <section className="bg-white border-b border-gray-100 py-4">
-          <div className="container-app flex flex-wrap gap-x-6 gap-y-2 items-center justify-center sm:justify-start text-sm text-gray-500">
-            {data.supportBadges.map((badge, index) => (
-              <div key={badge} className="flex items-center gap-1.5">
-                {index === 0 ? (
-                  <ShieldCheck className="w-4 h-4 text-primary-500" />
-                ) : index === 1 ? (
-                  <BadgePercent className="w-4 h-4 text-primary-500" />
-                ) : (
-                  <FileText className="w-4 h-4 text-primary-500" />
-                )}
-                {badge}
-              </div>
-            ))}
+        <section className="bg-white border-b border-gray-100 py-6">
+          <div className="container-app">
+            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+              {data.supportBadges.map((badge, index) => {
+                const Icon = BADGE_ICONS[index] ?? ShieldCheck;
+                return (
+                  <div key={badge} className="flex items-center gap-3 px-4 py-3 sm:py-2 sm:justify-center first:pt-0 last:pb-0 sm:first:pt-2 sm:last:pb-2">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(245,200,66,0.12)' }}>
+                      <Icon className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">{badge}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
@@ -111,16 +110,12 @@ export default function CityPage({ params }: { params: { city: string } }) {
           <div className="container-app max-w-3xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
             <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
-              {data.aboutParagraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              {data.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
             </div>
           </div>
         </section>
 
         {/* ── Violations + FAQ ──────────────────────────────────────────── */}
-        {/* showFaqSchema={false}: this page already emits FAQPage schema via
-            cityPageSchemas() above — we avoid a duplicate FAQPage on one page. */}
         <TopChallanOffencesSection
           violations={data.violations}
           cityName={data.cityName}
@@ -137,19 +132,17 @@ export default function CityPage({ params }: { params: { city: string } }) {
           <div className="container-app max-w-3xl">
             <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <Landmark className="w-5 h-5 text-primary-500" />
+                <Landmark className="w-5 h-5 text-amber-500" />
                 <h2 className="text-2xl font-bold text-gray-900">{data.settlementHeading}</h2>
               </div>
               <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
-                {data.settlementParagraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+                {data.settlementParagraphs.map((p, i) => <p key={i}>{p}</p>)}
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── How to pay ────────────────────────────────────────────────── */}
+        {/* ── How ChallanSetu Works ─────────────────────────────────────── */}
         <section className="py-12 sm:py-14">
           <div className="container-app max-w-3xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -157,11 +150,11 @@ export default function CityPage({ params }: { params: { city: string } }) {
             </h2>
             <div className="space-y-3">
               {data.steps.map((step, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-xl border border-gray-100 p-5 flex gap-4 shadow-sm"
-                >
-                  <div className="w-8 h-8 bg-primary-600 text-white rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">
+                <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 flex gap-4 shadow-sm">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0"
+                    style={{ background: BRAND_DARK, color: BRAND_YELLOW }}
+                  >
                     {i + 1}
                   </div>
                   <div>
@@ -183,9 +176,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
                 <h2 className="text-2xl font-bold text-gray-900">{data.unpaidHeading}</h2>
               </div>
               <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
-                {data.unpaidParagraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+                {data.unpaidParagraphs.map((p, i) => <p key={i}>{p}</p>)}
               </div>
             </div>
           </div>
@@ -197,13 +188,10 @@ export default function CityPage({ params }: { params: { city: string } }) {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">{data.documentsHeading}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {data.documents.map((item) => (
-                <div
-                  key={item}
-                  className="bg-white rounded-xl border border-gray-100 px-5 py-4 text-sm text-gray-600 shadow-sm"
-                >
+                <div key={item} className="bg-white rounded-xl border border-gray-100 px-5 py-4 text-sm text-gray-600 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-primary-50 text-primary-500 flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(245,200,66,0.15)' }}>
+                      <FileText className="w-4 h-4" style={{ color: BRAND_YELLOW }} />
                     </div>
                     <p className="leading-relaxed">{item}</p>
                   </div>
@@ -219,15 +207,10 @@ export default function CityPage({ params }: { params: { city: string } }) {
             <h2 className="text-xl font-bold text-gray-900 mb-5">{data.faqHeading}</h2>
             <div className="space-y-3">
               {data.faqs.map((faq, i) => (
-                <details
-                  key={i}
-                  className="group bg-surface-50 rounded-xl border border-gray-100 overflow-hidden"
-                >
+                <details key={i} className="group bg-surface-50 rounded-xl border border-gray-100 overflow-hidden">
                   <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors list-none">
                     <span>{faq.q}</span>
-                    <span className="ml-4 text-gray-400 flex-shrink-0 group-open:rotate-45 transition-transform duration-200 text-xl leading-none">
-                      +
-                    </span>
+                    <span className="ml-4 text-gray-400 flex-shrink-0 group-open:rotate-45 transition-transform duration-200 text-xl leading-none">+</span>
                   </summary>
                   <div className="px-5 pb-4 pt-1">
                     <p className="text-sm text-gray-600 leading-relaxed">{faq.a}</p>
@@ -237,10 +220,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
             </div>
             <p className="text-sm text-gray-400 mt-5">
               More questions?{' '}
-              <Link href="/faq" className="text-primary-600 hover:underline">
-                Visit our full FAQ page
-              </Link>
-              .
+              <Link href="/faq" className="text-amber-600 hover:underline">Visit our full FAQ page</Link>.
             </p>
           </div>
         </section>
@@ -254,7 +234,8 @@ export default function CityPage({ params }: { params: { city: string } }) {
                 <Link
                   key={slug}
                   href={`/pay-vehicle-challan-in-${slug}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 bg-primary-50 border border-primary-100 rounded-xl px-4 py-2 hover:bg-primary-100 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium rounded-xl px-4 py-2 border transition-colors hover:opacity-90"
+                  style={{ color: BRAND_DARK, background: 'rgba(245,200,66,0.15)', borderColor: 'rgba(245,200,66,0.3)' }}
                 >
                   <MapPin className="w-3.5 h-3.5" />
                   {city}
@@ -265,13 +246,18 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Bottom CTA ────────────────────────────────────────────────── */}
-        <section className="py-12 bg-primary-600">
-          <div className="container-app text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">{data.ctaHeading}</h2>
-            <p className="text-primary-100 mb-7">{data.ctaSubtext}</p>
+        <section
+          className="py-12 relative overflow-hidden"
+          style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
+        >
+          <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="container-app text-center relative">
+            <h2 className="text-2xl font-bold mb-3" style={{ color: BRAND_YELLOW }}>{data.ctaHeading}</h2>
+            <p className="text-white/60 mb-7">{data.ctaSubtext}</p>
             <a
               href={`#city-${data.slug}-lead-form`}
-              className="flex w-full max-w-md mx-auto justify-center items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
+              className="inline-flex w-full max-w-md mx-auto justify-center items-center gap-2 font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
               Check {data.cityName} Challan Eligibility
               <ArrowRight className="w-4 h-4" />

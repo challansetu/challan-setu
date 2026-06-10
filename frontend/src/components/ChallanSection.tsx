@@ -96,12 +96,12 @@ export function ChallanSection({ vehicleNumber }: Props) {
   return (
     <div className="space-y-3">
       {/* Orange alert banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 px-5 py-5 shadow-md shadow-orange-200">
+      <div className="relative overflow-hidden rounded-2xl px-5 py-5 shadow-md" style={{ background: "#1c1c24" }}>
         <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-white/10" />
         <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/10" />
         <div className="relative">
-          <h2 className="text-2xl font-black uppercase tracking-wide text-white">Challan Alert 🚨</h2>
-          <p className="mt-1 text-sm text-orange-100">
+          <h2 className="text-2xl font-black uppercase tracking-wide" style={{ color: "#f5c842" }}>Challan Alert 🚨</h2>
+          <p className="mt-1 text-sm text-white/60">
             {challans.length} violation{challans.length > 1 ? 's' : ''} found on your vehicle
           </p>
         </div>

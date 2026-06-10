@@ -70,7 +70,7 @@ export function StatesChallanSection() {
             <Link
               key={state.slug}
               href={`/e-challan/${state.slug}`}
-              className="group relative overflow-hidden rounded-xl sm:rounded-2xl aspect-square sm:aspect-[2/3] block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="group relative overflow-hidden rounded-xl sm:rounded-2xl aspect-square sm:aspect-[2/3] block focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             >
               <Image
                 src={state.image}
@@ -99,7 +99,7 @@ export function StatesChallanSection() {
           <div className="mt-6 text-center">
             <button
               onClick={() => setExpanded((p) => !p)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-primary-200 text-primary-600 text-sm font-semibold hover:bg-primary-50 transition-colors duration-200"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors duration-200"
             >
               {expanded ? 'Show less ↑' : `Show all ${STATES.length} states ↓`}
             </button>

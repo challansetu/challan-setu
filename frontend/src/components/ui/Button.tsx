@@ -24,17 +24,17 @@ export function Button({
 
   const variants = {
     primary:
-      'bg-primary-600 text-white hover:bg-primary-700 hover:shadow-glow focus-visible:ring-primary-500 shadow-sm',
+      'bg-[#f5c842] text-[#1c1c24] hover:opacity-90 focus-visible:ring-amber-400 shadow-sm font-bold',
     secondary:
       'bg-surface-100 text-gray-800 hover:bg-surface-200 focus-visible:ring-gray-400 border border-surface-200',
     outline:
-      'border-2 border-primary-200 text-primary-700 hover:bg-primary-50 hover:border-primary-300 focus-visible:ring-primary-500',
+      'border-2 border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus-visible:ring-gray-400',
     ghost:
       'text-gray-600 hover:bg-surface-100 hover:text-gray-900 focus-visible:ring-gray-400',
     danger:
       'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 shadow-sm',
     success:
-      'bg-accent-600 text-white hover:bg-accent-700 hover:shadow-glow-green focus-visible:ring-accent-500 shadow-sm',
+      'bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-500 shadow-sm',
   };
 
   const sizes = {

@@ -23,7 +23,7 @@ export function WallOfDrivers() {
     >
       {/* Header */}
       <div className="container-app text-left mb-10 sm:mb-14">
-        <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3 text-primary-400">
+        <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3 text-amber-500">
           Community
         </p>
         <h2 className="text-xl sm:text-2xl font-bold text-white leading-none mb-4">

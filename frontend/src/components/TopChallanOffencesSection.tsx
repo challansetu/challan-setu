@@ -182,14 +182,14 @@ export function TopChallanOffencesSection({
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-primary-600 px-8 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary-700 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-sm font-bold text-gray-900 shadow-sm transition-all hover:-translate-y-0.5"
             >
               <Search className="h-4 w-4" aria-hidden="true" />
               Check Eligibility Now
             </Link>
             <Link
               href="/"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-primary-200 bg-white px-8 py-3.5 text-sm font-bold text-primary-600 shadow-sm transition-all hover:bg-primary-50 hover:shadow-md hover:border-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-8 py-3.5 text-sm font-bold text-gray-800 shadow-sm transition-all hover:bg-gray-50 hover:shadow-md hover:border-gray-300"
             >
               See How You Can Save
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -232,7 +232,7 @@ export function TopChallanOffencesSection({
 
           <p className="mt-5 text-xs text-gray-400">
             Have more questions?{' '}
-            <Link href="/faq" className="text-primary-600 hover:underline">
+            <Link href="/faq" className="text-amber-600 hover:underline">
               Visit our full FAQ page
             </Link>
             .

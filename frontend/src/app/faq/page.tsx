@@ -117,7 +117,6 @@ const FAQ_SECTIONS = [
   },
 ];
 
-// Flatten all FAQs for schema
 const ALL_FAQS = FAQ_SECTIONS.flatMap((s) => s.faqs.map((f) => ({ q: f.q, a: f.a })));
 
 export default function FaqPage() {
@@ -135,8 +134,8 @@ export default function FaqPage() {
         {/* Hero */}
         <section className="bg-white border-b border-gray-100 py-12 sm:py-16">
           <div className="container-app text-center max-w-2xl">
-            <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-              <HelpCircle className="w-6 h-6 text-primary-600" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(245,200,66,0.12)' }}>
+              <HelpCircle className="w-6 h-6 text-amber-500" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
               How to Legally Reduce Your Traffic Challan Fine
@@ -158,7 +157,7 @@ export default function FaqPage() {
                   <a
                     key={s.id}
                     href={`#${s.id}`}
-                    className="text-sm text-primary-600 hover:text-primary-800 font-medium bg-primary-50 hover:bg-primary-100 rounded-lg px-3 py-1.5 transition-colors"
+                    className="text-sm text-amber-700 hover:text-amber-800 font-medium bg-amber-50 hover:bg-amber-100 rounded-lg px-3 py-1.5 transition-colors"
                   >
                     {s.title}
                   </a>
@@ -193,14 +192,14 @@ export default function FaqPage() {
             </div>
 
             {/* Still have questions? */}
-            <div className="mt-12 bg-primary-50 rounded-2xl border border-primary-100 p-6 text-center">
+            <div className="mt-12 bg-amber-50 rounded-2xl border border-amber-100 p-6 text-center">
               <h3 className="font-bold text-gray-900 mb-2">Still have a question?</h3>
               <p className="text-sm text-gray-500 mb-4">
                 Our support team responds within 4 business hours.
               </p>
               <a
                 href="mailto:challansetu@gmail.com"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-800 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors"
               >
                 Email us at challansetu@gmail.com
                 <ArrowRight className="w-4 h-4" />
@@ -215,14 +214,15 @@ export default function FaqPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-2">Ready to clear your challans?</h2>
             <p className="text-gray-500 text-sm mb-5">
               See our{' '}
-              <Link href="/how-it-works" className="text-primary-600 hover:underline">
+              <Link href="/how-it-works" className="text-amber-600 hover:underline">
                 how it works
               </Link>{' '}
               page first, or jump straight in.
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: '#1c1c24', color: '#f5c842' }}
             >
               Check Challan
               <ArrowRight className="w-4 h-4" />

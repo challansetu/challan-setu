@@ -103,8 +103,8 @@ export default function AboutPage() {
                 const Icon = v.icon;
                 return (
                   <div key={i} className="bg-surface-50 rounded-2xl p-6 border border-gray-100">
-                    <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center mb-4">
-                      <Icon className="w-5 h-5 text-primary-600" />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: 'rgba(245,200,66,0.12)' }}>
+                      <Icon className="w-5 h-5 text-amber-500" />
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">{v.title}</h3>
                     <p className="text-sm text-gray-500 leading-relaxed">{v.description}</p>
@@ -118,9 +118,9 @@ export default function AboutPage() {
         {/* Service area */}
         <section className="py-14 sm:py-16">
           <div className="container-app max-w-3xl">
-            <div className="bg-primary-50 rounded-2xl border border-primary-100 p-7 sm:p-9">
+            <div className="bg-amber-50 rounded-2xl border border-amber-100 p-7 sm:p-9">
               <h2 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-primary-600" />
+                <MapPin className="w-5 h-5 text-amber-500" />
                 Where We Operate
               </h2>
               <p className="text-gray-600 text-sm leading-relaxed mb-5">
@@ -128,14 +128,14 @@ export default function AboutPage() {
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
                 {siteData.serviceArea.map((city) => (
-                  <div key={city} className="bg-white rounded-xl border border-primary-100 p-3 text-center">
+                  <div key={city} className="bg-white rounded-xl border border-amber-100 p-3 text-center">
                     <span className="text-sm font-semibold text-gray-800">{city}</span>
                   </div>
                 ))}
               </div>
               <Link
                 href="/service-area"
-                className="inline-flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800 font-medium"
+                className="inline-flex items-center gap-1.5 text-sm text-amber-600 hover:text-amber-700 font-medium"
               >
                 View full service area details
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -153,23 +153,23 @@ export default function AboutPage() {
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
               <div className="bg-surface-50 rounded-2xl border border-gray-100 p-6">
-                <Mail className="w-5 h-5 text-primary-600 mb-3" />
+                <Mail className="w-5 h-5 text-amber-500 mb-3" />
                 <h3 className="font-semibold text-gray-900 mb-1">Email Support</h3>
                 <p className="text-sm text-gray-500 mb-2">{siteData.contact.responseTime}</p>
                 <a
                   href={`mailto:${siteData.contact.email}`}
-                  className="text-sm font-medium text-primary-600 hover:text-primary-800 transition-colors"
+                  className="text-sm font-medium text-amber-600 hover:text-amber-700 transition-colors"
                 >
                   {siteData.contact.email}
                 </a>
               </div>
               <div className="bg-surface-50 rounded-2xl border border-gray-100 p-6">
-                <Clock className="w-5 h-5 text-primary-600 mb-3" />
+                <Clock className="w-5 h-5 text-amber-500 mb-3" />
                 <h3 className="font-semibold text-gray-900 mb-1">Support Hours</h3>
                 <p className="text-sm text-gray-500 mb-2">{siteData.contact.supportHours}</p>
                 <Link
                   href="/faq"
-                  className="text-sm font-medium text-primary-600 hover:text-primary-800 transition-colors"
+                  className="text-sm font-medium text-amber-600 hover:text-amber-700 transition-colors"
                 >
                   Check our FAQ first →
                 </Link>

@@ -15,7 +15,7 @@ export function PremiumFactorsList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-12">
           {PREMIUM_FACTORS.map((f) => (
             <div key={f.title} className="flex items-start gap-4 py-4 border-b border-gray-100">
-              <f.icon className="w-5 h-5 shrink-0 mt-0.5 text-primary-500" />
+              <f.icon className="w-5 h-5 shrink-0 mt-0.5 text-amber-500" />
               <div>
                 <h3 className="font-semibold text-sm text-gray-900 mb-0.5">{f.title}</h3>
                 <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>

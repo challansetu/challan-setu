@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import fs from 'fs';
 import path from 'path';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { JsonLd, faqSchema, webPageSchema } from '@/components/seo/JsonLd';
 import { Navbar } from '@/components/Navbar';
@@ -16,7 +17,7 @@ import { FeatureMarquee } from '@/components/FeatureMarquee';
 import { HOMEPAGE_FAQS } from '@/data/homepage-faqs';
 import landingData from '@/data/landing.json';
 import { BlogSection } from '@/components/BlogSection';
-import { WallOfDrivers } from '@/components/WallOfDrivers';
+// import { WallOfDrivers } from '@/components/WallOfDrivers';
 import { StatesChallanSection } from '@/components/StatesChallanSection';
 import { StolenVehicleBanner } from '@/components/StolenVehicleBanner';
 
@@ -58,8 +59,8 @@ export default async function LandingPage() {
           {/* Hero — sticky below navbar on mobile; content sheet slides over it */}
           <section className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
             <div className="absolute inset-0 pattern-dots opacity-40" />
-            <div className="absolute top-0 right-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] bg-primary-400/10 rounded-full blur-3xl -translate-y-1/2 sm:-translate-y-1/2 sm:translate-x-1/4" />
-            <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-primary-300/10 rounded-full blur-3xl translate-y-1/2 sm:translate-y-1/2 sm:-translate-x-1/4" />
+            <div className="absolute top-0 right-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/2 sm:-translate-y-1/2 sm:translate-x-1/4" />
+            <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/2 sm:translate-y-1/2 sm:-translate-x-1/4" />
 
             <div className="container-app relative">
               {/*
@@ -74,16 +75,12 @@ export default async function LandingPage() {
                 <div className="flex-1 min-w-0 text-center w-full max-w-3xl mx-auto">
 
                   <h1 className="mb-5 px-2 lg:px-0 tracking-tight">
-                    <span className="block text-2xl sm:text-3xl md:text-4xl font-medium text-white mb-2 leading-snug">
+                    <span className="block text-2xl sm:text-3xl md:text-4xl font-medium text-white/70 mb-2 leading-snug">
                       Got a traffic challan?
                     </span>
-                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.2] pb-3">
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200">
-                        Settle &amp; Save
-                      </span>
-                      <span className="block bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-emerald-300 to-accent-200 pb-1">
-                        Up to 50%, Legally.
-                      </span>
+                    <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.2] pb-3" style={{ color: '#f5c842' }}>
+                      <span className="block">Settle &amp; Save</span>
+                      <span className="block pb-1">Up to 50%, Legally.</span>
                     </span>
                   </h1>
 
@@ -156,18 +153,12 @@ export default async function LandingPage() {
             <section className="py-10 bg-white border-y border-gray-100">
               <div className="container-app">
                 <div className="grid grid-cols-2 md:grid-cols-4 border border-gray-100 rounded-xl overflow-hidden">
-                  {[
-                    { ...landingData.trustStats[0], icon: <CheckCircle2 className="w-4 h-4" /> },
-                    { ...landingData.trustStats[1], icon: <Zap className="w-4 h-4" /> },
-                    { ...landingData.trustStats[2], icon: <MapPin className="w-4 h-4" /> },
-                    { ...landingData.trustStats[3], icon: <RefreshCw className="w-4 h-4" /> },
-                  ].map((stat, i) => (
+                  {landingData.trustStats.map((stat, i) => (
                     <div key={i} className={`flex flex-col items-center justify-center gap-1 px-6 py-6 text-center border-gray-100 ${i % 2 === 0 ? 'border-r' : ''} ${i < 2 ? 'border-b md:border-b-0' : ''} ${i < 3 ? 'md:border-r' : ''}`}>
                       <div className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 leading-none">
                         {stat.num}
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 mt-1">
-                        <span className="text-primary-400">{stat.icon}</span>
+                      <div className="text-xs font-semibold text-gray-400 mt-1 text-center">
                         {stat.label}
                       </div>
                     </div>
@@ -183,25 +174,35 @@ export default async function LandingPage() {
             <BlogSection posts={posts} />
 
             {/* Wall of Responsible Drivers */}
-            <WallOfDrivers />
+            {/* <WallOfDrivers /> */}
 
             {/* Homepage FAQ */}
             <HomepageFaqSection />
 
             {/* CTA Section */}
-            <section className="py-10 bg-gradient-hero text-white relative overflow-hidden">
-              <div className="absolute inset-0 pattern-dots opacity-30" />
+            <section className="py-10 text-white relative overflow-hidden" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
+              <div className="absolute inset-0 pattern-dots opacity-10" />
+              <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+              <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
               <div className="container-app relative text-center">
                 <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/10">
-                  <CheckCircle2 className="w-4 h-4 text-accent-300" />
+                  <CheckCircle2 className="w-4 h-4" style={{ color: '#f5c842' }} />
                   <span className="text-sm text-white/90">{landingData.cta.badge}</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold leading-none mb-4">
                   {landingData.cta.title}
                 </h2>
-                <p className="text-primary-200/80 mb-8 max-w-lg mx-auto">
+                <p className="text-white/60 mb-8 max-w-lg mx-auto">
                   {landingData.cta.subtitle}
                 </p>
+                <Link
+                  href="#hero-lead-form"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5"
+                  style={{ background: '#f5c842', color: '#1c1c24' }}
+                >
+                  <Scale className="w-4 h-4" />
+                  Settle My Challan
+                </Link>
               </div>
             </section>
 

@@ -28,14 +28,14 @@ export function DocumentsRequired() {
     <section className="py-8 bg-white">
       <div className="container-app">
         <div className="flex items-center justify-center gap-3 mb-6">
-          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+          <span className="w-10 h-0.5 rounded-full bg-amber-300" />
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Documents Required</h2>
-          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+          <span className="w-10 h-0.5 rounded-full bg-amber-300" />
         </div>
         <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
           {DOCS.map((doc) => (
             <div key={doc.title} className="flex flex-col gap-2">
-              <div className="w-full aspect-square rounded-xl bg-[#c9b8f5] relative overflow-hidden">
+              <div className="w-full aspect-square rounded-xl relative overflow-hidden" style={{ background: 'rgba(245,200,66,0.15)' }}>
                 <Image
                   src={doc.img}
                   alt={doc.title}

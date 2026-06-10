@@ -32,7 +32,7 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
           </div>
           <Link
             href="/blog"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors"
           >
             All guides <ArrowRight className="w-4 h-4" />
           </Link>
@@ -61,10 +61,10 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
 
             {/* Content */}
             <div className="flex flex-col flex-1 p-5">
-              <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full w-fit mb-3">
+              <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-3">
                 {post.category}
               </span>
-              <h3 className="text-base font-bold text-gray-900 mb-3 leading-snug group-hover:text-primary-600 transition-colors line-clamp-2">
+              <h3 className="text-base font-bold text-gray-900 mb-3 leading-snug group-hover:text-amber-600 transition-colors line-clamp-2">
                 {post.title}
               </h3>
               <p className="text-sm text-gray-500 leading-relaxed flex-1 mb-5 line-clamp-3">
@@ -74,7 +74,7 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
                 <span className="text-xs text-gray-400">{formatDate(post.date)}</span>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 group-hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 hover:text-amber-700 group-hover:gap-2 transition-all"
                 >
                   Read more<span className="sr-only"> – {post.title}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -91,7 +91,7 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
       <div className="pb-6 text-center sm:hidden">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors"
         >
           View all guides <ArrowRight className="w-4 h-4" />
         </Link>

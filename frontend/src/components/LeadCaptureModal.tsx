@@ -193,9 +193,9 @@ export function LeadCaptureModal({
       <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-white">
         <Logo scheme="dark" height={44} />
         <div className="mt-10 relative flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin" />
-          <div className="absolute w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
-            <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <div className="w-16 h-16 rounded-full border-4 border-amber-100 border-t-amber-500 animate-spin" />
+          <div className="absolute w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+            <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -241,8 +241,8 @@ export function LeadCaptureModal({
 
         <div className="px-8 pb-8">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/70 px-4 py-3 text-left">
-              <p className="text-xs font-bold tracking-[0.18em] uppercase text-primary-500">
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-left">
+              <p className="text-xs font-bold tracking-[0.18em] uppercase text-gray-500">
                 Vehicle Number
               </p>
               <p className="mt-1 text-base font-semibold text-gray-900">{vehicleNumber}</p>
@@ -314,7 +314,7 @@ export function LeadCaptureModal({
               </div>
             </div>
 
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3 text-xs font-medium text-primary-700">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-medium text-amber-800">
               We never ask for OTP, UPI PIN, or bank details.
             </div>
 

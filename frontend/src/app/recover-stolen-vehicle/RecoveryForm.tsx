@@ -131,8 +131,9 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
       <button
         type="submit"
         disabled={!isValid || submitState === 'loading'}
-        className={`w-full flex items-center justify-center gap-2 font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${hero
-          ? 'h-14 bg-white text-gray-900 rounded-2xl hover:bg-gray-50 shadow-lg text-base'
+        style={hero ? { background: '#f5c842', color: '#1c1c24' } : undefined}
+        className={`w-full flex items-center justify-center gap-2 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${hero
+          ? 'h-14 rounded-2xl shadow-lg text-base hover:brightness-95'
           : 'py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800'}`}
       >
         {submitState === 'loading'

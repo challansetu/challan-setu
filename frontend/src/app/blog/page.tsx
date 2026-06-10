@@ -49,7 +49,7 @@ export default function BlogIndexPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-gradient-hero text-white py-14 sm:py-20">
+        <section className="relative overflow-hidden text-white py-14 sm:py-20" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
           <div className="container-app text-center">
             <span className="inline-block bg-white/10 text-white/80 text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-4">
               ChallanSetu Blog
@@ -74,12 +74,12 @@ export default function BlogIndexPage() {
                   className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
                 >
                   {/* Colour band placeholder */}
-                  <div className="h-2 bg-gradient-to-r from-primary-500 to-accent-400" />
+                  <div className="h-2" style={{ background: '#f5c842' }} />
 
                   <div className="flex flex-col flex-1 p-6">
                     {/* Category + read time */}
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full">
                         <Tag className="w-3 h-3" />
                         {post.category}
                       </span>
@@ -90,7 +90,7 @@ export default function BlogIndexPage() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-lg font-bold text-gray-900 mb-3 leading-snug group-hover:text-primary-600 transition-colors">
+                    <h2 className="text-lg font-bold text-gray-900 mb-3 leading-snug group-hover:text-amber-700 transition-colors">
                       {post.title}
                     </h2>
 
@@ -102,7 +102,7 @@ export default function BlogIndexPage() {
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                       <span className="text-xs text-gray-400">{formatDate(post.publishedAt)}</span>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 group-hover:gap-2 transition-all">
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 group-hover:gap-2 transition-all">
                         Read article <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
@@ -121,7 +121,8 @@ export default function BlogIndexPage() {
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: '#1c1c24', color: '#f5c842' }}
             >
               Check Eligibility Free <ArrowRight className="w-4 h-4" />
             </Link>

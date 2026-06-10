@@ -83,17 +83,17 @@ export default function ThankYouPage({
 
         {/* ── Hero ── */}
         {/* Mobile: fixed behind cards. Desktop: normal flow, taller */}
-        <div className="fixed top-16 inset-x-0 z-0 overflow-hidden bg-gradient-to-b from-[#1a237e] to-[#3D5AFE] px-6 pt-8 pb-6 text-center h-[190px] sm:relative sm:top-auto sm:inset-x-auto sm:z-auto sm:h-auto sm:py-16">
-          <div className="absolute -top-16 -right-12 h-56 w-56 rounded-full bg-white/5" />
-          <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-white/5" />
+        <div className="fixed top-16 inset-x-0 z-0 overflow-hidden px-6 pt-8 pb-6 text-center h-[190px] sm:relative sm:top-auto sm:inset-x-auto sm:z-auto sm:h-auto sm:py-16" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
+          <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-yellow-400/15 rounded-full blur-2xl -translate-y-1/4 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-2xl translate-y-1/4 -translate-x-1/4" />
           <div className="relative">
-            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/30 bg-white/15 backdrop-blur-sm sm:h-14 sm:w-14">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-white sm:h-7 sm:w-7">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border-2 sm:h-14 sm:w-14" style={{ borderColor: '#f5c842', background: 'transparent' }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 sm:h-7 sm:w-7" style={{ color: '#f5c842' }}>
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight sm:text-4xl">Request Received</h1>
-            <p className="mt-1 text-xs text-blue-300 sm:text-sm sm:mt-2">No payment is required at this stage</p>
+            <h1 className="text-2xl font-black tracking-tight sm:text-4xl" style={{ color: '#f5c842' }}>Request Received</h1>
+            <p className="mt-1 text-xs text-white/60 sm:text-sm sm:mt-2">No payment is required at this stage</p>
           </div>
         </div>
 
@@ -116,10 +116,6 @@ export default function ThankYouPage({
                   <p className="text-sm font-bold text-amber-900">Our team will contact you shortly</p>
                   <p className="mt-1 text-xs text-amber-600/90 leading-relaxed">You'll receive a call or WhatsApp message within 30 minutes</p>
                 </div>
-                <div className="flex-shrink-0 text-right">
-                  <p className="text-[10px] font-black tracking-widest uppercase text-amber-400">Request ID</p>
-                  <p className="mt-0.5 font-mono text-sm font-bold text-amber-800">{requestId}</p>
-                </div>
               </div>
             </div>
 
@@ -132,21 +128,10 @@ export default function ThankYouPage({
                 {/* Vehicle info card with change vehicle */}
                 <VehicleInfoCard vehicleNumber={vehicleNumber} />
 
-                {/* Status banner — mobile only (desktop version is above the grid) */}
-                <div className="sm:hidden rounded-2xl border border-amber-100 shadow-sm overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                  <div className="flex items-center gap-2 bg-green-50 border-b border-green-100 px-5 py-2.5">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-                    <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
-                  </div>
-                  <div className="px-5 py-4 flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-bold text-amber-900">Our team will contact you shortly</p>
-                    </div>
-                    <div className="flex-shrink-0 text-right">
-                      <p className="text-[10px] font-black tracking-widest uppercase text-amber-400">Request ID</p>
-                      <p className="mt-0.5 font-mono text-sm font-bold text-amber-800">{requestId}</p>
-                    </div>
-                  </div>
+                {/* Status banner — mobile only */}
+                <div className="sm:hidden flex items-center gap-2 bg-green-50 border border-green-100 rounded-2xl px-4 py-3">
+                  <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+                  <span className="text-xs font-semibold text-green-700">Agent assigned · Response within 30 min</span>
                 </div>
 
                 {/* Challan sections */}
@@ -171,7 +156,7 @@ export default function ThankYouPage({
                 {/* What happens next */}
                 <div className="rounded-2xl bg-white shadow-sm px-5 py-5">
                   <div className="flex items-center gap-2 mb-4">
-                    <ShieldCheck className="h-4 w-4 text-blue-500" />
+                    <ShieldCheck className="h-4 w-4 text-amber-500" />
                     <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">What happens next</h2>
                   </div>
                   <div className="space-y-4">
@@ -180,7 +165,7 @@ export default function ThankYouPage({
                         key={step.title}
                         className={`flex gap-3 ${index < nextSteps.length - 1 ? 'pb-4 border-b border-gray-50' : ''}`}
                       >
-                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-xs font-black text-blue-600">
+                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-amber-50 text-xs font-black text-amber-700">
                           {index + 1}
                         </div>
                         <div>
@@ -214,7 +199,7 @@ export default function ThankYouPage({
                   <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>
                 </div>
                 <div className="hidden sm:block px-1">
-                  <Link href="/" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                  <Link href="/" className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors">
                     ← Back to homepage
                   </Link>
                 </div>
@@ -229,7 +214,7 @@ export default function ThankYouPage({
                 <p className="text-xs text-gray-400">We never ask for OTP, UPI PIN, or bank details.</p>
               </div>
               <div className="px-1">
-                <Link href="/" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                <Link href="/" className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors">
                   ← Back to homepage
                 </Link>
               </div>

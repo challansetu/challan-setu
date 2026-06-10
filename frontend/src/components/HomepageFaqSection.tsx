@@ -31,7 +31,7 @@ export function HomepageFaqSection() {
                 <button
                   type="button"
                   onClick={() => setOpenIndex((current) => (current === index ? -1 : index))}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-inset"
                   aria-expanded={isOpen}
                   aria-controls={`homepage-faq-answer-${index}`}
                 >
@@ -66,7 +66,7 @@ export function HomepageFaqSection() {
 
         <p className="mt-5 text-xs text-gray-400">
           Need more details?{' '}
-          <Link href="/faq" className="text-primary-600 hover:underline">
+          <Link href="/faq" className="text-amber-600 hover:underline">
             Visit our full FAQ page
           </Link>
           .

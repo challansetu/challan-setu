@@ -77,8 +77,8 @@ export default function ServiceAreaPage() {
         {/* Hero */}
         <section className="bg-white border-b border-gray-100 py-12 sm:py-16">
           <div className="container-app text-center max-w-2xl">
-            <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-              <MapPin className="w-6 h-6 text-primary-600" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(245,200,66,0.12)' }}>
+              <MapPin className="w-6 h-6 text-amber-500" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
               Our Service Area
@@ -95,20 +95,20 @@ export default function ServiceAreaPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-6">Covered Cities</h2>
             <div className="grid sm:grid-cols-2 gap-5">
               {COVERED_CITIES.map((c) => (
-                <div key={c.city} className="bg-white rounded-2xl border border-gray-100 p-6 hover:border-primary-200 hover:shadow-sm transition-all">
+                <div key={c.city} className="bg-white rounded-2xl border border-gray-100 p-6 hover:border-amber-200 hover:shadow-sm transition-all">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">{c.city}</h3>
                       <p className="text-xs text-gray-400">{c.authority}</p>
                     </div>
-                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-2.5 py-1">
+                    <span className="flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-100 rounded-full px-2.5 py-1">
                       <CheckCircle2 className="w-3 h-3" /> Covered
                     </span>
                   </div>
                   <ul className="space-y-1 mb-4">
                     {c.challanTypes.map((type) => (
                       <li key={type} className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
                         {type}
                       </li>
                     ))}
@@ -116,7 +116,7 @@ export default function ServiceAreaPage() {
                   <p className="text-xs text-gray-400 mb-4 bg-gray-50 rounded-lg px-3 py-2">{c.notes}</p>
                   <Link
                     href={c.href}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 transition-colors"
                   >
                     Pay {c.city} challans
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -149,7 +149,8 @@ export default function ServiceAreaPage() {
             <p className="text-gray-500 text-sm mb-5">Enter your vehicle number to start a challan eligibility request.</p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: '#1c1c24', color: '#f5c842' }}
             >
               Check Challan
               <ArrowRight className="w-4 h-4" />

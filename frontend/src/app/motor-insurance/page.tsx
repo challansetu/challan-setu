@@ -111,7 +111,7 @@ export default function MotorInsurancePage() {
 
       <Navbar />
       <main className="flex-1">
-        <div className="relative bg-gradient-hero">
+        <div className="relative" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
 
           {/* ── Hero ─────────────────────────────────────────────────────────── */}
           <section

@@ -67,12 +67,17 @@ export default function CitiesPage() {
       <Navbar />
       <main className="flex-1 bg-surface-50">
         {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-700 via-primary-700 to-indigo-800 text-white py-14 sm:py-18">
-          <div className="container-app">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3 max-w-xl">
+        <section
+          className="relative overflow-hidden text-white py-14 sm:py-18"
+          style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}
+        >
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+          <div className="container-app relative">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-3 max-w-xl" style={{ color: '#f5c842' }}>
               Vehicle Challan Support by City
             </h1>
-            <p className="text-primary-100 text-base sm:text-lg max-w-2xl">
+            <p className="text-white/70 text-base sm:text-lg max-w-2xl">
               ChallanSetu currently serves 5 cities in the NCR region. Choose your city to request challan assistance and discount eligibility review.
             </p>
           </div>
@@ -86,20 +91,20 @@ export default function CitiesPage() {
                 <Link
                   key={city.name}
                   href={city.href}
-                  className="group bg-white rounded-2xl border border-gray-100 p-6 hover:border-primary-200 hover:shadow-md transition-all"
+                  className="group bg-white rounded-2xl border border-gray-100 p-6 hover:border-amber-200 hover:shadow-md transition-all"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <MapPin className="w-4 h-4 text-primary-500" />
-                        <h2 className="text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors">{city.name}</h2>
+                        <MapPin className="w-4 h-4 text-amber-500" />
+                        <h2 className="text-lg font-bold text-gray-900 group-hover:text-amber-700 transition-colors">{city.name}</h2>
                       </div>
                       <p className="text-xs text-gray-400">{city.state} · {city.authority}</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
+                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
                   </div>
                   <p className="text-sm text-gray-600 leading-relaxed mb-4">{city.desc}</p>
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+                  <div className="flex items-center gap-1.5 text-xs text-amber-600 font-medium">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {city.highlight}
                   </div>
@@ -110,11 +115,19 @@ export default function CitiesPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-12 bg-primary-600">
-          <div className="container-app text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">Not sure which city? Just enter your vehicle number</h2>
-            <p className="text-primary-100 mb-6">Start your challan assistance request securely with your vehicle number.</p>
-            <Link href="/" className="flex w-full max-w-md mx-auto justify-center items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg">
+        <section
+          className="py-12 relative overflow-hidden"
+          style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}
+        >
+          <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="container-app text-center relative">
+            <h2 className="text-2xl font-bold mb-3" style={{ color: '#f5c842' }}>Not sure which city? Just enter your vehicle number</h2>
+            <p className="text-white/60 mb-6">Start your challan assistance request securely with your vehicle number.</p>
+            <Link
+              href="/"
+              className="flex w-full max-w-md mx-auto justify-center items-center gap-2 font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: '#f5c842', color: '#1c1c24' }}
+            >
               Check Challan <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

@@ -75,7 +75,7 @@ export function UrgencyCarousel() {
           <div
             key={i}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === activeIndex ? 'w-4 bg-primary-400' : 'w-1.5 bg-gray-200'
+              i === activeIndex ? 'w-4 bg-amber-400' : 'w-1.5 bg-gray-200'
             }`}
           />
         ))}

@@ -68,7 +68,7 @@ export function InsuranceFaqSection() {
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`flex-shrink-0 w-4 h-4 text-primary-500 transition-transform duration-200 ${
+                    className={`flex-shrink-0 w-4 h-4 text-amber-500 transition-transform duration-200 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />

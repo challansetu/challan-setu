@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { JsonLd, serviceSchema, breadcrumbSchema, howToSchema, faqSchema } from '@/components/seo/JsonLd';
 import {
   Search,
-    CheckCircle2,
+  CheckCircle2,
   Shield,
   Clock,
   FileText,
@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   },
 };
 
+const BRAND_DARK = '#1c1c24';
+const BRAND_YELLOW = '#f5c842';
+
 const STEPS = [
   {
     number: '01',
@@ -34,7 +37,6 @@ const STEPS = [
     description:
       'Type your vehicle registration number (e.g. DL7SBY5194) to begin a challan discount eligibility request.',
     detail: 'No login required to start.',
-    color: 'bg-primary-50 text-primary-600',
   },
   {
     number: '02',
@@ -43,7 +45,6 @@ const STEPS = [
     description:
       'Add your full name, mobile number, and consent in the secure lead form so our team can review your challan and find the best available option.',
     detail: 'No OTP, UPI PIN, or bank details are required.',
-    color: 'bg-accent-50 text-accent-600',
   },
   {
     number: '03',
@@ -52,7 +53,6 @@ const STEPS = [
     description:
       'Our team verifies your challan details and contacts you with the best available settlement option. If eligible, you can proceed with payment securely through Razorpay.',
     detail: 'No payment is required at the request stage.',
-    color: 'bg-emerald-50 text-emerald-600',
   },
 ];
 
@@ -67,7 +67,7 @@ const FEATURES = [
     icon: Shield,
     title: 'Secure & Minimal Data',
     description:
-      'All payments go through Razorpay\'s PCI-DSS compliant gateway. Challan settlement is processed through official government channels. We never store your card or bank details.',
+      "All payments go through Razorpay's PCI-DSS compliant gateway. Challan settlement is processed through official government channels. We never store your card or bank details.",
   },
   {
     icon: Clock,
@@ -142,19 +142,26 @@ export default function HowItWorksPage() {
       />
       <Navbar />
       <main className="flex-1 bg-surface-50">
-        {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800 text-white py-16 sm:py-20">
-          <div className="container-app text-center">
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+        {/* ── Hero ──────────────────────────────────────────────────────── */}
+        <section
+          className="relative overflow-hidden text-white py-16 sm:py-20"
+          style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
+        >
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+
+          <div className="container-app text-center relative">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight" style={{ color: BRAND_YELLOW }}>
               How ChallanSetu Settles Your Challan via Lok Adalat
             </h1>
-            <p className="text-primary-100 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
+            <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-8">
               Start with your vehicle number, submit your request securely, and receive the next step for eligible challans.
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
               Submit Your Request
               <ArrowRight className="w-4 h-4" />
@@ -162,7 +169,7 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* Steps */}
+        {/* ── Steps ─────────────────────────────────────────────────────── */}
         <section className="py-16 sm:py-20">
           <div className="container-app">
             <div className="text-center mb-12">
@@ -176,16 +183,21 @@ export default function HowItWorksPage() {
                 return (
                   <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 flex gap-5 sm:gap-7">
                     <div className="flex-shrink-0">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${step.color}`}>
-                        <Icon className="w-7 h-7" />
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                        style={{ background: 'rgba(245,200,66,0.12)' }}
+                      >
+                        <Icon className="w-7 h-7" style={{ color: BRAND_YELLOW }} />
                       </div>
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-gray-300 uppercase tracking-widest mb-1">Step {step.number}</div>
+                      <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: BRAND_YELLOW }}>
+                        Step {step.number}
+                      </div>
                       <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
                       <p className="text-gray-600 text-sm leading-relaxed mb-3">{step.description}</p>
-                      <div className="flex items-center gap-2 text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2 w-fit">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                      <div className="flex items-center gap-2 text-xs text-gray-500 rounded-lg px-3 py-2 w-fit border border-gray-100 bg-gray-50">
+                        <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: BRAND_YELLOW }} />
                         {step.detail}
                       </div>
                     </div>
@@ -196,7 +208,7 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* Features */}
+        {/* ── Features ──────────────────────────────────────────────────── */}
         <section className="py-16 bg-white">
           <div className="container-app">
             <div className="text-center mb-12">
@@ -207,9 +219,9 @@ export default function HowItWorksPage() {
               {FEATURES.map((f, i) => {
                 const Icon = f.icon;
                 return (
-                  <div key={i} className="p-6 rounded-2xl border border-gray-100 hover:border-primary-100 hover:shadow-sm transition-all">
-                    <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center mb-4">
-                      <Icon className="w-5 h-5 text-primary-600" />
+                  <div key={i} className="p-6 rounded-2xl border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: 'rgba(245,200,66,0.12)' }}>
+                      <Icon className="w-5 h-5" style={{ color: BRAND_YELLOW }} />
                     </div>
                     <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
                     <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
@@ -220,14 +232,14 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* ── FAQ ───────────────────────────────────────────────────────── */}
         <section className="py-16 sm:py-20">
           <div className="container-app max-w-3xl">
             <div className="text-center mb-10">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Quick Questions</h2>
               <p className="text-gray-500 text-sm">
                 More questions? See our{' '}
-                <Link href="/faq" className="text-primary-600 hover:underline">
+                <Link href="/faq" className="text-amber-600 hover:underline">
                   full FAQ page
                 </Link>.
               </p>
@@ -243,20 +255,28 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="py-12 bg-primary-600">
-          <div className="container-app text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">Ready to clear your challans?</h2>
-            <p className="text-primary-100 mb-6">Enter your vehicle number to start your eligibility request securely.</p>
+        {/* ── CTA ───────────────────────────────────────────────────────── */}
+        <section
+          className="py-12 relative overflow-hidden"
+          style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
+        >
+          <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+          <div className="container-app text-center relative">
+            <h2 className="text-2xl font-bold mb-3" style={{ color: BRAND_YELLOW }}>
+              Ready to clear your challans?
+            </h2>
+            <p className="text-white/60 mb-6">Enter your vehicle number to start your eligibility request securely.</p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+              style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
               Submit Your Request
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
+
       </main>
       <Footer />
     </>

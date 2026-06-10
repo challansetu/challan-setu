@@ -11,11 +11,11 @@ export function RecoveryFaqSection() {
     <section className="py-10 bg-white">
       <div className="container-app max-w-2xl">
         <div className="flex items-center justify-center gap-3 mb-6">
-          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+          <span className="w-10 h-0.5 rounded-full bg-amber-300" />
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Common Questions
           </h2>
-          <span className="w-10 h-0.5 rounded-full bg-primary-300" />
+          <span className="w-10 h-0.5 rounded-full bg-amber-300" />
         </div>
 
         <div className="space-y-2">
@@ -36,7 +36,7 @@ export function RecoveryFaqSection() {
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`flex-shrink-0 w-4 h-4 text-primary-500 transition-transform duration-200 ${
+                    className={`flex-shrink-0 w-4 h-4 text-amber-500 transition-transform duration-200 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />

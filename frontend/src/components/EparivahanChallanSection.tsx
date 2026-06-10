@@ -71,10 +71,10 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header — always visible, never scrolls away */}
-        <div className="flex-shrink-0 bg-white pt-3 pb-2 px-5 border-b border-gray-100 rounded-t-[28px] sm:rounded-t-[28px]">
+        <div className="flex-shrink-0 bg-white pt-3 pb-3 px-5 rounded-t-[28px] sm:rounded-t-[28px] border-b-2" style={{ borderColor: '#f5c842' }}>
           <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-black tracking-[0.18em] text-gray-400 uppercase">Challan Details</p>
+            <p className="text-xs font-black tracking-[0.18em] text-gray-900 uppercase">Challan Details</p>
             <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
               <X className="h-4 w-4 text-gray-500" />
             </button>
@@ -91,7 +91,7 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
               </p>
               <p className="text-xs text-gray-400 mt-1.5">Fine Amount</p>
             </div>
-            <span className={`text-xs font-black px-3 py-1.5 rounded-full tracking-wide ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
+            <span className={`text-xs font-bold ${isPaid ? "text-emerald-600" : "text-red-500"}`}>
               {isPaid ? 'PAID' : 'UNPAID'}
             </span>
           </div>
@@ -139,8 +139,8 @@ function ChallanDetailSheet({ challan, onClose }: { challan: ChallanEntry; onClo
               <div className="space-y-2">
                 {challan.detailsViolation.map((v, i) => (
                   <div key={i} className="rounded-xl bg-gray-50 px-4 py-3.5 flex items-start gap-3">
-                    <div className="mt-0.5 h-5 w-5 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[10px] font-black text-orange-500">{i + 1}</span>
+                    <div className="mt-0.5 h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(245,200,66,0.2)" }}>
+                      <span className="text-[10px] font-black" style={{ color: "#b8941c" }}>{i + 1}</span>
                     </div>
                     <p className="text-sm font-medium text-gray-800 leading-snug">{v.offence}</p>
                   </div>
@@ -210,12 +210,12 @@ function ChallanResults({ challans, confirmed }: { challans: ChallanEntry[]; con
 
   return (
     <div className="space-y-3">
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 px-5 py-5 shadow-md shadow-orange-200">
+      <div className="relative overflow-hidden rounded-2xl px-5 py-5 shadow-md" style={{ background: "#f5c842" }}>
         <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-white/10" />
         <div className="absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/10" />
         <div className="relative">
-          <h2 className="text-2xl font-black uppercase tracking-wide text-white">Challan Alert 🚨</h2>
-          <p className="mt-1 text-sm text-orange-100">
+          <h2 className="text-2xl font-black uppercase tracking-wide" style={{ color: "#1c1c24" }}>Challan Alert 🚨</h2>
+          <p className="mt-1 text-sm text-gray-800/80">
             {challans.length} violation{challans.length > 1 ? 's' : ''} found on your vehicle
           </p>
         </div>

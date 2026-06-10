@@ -84,7 +84,7 @@ export function SavingsCalculator() {
 
 
             {/* Widget card */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_2px_16px_rgba(0,0,0,0.07),0_0_0_1px_rgba(99,102,241,0.06)] overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_2px_16px_rgba(0,0,0,0.07),0_0_0_1px_rgba(245,200,66,0.08)] overflow-hidden">
 
               {/* Input */}
               <div className="p-5 border-b border-gray-100">
@@ -99,13 +99,13 @@ export function SavingsCalculator() {
                     placeholder="e.g. 2000"
                     value={inputValue}
                     onChange={handleInput}
-                    className="w-full pl-10 pr-4 py-3 text-2xl font-bold text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:bg-white transition-colors"
+                    className="w-full pl-10 pr-4 py-3 text-2xl font-bold text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent focus:bg-white transition-colors"
                   />
                 </div>
                 {/* Demo label — always rendered (opacity only, zero CLS) */}
                 <p className={`mt-2 transition-opacity duration-200 ${hasAmount ? 'opacity-0' : 'opacity-100'}`}>
                   <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                    <Sparkles className="w-2.5 h-2.5" />
+                    
                     Preview for ₹{DEMO_AMOUNT.toLocaleString('en-IN')} challan
                   </span>
                 </p>
@@ -122,23 +122,23 @@ export function SavingsCalculator() {
                 </div>
 
                 {/* ChallanSetu row */}
-                <div className="flex items-center gap-1.5 sm:gap-2 bg-accent-50 border-2 border-accent-300 rounded-xl px-3 sm:px-4 py-3 mb-3">
+                <div className="flex items-center gap-1.5 sm:gap-2 bg-gray-50 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-3 mb-3">
                   <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-900 flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden">
                       <Image src="/challan-logo.svg" alt="ChallanSetu" width={32} height={32} className="w-full h-full object-contain p-0.5" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] sm:text-sm font-bold text-gray-900 leading-none mb-0.5 sm:mb-1 mt-0.5">ChallanSetu</p>
-                      <p className="text-[9px] sm:text-[10px] text-accent-600 font-semibold leading-none whitespace-nowrap truncate py-0.5">
+                      <p className="text-[9px] sm:text-[10px] text-amber-600 font-semibold leading-none whitespace-nowrap truncate py-0.5">
                         {dispDiscountLabel}
                       </p>
                     </div>
                   </div>
-                  <span className="w-[76px] sm:w-28 text-right text-base sm:text-lg font-black text-accent-600 tabular-nums">
+                  <span className="w-[76px] sm:w-28 text-right text-base sm:text-lg font-black text-amber-600 tabular-nums">
                     {formatINR(dispOurPrice)}
                   </span>
                   <div className="w-[72px] sm:w-[88px] flex justify-end">
-                    <span className="text-[9px] sm:text-[10px] font-black bg-accent-500 text-white px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full uppercase tracking-wide whitespace-nowrap">
+                    <span className="text-[9px] sm:text-[10px] font-black px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full uppercase tracking-wide whitespace-nowrap" style={{ background: '#1c1c24', color: '#f5c842' }}>
                       ✓ Lowest
                     </span>
                   </div>
@@ -206,15 +206,19 @@ export function SavingsCalculator() {
                   </div>
 
                   {/* Filled state */}
-                  <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-accent-500 to-emerald-500 flex items-center gap-3 px-4 text-white transition-opacity duration-200 ${hasAmount ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                  <div
+                    className={`absolute inset-0 rounded-xl flex items-center gap-3 px-4 transition-opacity duration-200 ${hasAmount ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    style={{ background: '#1c1c24' }}
+                  >
                     <div className="flex-1 min-w-0">
-                      <p className="text-[11px] text-white/70 font-medium leading-none">Estimated savings up to</p>
-                      <p className="text-lg font-black tabular-nums truncate leading-tight mt-0.5">{formatINR(dispMaxSave)}</p>
+                      <p className="text-[11px] text-white/60 font-medium leading-none">Estimated savings up to</p>
+                      <p className="text-lg font-black tabular-nums truncate leading-tight mt-0.5" style={{ color: '#f5c842' }}>{formatINR(dispMaxSave)}</p>
                     </div>
                     <Link
                       href="#hero-lead-form"
                       onClick={(e) => { e.preventDefault(); document.getElementById('hero-lead-form')?.scrollIntoView({ behavior: 'smooth' }); }}
-                      className="flex-shrink-0 flex items-center gap-1 bg-white text-accent-600 text-sm font-bold px-3 py-2 rounded-xl hover:bg-accent-50 transition-colors whitespace-nowrap"
+                      className="flex-shrink-0 flex items-center gap-1 text-sm font-bold px-3 py-2 rounded-xl transition-colors whitespace-nowrap hover:-translate-y-0.5"
+                      style={{ background: '#f5c842', color: '#1c1c24' }}
                     >
                       Start request <ArrowRight className="w-4 h-4" />
                     </Link>

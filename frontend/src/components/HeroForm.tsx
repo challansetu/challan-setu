@@ -202,7 +202,7 @@ export function HeroForm({
           <Button
             type="submit"
             size="lg"
-            className="whitespace-nowrap bg-white text-gray-900 hover:bg-gray-50 focus-visible:ring-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] hover:scale-[1.02] w-full sm:w-auto font-bold"
+            className="whitespace-nowrap w-full sm:w-auto font-bold hover:scale-[1.02] hover:-translate-y-0.5 transition-all" style={{ background: "#f5c842", color: "#1c1c24", border: "none" }}
           >
             {buttonLabel ?? landingData.hero.searchButton}
             <ArrowRight className="w-5 h-5" />
@@ -215,16 +215,14 @@ export function HeroForm({
             className="group flex items-center justify-between gap-3 mt-3 mb-8 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 hover:border-white/20 transition-all duration-200"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-accent-500/20 flex items-center justify-center flex-shrink-0">
-                <Calculator className="w-3.5 h-3.5 text-accent-300" />
-              </div>
+              <Calculator className="w-6 h-6 text-amber-300 flex-shrink-0" />
               <div className="text-left">
                 <p className="text-xs font-bold text-white leading-none">Start for free</p>
-                <p className="text-[11px] text-accent-300/80 mt-0.5">Check your discount eligibility</p>
+                <p className="text-[11px] text-amber-300/80 mt-0.5">Check your discount eligibility</p>
               </div>
             </div>
             <div className="flex items-center gap-1.5 flex-shrink-0">
-              <span className="text-[11px] font-black text-accent-300 bg-accent-500/20 px-2 py-0.5 rounded-full">Up to 50% Off </span>
+              <span className="text-[11px] font-black text-amber-300">Up to 50% Off</span>
               <span className="text-white/40 group-hover:text-white/70 group-hover:translate-x-0.5 transition-all duration-200">→</span>
             </div>
           </a>
@@ -251,8 +249,8 @@ export function HeroForm({
 
             {/* Input */}
             <div className="px-5 pt-1 sm:pt-5">
-              <div className={`flex items-center rounded-2xl border-2 overflow-hidden ${overlayError ? 'border-red-400' : 'border-primary-500'}`}>
-                <div className="flex items-center gap-1.5 bg-primary-600 px-3 self-stretch">
+              <div className={`flex items-center rounded-2xl border-2 overflow-hidden ${overlayError ? 'border-red-400' : 'border-gray-900'}`}>
+                <div className="flex items-center gap-1.5 bg-gray-900 px-3 self-stretch">
                   <span className="text-base leading-none">🇮🇳</span>
                   <span className="text-xs font-bold text-white tracking-wider">IND</span>
                 </div>
@@ -312,7 +310,7 @@ export function HeroForm({
                 size="lg"
                 onClick={() => submitVehicle(overlayVehicle)}
                 disabled={!overlayVehicle.trim()}
-                className="w-full rounded-2xl h-14"
+                className="w-full rounded-2xl h-14" style={{ background: "#f5c842", color: "#1c1c24", border: "none" }}
               >
                 {buttonLabel ?? landingData.hero.searchButton}
                 <ArrowRight className="w-5 h-5" />

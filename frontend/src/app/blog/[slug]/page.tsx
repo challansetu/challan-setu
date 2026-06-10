@@ -62,7 +62,7 @@ function Block({ block }: { block: BlogBlock }) {
         <ul className="mb-4 space-y-2">
           {block.items.map((item, i) => (
             <li key={i} className="flex items-start gap-2 text-gray-700">
-              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
               {item}
             </li>
           ))}
@@ -126,7 +126,7 @@ function Block({ block }: { block: BlogBlock }) {
         <div className="my-6 space-y-4">
           {block.items.map((step, i) => (
             <div key={i} className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center mt-0.5">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full text-sm font-bold flex items-center justify-center mt-0.5" style={{ background: '#1c1c24', color: '#f5c842' }}>
                 {i + 1}
               </div>
               <div className="flex-1 pb-4 border-b border-gray-100 last:border-0">
@@ -143,10 +143,10 @@ function Block({ block }: { block: BlogBlock }) {
 
     case 'highlights':
       return (
-        <div className="my-6 bg-primary-50 rounded-xl p-5 space-y-2">
+        <div className="my-6 bg-amber-50 rounded-xl p-5 space-y-2">
           {block.items.map((item, i) => (
             <div key={i} className="flex items-start gap-2 text-gray-800 text-sm">
-              <CheckCircle2 className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               {item}
             </div>
           ))}
@@ -158,7 +158,7 @@ function Block({ block }: { block: BlogBlock }) {
         <ul className="mb-4 space-y-3">
           {block.items.map((item, i) => (
             <li key={i} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed">
-              <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+              <span className="mt-1 w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
               <span>
                 <strong className="text-gray-900">{item.label}:</strong> {item.text}
               </span>
@@ -212,7 +212,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <main className="flex-1">
 
         {/* Article header */}
-        <section className="bg-gradient-hero text-white py-12 sm:py-16">
+        <section className="relative overflow-hidden text-white py-12 sm:py-16" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
           <div className="container-app max-w-3xl">
             {/* Back link */}
             <Link
@@ -279,7 +279,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             )}
 
             {/* CTA box */}
-            <div className="rounded-2xl bg-gradient-hero text-white p-7 sm:p-9">
+            <div className="rounded-2xl text-white p-7 sm:p-9" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
               <p className="text-lg font-black mb-3">Ready to check your challan?</p>
               <p
                 className="text-white/80 text-sm leading-relaxed mb-6"
@@ -287,7 +287,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               />
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 bg-white text-primary-700 font-bold text-sm px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5"
+                style={{ background: '#f5c842', color: '#1c1c24' }}
               >
                 Check Eligibility Free <ArrowRight className="w-4 h-4" />
               </Link>
@@ -300,7 +301,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="pb-12 container-app max-w-3xl">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-amber-600 hover:text-amber-700 font-semibold transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Back to all articles
           </Link>

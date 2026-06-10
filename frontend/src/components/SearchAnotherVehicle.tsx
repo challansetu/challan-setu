@@ -43,6 +43,12 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
   const [overlayVehicle, setOverlayVehicle] = useState('');
   const [overlayError, setOverlayError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Real-time validation helpers
+  const cleanedVehicle = overlayVehicle.toUpperCase().replace(/[\s\-./]/g, '');
+  const isValidVehicle = VEHICLE_NUMBER_REGEX.test(cleanedVehicle);
+  const hasTyped = cleanedVehicle.length > 0;
+  const showFormatHint = hasTyped && !isValidVehicle && !overlayError;
   const [submitted, setSubmitted] = useState(false);
   const [submittedVehicle, setSubmittedVehicle] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -143,8 +149,8 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
         <Logo scheme="dark" height={44} />
         <div className="mt-10 relative flex items-center justify-center">
           <div className="w-16 h-16 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin" />
-          <div className="absolute w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
-            <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <div className="absolute w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+            <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -161,10 +167,10 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
       {/* Vehicle info card */}
       <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="flex">
-          <div className="w-1 flex-shrink-0 bg-blue-500" />
+          <div className="w-1 flex-shrink-0" style={{ background: "#f5c842" }} />
           <div className="flex-1 px-5 py-5 flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black tracking-[0.22em] text-blue-600 uppercase mb-2">
+              <p className="text-[10px] font-black tracking-[0.22em] text-[#b8941c] uppercase mb-2">
                 Vehicle Information
               </p>
               <p className="text-2xl font-black leading-none tracking-widest text-gray-900 break-all">
@@ -176,7 +182,7 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
               onClick={openOverlay}
               aria-label="Search another vehicle"
               title="Search another vehicle"
-              className="flex-shrink-0 text-gray-400 hover:text-blue-600 transition-colors p-1"
+              className="flex-shrink-0 text-gray-400 hover:text-amber-600 transition-colors p-1"
             >
               <Pencil className="w-4 h-4" />
             </button>
@@ -204,8 +210,8 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
 
             {/* Input */}
             <div className="px-5 pt-1 sm:pt-5">
-              <div className={`flex items-center rounded-2xl border-2 overflow-hidden ${overlayError ? 'border-red-400' : 'border-primary-500'}`}>
-                <div className="flex items-center gap-1.5 bg-primary-600 px-3 self-stretch">
+              <div className={`flex items-center rounded-2xl border-2 overflow-hidden ${overlayError ? 'border-red-400' : 'border-gray-900'}`}>
+                <div className="flex items-center gap-1.5 bg-gray-900 px-3 self-stretch">
                   <span className="text-base leading-none">🇮🇳</span>
                   <span className="text-xs font-bold text-white tracking-wider">IND</span>
                 </div>
@@ -228,6 +234,12 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
               </div>
               {overlayError ? (
                 <p className="mt-2 text-sm text-red-500 px-1">{overlayError}</p>
+              ) : isValidVehicle ? (
+                <p className="mt-2 text-sm text-green-600 px-1 flex items-center gap-1">
+                  <span>✓</span> Looks good!
+                </p>
+              ) : showFormatHint ? (
+                <p className="mt-2 text-sm text-amber-600 px-1">Format: DL 7S BY 1234</p>
               ) : (
                 <p className="mt-2 text-sm text-gray-400 px-1">Same as your vehicle registration number</p>
               )}
@@ -240,8 +252,8 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={!overlayVehicle.trim() || loading}
-                className="w-full h-14 rounded-2xl bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2 hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                disabled={!isValidVehicle || loading}
+                className="w-full h-14 rounded-2xl bg-[#f5c842] text-[#1c1c24] font-bold text-base flex items-center justify-center gap-2 hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? (
                   <>

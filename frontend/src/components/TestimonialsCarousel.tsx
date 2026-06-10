@@ -112,15 +112,15 @@ export function TestimonialsCarousel() {
   };
 
   return (
-    <section className="py-10 bg-gray-950 overflow-hidden">
+    <section className="py-10 overflow-hidden" style={{ background: "linear-gradient(135deg, #fffbeb 0%, #fef9f0 50%, #fffbeb 100%)" }}>
       <div className="container-app">
 
         {/* Heading */}
         <div className="mb-8 sm:mb-12 px-1">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary-400">
+          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-amber-500">
             Happy customers
           </p>
-          <h2 className="text-xl sm:text-2xl font-bold text-white leading-none">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
             What our customers say
           </h2>
         </div>
@@ -165,8 +165,8 @@ export function TestimonialsCarousel() {
                 onClick={() => handleDotClick(i)}
                 aria-label={`Review ${i + 1}`}
                 className={`rounded-full transition-all duration-300 ${active === i
-                  ? 'w-5 h-[7px] bg-primary-400'
-                  : 'w-[7px] h-[7px] bg-white/20 hover:bg-white/40'
+                  ? 'w-5 h-[7px] bg-amber-400'
+                  : 'w-[7px] h-[7px] bg-gray-300 hover:bg-gray-400'
                   }`}
               />
             ))}

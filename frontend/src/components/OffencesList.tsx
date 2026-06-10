@@ -69,7 +69,7 @@ export function OffencesList({ violations }: { violations: CityViolation[] }) {
         <div className="mt-4 text-center">
           <button
             onClick={() => setExpanded((p) => !p)}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-primary-200 text-primary-600 text-sm font-semibold hover:bg-primary-50 transition-colors duration-200"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors duration-200"
           >
             {expanded ? 'Show less ↑' : `Show all ${violations.length} offences ↓`}
           </button>
