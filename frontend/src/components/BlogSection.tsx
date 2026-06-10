@@ -39,8 +39,8 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
         </div>
       </div>
 
-      {/* Scroll track — lives outside container-app so nothing clips pointer events */}
-      <div className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Scroll track — constrained to same width as header */}
+      <div className="max-w-7xl mx-auto flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {posts.map((post) => (
           <article
             key={post.slug}
