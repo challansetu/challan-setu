@@ -20,6 +20,7 @@ import { BlogSection } from '@/components/BlogSection';
 // import { WallOfDrivers } from '@/components/WallOfDrivers';
 import { StatesChallanSection } from '@/components/StatesChallanSection';
 import { StolenVehicleBanner } from '@/components/StolenVehicleBanner';
+import { CtaScrollButton } from '@/components/CtaScrollButton';
 
 const SavingsCalculator = dynamic(
   () => import('@/components/SavingsCalculator').then((m) => ({ default: m.SavingsCalculator })),
@@ -191,14 +192,7 @@ export default async function LandingPage() {
                 <p className="text-white/60 mb-8 max-w-lg mx-auto">
                   {landingData.cta.subtitle}
                 </p>
-                <a
-                  href="#hero-lead-form"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5"
-                  style={{ background: '#f5c842', color: '#1c1c24' }}
-                >
-                  <Scale className="w-4 h-4" />
-                  Settle My Challan
-                </a>
+                <CtaScrollButton label="Settle My Challan" />
               </div>
             </section>
 
