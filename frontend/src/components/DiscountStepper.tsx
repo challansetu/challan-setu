@@ -9,8 +9,8 @@ const BRAND_YELLOW = '#f5c842';
 
 export function DiscountStepper() {
   return (
-    <section className="py-10 md:pl-8 lg:pl-10">
-      <div className="w-full">
+    <section className="py-10 md:flex md:justify-end">
+      <div className="w-full md:max-w-sm">
         <div className="mb-6">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">How it works</h2>
           <p className="text-gray-500 text-sm leading-relaxed mt-3">What happens after you submit your vehicle number.</p>
