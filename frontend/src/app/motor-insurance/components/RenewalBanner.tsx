@@ -16,19 +16,40 @@ const SLIDE_MS = 4000;
 
 export function RenewalBanner() {
   const [active, setActive] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isPausedRef = useRef(false);
+
+  const scrollTo = (i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: el.clientWidth * i, behavior: 'smooth' });
+  };
 
   const startTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => setActive((p) => (p + 1) % SLIDES.length), SLIDE_MS);
+    timerRef.current = setInterval(() => {
+      if (isPausedRef.current) return;
+      scrollTo((active + 1) % SLIDES.length);
+    }, SLIDE_MS);
   };
 
   useEffect(() => {
     startTimer();
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [active]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const goTo = (i: number) => { setActive(i); startTimer(); };
+  // Sync dot with scroll position
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const idx = Math.round(el.scrollLeft / el.clientWidth);
+      setActive(idx);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <section className="pt-4 pb-8 bg-white">
@@ -45,38 +66,32 @@ export function RenewalBanner() {
               className="block rounded-2xl overflow-hidden"
             >
               <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  fill
-                  className="object-fill"
-                  unoptimized
-                />
+                <Image src={slide.src} alt={slide.alt} fill className="object-fill" unoptimized />
               </div>
             </Link>
           ))}
         </div>
 
-        {/* ── Mobile: carousel ─────────────────────────────────────── */}
+        {/* ── Mobile: swipeable scroll-snap carousel ───────────────── */}
         <div className="sm:hidden">
-          <div className="relative overflow-hidden rounded-2xl">
-            {SLIDES.map((slide, i) => (
+          <div
+            ref={scrollRef}
+            className="flex overflow-x-auto rounded-2xl"
+            style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}
+            onTouchStart={() => { isPausedRef.current = true; }}
+            onTouchEnd={() => { isPausedRef.current = false; }}
+          >
+            {SLIDES.map((slide) => (
               <Link
                 key={slide.src}
                 href={slide.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`block transition-all duration-500 ${active === i ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}
+                className="shrink-0 w-full block"
+                style={{ scrollSnapAlign: 'start' }}
               >
-                <div className="relative w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '16/9' }}>
-                  <Image
-                    src={slide.src}
-                    alt={slide.alt}
-                    fill
-                    className="object-fill"
-                    unoptimized
-                    priority={i === 0}
-                  />
+                <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                  <Image src={slide.src} alt={slide.alt} fill className="object-fill" unoptimized priority />
                 </div>
               </Link>
             ))}
@@ -84,7 +99,10 @@ export function RenewalBanner() {
 
           <div className="flex justify-center gap-2 mt-3">
             {SLIDES.map((_, i) => (
-              <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
+              <button
+                key={i}
+                onClick={() => scrollTo(i)}
+                aria-label={`Slide ${i + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-300 ${active === i ? 'w-5 bg-amber-500' : 'w-1.5 bg-gray-300'}`}
               />
             ))}
