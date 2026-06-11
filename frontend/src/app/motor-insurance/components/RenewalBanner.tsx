@@ -31,7 +31,7 @@ export function RenewalBanner() {
   const goTo = (i: number) => { setActive(i); startTimer(); };
 
   return (
-    <section className="pt-4 bg-white">
+    <section className="pt-4 pb-8 bg-white">
       <div className="container-app max-w-5xl">
 
         {/* ── Desktop: both banners side by side ───────────────────── */}
