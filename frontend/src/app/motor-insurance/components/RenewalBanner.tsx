@@ -9,13 +9,14 @@ const CAR_URL         = 'https://ci.policybazaar.com/v1?utm_source=ChallanSetu';
 const COMMERCIAL_URL  = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=motor_insurance_page&utm_medium=banner';
 const GENERAL_URL     = 'https://www.policybazaar.com/motor-insurance/?utm_source=ChallanSetu';
 
-const TOTAL = 4;
+const TOTAL = 2; // TODO: change to 4 after adding pb-banner-commercial1.jpg + pb-banner-commercial2.jpg
 const SLIDE_MS = 4000;
 
 const IMAGE_SLIDES = [
-  { src: '/images/pb-banner-car.jpg',          alt: 'Car insurance expired – Renew now',           href: CAR_URL },
-  { src: '/images/pb-banner-commercial1.jpg',  alt: 'Renew commercial vehicle insurance today',    href: COMMERCIAL_URL },
-  { src: '/images/pb-banner-commercial2.jpg',  alt: 'Compare & save on commercial vehicle',        href: COMMERCIAL_URL },
+  { src: '/images/pb-banner-car.jpg', alt: 'Car insurance expired – Renew now', href: CAR_URL },
+  // TODO: uncomment once images are saved to public/images/
+  // { src: '/images/pb-banner-commercial1.jpg', alt: 'Renew commercial vehicle insurance today', href: COMMERCIAL_URL },
+  // { src: '/images/pb-banner-commercial2.jpg', alt: 'Compare & save on commercial vehicle',     href: COMMERCIAL_URL },
 ];
 
 export function RenewalBanner() {
@@ -66,7 +67,7 @@ export function RenewalBanner() {
             href={GENERAL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`block rounded-2xl transition-all duration-500 ${active === 3 ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}
+            className={`block rounded-2xl transition-all duration-500 ${active === 1 ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}
             style={{ background: '#f0f6ff' }}
           >
             <div className="px-6 py-5 sm:px-10 sm:py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl" style={{ background: '#f0f6ff' }}>
