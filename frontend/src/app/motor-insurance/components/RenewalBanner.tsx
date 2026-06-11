@@ -6,11 +6,11 @@ import { useState, useEffect, useRef } from 'react';
 // import { RENEWAL_BANNER_TAGS, BRAND_BLUE } from '../data'; // unused while HTML card is commented
 
 const CAR_URL        = 'https://ci.policybazaar.com/v1?utm_source=ChallanSetu';
-const COMMERCIAL_URL = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=motor_insurance_page&utm_medium=banner';
+const COMMERCIAL_URL = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=&utm_medium';
 
 const SLIDES = [
-  { src: '/images/pb-banner-car.jpg',        alt: 'Car insurance expired – Renew now',          href: CAR_URL },
-  { src: '/images/pb-banner-commercial.jpg', alt: 'Renew car insurance – Compare & save 85%',   href: COMMERCIAL_URL },
+  { src: '/images/pb-banner-cv1.webp', alt: 'Renew your commercial vehicle insurance today',  href: CAR_URL },
+  { src: '/images/pb-banner-cv2.webp', alt: 'Compare & save up to 85% on commercial vehicle', href: COMMERCIAL_URL },
 ];
 
 const SLIDE_MS = 4000;
@@ -45,12 +45,12 @@ export function RenewalBanner() {
               rel="noopener noreferrer"
               className={`block transition-all duration-500 ${active === i ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}
             >
-              <div className="relative w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '16/5' }}>
+              <div className="relative w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '16/9' }}>
                 <Image
                   src={slide.src}
                   alt={slide.alt}
                   fill
-                  className="object-cover"
+                  className="object-fill"
                   unoptimized
                   priority={i === 0}
                 />
