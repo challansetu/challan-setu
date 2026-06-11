@@ -20,6 +20,7 @@ import { BlogSection } from '@/components/BlogSection';
 // import { WallOfDrivers } from '@/components/WallOfDrivers';
 import { StatesChallanSection } from '@/components/StatesChallanSection';
 import { StolenVehicleBanner } from '@/components/StolenVehicleBanner';
+import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { CtaScrollButton } from '@/components/CtaScrollButton';
 
 const SavingsCalculator = dynamic(
@@ -129,8 +130,8 @@ export default async function LandingPage() {
               </div>
             </section>
 
-            {/* Stolen Vehicle Recovery Banner */}
-            <StolenVehicleBanner />
+            {/* Insurance Banner */}
+            <RenewalBanner />
 
             {/* Savings Calculator + How it Works — side by side on desktop */}
             <section className="bg-surface-50">
@@ -153,6 +154,9 @@ export default async function LandingPage() {
 
             {/* States Challan */}
             <StatesChallanSection />
+
+            {/* Stolen Vehicle Recovery Banner */}
+            <StolenVehicleBanner />
 
             {/* Trust Stats */}
             <section className="py-10 bg-white border-y border-gray-100">
