@@ -106,7 +106,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Why Trust Us */}
-            <section className="pt-4 pb-10 bg-white">
+            <section className="pt-4 pb-4 bg-white">
               <div className="container-app">
                 <div className="text-left mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">
