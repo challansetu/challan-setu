@@ -151,9 +151,9 @@ export default function ThankYouPage({
                 {/* Insurance FOMO */}
                 <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
                   <div className="px-4 pt-4 pb-2">
-                    <p className="text-sm font-black text-gray-900">
+                    <h2 className="text-sm font-black text-gray-900">
                       🚨 Expired insurance can get you <span className="text-red-600">another challan</span>
-                    </p>
+                    </h2>
                     <p className="text-xs text-gray-500 mt-0.5">
                       No valid insurance = ₹2,000 fine. Renew in 2 minutes.
                     </p>
