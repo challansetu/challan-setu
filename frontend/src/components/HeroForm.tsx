@@ -267,7 +267,9 @@ export function HeroForm({
                   placeholder="e.g. DL 7S BY 5194"
                   maxLength={VEHICLE_NUMBER_MAX_LENGTH + 3}
                   autoComplete="off"
-                  autoCapitalize="characters"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                   className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent"
                 />
               </div>
