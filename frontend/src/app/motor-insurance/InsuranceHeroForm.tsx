@@ -77,7 +77,11 @@ export function InsuranceHeroForm() {
   const animatedText = useTypingPlaceholder(!focused && !value);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(formatVehicleNumber(e.target.value));
+    // IMPORTANT: never transform the value here. Android keyboards (Gboard)
+    // compose text internally; any programmatic change (uppercase, space
+    // insertion) desyncs the composition buffer and the next keystroke wipes
+    // the field. Store raw, display uppercase via CSS, normalize on blur/submit.
+    setValue(e.target.value);
     if (error) setError('');
   };
 
@@ -114,11 +118,11 @@ export function InsuranceHeroForm() {
           value={value}
           onChange={handleChange}
           onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
+          onBlur={() => { setFocused(false); setValue((v) => formatVehicleNumber(v)); }}
           placeholder={animatedText || 'MH 02 AB 1234'}
           className="flex-1 py-4 text-[16px] sm:text-lg font-bold text-gray-900 bg-transparent outline-none border-none placeholder:text-gray-300 placeholder:font-normal uppercase tracking-[0.1em] min-w-0"
           maxLength={13}
-          autoCapitalize="characters"
+          autoCapitalize="off"
           autoCorrect="off"
           spellCheck={false}
           inputMode="text"

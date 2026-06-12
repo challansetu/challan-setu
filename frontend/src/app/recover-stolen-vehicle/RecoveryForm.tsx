@@ -98,10 +98,15 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
 
       <input
         value={vehicle}
-        onChange={(e) => setVehicle(e.target.value.toUpperCase())}
+        // Never transform value in onChange — desyncs Android keyboard
+        // composition and wipes the field. Display uppercase via CSS;
+        // handleSubmit already uppercases before sending.
+        onChange={(e) => setVehicle(e.target.value)}
         placeholder="Vehicle number (e.g. DL 7S BY 5194)"
-        autoCapitalize="characters"
-        className={inputCls}
+        autoCapitalize="off"
+        autoCorrect="off"
+        spellCheck={false}
+        className={`${inputCls} uppercase placeholder:normal-case`}
       />
 
       {/* Phone */}

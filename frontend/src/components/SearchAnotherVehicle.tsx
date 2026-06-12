@@ -220,16 +220,24 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
                   type="text"
                   value={overlayVehicle}
                   onChange={(e) => {
-                    setOverlayVehicle(formatVehicleNumber(e.target.value));
+                    // IMPORTANT: never transform the value here. Android keyboards
+                    // (Gboard) compose text internally; any programmatic change
+                    // (uppercase, space insertion) desyncs the composition buffer
+                    // and the next keystroke wipes the field. Store raw, display
+                    // uppercase via CSS, normalize on blur/submit.
+                    setOverlayVehicle(e.target.value);
                     if (overlayError) setOverlayError('');
                   }}
+                  onBlur={() => setOverlayVehicle((v) => formatVehicleNumber(v))}
                   onKeyDown={(e) => e.key === 'Enter' && !loading && handleSubmit()}
                   placeholder="e.g. DL 7S BY 5194"
                   maxLength={VEHICLE_NUMBER_MAX_LENGTH + 3}
                   autoComplete="off"
-                  autoCapitalize="characters"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                   disabled={loading}
-                  className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent disabled:opacity-50"
+                  className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent disabled:opacity-50 uppercase placeholder:normal-case"
                 />
               </div>
               {overlayError ? (
