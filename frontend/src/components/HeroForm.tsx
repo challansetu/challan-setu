@@ -287,6 +287,21 @@ export function HeroForm({
               )}
             </div>
 
+            {/* CTA — right below input on mobile so the keyboard never hides it;
+                ordered last (bottom) on desktop modal */}
+            <div className="p-5 pt-4 border-gray-100 sm:order-last sm:border-t sm:mt-4">
+              <Button
+                type="button"
+                size="lg"
+                onClick={() => submitVehicle(overlayVehicle)}
+                disabled={!overlayVehicle.trim()}
+                className="w-full rounded-2xl h-14" style={{ background: "#f5c842", color: "#1c1c24", border: "none" }}
+              >
+                {buttonLabel ?? landingData.hero.searchButton}
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </div>
+
             {/* Recent searches */}
             {recentVehicles.length > 0 && (
               <div className="flex-1 overflow-y-auto mt-4">
@@ -311,20 +326,6 @@ export function HeroForm({
             )}
 
             {recentVehicles.length === 0 && <div className="flex-1 sm:hidden" />}
-
-            {/* CTA */}
-            <div className="p-5 border-t border-gray-100 sm:mt-4">
-              <Button
-                type="button"
-                size="lg"
-                onClick={() => submitVehicle(overlayVehicle)}
-                disabled={!overlayVehicle.trim()}
-                className="w-full rounded-2xl h-14" style={{ background: "#f5c842", color: "#1c1c24", border: "none" }}
-              >
-                {buttonLabel ?? landingData.hero.searchButton}
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
           </div>
         </div>,
         document.body,

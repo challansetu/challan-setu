@@ -253,10 +253,9 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
               )}
             </div>
 
-            <div className="flex-1 sm:hidden" />
-
-            {/* CTA */}
-            <div className="p-5 border-t border-gray-100 sm:mt-6">
+            {/* CTA — right below input on mobile so the keyboard never hides it;
+                ordered last (bottom) on desktop modal */}
+            <div className="p-5 pt-4 border-gray-100 sm:order-last sm:border-t sm:mt-6">
               <button
                 type="button"
                 onClick={handleSubmit}
@@ -276,6 +275,8 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
                 )}
               </button>
             </div>
+
+            <div className="flex-1 sm:hidden" />
           </div>
         </div>,
         document.body,
