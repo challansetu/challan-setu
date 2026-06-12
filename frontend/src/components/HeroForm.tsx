@@ -260,9 +260,11 @@ export function HeroForm({
                   type="text"
                   value={overlayVehicle}
                   onChange={(e) => {
-                    setOverlayVehicle(formatVehicleNumber(e.target.value));
+                    const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+                    setOverlayVehicle(raw);
                     if (overlayError) setOverlayError('');
                   }}
+                  onBlur={() => setOverlayVehicle((v) => formatVehicleNumber(v))}
                   onKeyDown={(e) => e.key === 'Enter' && submitVehicle(overlayVehicle)}
                   placeholder="e.g. DL 7S BY 5194"
                   maxLength={VEHICLE_NUMBER_MAX_LENGTH + 3}
@@ -270,6 +272,7 @@ export function HeroForm({
                   autoCorrect="off"
                   autoCapitalize="off"
                   spellCheck={false}
+                  inputMode="text"
                   className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent"
                 />
               </div>
