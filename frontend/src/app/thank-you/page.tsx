@@ -158,7 +158,7 @@ export default function ThankYouPage({
                       No valid insurance = ₹2,000 fine. Renew in 2 minutes.
                     </p>
                   </div>
-                  <RenewalBanner className="bg-white" />
+                  <RenewalBanner className="bg-white pb-4" />
                 </div>
 
               </div>
