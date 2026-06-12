@@ -4,12 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 
-const CAR_URL        = 'https://ci.policybazaar.com/v1?utm_source=ChallanSetu';
-const COMMERCIAL_URL = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=&utm_medium';
+const COMMERCIAL_URL  = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=&utm_medium';
+const TWO_WHEELER_URL = 'https://twowheeler.policybazaar.com/?utm_source=ChallanSetu';
 
 const SLIDES = [
-  { src: '/images/pb-banner-cv1.webp', alt: 'Renew your commercial vehicle insurance today',  href: CAR_URL },
   { src: '/images/pb-banner-cv2.webp', alt: 'Compare & save up to 85% on commercial vehicle', href: COMMERCIAL_URL },
+  { src: '/images/pb-banner-2w.jpg',   alt: 'Buy two-wheeler insurance starting ₹1.3/day',    href: TWO_WHEELER_URL },
 ];
 
 const SLIDE_MS = 4000;
