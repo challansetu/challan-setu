@@ -260,8 +260,12 @@ export function HeroForm({
                   type="text"
                   value={overlayVehicle}
                   onChange={(e) => {
-                    const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
-                    setOverlayVehicle(raw);
+                    // IMPORTANT: never transform the value here. Android keyboards
+                    // (Gboard) compose text internally; any programmatic change
+                    // (uppercase, space insertion) desyncs the composition buffer
+                    // and the next keystroke wipes the field. Store raw, display
+                    // uppercase via CSS, normalize on blur/submit.
+                    setOverlayVehicle(e.target.value);
                     if (overlayError) setOverlayError('');
                   }}
                   onBlur={() => setOverlayVehicle((v) => formatVehicleNumber(v))}
@@ -273,7 +277,7 @@ export function HeroForm({
                   autoCapitalize="off"
                   spellCheck={false}
                   inputMode="text"
-                  className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent"
+                  className="flex-1 py-4 px-4 text-base font-semibold text-gray-900 placeholder-gray-400 outline-none bg-transparent uppercase placeholder:normal-case"
                 />
               </div>
               {overlayError ? (
