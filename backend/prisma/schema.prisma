@@ -50,9 +50,6 @@ model User {
 
   vehicles        Vehicle[]
   challanSearches ChallanSearch[]
-  carts           Cart[]
-  orders          Order[]
-  promises        SafeDrivingPromise[]
   adminNotes      AdminNote[]
   statusHistory   UserStatusHistory[]
   auditLogs       AuditLog[]
@@ -163,11 +160,8 @@ model Challan {
   createdAt               DateTime         @default(now())
   updatedAt               DateTime         @updatedAt
 
-  search      ChallanSearch    @relation(fields: [searchId], references: [id])
-  offences    ChallanOffence[]
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-
+  search   ChallanSearch    @relation(fields: [searchId], references: [id])
+  offences ChallanOffence[]
 
   @@unique([searchId, challanNo])
   @@index([vehicleNumber])
@@ -193,7 +187,7 @@ enum SupportedRegion {
 
 // ─── Challan Offences ───────────────────────────────
 model ChallanOffence {
-  id        String  @id @default(cuid())
+  id        String @id @default(cuid())
   challanId String
   offence   String
   penalty   Float?
@@ -201,216 +195,6 @@ model ChallanOffence {
   challan Challan @relation(fields: [challanId], references: [id], onDelete: Cascade)
 
   @@map("challan_offences")
-}
-
-// ─── Carts ──────────────────────────────────────────
-model Cart {
-  id        String     @id @default(cuid())
-  userId    String
-  status    CartStatus @default(ACTIVE)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  user  User       @relation(fields: [userId], references: [id])
-  items CartItem[]
-  order Order?
-
-  @@index([userId, status])
-  @@map("carts")
-}
-
-enum CartStatus {
-  ACTIVE
-  CHECKED_OUT
-  EXPIRED
-}
-
-// ─── Cart Items ─────────────────────────────────────
-model CartItem {
-  id        String   @id @default(cuid())
-  cartId    String
-  challanId String
-  amount    Float
-  createdAt DateTime @default(now())
-
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  challan Challan @relation(fields: [challanId], references: [id])
-
-  @@unique([cartId, challanId])
-  @@map("cart_items")
-}
-
-// ─── Orders ─────────────────────────────────────────
-model Order {
-  id              String      @id @default(cuid())
-  userId          String
-  cartId          String      @unique
-  orderNumber     String      @unique
-  grossAmount     Float
-  discountAmount  Float       @default(0)
-  finalAmount     Float
-  currency        String      @default("INR")
-  status          OrderStatus    @default(CREATED)
-  trackingStatus  TrackingStatus @default(ORDER_CREATED)
-  trackingHistory Json?
-  pricingSnapshot Json?
-  itemCount       Int
-  vehicleNumber   String?
-  discountPercent Float       @default(0)
-  platformFee     Float       @default(0)
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-
-  user       User               @relation(fields: [userId], references: [id])
-  cart       Cart               @relation(fields: [cartId], references: [id])
-  payment    Payment?
-  settlement Settlement?
-  items      OrderItem[]
-  promise    SafeDrivingPromise?
-
-  @@index([userId])
-  @@index([orderNumber])
-  @@index([status])
-  @@index([createdAt])
-  @@index([status, createdAt])
-  @@map("orders")
-}
-
-enum OrderStatus {
-  CREATED
-  PAYMENT_PENDING
-  PAYMENT_COMPLETED
-  PAYMENT_FAILED
-  SETTLED
-  SETTLEMENT_FAILED
-  CANCELLED
-  REFUNDED
-}
-
-enum TrackingStatus {
-  ORDER_CREATED
-  LAWYER_ASSIGNED
-  UNDER_REVIEW
-  IN_PROGRESS
-  SETTLED
-  REFLECTION_PENDING
-}
-
-// ─── Order Items ─────────────────────────────────────
-model OrderItem {
-  id        String   @id @default(cuid())
-  orderId   String
-  challanId String
-  challanNo String
-  amount    Float
-  createdAt DateTime @default(now())
-
-  order   Order   @relation(fields: [orderId], references: [id])
-  challan Challan @relation(fields: [challanId], references: [id])
-
-  @@unique([orderId, challanId])
-  @@map("order_items")
-}
-
-// ─── Payments ───────────────────────────────────────
-model Payment {
-  id                  String        @id @default(cuid())
-  orderId             String        @unique
-  razorpayOrderId     String        @unique
-  razorpayPaymentId   String?
-  razorpaySignature   String?
-  amount              Float
-  currency            String        @default("INR")
-  status              PaymentStatus @default(CREATED)
-  method              String?
-  errorCode           String?
-  errorDescription    String?
-  attempts            Int           @default(0)
-  gatewayName         String        @default("razorpay")
-  failureReason       String?
-  refundStatus        RefundStatus?
-  refundedAmount      Float?
-  refundedAt          DateTime?
-  gatewayRefundId     String?
-  gatewayResponse     Json?
-  webhookPayload      Json?
-  paidAt              DateTime?
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
-
-  order Order @relation(fields: [orderId], references: [id])
-
-  @@index([razorpayOrderId])
-  @@index([razorpayPaymentId])
-  @@index([status])
-  @@index([createdAt])
-  @@map("payments")
-}
-
-enum PaymentStatus {
-  CREATED
-  AUTHORIZED
-  CAPTURED
-  FAILED
-  REFUNDED
-}
-
-enum RefundStatus {
-  PENDING
-  PROCESSED
-  FAILED
-}
-
-// ─── Settlements ────────────────────────────────────
-model Settlement {
-  id                            String           @id @default(cuid())
-  orderId                       String           @unique
-  status                        SettlementStatus @default(PENDING)
-  attempts                      Int              @default(0)
-  lastAttemptAt                 DateTime?
-  startedAt                     DateTime?
-  completedAt                   DateTime?
-  governmentStatusLastCheckedAt DateTime?
-  proofUrl                      String?
-  receiptUrl                    String?
-  assignedTo                    String?
-  settlementNotes               String?
-  settledAt                     DateTime?
-  failureReason                 String?
-  externalRef                   String?
-  createdAt                     DateTime         @default(now())
-  updatedAt                     DateTime         @updatedAt
-
-  order              Order               @relation(fields: [orderId], references: [id])
-
-  @@index([status])
-  @@map("settlements")
-}
-
-enum SettlementStatus {
-  PENDING
-  PROCESSING
-  SUBMITTED
-  SETTLED
-  FAILED
-  MANUAL_REVIEW
-}
-
-// ─── Safe Driving Promise ────────────────────────────
-model SafeDrivingPromise {
-  id             String   @id @default(cuid())
-  userId         String
-  orderId        String   @unique
-  acceptedAt     DateTime @default(now())
-  ipAddress      String?
-  userAgent      String?
-  promiseVersion Int      @default(1)
-
-  user  User  @relation(fields: [userId], references: [id])
-  order Order @relation(fields: [orderId], references: [id])
-
-  @@index([userId])
-  @@map("safe_driving_promises")
 }
 
 // ─── Lead Challans (per-challan CRM tracking) ───────
@@ -444,18 +228,18 @@ model Lead {
   leadStatus       String   @default("new")
 
   // CRM fields
-  crmStatus        String   @default("new")      // new | follow_up | converted | dead
-  paymentStatus    String   @default("pending")   // pending | payment_done
-  challanSettled   String   @default("no")        // yes | no | initiated
-  totalChallan     Int?
-  paidAmount       Int?
-  settledAmount    Int?
-  discountGiven    Int?
+  crmStatus      String @default("new") // new | follow_up | converted | dead
+  paymentStatus  String @default("pending") // pending | payment_done
+  challanSettled String @default("no") // yes | no | initiated
+  totalChallan   Int?
+  paidAmount     Int?
+  settledAmount  Int?
+  discountGiven  Int?
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  leadChallans     LeadChallan[]
+  leadChallans LeadChallan[]
 
   @@index([mobileNumber])
   @@index([vehicleNumber])

@@ -17,10 +17,6 @@ import { UsersModule } from './users/users.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { ChallansModule } from './challans/challans.module';
 import { PricingModule } from './pricing/pricing.module';
-import { CartsModule } from './carts/carts.module';
-import { OrdersModule } from './orders/orders.module';
-import { PaymentsModule } from './payments/payments.module';
-import { SettlementsModule } from './settlements/settlements.module';
 import { AdminModule } from './admin/admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { QueueModule } from './queue/queue.module';
@@ -54,10 +50,6 @@ import { QrScansModule } from './qr-scans/qr-scans.module';
     VehiclesModule,
     ChallansModule,
     PricingModule,
-    CartsModule,
-    OrdersModule,
-    PaymentsModule,
-    SettlementsModule,
     AdminModule,
     NotificationsModule,
     QueueModule,

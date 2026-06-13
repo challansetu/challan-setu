@@ -5,17 +5,15 @@ import useSWR from "swr";
 import {
   Users,
   UserPlus,
-  IndianRupee,
-  ShoppingCart,
-  Clock,
-  XCircle,
+  Inbox,
+  Search,
   Activity,
 } from "lucide-react";
 import { adminApi } from "@/lib/admin-api";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { SkeletonCard, SkeletonTable } from "@/components/admin/ui/Skeleton";
-import { UserStatusBadge, OrderStatusBadge } from "@/components/admin/ui/Badge";
-import { formatCurrency, formatDateTime, formatDate } from "@/lib/utils";
+import { UserStatusBadge } from "@/components/admin/ui/Badge";
+import { formatDateTime } from "@/lib/utils";
 import type { DashboardData } from "@/types/admin";
 
 function DashboardPage() {
@@ -29,7 +27,7 @@ function DashboardPage() {
       <div className="space-y-6">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: 4 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}
         </div>
@@ -69,33 +67,18 @@ function DashboardPage() {
           value={s?.newUsersToday?.toLocaleString() ?? "-"}
         />
         <StatCard
-          icon={<IndianRupee className="h-6 w-6 text-emerald-600" />}
-          iconBgClass="bg-emerald-100"
-          label="Revenue Today"
-          value={s?.revenueToday != null ? formatCurrency(s.revenueToday) : "-"}
-          subtitle={`Total: ${s?.totalRevenue != null ? formatCurrency(s.totalRevenue) : "-"}`}
+          icon={<Inbox className="h-6 w-6 text-indigo-600" />}
+          iconBgClass="bg-indigo-100"
+          label="Leads Today"
+          value={s?.leadsToday?.toLocaleString() ?? "-"}
+          subtitle={`Total: ${s?.totalLeads?.toLocaleString() ?? "-"}`}
           trendPositive
         />
         <StatCard
-          icon={<ShoppingCart className="h-6 w-6 text-purple-600" />}
+          icon={<Search className="h-6 w-6 text-purple-600" />}
           iconBgClass="bg-purple-100"
-          label="Orders Today"
-          value={s?.ordersToday?.toLocaleString() ?? "-"}
-          subtitle={`Total: ${s?.totalOrders?.toLocaleString() ?? "-"}`}
-        />
-        <StatCard
-          icon={<Clock className="h-6 w-6 text-yellow-600" />}
-          iconBgClass="bg-yellow-100"
-          label="Pending Settlements"
-          value={s?.pendingSettlements?.toLocaleString() ?? "-"}
-          trendPositive={s?.pendingSettlements === 0}
-        />
-        <StatCard
-          icon={<XCircle className="h-6 w-6 text-red-600" />}
-          iconBgClass="bg-red-100"
-          label="Failed Payments Today"
-          value={s?.failedPaymentsToday?.toLocaleString() ?? "-"}
-          trendPositive={s?.failedPaymentsToday === 0}
+          label="Total Searches"
+          value={s?.totalSearches?.toLocaleString() ?? "-"}
         />
       </div>
 
@@ -161,59 +144,6 @@ function DashboardPage() {
             {!data?.activityFeed?.length && (
               <p className="text-sm text-gray-400">No recent activity</p>
             )}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Orders */}
-      <div>
-        <h2 className="text-base font-semibold text-gray-900 mb-3">
-          Recent Orders
-        </h2>
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500 whitespace-nowrap">Order #</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">User</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500 whitespace-nowrap">Vehicle</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-500">Gross</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-500">Discount</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-500">Final</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500 whitespace-nowrap">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {data?.recentOrders?.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">{order.orderNumber}</td>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-xs">{order.user?.phone}</p>
-                    {order.user?.name && <p className="text-gray-400 text-xs">{order.user.name}</p>}
-                  </td>
-                  <td className="px-4 py-3">
-                    {order.vehicleNumber
-                      ? <span className="font-mono text-xs bg-gray-100 px-2 py-0.5 rounded">{order.vehicleNumber}</span>
-                      : <span className="text-gray-300 text-xs">-</span>}
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums">{formatCurrency(order.grossAmount)}</td>
-                  <td className="px-4 py-3 text-right tabular-nums text-green-700">
-                    {order.discountAmount > 0 ? `-${formatCurrency(order.discountAmount)}` : "-"}
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums font-semibold">{formatCurrency(order.finalAmount)}</td>
-                  <td className="px-4 py-3"><OrderStatusBadge status={order.status} /></td>
-                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{formatDate(order.createdAt)}</td>
-                </tr>
-              ))}
-              {!data?.recentOrders?.length && (
-                <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-gray-400">No recent orders</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
           </div>
         </div>
       </div>

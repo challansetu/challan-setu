@@ -3,18 +3,12 @@ import type {
   DashboardData,
   UsersResponse,
   UserDetail,
-  OrdersResponse,
-  PaymentsResponse,
-  SettlementsResponse,
   AuditLogsResponse,
   AdminUser,
   AdminNote,
   LeadsResponse,
   ListLeadsParams,
   ListUsersParams,
-  ListOrdersParams,
-  ListPaymentsParams,
-  ListSettlementsParams,
   ListAuditLogsParams,
   ChallanSearch,
   QrScanSummary,
@@ -113,14 +107,6 @@ export const adminApi = {
 
   userDetail: async (id: string) => {
     const res = await axiosInstance.get<UserDetail>(`/admin/users/${id}`);
-    return res.data;
-  },
-
-  userOrders: async (id: string, page = 1, limit = 10) => {
-    const res = await axiosInstance.get<OrdersResponse>(
-      `/admin/users/${id}/orders`,
-      { params: { page, limit } }
-    );
     return res.data;
   },
 
@@ -246,44 +232,6 @@ export const adminApi = {
     await axiosInstance.delete(`/admin/users/${userId}/challans/${challanId}`);
   },
 
-  orders: async (params: ListOrdersParams = {}) => {
-    const res = await axiosInstance.get<OrdersResponse>("/admin/orders", {
-      params,
-    });
-    return res.data;
-  },
-
-  payments: async (params: ListPaymentsParams = {}) => {
-    const res = await axiosInstance.get<PaymentsResponse>("/admin/payments", {
-      params,
-    });
-    return res.data;
-  },
-
-  deleteOrder: async (id: string) => {
-    await axiosInstance.delete(`/admin/orders/${id}`);
-  },
-
-  updateOrderTracking: async (id: string, status: string, note?: string) => {
-    const res = await axiosInstance.put(`/admin/orders/${id}/tracking`, { status, note });
-    return res.data;
-  },
-
-  settlements: async (params: ListSettlementsParams = {}) => {
-    const res = await axiosInstance.get<SettlementsResponse>(
-      "/admin/settlements",
-      { params }
-    );
-    return res.data;
-  },
-
-  settleSettlement: async (id: string, externalRef?: string) => {
-    const res = await axiosInstance.put(`/admin/settlements/${id}/settle`, {
-      externalRef,
-    });
-    return res.data;
-  },
-
   auditLogs: async (params: ListAuditLogsParams = {}) => {
     const res = await axiosInstance.get<AuditLogsResponse>(
       "/admin/audit-logs",
@@ -298,18 +246,6 @@ export const adminApi = {
     status?: string;
   }) => {
     const res = await axiosInstance.get("/admin/export/users", {
-      params,
-      responseType: "blob",
-    });
-    return res.data as Blob;
-  },
-
-  exportOrders: async (params: {
-    dateFrom?: string;
-    dateTo?: string;
-    status?: string;
-  }) => {
-    const res = await axiosInstance.get("/admin/export/orders", {
       params,
       responseType: "blob",
     });

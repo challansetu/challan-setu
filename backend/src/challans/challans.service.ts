@@ -128,7 +128,7 @@ export class ChallansService {
                 },
               });
             } catch { /* non-blocking */ }
-            return this.enrichWithPlatformPaid({ ...entry, cached: true });
+            return { ...entry, cached: true };
           }
         } else {
           // Cache entry has no challans (no-data case) — always valid
@@ -182,8 +182,7 @@ export class ChallansService {
     this.inFlight.set(vehicleNumber, fetchPromise);
 
     try {
-      const result = await fetchPromise;
-      return this.enrichWithPlatformPaid(result);
+      return await fetchPromise;
     } finally {
       this.inFlight.delete(vehicleNumber);
     }
@@ -409,37 +408,6 @@ export class ChallansService {
         this.stats.hits + this.stats.apiCalls > 0
           ? `${Math.round((this.stats.hits / (this.stats.hits + this.stats.apiCalls)) * 100)}%`
           : '0%',
-    };
-  }
-
-  // ─── Platform-paid enrichment ─────────────────────────────────────────────
-
-  /**
-   * After every search result (cache hit or fresh), mark challans that were
-   * already paid via our platform so the UI can show a "Paid via ChallanSetu" badge.
-   * This is NOT stored in cache since payment status changes at any time.
-   */
-  private async enrichWithPlatformPaid(entry: ChallanCacheEntry): Promise<ChallanCacheEntry> {
-    const challanNos = (entry.challans || []).map((c: any) => c.challanNo).filter(Boolean);
-    if (challanNos.length === 0) return entry;
-
-    const paidItems = await this.prisma.orderItem.findMany({
-      where: {
-        challanNo: { in: challanNos },
-        order: { status: { in: ['PAYMENT_COMPLETED', 'SETTLED'] } },
-      },
-      select: { challanNo: true },
-    });
-
-    if (paidItems.length === 0) return entry;
-
-    const paidNos = new Set(paidItems.map((i) => i.challanNo));
-    return {
-      ...entry,
-      challans: entry.challans.map((c: any) => ({
-        ...c,
-        paidViaPlatform: paidNos.has(c.challanNo),
-      })),
     };
   }
 

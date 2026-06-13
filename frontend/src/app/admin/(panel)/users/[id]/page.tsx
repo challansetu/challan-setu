@@ -15,8 +15,6 @@ import {
   ToggleLeft,
   ToggleRight,
   Search,
-  ShoppingCart,
-  IndianRupee,
   Clock,
   Check,
   Loader2,
@@ -31,78 +29,10 @@ import { useToast } from "@/components/admin/ui/Toast";
 import { Button } from "@/components/admin/ui/Button";
 import { Card } from "@/components/admin/ui/Card";
 import { StatCard } from "@/components/admin/ui/StatCard";
-import {
-  UserStatusBadge,
-  OrderStatusBadge,
-} from "@/components/admin/ui/Badge";
+import { UserStatusBadge } from "@/components/admin/ui/Badge";
 import { SkeletonLine } from "@/components/admin/ui/Skeleton";
-import { formatCurrency, formatDate, formatDateTime } from "@/lib/utils";
-import type { UserDetail, UserLifecycleStatus, TrackingStatus, UserChallan } from "@/types/admin";
-
-const TRACKING_STATUSES: { value: TrackingStatus; label: string }[] = [
-  { value: "ORDER_CREATED",      label: "Order Created" },
-  { value: "LAWYER_ASSIGNED",    label: "Lawyer Assigned" },
-  { value: "UNDER_REVIEW",       label: "Lawyer Reviewing Case" },
-  { value: "IN_PROGRESS",        label: "Settlement In Progress" },
-  { value: "SETTLED",            label: "Challan Settled" },
-  { value: "REFLECTION_PENDING", label: "Awaiting Portal Update" },
-];
-
-function TrackingCell({
-  orderId,
-  current,
-  onSaved,
-}: {
-  orderId: string;
-  current?: TrackingStatus;
-  onSaved: () => void;
-}) {
-  const [selected, setSelected] = useState<TrackingStatus>(current ?? "ORDER_CREATED");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const isDirty = selected !== (current ?? "ORDER_CREATED");
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      await adminApi.updateOrderTracking(orderId, selected);
-      setSaved(true);
-      onSaved();
-      setTimeout(() => setSaved(false), 1500);
-    } catch {
-      setSelected(current ?? "ORDER_CREATED");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="flex items-center gap-1.5">
-      <div className="relative flex-1">
-        <select
-          value={selected}
-          onChange={(e) => setSelected(e.target.value as TrackingStatus)}
-          className="w-full appearance-none pl-2.5 pr-6 py-1.5 text-xs border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 cursor-pointer"
-        >
-          {TRACKING_STATUSES.map((s) => (
-            <option key={s.value} value={s.value}>{s.label}</option>
-          ))}
-        </select>
-        <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
-      </div>
-      {isDirty && !saving && !saved && (
-        <button
-          onClick={handleSave}
-          className="flex-shrink-0 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg px-2 py-1.5 transition-colors"
-        >
-          Save
-        </button>
-      )}
-      {saving && <Loader2 className="flex-shrink-0 w-4 h-4 text-indigo-500 animate-spin" />}
-      {saved && <Check className="flex-shrink-0 w-4 h-4 text-emerald-500" />}
-    </div>
-  );
-}
+import { formatDate, formatDateTime } from "@/lib/utils";
+import type { UserDetail, UserLifecycleStatus, UserChallan } from "@/types/admin";
 
 const CHALLAN_LOCATIONS = [
   "Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Chandigarh", "Himachal",
@@ -567,24 +497,12 @@ export default function UserDetailPage() {
       </Card>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <StatCard
           icon={<Search className="h-5 w-5 text-blue-600" />}
           iconBgClass="bg-blue-100"
           label="Total Searches"
           value={user._count?.challanSearches ?? 0}
-        />
-        <StatCard
-          icon={<ShoppingCart className="h-5 w-5 text-purple-600" />}
-          iconBgClass="bg-purple-100"
-          label="Total Orders"
-          value={user._count?.orders ?? 0}
-        />
-        <StatCard
-          icon={<IndianRupee className="h-5 w-5 text-emerald-600" />}
-          iconBgClass="bg-emerald-100"
-          label="Total Spent"
-          value={formatCurrency(user.totalSpent ?? 0)}
         />
         <StatCard
           icon={<Clock className="h-5 w-5 text-gray-500" />}
@@ -627,55 +545,6 @@ export default function UserDetailPage() {
 
       {/* Challans */}
       <UserChallansSection userId={user.id} />
-
-      {/* Recent Orders */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold text-gray-900">Recent Orders</h2>
-          <Link href={`/admin/orders?userId=${user.id}`} className="text-sm text-primary-600 hover:text-primary-800">
-            View all
-          </Link>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Order #</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Amount</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500 min-w-[200px]">Settlement Progress</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {user.orders?.slice(0, 5).map((order) => (
-                <tr key={order.id}>
-                  <td className="px-4 py-3 font-mono text-xs">{order.orderNumber}</td>
-                  <td className="px-4 py-3">{formatCurrency(order.finalAmount)}</td>
-                  <td className="px-4 py-3"><OrderStatusBadge status={order.status} /></td>
-                  <td className="px-4 py-3">
-                    {order.status === "PAYMENT_COMPLETED" || order.status === "SETTLED" ? (
-                      <TrackingCell
-                        orderId={order.id}
-                        current={order.trackingStatus as TrackingStatus}
-                        onSaved={mutate}
-                      />
-                    ) : (
-                      <span className="text-gray-300 text-xs">—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">{formatDate(order.createdAt)}</td>
-                </tr>
-              ))}
-              {!user.orders?.length && (
-                <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-gray-400">No orders yet</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
       {/* Recent Searches */}
       <div>

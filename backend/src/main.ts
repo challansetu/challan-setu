@@ -14,9 +14,7 @@ import {
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule, {
-    rawBody: true, // Required for Razorpay webhook signature verification
-  });
+  const app = await NestFactory.create(AppModule);
 
   const extraOrigins = (process.env.ALLOWED_ORIGINS ?? '')
     .split(',')

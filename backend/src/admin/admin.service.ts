@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../config/prisma.service';
-import { UserLifecycleStatus, AdminRole, TrackingStatus } from '@prisma/client';
+import { UserLifecycleStatus, AdminRole } from '@prisma/client';
 
 @Injectable()
 export class AdminService {
@@ -32,43 +32,18 @@ export class AdminService {
     const [
       totalUsers,
       newUsersToday,
-      totalOrders,
-      ordersToday,
-      totalRevenue,
-      revenueToday,
-      pendingSettlements,
-      failedPaymentsToday,
+      totalLeads,
+      leadsToday,
       totalSearches,
       statusBreakdown,
-      recentOrders,
       recentActivity,
     ] = await Promise.all([
       this.prisma.user.count(),
       this.prisma.user.count({ where: { createdAt: { gte: todayStart } } }),
-      this.prisma.order.count(),
-      this.prisma.order.count({ where: { createdAt: { gte: todayStart } } }),
-      this.prisma.order.aggregate({
-        _sum: { finalAmount: true },
-        where: { status: { in: ['PAYMENT_COMPLETED', 'SETTLED'] } },
-      }),
-      this.prisma.order.aggregate({
-        _sum: { finalAmount: true },
-        where: { status: { in: ['PAYMENT_COMPLETED', 'SETTLED'] }, createdAt: { gte: todayStart } },
-      }),
-      this.prisma.settlement.count({
-        where: { status: { in: ['PENDING', 'PROCESSING', 'MANUAL_REVIEW'] } },
-      }),
-      this.prisma.payment.count({ where: { status: 'FAILED', createdAt: { gte: todayStart } } }),
+      this.prisma.lead.count(),
+      this.prisma.lead.count({ where: { createdAt: { gte: todayStart } } }),
       this.prisma.challanSearch.count(),
       this.prisma.user.groupBy({ by: ['lifecycleStatus'], _count: { _all: true } }),
-      this.prisma.order.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          user: { select: { id: true, phone: true, name: true } },
-          payment: { select: { status: true, method: true } },
-        },
-      }),
       this.prisma.auditLog.findMany({
         take: 20,
         orderBy: { createdAt: 'desc' },
@@ -80,19 +55,14 @@ export class AdminService {
       summary: {
         totalUsers,
         newUsersToday,
-        totalOrders,
-        ordersToday,
-        totalRevenue: totalRevenue._sum.finalAmount ?? 0,
-        revenueToday: revenueToday._sum.finalAmount ?? 0,
-        pendingSettlements,
-        failedPaymentsToday,
+        totalLeads,
+        leadsToday,
         totalSearches,
       },
       statusBreakdown: statusBreakdown.map((s) => ({
         status: s.lifecycleStatus,
         count: s._count._all,
       })),
-      recentOrders,
       activityFeed: recentActivity,
     };
     this.setCached('dashboard', result, 60_000);
@@ -204,7 +174,6 @@ export class AdminService {
     limit?: number | string;
     search?: string;
     status?: string | string[];
-    hasOrders?: string | boolean;
     dateFrom?: string;
     dateTo?: string;
     sortBy?: string;
@@ -228,10 +197,6 @@ export class AdminService {
     if (params.status) {
       const statuses = Array.isArray(params.status) ? params.status : [params.status];
       if (statuses.length > 0) where.lifecycleStatus = { in: statuses };
-    }
-
-    if (params.hasOrders === 'true' || params.hasOrders === true) {
-      where.orders = { some: {} };
     }
 
     if (params.dateFrom || params.dateTo) {
@@ -263,24 +228,15 @@ export class AdminService {
           lifecycleStatus: true,
           lastActiveAt: true,
           createdAt: true,
-          _count: { select: { orders: true, challanSearches: true, vehicles: true } },
+          _count: { select: { challanSearches: true, vehicles: true } },
           vehicles: { select: { vehicleNumber: true }, orderBy: { createdAt: 'desc' }, take: 3 },
         },
       }),
       this.prisma.user.count({ where }),
     ]);
 
-    // Attach totalSpent for each user efficiently
-    const userIds = users.map((u) => u.id);
-    const spentRows = await this.prisma.order.groupBy({
-      by: ['userId'],
-      where: { userId: { in: userIds }, status: { in: ['PAYMENT_COMPLETED', 'SETTLED'] } },
-      _sum: { finalAmount: true },
-    });
-    const spentMap = Object.fromEntries(spentRows.map((r) => [r.userId, r._sum.finalAmount ?? 0]));
-
     return {
-      users: users.map((u) => ({ ...u, totalSpent: spentMap[u.id] ?? 0 })),
+      users,
       total,
       page,
       limit,
@@ -304,55 +260,22 @@ export class AdminService {
           orderBy: { createdAt: 'desc' },
           take: 20,
         },
-        _count: { select: { orders: true, challanSearches: true, vehicles: true } },
+        _count: { select: { challanSearches: true, vehicles: true } },
       },
     });
     if (!user) throw new NotFoundException('User not found');
 
-    const [orders, searches, totalSpent] = await Promise.all([
-      this.prisma.order.findMany({
-        where: { userId },
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        include: { payment: { select: { status: true, method: true } }, settlement: { select: { status: true } } },
-      }),
-      this.prisma.challanSearch.findMany({
-        where: { userId },
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: { id: true, vehicleNumber: true, status: true, resultCount: true, cachedResponseUsed: true, createdAt: true },
-      }),
-      this.prisma.order.aggregate({
-        _sum: { finalAmount: true },
-        where: { userId, status: { in: ['PAYMENT_COMPLETED', 'SETTLED'] } },
-      }),
-    ]);
+    const searches = await this.prisma.challanSearch.findMany({
+      where: { userId },
+      take: 10,
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, vehicleNumber: true, status: true, resultCount: true, cachedResponseUsed: true, createdAt: true },
+    });
 
     return {
       ...user,
-      orders,
       searches,
-      totalSpent: totalSpent._sum.finalAmount ?? 0,
     };
-  }
-
-  async getUserOrders(userId: string, page = 1, limit = 10) {
-    const skip = (Math.max(1, page) - 1) * Math.min(50, limit);
-    const [orders, total] = await Promise.all([
-      this.prisma.order.findMany({
-        where: { userId },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          payment: { select: { status: true, method: true, razorpayPaymentId: true } },
-          settlement: { select: { status: true, settledAt: true } },
-          items: { select: { challanNo: true, amount: true } },
-        },
-      }),
-      this.prisma.order.count({ where: { userId } }),
-    ]);
-    return { orders, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
   async getUserSearches(userId: string, page = 1, limit = 10) {
@@ -472,96 +395,6 @@ export class AdminService {
     return updated;
   }
 
-  // ─── Orders (filtered) ────────────────────────────────────────────────────
-
-  async getOrders(params: {
-    page?: number | string;
-    limit?: number | string;
-    status?: string;
-    userId?: string;
-    dateFrom?: string;
-    dateTo?: string;
-    sortBy?: string;
-    sortOrder?: string;
-  }) {
-    const page = Math.max(1, Number(params.page) || 1);
-    const limit = Math.min(100, Math.max(1, Number(params.limit) || 25));
-    const skip = (page - 1) * limit;
-
-    const where: any = {};
-    if (params.status) where.status = params.status;
-    if (params.userId) where.userId = params.userId;
-    if (params.dateFrom || params.dateTo) {
-      where.createdAt = {};
-      if (params.dateFrom) where.createdAt.gte = new Date(params.dateFrom);
-      if (params.dateTo) where.createdAt.lte = new Date(params.dateTo);
-    }
-
-    const sortField = params.sortBy === 'finalAmount' ? 'finalAmount' : 'createdAt';
-    const orderBy = { [sortField]: params.sortOrder === 'asc' ? 'asc' : 'desc' };
-
-    const [orders, total] = await Promise.all([
-      this.prisma.order.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy,
-        include: {
-          user: { select: { id: true, phone: true, name: true } },
-          payment: { select: { status: true, method: true } },
-          settlement: { select: { status: true } },
-          items: { select: { challanNo: true, amount: true } },
-        },
-      }),
-      this.prisma.order.count({ where }),
-    ]);
-
-    return { orders, total, page, limit, totalPages: Math.ceil(total / limit) };
-  }
-
-  // ─── Payments (filtered) ──────────────────────────────────────────────────
-
-  async getPayments(params: {
-    page?: number | string;
-    limit?: number | string;
-    status?: string;
-    dateFrom?: string;
-    dateTo?: string;
-  }) {
-    const page = Math.max(1, Number(params.page) || 1);
-    const limit = Math.min(100, Math.max(1, Number(params.limit) || 25));
-    const skip = (page - 1) * limit;
-
-    const where: any = {};
-    if (params.status) where.status = params.status;
-    if (params.dateFrom || params.dateTo) {
-      where.createdAt = {};
-      if (params.dateFrom) where.createdAt.gte = new Date(params.dateFrom);
-      if (params.dateTo) where.createdAt.lte = new Date(params.dateTo);
-    }
-
-    const [payments, total] = await Promise.all([
-      this.prisma.payment.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          order: {
-            select: {
-              orderNumber: true,
-              finalAmount: true,
-              user: { select: { id: true, phone: true, name: true } },
-            },
-          },
-        },
-      }),
-      this.prisma.payment.count({ where }),
-    ]);
-
-    return { payments, total, page, limit, totalPages: Math.ceil(total / limit) };
-  }
-
   // ─── Audit Logs (filtered) ────────────────────────────────────────────────
 
   async getAuditLogs(params: {
@@ -606,41 +439,6 @@ export class AdminService {
     return { logs, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
-  // ─── Settlements (filtered) ───────────────────────────────────────────────
-
-  async getSettlements(params: { page?: number | string; limit?: number | string; status?: string }) {
-    const page = Math.max(1, Number(params.page) || 1);
-    const limit = Math.min(100, Math.max(1, Number(params.limit) || 25));
-    const skip = (page - 1) * limit;
-
-    const where: any = {};
-    if (params.status) where.status = params.status;
-    else where.status = { in: ['PENDING', 'PROCESSING', 'MANUAL_REVIEW', 'FAILED'] };
-
-    const [settlements, total] = await Promise.all([
-      this.prisma.settlement.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          order: {
-            select: {
-              orderNumber: true,
-              finalAmount: true,
-              itemCount: true,
-              vehicleNumber: true,
-              user: { select: { id: true, phone: true, name: true } },
-            },
-          },
-        },
-      }),
-      this.prisma.settlement.count({ where }),
-    ]);
-
-    return { settlements, total, page, limit, totalPages: Math.ceil(total / limit) };
-  }
-
   // ─── CSV Export ───────────────────────────────────────────────────────────
 
   async exportUsers(params: { dateFrom?: string; dateTo?: string; status?: string }): Promise<string> {
@@ -658,47 +456,16 @@ export class AdminService {
       select: {
         id: true, phone: true, name: true, email: true, lifecycleStatus: true,
         isActive: true, createdAt: true, lastActiveAt: true,
-        _count: { select: { orders: true, challanSearches: true } },
+        _count: { select: { challanSearches: true } },
       },
       take: 10000,
     });
 
-    const headers = ['ID', 'Phone', 'Name', 'Email', 'Status', 'Active', 'Orders', 'Searches', 'Created At', 'Last Active'];
+    const headers = ['ID', 'Phone', 'Name', 'Email', 'Status', 'Active', 'Searches', 'Created At', 'Last Active'];
     const rows = users.map((u) => [
       u.id, u.phone, u.name ?? '', u.email ?? '', u.lifecycleStatus,
-      u.isActive ? 'Yes' : 'No', u._count.orders, u._count.challanSearches,
+      u.isActive ? 'Yes' : 'No', u._count.challanSearches,
       u.createdAt.toISOString(), u.lastActiveAt?.toISOString() ?? '',
-    ]);
-
-    return [headers, ...rows].map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-  }
-
-  async exportOrders(params: { dateFrom?: string; dateTo?: string; status?: string }): Promise<string> {
-    const where: any = {};
-    if (params.status) where.status = params.status;
-    if (params.dateFrom || params.dateTo) {
-      where.createdAt = {};
-      if (params.dateFrom) where.createdAt.gte = new Date(params.dateFrom);
-      if (params.dateTo) where.createdAt.lte = new Date(params.dateTo);
-    }
-
-    const orders = await this.prisma.order.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        orderNumber: true, status: true, grossAmount: true, discountAmount: true, finalAmount: true,
-        itemCount: true, vehicleNumber: true, createdAt: true,
-        user: { select: { phone: true, name: true } },
-        payment: { select: { status: true, method: true, razorpayPaymentId: true } },
-      },
-      take: 10000,
-    });
-
-    const headers = ['Order#', 'Status', 'User Phone', 'User Name', 'Gross', 'Discount', 'Final', 'Items', 'Vehicle', 'Payment Status', 'Payment Method', 'Razorpay ID', 'Created At'];
-    const rows = orders.map((o) => [
-      o.orderNumber, o.status, o.user.phone, o.user.name ?? '', o.grossAmount, o.discountAmount,
-      o.finalAmount, o.itemCount, o.vehicleNumber ?? '', o.payment?.status ?? '', o.payment?.method ?? '',
-      o.payment?.razorpayPaymentId ?? '', o.createdAt.toISOString(),
     ]);
 
     return [headers, ...rows].map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -719,75 +486,6 @@ export class AdminService {
         data: { userId, oldStatus: user.lifecycleStatus, newStatus, changedBy: null },
       }),
     ]);
-  }
-
-  // ─── Order Tracking ───────────────────────────────────────────────────────
-
-  async updateOrderTracking(
-    orderId: string,
-    newStatus: TrackingStatus,
-    adminId: string,
-    note?: string,
-  ) {
-    const order = await this.prisma.order.findUnique({ where: { id: orderId } });
-    if (!order) throw new NotFoundException('Order not found');
-
-    const historyEntry = {
-      status: newStatus,
-      timestamp: new Date().toISOString(),
-      ...(note ? { note } : {}),
-    };
-
-    const existingHistory = Array.isArray(order.trackingHistory) ? order.trackingHistory : [];
-
-    const updated = await this.prisma.order.update({
-      where: { id: orderId },
-      data: {
-        trackingStatus: newStatus,
-        trackingHistory: [...existingHistory, historyEntry],
-      },
-    });
-
-    await this.prisma.auditLog.create({
-      data: {
-        adminId,
-        action: 'TRACKING_STATUS_UPDATED',
-        entity: 'Order',
-        entityId: orderId,
-        oldValue: { trackingStatus: order.trackingStatus },
-        newValue: { trackingStatus: newStatus },
-        metadata: { note },
-      },
-    });
-
-    this.logger.log(`Order tracking updated: ${order.orderNumber} → ${newStatus}`);
-
-    // TODO: trigger WhatsApp/SMS notification to user when status changes
-    // Example hook: notificationService.sendTrackingUpdate(order.userId, newStatus);
-
-    return { trackingStatus: updated.trackingStatus, trackingHistory: updated.trackingHistory };
-  }
-
-  // ─── Delete Order ─────────────────────────────────────────────────────────
-
-  async deleteOrder(orderId: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { id: orderId },
-      include: { payment: true, settlement: true },
-    });
-    if (!order) throw new NotFoundException('Order not found');
-
-    // Delete in dependency order to avoid FK violations
-    await this.prisma.$transaction([
-      this.prisma.settlement.deleteMany({ where: { orderId } }),
-      this.prisma.payment.deleteMany({ where: { orderId } }),
-      this.prisma.safeDrivingPromise.deleteMany({ where: { orderId } }),
-      this.prisma.orderItem.deleteMany({ where: { orderId } }),
-      this.prisma.order.delete({ where: { id: orderId } }),
-    ]);
-
-    this.logger.log(`Order deleted by admin: ${order.orderNumber}`);
-    return { deleted: true, orderNumber: order.orderNumber };
   }
 
   // ─── Lead Challans (per-challan CRM tracking) ────────────────────────────

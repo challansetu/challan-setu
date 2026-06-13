@@ -1,13 +1,5 @@
 export type AdminRole = "SUPER_ADMIN" | "ADMIN" | "SUPPORT_AGENT";
 
-export type TrackingStatus =
-  | "ORDER_CREATED"
-  | "LAWYER_ASSIGNED"
-  | "UNDER_REVIEW"
-  | "IN_PROGRESS"
-  | "SETTLED"
-  | "REFLECTION_PENDING";
-
 export type UserLifecycleStatus =
   | "NEW_USER"
   | "ACTIVE"
@@ -16,23 +8,6 @@ export type UserLifecycleStatus =
   | "COMPLETED"
   | "CHURNED"
   | "BLOCKED";
-
-export type OrderStatus =
-  | "CREATED"
-  | "PAYMENT_PENDING"
-  | "PAYMENT_COMPLETED"
-  | "SETTLED"
-  | "PAYMENT_FAILED"
-  | "CANCELLED";
-
-export type PaymentStatus = "CAPTURED" | "FAILED" | "CREATED" | "REFUNDED";
-
-export type SettlementStatus =
-  | "PENDING"
-  | "PROCESSING"
-  | "SETTLED"
-  | "FAILED"
-  | "MANUAL_REVIEW";
 
 export interface AdminUser {
   id: string;
@@ -63,7 +38,6 @@ export interface Lead {
 }
 
 export interface UserCount {
-  orders: number;
   challanSearches: number;
   vehicles: number;
 }
@@ -77,7 +51,6 @@ export interface User {
   lifecycleStatus: UserLifecycleStatus;
   lastActiveAt: string | null;
   createdAt: string;
-  totalSpent: number;
   _count: UserCount;
   vehicles?: { vehicleNumber: string }[];
 }
@@ -104,28 +77,6 @@ export interface AdminNote {
   isPinned: boolean;
   createdAt: string;
   admin: { id: string; name: string; role: AdminRole };
-}
-
-export interface OrderItem {
-  challanNo: string;
-  amount: number;
-}
-
-export interface Order {
-  id: string;
-  orderNumber: string;
-  status: OrderStatus;
-  grossAmount: number;
-  discountAmount: number;
-  finalAmount: number;
-  itemCount: number;
-  vehicleNumber: string | null;
-  createdAt: string;
-  user: { phone: string; name: string | null };
-  payment: { status: PaymentStatus; method: string | null } | null;
-  settlement: { status: SettlementStatus } | null;
-  items?: OrderItem[];
-  trackingStatus?: TrackingStatus;
 }
 
 export interface ChallanSearch {
@@ -160,41 +111,10 @@ export interface UserChallan {
 }
 
 export interface UserDetail extends User {
-  orders: Order[];
   searches: ChallanSearch[];
   adminNotes: AdminNote[];
   statusHistory: StatusHistoryEntry[];
   vehicles: Vehicle[];
-}
-
-export interface Payment {
-  id: string;
-  razorpayOrderId: string | null;
-  razorpayPaymentId: string | null;
-  amount: number;
-  status: PaymentStatus;
-  method: string | null;
-  errorCode: string | null;
-  createdAt: string;
-  order: {
-    orderNumber: string;
-    finalAmount: number;
-    user: { phone: string; name: string | null };
-  };
-}
-
-export interface Settlement {
-  id: string;
-  status: SettlementStatus;
-  attempts: number;
-  createdAt: string;
-  externalRef?: string | null;
-  order: {
-    orderNumber: string;
-    finalAmount: number;
-    vehicleNumber: string | null;
-    user: { phone: string; name: string | null };
-  };
 }
 
 export interface AuditLog {
@@ -213,12 +133,8 @@ export interface AuditLog {
 export interface DashboardSummary {
   totalUsers: number;
   newUsersToday: number;
-  totalOrders: number;
-  ordersToday: number;
-  totalRevenue: number;
-  revenueToday: number;
-  pendingSettlements: number;
-  failedPaymentsToday: number;
+  totalLeads: number;
+  leadsToday: number;
   totalSearches: number;
 }
 
@@ -239,7 +155,6 @@ export interface ActivityFeedItem {
 export interface DashboardData {
   summary: DashboardSummary;
   statusBreakdown: StatusBreakdownItem[];
-  recentOrders: Order[];
   activityFeed: ActivityFeedItem[];
 }
 
@@ -253,30 +168,6 @@ export interface PaginatedResponse<T> {
 
 export interface UsersResponse {
   users: User[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface OrdersResponse {
-  orders: Order[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface PaymentsResponse {
-  payments: Payment[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface SettlementsResponse {
-  settlements: Settlement[];
   total: number;
   page: number;
   limit: number;
@@ -312,36 +203,10 @@ export interface ListUsersParams {
   limit?: number;
   search?: string;
   status?: string;
-  hasOrders?: boolean;
   dateFrom?: string;
   dateTo?: string;
   sortBy?: string;
   sortOrder?: string;
-}
-
-export interface ListOrdersParams {
-  page?: number;
-  limit?: number;
-  status?: string;
-  userId?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  sortBy?: string;
-  sortOrder?: string;
-}
-
-export interface ListPaymentsParams {
-  page?: number;
-  limit?: number;
-  status?: string;
-  dateFrom?: string;
-  dateTo?: string;
-}
-
-export interface ListSettlementsParams {
-  page?: number;
-  limit?: number;
-  status?: string;
 }
 
 export interface ListAuditLogsParams {

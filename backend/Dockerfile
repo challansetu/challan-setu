@@ -26,4 +26,6 @@ COPY --from=build /app/package-lock.json ./
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
+# Migrations run as a Railway pre-deploy step (see railway.json), not on every
+# container boot — this keeps cold starts fast.
+CMD ["node", "dist/src/main.js"]

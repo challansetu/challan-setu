@@ -7,7 +7,6 @@ import { AdminAuthController } from './auth/admin-auth.controller';
 import { AdminAuthService } from './auth/admin-auth.service';
 import { AdminJwtStrategy } from './auth/admin-jwt.strategy';
 import { AdminRolesGuard } from './auth/admin-roles.guard';
-import { SettlementsModule } from '../settlements/settlements.module';
 import { PricingModule } from '../pricing/pricing.module';
 import { PrismaModule } from '../config/prisma.module';
 import { QrScansModule } from '../qr-scans/qr-scans.module';
@@ -17,7 +16,6 @@ import { QrScansModule } from '../qr-scans/qr-scans.module';
     PassportModule,
     JwtModule.register({}),
     PrismaModule,
-    SettlementsModule,
     PricingModule,
     QrScansModule,
   ],

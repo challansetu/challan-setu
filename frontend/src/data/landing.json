@@ -24,58 +24,10 @@
       "Pay only what's required"
     ]
   },
-  "promiseSection": {
-    "badge": "Commitment Reward",
-    "headingPrefix": "Promise to Drive Safe.",
-    "headingSuffix": "Unlock {discount}% Benefit.",
-    "description": "Your commitment to responsible driving matters. When you make the Safe Driving Promise at checkout, you become eligible for an instant {discount}% benefit on your challan payment, because safer roads deserve to be rewarded.",
-    "cta": "Submit Your Request",
-    "promisePoints": [
-      {
-        "text": "No drinking & driving",
-        "color": "text-rose-500",
-        "bg": "bg-rose-50"
-      },
-      {
-        "text": "No phone while driving",
-        "color": "text-blue-500",
-        "bg": "bg-blue-50"
-      },
-      {
-        "text": "Respect traffic rules",
-        "color": "text-amber-500",
-        "bg": "bg-amber-50"
-      },
-      {
-        "text": "Respect fellow road users",
-        "color": "text-teal-500",
-        "bg": "bg-teal-50"
-      }
-    ]
-  },
-  "benefitCard": {
-    "heading": "Your Promise Unlocks",
-    "benefitLabel": "Benefit",
-    "steps": [
-      {
-        "step": "1",
-        "text": "Search your vehicle challans"
-      },
-      {
-        "step": "2",
-        "text": "Make the Safe Driving Promise"
-      },
-      {
-        "step": "3",
-        "text": "{discount}% benefit applied instantly"
-      }
-    ],
-    "trustNote": "The benefit is applied at checkout when you make the promise. No convenience fee. No hidden charges. Transparent and instant."
-  },
   "howItWorks": {
     "badge": "How it works",
     "title": "Three Simple Steps",
-    "subtitle": "From vehicle number to payment, it takes less than 2 minutes.",
+    "subtitle": "From vehicle number to a settlement option, it takes less than 2 minutes.",
     "steps": [
       {
         "step": "01",
@@ -86,15 +38,15 @@
       },
       {
         "step": "02",
-        "title": "Make the Promise",
-        "desc": "Commit to driving responsibly with our Safe Driving Promise and instantly unlock your {discount}% benefit.",
+        "title": "We Review Your Challans",
+        "desc": "Our legal experts verify your challan details and identify the best available settlement option for your case.",
         "iconColor": "text-accent-600",
         "bg": "bg-accent-50"
       },
       {
         "step": "03",
-        "title": "Pay with Benefit",
-        "desc": "Complete payment securely via Razorpay with your {discount}% promise benefit already applied.",
+        "title": "Get Your Settlement Option",
+        "desc": "We share the best available option and guide you through the next steps to settle your challan legally.",
         "iconColor": "text-violet-600",
         "bg": "bg-violet-50"
       }

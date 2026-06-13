@@ -40,7 +40,7 @@ export class UsersService {
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        include: { _count: { select: { orders: true, vehicles: true } } },
+        include: { _count: { select: { vehicles: true } } },
       }),
       this.prisma.user.count(),
     ]);

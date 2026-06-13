@@ -10,7 +10,7 @@ import { UserStatusBadge } from "@/components/admin/ui/Badge";
 import { Button } from "@/components/admin/ui/Button";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SkeletonTable } from "@/components/admin/ui/Skeleton";
-import { formatCurrency, formatDate, downloadBlob } from "@/lib/utils";
+import { formatDate, downloadBlob } from "@/lib/utils";
 import type { UsersResponse } from "@/types/admin";
 
 const USER_STATUSES = [
@@ -254,9 +254,7 @@ export default function UsersPage() {
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Vehicles</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Orders</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Searches</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Total Spent</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Last Active</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Joined</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Actions</th>
@@ -281,9 +279,7 @@ export default function UsersPage() {
                       <span className="text-gray-300">-</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center">{user._count?.orders ?? 0}</td>
                   <td className="px-4 py-3 text-center">{user._count?.challanSearches ?? 0}</td>
-                  <td className="px-4 py-3">{formatCurrency(user.totalSpent ?? 0)}</td>
                   <td className="px-4 py-3 text-gray-500 text-xs">
                     {user.lastActiveAt ? formatDate(user.lastActiveAt) : "-"}
                   </td>
@@ -300,7 +296,7 @@ export default function UsersPage() {
               ))}
               {!data?.users?.length && (
                 <tr>
-                  <td colSpan={10} className="px-4 py-10 text-center text-gray-400">
+                  <td colSpan={8} className="px-4 py-10 text-center text-gray-400">
                     No users found
                   </td>
                 </tr>
