@@ -131,7 +131,7 @@ export default async function LandingPage() {
             </section>
 
             {/* Insurance Banner */}
-            <RenewalBanner />
+            <RenewalBanner innerClassName="max-w-2xl" />
 
             {/* Savings Calculator + How it Works — side by side on desktop */}
             <section className="bg-surface-50">
