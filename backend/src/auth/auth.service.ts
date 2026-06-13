@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { randomInt } from 'crypto';
 import { RedisService } from '../config/redis.service';
 import { UsersService } from '../users/users.service';
 import { DEFAULT_OTP_LENGTH, DEFAULT_OTP_EXPIRY_SECONDS, DEV_OTP } from '../common/constants';
@@ -19,12 +20,11 @@ export class AuthService {
     const otpExpiry = parseInt(process.env.OTP_EXPIRY_SECONDS || String(DEFAULT_OTP_EXPIRY_SECONDS), 10);
     const isDev = process.env.NODE_ENV !== 'production';
 
-    // In dev mode, use a fixed OTP for easy testing
+    // In dev mode, use a fixed OTP for easy testing. In production, generate a
+    // cryptographically secure, fixed-length numeric OTP (zero-padded).
     const otp = isDev
       ? DEV_OTP
-      : Math.random()
-          .toString()
-          .slice(2, 2 + otpLength);
+      : randomInt(0, 10 ** otpLength).toString().padStart(otpLength, '0');
 
     // Store OTP in Redis with TTL
     await this.redisService.set(`otp:${phone}`, otp, otpExpiry);

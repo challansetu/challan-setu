@@ -26,10 +26,14 @@ export class AdminAuthService {
       data: { lastLoginAt: new Date() },
     });
 
+    const secret = this.config.get<string>('ADMIN_JWT_SECRET');
+    if (!secret) {
+      throw new Error('ADMIN_JWT_SECRET is not set.');
+    }
     const token = this.jwtService.sign(
       { sub: admin.id, email: admin.email, role: admin.role, type: 'admin' },
       {
-        secret: this.config.get<string>('ADMIN_JWT_SECRET', 'admin-secret'),
+        secret,
         expiresIn: this.config.get<string>('ADMIN_JWT_EXPIRY', '8h'),
       },
     );

@@ -16,6 +16,10 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
+  // Behind Railway's proxy: trust the first hop so req.ip (used for rate
+  // limiting and audit logs) reflects the real client, not the load balancer.
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   const extraOrigins = (process.env.ALLOWED_ORIGINS ?? '')
     .split(',')
     .map((o) => o.trim())
