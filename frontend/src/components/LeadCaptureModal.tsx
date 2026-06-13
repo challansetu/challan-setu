@@ -25,6 +25,21 @@ type TouchedState = {
   mobileNumber: boolean;
 };
 
+/**
+ * Reduce any input (typed, pasted, or browser-autofilled) to a bare 10-digit
+ * Indian mobile number. The field already shows a "+91" prefix, so an autofill
+ * like "+91 82876 50767" must have its country code stripped BEFORE we cap to
+ * 10 digits — otherwise the "91" is kept and the real digits get truncated.
+ */
+function toNationalMobile(raw: string): string {
+  let digits = raw.replace(/\D/g, '');
+  if (digits.length > PHONE_MAX_DIGITS) {
+    if (digits.startsWith('91')) digits = digits.slice(2);
+    else if (digits.startsWith('0')) digits = digits.slice(1);
+  }
+  return digits.slice(0, PHONE_MAX_DIGITS);
+}
+
 export function LeadCaptureModal({
   open,
   onClose,
@@ -288,8 +303,7 @@ export function LeadCaptureModal({
                     placeholder="Enter your mobile number"
                     value={mobileNumber}
                     onChange={(event) => {
-                      const digitsOnly = event.target.value.replace(/\D/g, '').slice(0, PHONE_MAX_DIGITS);
-                      setMobileNumber(digitsOnly);
+                      setMobileNumber(toNationalMobile(event.target.value));
                       if (submitState === 'error') {
                         setSubmitState('idle');
                         setErrorMessage('');
@@ -297,7 +311,7 @@ export function LeadCaptureModal({
                     }}
                     onBlur={() => setTouched((current) => ({ ...current, mobileNumber: true }))}
                     inputMode="numeric"
-                    autoComplete="tel"
+                    autoComplete="tel-national"
                     className="w-full h-14 rounded-r-2xl bg-transparent pr-5 text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none"
                   />
                 </div>
