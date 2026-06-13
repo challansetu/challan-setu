@@ -113,14 +113,14 @@ export default async function LandingPage() {
                     {landingData.whyChoose.title}
                   </h2>
                 </div>
-                <div className="grid grid-cols-3 gap-4 sm:gap-8">
+                <div className="grid grid-cols-3 gap-4 sm:gap-6 sm:max-w-2xl">
                   {[
                     { img: '/images/why-no-court.png', title: 'No Court Visit Required' },
                     { img: '/images/why-one-portal.png', title: 'One Portal for All Challans' },
                     { img: '/images/why-expert-lawyer.png', title: 'Backed by Legal Experts' },
                   ].map((item, i) => (
                     <div key={i} className="flex flex-col items-center text-center gap-3">
-                      <div className="w-full sm:max-w-[180px] aspect-square rounded-2xl bg-[rgb(233,233,234)] flex items-center justify-center overflow-hidden">
+                      <div className="w-full aspect-square rounded-2xl bg-[rgb(233,233,234)] flex items-center justify-center overflow-hidden">
                         <Image src={item.img} alt={item.title} width={280} height={280} unoptimized className="w-full h-full object-cover" />
                       </div>
                       <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">{item.title}</h3>
