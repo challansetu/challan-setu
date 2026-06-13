@@ -113,7 +113,7 @@ export default async function LandingPage() {
                     {landingData.whyChoose.title}
                   </h2>
                 </div>
-                <div className="grid grid-cols-3 gap-4 sm:gap-6 sm:max-w-2xl">
+                <div className="grid grid-cols-3 gap-4 sm:gap-6 sm:max-w-2xl sm:mx-auto">
                   {[
                     { img: '/images/why-no-court.png', title: 'No Court Visit Required' },
                     { img: '/images/why-one-portal.png', title: 'One Portal for All Challans' },
