@@ -16,7 +16,7 @@ const SLIDES = [
 
 const SLIDE_MS = 4000;
 
-export function RenewalBanner({ className, innerClassName = 'max-w-5xl' }: { className?: string; innerClassName?: string }) {
+export function RenewalBanner({ className }: { className?: string }) {
   const [active, setActive] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -55,7 +55,7 @@ export function RenewalBanner({ className, innerClassName = 'max-w-5xl' }: { cla
 
   return (
     <section className={className ?? 'pt-4 pb-8 bg-white'}>
-      <div className={`container-app ${innerClassName}`}>
+      <div className="container-app max-w-5xl">
 
         {/* ── Desktop: both banners side by side ───────────────────── */}
         <div className="hidden sm:grid sm:grid-cols-3 gap-4">
