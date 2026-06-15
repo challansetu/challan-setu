@@ -40,8 +40,8 @@ export function DocumentsRequired() {
                   src={doc.img}
                   alt={doc.title}
                   fill
+                  sizes="(max-width: 768px) 33vw, 200px"
                   className="object-cover object-center scale-[1.15]"
-                  unoptimized
                 />
               </div>
               <div className="text-center">

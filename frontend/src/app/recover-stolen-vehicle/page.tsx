@@ -129,8 +129,8 @@ export default function RecoverStolenVehiclePage() {
                             src={step.img}
                             alt={step.title}
                             fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
                             className="object-cover object-center scale-[1.15]"
-                            unoptimized
                           />
                         </div>
                         <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center shadow" style={{ background: '#1c1c24', color: '#f5c842' }}>

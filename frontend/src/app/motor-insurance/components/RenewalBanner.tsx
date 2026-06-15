@@ -70,7 +70,7 @@ export function RenewalBanner({ className }: { className?: string }) {
               className="block rounded-2xl overflow-hidden"
             >
               <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-                <Image src={slide.src} alt={slide.alt} fill className="object-fill" unoptimized />
+                <Image src={slide.src} alt={slide.alt} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-fill" />
               </div>
             </Link>
           ))}
@@ -96,7 +96,7 @@ export function RenewalBanner({ className }: { className?: string }) {
                 style={{ scrollSnapAlign: 'start' }}
               >
                 <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-                  <Image src={slide.src} alt={slide.alt} fill className="object-fill" unoptimized priority />
+                  <Image src={slide.src} alt={slide.alt} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-fill" priority />
                 </div>
               </Link>
             ))}

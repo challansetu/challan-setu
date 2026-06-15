@@ -42,8 +42,8 @@ export function StolenVehicleBanner() {
               src="/images/vehicle-recovery-banner.png"
               alt="Vehicle recovery"
               fill
+              sizes="(max-width: 768px) 60vw, 400px"
               className="object-cover object-center"
-              unoptimized
             />
             <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#1c1c24] to-transparent" />
           </div>

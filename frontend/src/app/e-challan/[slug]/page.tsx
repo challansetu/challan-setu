@@ -690,7 +690,7 @@ export default async function StatePage({ params }: Props) {
                 src={state.image}
                 alt={`E-challan in ${state.name}`}
                 fill
-                unoptimized
+                sizes="100vw"
                 className="object-cover object-top opacity-20"
               />
             </div>

@@ -76,7 +76,6 @@ export function StatesChallanSection() {
                 src={state.image}
                 alt={`Pay e-challan in ${state.name}`}
                 fill
-                unoptimized
                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                 className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
               />

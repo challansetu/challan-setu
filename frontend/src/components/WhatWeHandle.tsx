@@ -25,8 +25,8 @@ export function WhatWeHandle() {
                   src={item.img}
                   alt={item.title}
                   fill
+                  sizes="(max-width: 768px) 33vw, 200px"
                   className="object-cover scale-[1.15]"
-                  unoptimized
                 />
               </div>
               <p className="text-center font-semibold text-gray-900 text-xs leading-snug">{item.title}</p>
