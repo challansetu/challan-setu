@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { trackBannerClick } from '@/lib/analytics';
 
 export function StolenVehicleBanner() {
   return (
@@ -24,6 +27,7 @@ export function StolenVehicleBanner() {
 
             <Link
               href="/recover-stolen-vehicle"
+              onClick={() => trackBannerClick('stolen_vehicle_recovery')}
               className="inline-flex items-center gap-1.5 font-bold text-xs px-4 py-2 rounded-lg transition-all hover:-translate-y-0.5 w-fit"
               style={{ background: '#f5c842', color: '#1c1c24' }}
             >

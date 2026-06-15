@@ -3,15 +3,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import { trackBannerClick } from '@/lib/analytics';
 
 const CAR_URL         = 'https://ci.policybazaar.com/v1?utm_source=ChallanSetu';
 const COMMERCIAL_URL  = 'https://commercial.policybazaar.com/?utm_source=ChallanSetu&utm_campaign=&utm_medium';
 const TWO_WHEELER_URL = 'https://twowheeler.policybazaar.com/?utm_source=ChallanSetu';
 
 const SLIDES = [
-  { src: '/images/pb-banner-car.jpg',  alt: 'Renew your car insurance policy today',           href: CAR_URL },
-  { src: '/images/pb-banner-cv2.webp', alt: 'Compare & save up to 85% on commercial vehicle',  href: COMMERCIAL_URL },
-  { src: '/images/pb-banner-2w.jpg',   alt: 'Buy two-wheeler insurance starting ₹1.3/day',     href: TWO_WHEELER_URL },
+  { src: '/images/pb-banner-car.jpg',  alt: 'Renew your car insurance policy today',           href: CAR_URL,         name: 'insurance_car' },
+  { src: '/images/pb-banner-cv2.webp', alt: 'Compare & save up to 85% on commercial vehicle',  href: COMMERCIAL_URL,  name: 'insurance_commercial' },
+  { src: '/images/pb-banner-2w.jpg',   alt: 'Buy two-wheeler insurance starting ₹1.3/day',     href: TWO_WHEELER_URL, name: 'insurance_two_wheeler' },
 ];
 
 const SLIDE_MS = 4000;
@@ -65,6 +66,7 @@ export function RenewalBanner({ className }: { className?: string }) {
               href={slide.href}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackBannerClick(slide.name)}
               className="block rounded-2xl overflow-hidden"
             >
               <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
@@ -89,6 +91,7 @@ export function RenewalBanner({ className }: { className?: string }) {
                 href={slide.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackBannerClick(slide.name)}
                 className="shrink-0 w-full block"
                 style={{ scrollSnapAlign: 'start' }}
               >
