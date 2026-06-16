@@ -43,7 +43,7 @@ export const leadsApi = {
     mobileNumber: string;
     vehicleNumber: string;
     consentAccepted: boolean;
-    source?: 'homepage' | 'city_page';
+    source?: 'homepage' | 'city_page' | 'insurance';
     city?: string;
   }) => api.post('/leads', data, { timeout: 25000 }),
 };

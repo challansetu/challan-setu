@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, faqSchema } from '@/components/seo/JsonLd';
 import { HeroForm } from '@/components/HeroForm';
+import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { ArrowRight, CheckCircle2, MapPin, AlertCircle } from 'lucide-react';
 
 type Offence = { name: string; fine: string };
@@ -800,6 +801,8 @@ export default async function StatePage({ params }: Props) {
                 </Link>
               </div>
             </section>
+
+            <RenewalBanner />
 
             <Footer />
           </div> {/* end content sheet */}

@@ -59,8 +59,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
+  // Prevent iOS Safari from auto-zooming when a form field is focused.
+  // (iOS 10+ still allows manual pinch-zoom, so accessibility is preserved.)
+  maximumScale: 1,
+  userScalable: false,
   viewportFit: 'cover',
   themeColor: '#4f46e5',
 };

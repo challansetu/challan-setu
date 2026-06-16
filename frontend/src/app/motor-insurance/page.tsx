@@ -23,7 +23,7 @@ import {
   DocumentsNeeded,
   InsuranceCta,
 } from './components';
-import { URGENCY_FACTS, BRAND_DARK, BRAND_YELLOW } from './data';
+import { URGENCY_FACTS, BRAND_DARK } from './data';
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
@@ -129,21 +129,7 @@ export default function MotorInsurancePage() {
             <div className="container-app relative">
               <div className="pt-5 pb-16 lg:pt-8 lg:pb-20 flex flex-col items-center gap-5">
                 <div className="text-center max-w-xl w-full">
-                  <h1 className="tracking-tight mb-2 leading-[1.2]">
-                    <span className="block text-[34px] sm:text-[40px] font-black" style={{ color: BRAND_YELLOW }}>
-                      Check Vehicle Insurance
-                    </span>
-                    <span className="block text-[34px] sm:text-[40px] font-black pb-1" style={{ color: BRAND_YELLOW }}>
-                      Status &amp; Renewal
-                    </span>
-                  </h1>
-                  <p className="text-[15px] sm:text-[17px] text-white/70 leading-[1.4] mb-5">
-                    Enter your vehicle number to check insurance validity and find renewal options.
-                  </p>
                   <InsuranceHeroForm />
-                  <p className="mt-3 text-[13px]" style={{ color: 'rgba(255,255,255,0.72)' }}>
-                    Expired insurance? Renew with trusted partners.
-                  </p>
                 </div>
               </div>
             </div>

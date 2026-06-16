@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import { JsonLd, faqSchema, webPageSchema } from '@/components/seo/JsonLd';
 import { Navbar } from '@/components/Navbar';
+import { InsuranceTopBar } from '@/components/InsuranceTopBar';
 import { Footer } from '@/components/Footer';
 import { HeroForm } from '@/components/HeroForm';
 import { SocialProofTicker } from '@/components/SocialProofTicker';
@@ -52,6 +53,7 @@ export default async function LandingPage() {
           url: '/',
         })}
       />
+      <InsuranceTopBar />
       <Navbar />
       <main className="flex-1">
 

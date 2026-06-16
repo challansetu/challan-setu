@@ -8,6 +8,7 @@ import { JsonLd, cityPageSchemas } from '@/components/seo/JsonLd';
 import { getCityPage, getAllCitySlugs } from '@/data/city-pages';
 import { ArrowRight, MapPin, BadgePercent, FileText, Landmark, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { TopChallanOffencesSection } from '@/components/TopChallanOffencesSection';
+import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
@@ -264,6 +265,8 @@ export default function CityPage({ params }: { params: { city: string } }) {
             </a>
           </div>
         </section>
+
+        <RenewalBanner />
 
       </main>
       <Footer />

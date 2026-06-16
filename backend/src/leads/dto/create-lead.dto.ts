@@ -30,7 +30,7 @@ export class CreateLeadDto {
   @ApiProperty({ example: 'city_page', required: false })
   @IsOptional()
   @IsString()
-  @Matches(/^(homepage|city_page|vehicle_recovery)$/)
+  @Matches(/^(homepage|city_page|vehicle_recovery|insurance)$/)
   source?: string;
 
   @ApiProperty({ example: 'faridabad', required: false })

@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, faqSchema, articleSchema } from '@/components/seo/JsonLd';
 import { getBlogPost, getAllBlogSlugs, type BlogBlock } from '@/data/blog';
+import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { Clock, Tag, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
@@ -306,6 +307,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             <ArrowLeft className="w-4 h-4" /> Back to all articles
           </Link>
         </div>
+
+        <RenewalBanner />
 
       </main>
       <Footer />

@@ -52,9 +52,14 @@ export class LeadsService {
 
     const ist = lead.createdAt.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     const isRecovery = lead.source === 'vehicle_recovery';
+    const isInsurance = lead.source === 'insurance';
 
     const text = [
-      isRecovery ? `🚨 <b>Vehicle Recovery Lead</b>` : `🚗 <b>New Lead</b>`,
+      isRecovery
+        ? `🚨 <b>Vehicle Recovery Lead</b>`
+        : isInsurance
+          ? `🛡️ <b>Insurance Lead</b>`
+          : `🚗 <b>New Lead</b>`,
       `👤 ${lead.fullName}`,
       `📱 ${lead.mobileNumber}`,
       `🔢 ${lead.vehicleNumber}`,
