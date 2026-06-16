@@ -46,7 +46,7 @@ A production-ready full-stack web application for discovering and paying vehicle
 
 ```bash
 cp .env.example .env
-# Fill in your Razorpay keys and challan provider credentials
+# Fill in your secrets (DB, JWT) and your scraper service URL (SCRAPER_API_URL)
 ```
 
 ### 2. Start Infrastructure

@@ -106,7 +106,7 @@ model ChallanSearch {
   rawResponse             Json?
   status                  SearchStatus @default(PENDING)
   errorMessage            String?
-  apiProvider             String       @default("invincibleocean")
+  apiProvider             String       @default("scraper")
   apiCost                 Int          @default(0)
   cachedResponseUsed      Boolean      @default(false)
   supportableFound        Int          @default(0)

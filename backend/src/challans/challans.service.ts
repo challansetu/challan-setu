@@ -207,8 +207,8 @@ export class ChallansService {
         vehicleNumber,
         normalizedVehicleNumber: vehicleNumber,
         status: 'PENDING',
-        apiProvider: 'invincibleocean',
-        apiCost: 400,
+        apiProvider: 'scraper',
+        apiCost: 0,
         cachedResponseUsed: false,
       },
     });
