@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Menu, X, HelpCircle, Info, BookOpen } from 'lucide-react';
+import { Menu, X, HelpCircle, Info, BookOpen, ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from './ui/Button';
 
@@ -23,6 +23,11 @@ export function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden sm:flex items-center gap-1">
             {/* Public links - always visible */}
+            <Link href="/motor-insurance">
+              <Button variant="ghost" size="sm" className="text-gray-600">
+                Motor Insurance
+              </Button>
+            </Link>
             <Link href="/how-it-works">
               <Button variant="ghost" size="sm" className="text-gray-600">
                 How It Works
@@ -54,6 +59,14 @@ export function Navbar() {
         {mobileOpen && (
           <div className="sm:hidden border-t border-gray-50 py-3 space-y-1 animate-in slide-in-from-top-2">
             {/* Public links */}
+            <Link
+              href="/motor-insurance"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-surface-50 transition-colors"
+            >
+              <ShieldCheck className="w-4 h-4 text-gray-400" />
+              <span className="text-sm font-medium">Motor Insurance</span>
+            </Link>
             <Link
               href="/how-it-works"
               onClick={closeMobile}

@@ -59,10 +59,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // Prevent iOS Safari from auto-zooming when a form field is focused.
-  // (iOS 10+ still allows manual pinch-zoom, so accessibility is preserved.)
-  maximumScale: 1,
-  userScalable: false,
+  // Allow pinch-zoom for accessibility (Lighthouse / WCAG). iOS auto-zoom on
+  // input focus is prevented instead by keeping form fields at >=16px font size.
   viewportFit: 'cover',
   themeColor: '#4f46e5',
 };

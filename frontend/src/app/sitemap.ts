@@ -15,6 +15,7 @@ const LAUNCH_DATE        = new Date('2026-05-11'); // site went live
 const CONTENT_DATE       = new Date('2026-05-24'); // last content update (homepage, FAQs)
 const LEGAL_DATE         = new Date('2026-05-01'); // privacy / terms / refund
 const STATE_DATE         = new Date('2026-06-02'); // state e-challan pages added
+const INSURANCE_DATE     = new Date('2026-06-18'); // motor-insurance landing page
 
 const STATE_SLUGS = [
   'andaman-nicobar', 'andhra-pradesh', 'arunachal-pradesh', 'assam',
@@ -44,6 +45,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_DATE,
       changeFrequency: 'monthly',
       priority: 1.0,
+    },
+
+    // ── Motor insurance landing page (high-priority money page) ───────────────
+    {
+      url: `${SITE_URL}/motor-insurance`,
+      lastModified: INSURANCE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.9,
     },
 
     // ── Core static pages ─────────────────────────────────────────────────────

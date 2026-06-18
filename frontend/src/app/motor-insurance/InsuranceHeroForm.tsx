@@ -201,10 +201,10 @@ export function InsuranceHeroForm() {
     <div className="w-full max-w-xl mx-auto">
       <h1 className="tracking-tight mb-2 leading-[1.2]">
         <span className="block text-[34px] sm:text-[40px] font-black" style={{ color: BRAND_YELLOW }}>
-          Check Vehicle Insurance
-        </span>
+          Check Motor Insurance Status
+        </span>{' '}
         <span className="block text-[34px] sm:text-[40px] font-black pb-1" style={{ color: BRAND_YELLOW }}>
-          Status &amp; Renewal
+          by Vehicle Number
         </span>
       </h1>
       <p className="text-[15px] sm:text-[17px] text-white/70 leading-[1.4] mb-5">

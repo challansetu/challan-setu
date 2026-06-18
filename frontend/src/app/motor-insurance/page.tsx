@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { InsuranceHeroForm } from './InsuranceHeroForm';
 import { InsuranceFaqSection } from './InsuranceFaqSection';
+import { FAQS } from './faqs';
 import { UrgencyCarousel } from './UrgencyCarousel';
 import {
   JsonLd,
@@ -28,7 +30,9 @@ import { URGENCY_FACTS, BRAND_DARK } from './data';
 // ── Page metadata ─────────────────────────────────────────────────────────────
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/motor-insurance';
-const PAGE_TITLE = 'Check Motor Insurance Status by Vehicle Number | Free | ChallanSetu';
+// Brand suffix (" | ChallanSetu") is appended by the root layout title template,
+// so it must NOT be repeated here — otherwise the title double-brands.
+const PAGE_TITLE = 'Check Motor Insurance Status by Vehicle Number — Free';
 const PAGE_DESC =
   'Check if your car, bike, truck or any vehicle insurance is active, expired or expiring soon — free & instant via VAHAN. Covers all vehicle types registered in India.';
 
@@ -43,11 +47,7 @@ export const metadata: Metadata = {
     siteName: 'ChallanSetu',
     locale: 'en_IN',
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Check Motor Insurance Status Free | ChallanSetu',
-    description: PAGE_DESC,
+    // og:image is supplied automatically by ./opengraph-image.tsx
   },
   robots: { index: true, follow: true },
   keywords: [
@@ -64,29 +64,10 @@ export const metadata: Metadata = {
   ],
 };
 
-// ── Schema data (SEO only, not rendered) ─────────────────────────────────────
-const FAQS_FOR_SCHEMA = [
-  {
-    q: 'How can I check my vehicle insurance status online?',
-    a: 'Enter your vehicle registration number in the search box and click Check Status. We verify your insurance against the VAHAN government database and instantly show whether your policy is active, expiring soon, or expired.',
-  },
-  {
-    q: 'Is motor insurance mandatory in India?',
-    a: 'Yes. Under the Motor Vehicles Act 1988, every vehicle on Indian roads must have at least a valid Third-Party Liability insurance policy. Driving without insurance is punishable with a fine of up to ₹2,000 and/or imprisonment.',
-  },
-  {
-    q: 'What is the difference between Comprehensive and Third-Party insurance?',
-    a: 'Third-Party covers damage caused to others only. Comprehensive additionally covers your own vehicle from accidents, theft, fire, and natural disasters — offering much broader protection.',
-  },
-  {
-    q: 'What is No Claim Bonus (NCB)?',
-    a: 'NCB is a discount on your renewal premium for every claim-free year. It starts at 20% after 1 year and grows up to 50% after 5 consecutive claim-free years. It is lost if your policy lapses beyond 90 days.',
-  },
-  {
-    q: 'What happens if motor insurance expires?',
-    a: 'You face a ₹2,000 fine if caught driving uninsured. All accident liability falls on you personally. If lapsed beyond 90 days, you lose your accumulated No Claim Bonus.',
-  },
-];
+// ── Schema data ──────────────────────────────────────────────────────────────
+// FAQ schema is derived from the SAME FAQS rendered on-page (InsuranceFaqSection),
+// so every visible Q&A is eligible for FAQ rich results — no drift.
+const FAQS_FOR_SCHEMA = FAQS;
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default function MotorInsurancePage() {
@@ -138,8 +119,21 @@ export default function MotorInsurancePage() {
           {/* ── Content sheet ────────────────────────────────────────────────── */}
           <div className="relative z-10 bg-white rounded-t-3xl -mt-8">
 
+            <RenewalBanner className="pt-4 pb-2 bg-white rounded-t-3xl" />
+
+            {/* Breadcrumb (mirrors breadcrumbSchema for users) */}
+            <nav aria-label="Breadcrumb" className="container-app max-w-5xl pt-2 pb-1">
+              <ol className="flex items-center gap-1.5 text-xs text-gray-500">
+                <li>
+                  <Link href="/" className="hover:text-gray-700 transition-colors">Home</Link>
+                </li>
+                <li aria-hidden="true" className="text-gray-300">/</li>
+                <li className="font-medium text-gray-700" aria-current="page">Motor Insurance</li>
+              </ol>
+            </nav>
+
             {/* Why Check */}
-            <section className="pt-8 bg-white rounded-2xl" aria-labelledby="why-check-heading">
+            <section className="pt-4 bg-white rounded-2xl" aria-labelledby="why-check-heading">
               <div className="container-app max-w-5xl">
                 <div className="mb-8">
                   <h2 id="why-check-heading" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-2">
@@ -174,7 +168,6 @@ export default function MotorInsurancePage() {
               </div>
             </section>
 
-            <RenewalBanner />
             <InsuranceCoverageTable />
             <HowItWorks />
             <NcbSlabTable />
@@ -182,6 +175,49 @@ export default function MotorInsurancePage() {
             <PremiumFactorsList />
             <LapseRisksList />
             <DocumentsNeeded />
+
+            {/* In-depth content — topical depth + descriptive internal links */}
+            <section className="py-10 bg-white" aria-labelledby="about-motor-insurance">
+              <div className="container-app max-w-3xl">
+                <h2 id="about-motor-insurance" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4">
+                  Understanding Motor Insurance in India
+                </h2>
+                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                  <p>
+                    Every vehicle registered in India — a two-wheeler, private car, taxi, or commercial truck — is
+                    recorded in the government&apos;s central <strong>VAHAN</strong> database, along with the status of
+                    its insurance policy. Checking your <strong>motor insurance status by vehicle number</strong> simply
+                    reads that official record, so you instantly know whether your cover is active, expiring soon, or
+                    already expired — without digging through old policy papers or calling your insurer.
+                  </p>
+                  <p>
+                    Under the Motor Vehicles Act, 1988, at least a <strong>Third-Party Liability</strong> policy is
+                    legally mandatory to drive on Indian roads. Third-party cover pays for injury or damage you cause to
+                    others, while a <strong>Comprehensive</strong> policy also protects your own vehicle against
+                    accidents, theft, fire, and natural calamities. If you are unsure which you hold, a quick status
+                    check is the fastest way to find out — and you can{' '}
+                    <Link href="/how-it-works" className="text-blue-600 hover:underline font-medium">see exactly how the lookup works</Link>{' '}
+                    before you start.
+                  </p>
+                  <p>
+                    Insurance is only one half of staying road-legal. Unpaid fines can quietly pile up against your
+                    registration number, so it is worth pairing your insurance check with a quick scan of your{' '}
+                    <Link href="/" className="text-blue-600 hover:underline font-medium">pending traffic challans</Link>.
+                    Drivers in major cities can also use our state guides, such as the{' '}
+                    <Link href="/e-challan/delhi" className="text-blue-600 hover:underline font-medium">Delhi e-challan portal</Link>,
+                    to understand local rules and penalties.
+                  </p>
+                  <p>
+                    Renewing on time protects more than your legal standing. Letting a policy lapse beyond 90 days wipes
+                    out your accumulated <strong>No Claim Bonus</strong> (worth up to a 50% premium discount) and may
+                    force a fresh vehicle inspection. And if the worst happens, knowing your cover is active matters most
+                    — here is what to do if you ever need to{' '}
+                    <Link href="/recover-stolen-vehicle" className="text-blue-600 hover:underline font-medium">report and recover a stolen vehicle</Link>.
+                  </p>
+                </div>
+              </div>
+            </section>
+
             <InsuranceFaqSection />
             <InsuranceCta />
 
