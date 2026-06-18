@@ -101,14 +101,9 @@ export function localBusinessSchema() {
       opens: '09:00',
       closes: '18:00',
     },
-    // UPDATE these placeholder values once you collect real reviews
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '200',
-      bestRating: '5',
-      worstRating: '1',
-    },
+    // NOTE: No aggregateRating here — Google forbids self-serving review markup
+    // without genuine, visible on-page reviews (risks a manual action). Add it
+    // back only once real reviews are collected AND rendered on the page.
     makesOffer: {
       '@type': 'Offer',
       name: 'Traffic Challan Settlement — Up to 50% Off',

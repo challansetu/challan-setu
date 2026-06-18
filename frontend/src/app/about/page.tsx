@@ -7,7 +7,9 @@ import { Shield, MapPin, Zap, HeartHandshake, ArrowRight, Mail, Clock } from 'lu
 import siteData from '@/data/site.json';
 
 export const metadata: Metadata = {
-  title: 'About ChallanSetu - Our Mission',
+  // absolute: title already contains the brand; absolute avoids the template
+  // appending "| ChallanSetu" a second time.
+  title: { absolute: 'About ChallanSetu - Our Mission' },
   description:
     'ChallanSetu is on a mission to make traffic challan payment simple, affordable, and stress-free for vehicle owners across Delhi, Noida, Gurgaon & Ghaziabad.',
   alternates: { canonical: '/about' },

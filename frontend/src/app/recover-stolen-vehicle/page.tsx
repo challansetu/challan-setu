@@ -15,7 +15,9 @@ const PAGE_TITLE = 'Recover Stolen Vehicle in India | Superdari Application | Ch
 const PAGE_DESC = 'Vehicle stolen and recovered by police? ChallanSetu handles your Superdari application, FIR follow-up, court filing and vehicle release end-to-end. Get started on WhatsApp.';
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
+  // absolute: PAGE_TITLE already ends in "| ChallanSetu"; absolute stops the
+  // layout template from appending it again (avoids double-branding).
+  title: { absolute: PAGE_TITLE },
   description: PAGE_DESC,
 
   // ── Canonical (fix: was pointing to homepage) ──────────────────────────────

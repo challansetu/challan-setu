@@ -34,7 +34,7 @@ const PAGE_URL = '/motor-insurance';
 // so it must NOT be repeated here — otherwise the title double-brands.
 const PAGE_TITLE = 'Check Motor Insurance Status by Vehicle Number — Free';
 const PAGE_DESC =
-  'Check if your car, bike, truck or any vehicle insurance is active, expired or expiring soon — free & instant via VAHAN. Covers all vehicle types registered in India.';
+  'Check if your car, bike, truck or any vehicle insurance is active, expired or expiring soon — free & instant via the VAHAN government database.';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
