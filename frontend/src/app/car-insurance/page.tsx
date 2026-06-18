@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { InsuranceHeroForm } from '../motor-insurance/InsuranceHeroForm';
 import { InsuranceFaqSection } from '../motor-insurance/InsuranceFaqSection';
-import { HowItWorks, InsuranceCta } from '../motor-insurance/components';
+import { RenewalBanner, HowItWorks, InsuranceCta } from '../motor-insurance/components';
 import { BRAND_DARK } from '../motor-insurance/data';
 import {
   JsonLd,
@@ -106,8 +106,11 @@ export default function CarInsurancePage() {
           {/* ── Content sheet ────────────────────────────────────────────────── */}
           <div className="relative z-10 bg-white rounded-t-3xl -mt-8">
 
+            {/* PolicyBazaar partner banners */}
+            <RenewalBanner className="pt-4 pb-2 bg-white rounded-t-3xl" />
+
             {/* Breadcrumb (mirrors breadcrumbSchema) */}
-            <nav aria-label="Breadcrumb" className="container-app max-w-5xl pt-5 pb-1">
+            <nav aria-label="Breadcrumb" className="container-app max-w-5xl pt-2 pb-1">
               <ol className="flex items-center gap-1.5 text-xs text-gray-500">
                 <li><Link href="/" className="hover:text-gray-700 transition-colors">Home</Link></li>
                 <li aria-hidden="true" className="text-gray-300">/</li>
