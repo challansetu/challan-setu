@@ -47,9 +47,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
 
-    // ── Motor insurance landing page (high-priority money page) ───────────────
+    // ── Motor insurance hub + vehicle-type spokes (high-priority money pages) ──
     {
       url: `${SITE_URL}/motor-insurance`,
+      lastModified: INSURANCE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/car-insurance`,
       lastModified: INSURANCE_DATE,
       changeFrequency: 'monthly',
       priority: 0.9,

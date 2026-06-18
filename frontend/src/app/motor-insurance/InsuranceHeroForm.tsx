@@ -82,7 +82,20 @@ function useTypingPlaceholder(active: boolean) {
 
 type Step = 'vehicle' | 'mobile' | 'options';
 
-export function InsuranceHeroForm() {
+interface InsuranceHeroFormProps {
+  /** First line of the H1 (yellow). Defaults to the generic motor-insurance copy. */
+  headingLine1?: string;
+  /** Second line of the H1 (yellow). */
+  headingLine2?: string;
+  /** Sub-heading shown under the H1 on the vehicle-number step. */
+  subheading?: string;
+}
+
+export function InsuranceHeroForm({
+  headingLine1 = 'Check Motor Insurance Status',
+  headingLine2 = 'by Vehicle Number',
+  subheading = 'Enter your vehicle number to check insurance validity and find renewal options.',
+}: InsuranceHeroFormProps = {}) {
   const [step, setStep] = useState<Step>('vehicle');
   const [value, setValue] = useState('');
   const [vehicleClean, setVehicleClean] = useState('');
@@ -201,15 +214,15 @@ export function InsuranceHeroForm() {
     <div className="w-full max-w-xl mx-auto">
       <h1 className="tracking-tight mb-2 leading-[1.2]">
         <span className="block text-[34px] sm:text-[40px] font-black" style={{ color: BRAND_YELLOW }}>
-          Check Motor Insurance Status
+          {headingLine1}
         </span>{' '}
         <span className="block text-[34px] sm:text-[40px] font-black pb-1" style={{ color: BRAND_YELLOW }}>
-          by Vehicle Number
+          {headingLine2}
         </span>
       </h1>
       <p className="text-[15px] sm:text-[17px] text-white/70 leading-[1.4] mb-5">
         {step === 'vehicle'
-          ? 'Enter your vehicle number to check insurance validity and find renewal options.'
+          ? subheading
           : 'Almost done, enter your mobile number to view your status & renewal options.'}
       </p>
 

@@ -188,7 +188,9 @@ export default function MotorInsurancePage() {
                     recorded in the government&apos;s central <strong>VAHAN</strong> database, along with the status of
                     its insurance policy. Checking your <strong>motor insurance status by vehicle number</strong> simply
                     reads that official record, so you instantly know whether your cover is active, expiring soon, or
-                    already expired — without digging through old policy papers or calling your insurer.
+                    already expired — without digging through old policy papers or calling your insurer. Looking only
+                    for a four-wheeler? Use our dedicated{' '}
+                    <Link href="/car-insurance" className="text-blue-600 hover:underline font-medium">car insurance status check</Link>.
                   </p>
                   <p>
                     Under the Motor Vehicles Act, 1988, at least a <strong>Third-Party Liability</strong> policy is

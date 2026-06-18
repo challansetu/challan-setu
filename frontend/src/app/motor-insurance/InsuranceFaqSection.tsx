@@ -2,9 +2,19 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { FAQS } from './faqs';
+import { FAQS, type Faq } from './faqs';
 
-export function InsuranceFaqSection() {
+interface InsuranceFaqSectionProps {
+  /** FAQs to render. Defaults to the generic motor-insurance set. */
+  faqs?: Faq[];
+  /** Section heading. */
+  heading?: string;
+}
+
+export function InsuranceFaqSection({
+  faqs = FAQS,
+  heading = 'Frequently Asked Questions',
+}: InsuranceFaqSectionProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -12,12 +22,12 @@ export function InsuranceFaqSection() {
       <div className="container-app max-w-5xl">
         <div className="mb-8">
           <h2 id="faq-heading" className="text-xl sm:text-2xl font-bold text-gray-900">
-            Frequently Asked Questions
+            {heading}
           </h2>
         </div>
 
         <div className="space-y-2">
-          {FAQS.map((faq, i) => {
+          {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
               <div
