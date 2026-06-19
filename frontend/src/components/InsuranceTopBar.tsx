@@ -14,7 +14,7 @@ export function InsuranceTopBar() {
     <Link
       href="/motor-insurance"
       onClick={() => trackBannerClick('insurance_topbar', { placement: 'home_topbar' })}
-      className="group block w-full sticky top-0 z-40"
+      className="group block w-full fixed top-0 left-0 right-0 z-50"
       style={{ background: 'linear-gradient(90deg, #f5c842 0%, #e8a800 100%)' }}
     >
       <div className="container-app flex items-center justify-center gap-2 py-2 text-[12.5px] sm:text-sm font-bold text-[#1a1a1a]">
