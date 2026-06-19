@@ -55,7 +55,7 @@ export default async function LandingPage() {
       />
       <InsuranceTopBar />
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pt-[108px]">
 
         {/* ── Sticky hero + content sheet wrapper ── */}
         <div className="relative">
