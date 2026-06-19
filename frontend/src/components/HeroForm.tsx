@@ -186,16 +186,23 @@ export function HeroForm({
 
   return (
     <>
-      {isOffline && (
-        <div className="max-w-xl mx-auto px-4 sm:px-0 mb-4">
+      <div className="max-w-xl mx-auto px-4 sm:px-0 mb-4">
+        {isOffline ? (
           <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
             <p className="text-sm font-semibold text-amber-900 flex items-center gap-2">
               <span>⏰</span> We're offline (11 AM - 10 PM IST)
             </p>
             <p className="text-sm text-amber-800 mt-1.5">Your message is saved. Agent will contact you tomorrow morning.</p>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+            <p className="text-sm font-semibold text-emerald-700 flex items-center gap-2">
+              <span className="w-2 h-2 bg-emerald-600 rounded-full"></span>
+              Agent assigned · Response within 30 min
+            </p>
+          </div>
+        )}
+      </div>
       <form
         id={formId}
         onSubmit={(e) => { e.preventDefault(); openOverlay(); }}
