@@ -175,6 +175,9 @@ export default function CityPage({ params }: { params: { city: string } }) {
           </div>
         </section>
 
+        {/* ── PolicyBazaar Banner ───────────────────────────────────────── */}
+        <RenewalBanner />
+
         {/* ── About city challans ───────────────────────────────────────── */}
         <section className="py-6 sm:py-8">
           <div className="container-app max-w-3xl">
@@ -343,8 +346,6 @@ export default function CityPage({ params }: { params: { city: string } }) {
             </a>
           </div>
         </section>
-
-        <RenewalBanner />
 
       </main>
       <Footer />
