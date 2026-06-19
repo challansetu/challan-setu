@@ -122,7 +122,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
 
-          <div className="container-app relative">
+          <div className="container-app relative pb-8">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-white/50 text-sm mb-5" aria-label="Breadcrumb">
               <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
