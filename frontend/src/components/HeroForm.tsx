@@ -111,6 +111,25 @@ export function HeroForm({
   const showAnimation = !showOverlay && vehicleNumber === '';
   const animatedText = useTypingPlaceholder(showAnimation);
 
+  // Check if currently offline (outside 11 AM - 10 PM IST)
+  const [isOffline, setIsOffline] = useState(false);
+
+  useEffect(() => {
+    const checkOfflineStatus = () => {
+      const now = new Date();
+      // Convert to IST (UTC+5:30)
+      const istTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      const hour = istTime.getHours();
+      // Offline if before 11 AM or at/after 10 PM
+      setIsOffline(hour < 11 || hour >= 22);
+    };
+
+    checkOfflineStatus();
+    // Check every minute
+    const interval = setInterval(checkOfflineStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem(RECENT_KEY);
@@ -167,6 +186,16 @@ export function HeroForm({
 
   return (
     <>
+      {isOffline && (
+        <div className="max-w-xl mx-auto px-4 sm:px-0 mb-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+            <p className="text-sm font-semibold text-amber-900 flex items-center gap-2">
+              <span>⏰</span> We're offline (11 AM - 10 PM IST)
+            </p>
+            <p className="text-sm text-amber-800 mt-1.5">Your message is saved. Agent will contact you tomorrow morning.</p>
+          </div>
+        </div>
+      )}
       <form
         id={formId}
         onSubmit={(e) => { e.preventDefault(); openOverlay(); }}
