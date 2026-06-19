@@ -9,7 +9,7 @@ const BRAND_YELLOW = '#f5c842';
 
 export function DiscountStepper() {
   return (
-    <section className="py-10 md:flex md:justify-end">
+    <section className="py-6 md:flex md:justify-end">
       <div className="w-full md:max-w-sm">
         <div className="mb-6">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">How it works</h2>
