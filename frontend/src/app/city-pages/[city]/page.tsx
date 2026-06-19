@@ -163,7 +163,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── About city challans ───────────────────────────────────────── */}
-        <section className="py-12 sm:py-14">
+        <section className="py-6 sm:py-8">
           <div className="container-app max-w-3xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
             <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
@@ -209,9 +209,9 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── How ChallanSetu Works ─────────────────────────────────────── */}
-        <section className="py-12 sm:py-14">
+        <section className="py-6 sm:py-8">
           <div className="container-app max-w-3xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
               How ChallanSetu Works in {data.cityName}
             </h2>
             <div className="space-y-3">
@@ -234,7 +234,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── If not paid ──────────────────────────────────────────────── */}
-        <section className="py-12 sm:py-14 bg-white border-y border-gray-100">
+        <section className="py-6 sm:py-8 bg-white border-y border-gray-100">
           <div className="container-app max-w-3xl">
             <div className="bg-amber-50 rounded-2xl border border-amber-100 p-6 sm:p-8">
               <div className="flex items-center gap-2 mb-4">
@@ -249,7 +249,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Documents needed ─────────────────────────────────────────── */}
-        <section className="py-12 sm:py-14">
+        <section className="py-6 sm:py-8">
           <div className="container-app max-w-3xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">{data.documentsHeading}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -268,7 +268,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── FAQ ───────────────────────────────────────────────────────── */}
-        <section className="py-10 bg-white">
+        <section className="py-6 sm:py-8 bg-white">
           <div className="container-app max-w-3xl">
             <h2 className="text-xl font-bold text-gray-900 mb-5">{data.faqHeading}</h2>
             <div className="space-y-3">
@@ -292,7 +292,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Related cities ────────────────────────────────────────────── */}
-        <section className="py-10 sm:py-12">
+        <section className="py-6 sm:py-8">
           <div className="container-app">
             <h2 className="text-lg font-bold text-gray-900 mb-4">Related City Pages</h2>
             <div className="flex flex-wrap gap-3">
@@ -313,7 +313,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Bottom CTA ────────────────────────────────────────────────── */}
         <section
-          className="py-12 relative overflow-hidden"
+          className="py-8 relative overflow-hidden"
           style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
         >
           <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
