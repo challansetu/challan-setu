@@ -98,13 +98,8 @@ export function ViolationTypeSection({
           <div className="relative rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100/50 p-8 overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-blue-200/30 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10">
-              <div className="flex items-start gap-4">
-                <Shield className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
-                <div>
-                  <p className="font-bold text-gray-900 mb-2 text-lg">Why Professional Help Matters</p>
-                  <p className="text-gray-700 leading-relaxed">{content.whyHelpNeeded}</p>
-                </div>
-              </div>
+              <p className="font-bold text-gray-900 mb-2 text-lg">Why Professional Help Matters</p>
+              <p className="text-gray-700 leading-relaxed">{content.whyHelpNeeded}</p>
             </div>
           </div>
         </div>
