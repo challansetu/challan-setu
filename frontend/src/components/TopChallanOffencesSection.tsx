@@ -147,7 +147,7 @@ export function TopChallanOffencesSection({
       aria-labelledby="top-offences-heading"
       className="py-10 bg-white"
     >
-      <div className="container-app">
+      <div className="container-app max-w-5xl">
 
         {/* ── Header ──────────────────────────────────────────────────────── */}
         <div className="mb-8">

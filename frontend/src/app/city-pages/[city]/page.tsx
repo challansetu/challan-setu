@@ -185,11 +185,13 @@ export default function CityPage({ params }: { params: { city: string } }) {
         <RenewalBanner />
 
         {/* ── About city challans ───────────────────────────────────────── */}
-        <section className="py-1 sm:py-2">
+        <section className="py-6 sm:py-8">
           <div className="container-app max-w-5xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
-            <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
-              {data.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+            <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
+              <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
+                {data.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+              </div>
             </div>
           </div>
         </section>
