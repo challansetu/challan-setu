@@ -147,13 +147,23 @@ export default function CityPage({ params }: { params: { city: string } }) {
         <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
           <div className="container-app">
             <style>{`
-              .hide-scrollbar::-webkit-scrollbar { display: none; }
+              .trust-badges {
+                display: flex;
+                gap: 0.75rem;
+                overflow-x: auto;
+                scroll-behavior: smooth;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+              }
+              .trust-badges::-webkit-scrollbar {
+                display: none;
+              }
             `}</style>
-            <div className="flex gap-3 flex-nowrap overflow-x-auto hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="trust-badges -mx-4 px-4 sm:mx-0 sm:px-0">
               {data.supportBadges.map((badge, index) => {
                 const Icon = BADGE_ICONS[index] ?? ShieldCheck;
                 return (
-                  <div key={badge} className="flex items-center gap-2 flex-shrink-0 bg-white rounded-lg px-4 py-3 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all whitespace-nowrap">
+                  <div key={badge} className="flex items-center gap-2 flex-shrink-0 bg-white rounded-lg px-4 py-3 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all whitespace-nowrap min-w-max">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-amber-100 to-orange-100">
                       <Icon className="w-4 h-4 text-amber-600" />
                     </div>
