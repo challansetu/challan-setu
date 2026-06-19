@@ -122,7 +122,7 @@ export default function CarInsurancePage() {
 
             {/* Intro / why */}
             <section className="pt-6 pb-2 bg-white" aria-labelledby="why-car-heading">
-              <div className="container-app max-w-3xl">
+              <div className="container-app max-w-5xl">
                 <h2 id="why-car-heading" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-3">
                   Why check your car insurance status?
                 </h2>
@@ -140,7 +140,7 @@ export default function CarInsurancePage() {
 
             {/* What car insurance covers */}
             <section className="py-8 bg-white" aria-labelledby="cover-heading">
-              <div className="container-app max-w-3xl">
+              <div className="container-app max-w-5xl">
                 <h2 id="cover-heading" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4">
                   Third-party vs comprehensive car insurance
                 </h2>
@@ -176,7 +176,7 @@ export default function CarInsurancePage() {
 
             {/* Road-legal prose + internal links */}
             <section className="py-10 bg-white" aria-labelledby="road-legal-heading">
-              <div className="container-app max-w-3xl">
+              <div className="container-app max-w-5xl">
                 <h2 id="road-legal-heading" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4">
                   Keeping your car road-legal
                 </h2>
