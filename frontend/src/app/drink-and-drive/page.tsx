@@ -8,8 +8,8 @@ import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howT
 const WHATSAPP_NUMBER = '+919876543210'; // Replace with actual number
 const WHATSAPP_MESSAGE = encodeURIComponent('Hi, I need legal help with my drink & drive challan. Please review my case.');
 
-// WhatsApp Logo Component
-function WhatsAppLogo({ className }: { className?: string }) {
+// Simple WhatsApp Icon Component
+function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -17,7 +17,7 @@ function WhatsAppLogo({ className }: { className?: string }) {
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a6.963 6.963 0 00-6.953 6.97c0 1.566.382 3.129 1.196 4.402L2.7 21.3l4.505-1.185a6.97 6.97 0 004.334 1.378h.005c3.82 0 6.975-3.12 6.975-6.937 0-1.855-.505-3.679-1.597-5.148-1.092-1.469-2.637-2.387-4.717-2.387" />
+      <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2 22l6.29-.97A10 10 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.41 0-2.73-.36-3.88-.97l-.28-.15-2.89.45.45-2.89-.15-.28A8 8 0 1 1 12 20z" />
     </svg>
   );
 }
@@ -55,7 +55,7 @@ function CTAButton({
       rel="noopener noreferrer"
       className={`inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 active:scale-95 text-gray-900 font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl group ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''}`}
     >
-      <WhatsAppLogo className={`${iconSizes[size]} text-green-600 group-hover:scale-110 transition-transform`} />
+      <WhatsAppIcon className={`${iconSizes[size]} text-green-600 group-hover:scale-110 transition-transform`} />
       <div className="text-left">
         <div>{label}</div>
         {subtitle && <div className="text-xs opacity-75">{subtitle}</div>}
