@@ -113,7 +113,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Hero ──────────────────────────────────────────────────────── */}
         <section
-          className="relative overflow-hidden text-white py-14 sm:py-20"
+          className="relative overflow-hidden text-white py-8 sm:py-10"
           style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
         >
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
