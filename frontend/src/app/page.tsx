@@ -121,7 +121,7 @@ export default async function LandingPage() {
                     { img: '/images/why-one-portal.png', title: 'One Portal for All Challans' },
                     { img: '/images/why-expert-lawyer.png', title: 'Backed by Legal Experts' },
                   ].map((item, i) => (
-                    <div key={i} className="flex flex-col items-center text-center gap-3">
+                    <div key={i} className={`flex flex-col items-center text-center gap-3 ${i < 2 ? 'sm:border-r sm:border-gray-100 sm:pr-4 md:pr-8' : ''}`}>
                       <div className="w-full aspect-square rounded-2xl bg-[rgb(233,233,234)] flex items-center justify-center overflow-hidden">
                         <Image src={item.img} alt={item.title} width={280} height={280} sizes="280px" className="w-full h-full object-cover" />
                       </div>
