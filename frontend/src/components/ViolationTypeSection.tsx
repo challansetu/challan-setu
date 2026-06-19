@@ -67,28 +67,28 @@ export function ViolationTypeSection({
       </section>
 
       {/* ── Penalties Section ──────────────────────────────────────────── */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-12 sm:py-16 bg-gradient-to-b from-slate-50 to-white">
         <div className="container-app max-w-4xl">
-          <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{content.penaltiesHeading}</h2>
-            <p className="text-lg text-gray-600">Understand the serious consequences you face</p>
+          <div className="mb-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{content.penaltiesHeading}</h2>
+            <p className="text-gray-600">Understand the serious consequences you face</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="space-y-3 mb-6">
             {content.penalties.map((penalty, i) => (
               <div
                 key={i}
-                className="group relative rounded-xl border border-gray-200 p-6 hover:border-amber-400 transition-all hover:shadow-lg hover:bg-white cursor-default"
+                className="group relative rounded-lg border border-gray-200 p-4 hover:border-amber-400 transition-all hover:shadow-md hover:bg-white cursor-default"
               >
-                <div className="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-amber-400 to-transparent rounded-tl-xl" />
+                <div className="absolute top-0 left-0 w-0.5 h-8 bg-amber-400 rounded-tl-lg" />
 
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 flex-shrink-0">
-                    <AlertTriangle className="w-5 h-5 text-amber-600" />
+                <div className="flex items-start gap-3 ml-1">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 flex-shrink-0 mt-0.5">
+                    <AlertTriangle className="w-4 h-4 text-amber-600" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900 mb-2 text-base">{penalty.label}</p>
-                    <p className="text-sm text-gray-600 leading-relaxed">{penalty.description}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-gray-900 text-sm">{penalty.label}</p>
+                    <p className="text-xs text-gray-600 leading-relaxed mt-0.5">{penalty.description}</p>
                   </div>
                 </div>
               </div>
@@ -111,36 +111,38 @@ export function ViolationTypeSection({
       </section>
 
       {/* ── Process Section ────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-20">
+      <section className="py-12 sm:py-16">
         <div className="container-app max-w-4xl">
-          <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{content.processHeading}</h2>
-            <p className="text-lg text-gray-600">Clear, step-by-step legal support from start to finish</p>
+          <div className="mb-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{content.processHeading}</h2>
+            <p className="text-gray-600">Clear, step-by-step legal support from start to finish</p>
           </div>
 
-          <div className="space-y-6">
-            {content.processSteps.map((step, i) => (
-              <div key={i} className="flex gap-6">
-                <div className="flex flex-col items-center flex-shrink-0">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-lg"
-                    style={{ background: BRAND_DARK }}
-                  >
-                    {i + 1}
-                  </div>
-                  {i < content.processSteps.length - 1 && (
-                    <div className="w-1 h-16 bg-gradient-to-b from-gray-300 to-gray-200 mt-2" />
-                  )}
-                </div>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 to-gray-200" />
 
-                <div className="pt-2 pb-6">
-                  <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-gray-300 transition-all hover:shadow-md">
-                    <h3 className="font-bold text-gray-900 mb-2 text-lg">{step.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+            <div className="space-y-4">
+              {content.processSteps.map((step, i) => (
+                <div key={i} className="flex gap-4 relative z-10">
+                  <div className="flex-shrink-0">
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-lg border-4 border-white"
+                      style={{ background: BRAND_DARK }}
+                    >
+                      {i + 1}
+                    </div>
+                  </div>
+
+                  <div className="pt-1 pb-0">
+                    <div className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-all hover:shadow-md">
+                      <h3 className="font-bold text-gray-900 mb-1 text-base">{step.title}</h3>
+                      <p className="text-gray-600 leading-relaxed text-sm">{step.desc}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="mt-10 rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50/50 p-8">
