@@ -12,7 +12,7 @@ export function Navbar() {
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   return (
-    <nav className="sticky top-[44px] z-40 bg-white border-b border-gray-100/80 -mt-1">
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100/80">
       <div className="container-app">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
