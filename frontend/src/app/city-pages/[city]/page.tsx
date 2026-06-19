@@ -253,10 +253,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         <section className="py-6 sm:py-8 bg-white border-y border-gray-100">
           <div className="container-app max-w-3xl">
             <div className="bg-amber-50 rounded-2xl border border-amber-100 p-6 sm:p-8">
-              <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <h2 className="text-2xl font-bold text-gray-900">{data.unpaidHeading}</h2>
-              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.unpaidHeading}</h2>
               <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
                 {data.unpaidParagraphs.map((p, i) => <p key={i}>{p}</p>)}
               </div>
