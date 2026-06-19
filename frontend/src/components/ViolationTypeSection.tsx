@@ -25,8 +25,8 @@ export function ViolationTypeSection({
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-        <div className="container-app relative z-10">
-          <div className="max-w-4xl">
+        <div className="container-app max-w-5xl relative z-10">
+          <div>
             <div className="mb-2">
               <span className="text-base font-bold text-amber-300">{content.heroBadge}</span>
             </div>
