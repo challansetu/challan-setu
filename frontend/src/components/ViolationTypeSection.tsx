@@ -31,7 +31,7 @@ export function ViolationTypeSection({
               <span className="text-base font-bold text-amber-300">{content.heroBadge}</span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-6 leading-tight">
               {content.heroHeading}
             </h2>
 
@@ -70,7 +70,7 @@ export function ViolationTypeSection({
       <section className="py-12 sm:py-16 bg-gradient-to-b from-slate-50 to-white">
         <div className="container-app max-w-4xl">
           <div className="mb-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{content.penaltiesHeading}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{content.penaltiesHeading}</h2>
             <p className="text-gray-600">Understand the serious consequences you face</p>
           </div>
 
@@ -109,7 +109,7 @@ export function ViolationTypeSection({
       <section className="py-12 sm:py-16">
         <div className="container-app max-w-4xl">
           <div className="mb-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{content.processHeading}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{content.processHeading}</h2>
             <p className="text-gray-600">Clear, step-by-step legal support from start to finish</p>
           </div>
 
@@ -157,9 +157,9 @@ export function ViolationTypeSection({
       {/* ── FAQs Section ──────────────────────────────────────────────── */}
       <section className="py-16 sm:py-20 bg-gradient-to-b from-white to-slate-50">
         <div className="container-app max-w-4xl">
-          <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{content.faqHeading}</h2>
-            <p className="text-lg text-gray-600">Answers to common questions about drink-and-drive cases</p>
+          <div className="mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{content.faqHeading}</h2>
+            <p className="text-gray-600">Answers to common questions about drink-and-drive cases</p>
           </div>
 
           <div className="space-y-3 mb-8">
@@ -203,7 +203,7 @@ export function ViolationTypeSection({
             <Scale className="w-8 h-8" style={{ color: BRAND_YELLOW }} />
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">{content.ctaHeading}</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">{content.ctaHeading}</h2>
           <p className="text-lg text-slate-300 mb-8 leading-relaxed">{content.ctaSubtext}</p>
 
           <a
