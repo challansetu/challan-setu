@@ -122,7 +122,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
 
-          <div className="container-app relative pb-8">
+          <div className="container-app max-w-5xl relative pb-8">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-white/50 text-sm mb-5" aria-label="Breadcrumb">
               <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -151,7 +151,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Trust strip ───────────────────────────────────────────────── */}
         <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
-          <div className="container-app">
+          <div className="container-app max-w-5xl">
             <style>{`
               .trust-badges {
                 display: flex;
@@ -186,7 +186,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── About city challans ───────────────────────────────────────── */}
         <section className="py-1 sm:py-2">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
             <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
               {data.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
@@ -217,7 +217,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Court challan support ─────────────────────────────────────── */}
         <section className="py-12 sm:py-14">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Landmark className="w-5 h-5 text-amber-500" />
@@ -232,7 +232,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── How ChallanSetu Works ─────────────────────────────────────── */}
         <section className="py-6 sm:py-8">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               How ChallanSetu Works in {data.cityName}
             </h2>
@@ -257,7 +257,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── If not paid ──────────────────────────────────────────────── */}
         <section className="py-6 sm:py-8 bg-white border-y border-gray-100">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <div className="bg-amber-50 rounded-3xl border border-amber-100 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.unpaidHeading}</h2>
               <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
@@ -269,7 +269,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Documents needed ─────────────────────────────────────────── */}
         <section className="py-6 sm:py-8">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">{data.documentsHeading}</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {data.documents.map((item) => (
@@ -288,7 +288,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── FAQ ───────────────────────────────────────────────────────── */}
         <section className="py-6 sm:py-8 bg-white">
-          <div className="container-app max-w-3xl">
+          <div className="container-app max-w-5xl">
             <h2 className="text-xl font-bold text-gray-900 mb-5">{data.faqHeading}</h2>
             <div className="space-y-3">
               {data.faqs.map((faq, i) => (
