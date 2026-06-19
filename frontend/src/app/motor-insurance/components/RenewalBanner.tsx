@@ -59,7 +59,7 @@ export function RenewalBanner({ className }: { className?: string }) {
       <div className="container-app max-w-5xl">
 
         {/* ── Heading ───────────────────────────────────────────────── */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Renew Your Insurance</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Renew Your Insurance</h2>
 
         {/* ── Desktop: both banners side by side ───────────────────── */}
         <div className="hidden sm:grid sm:grid-cols-3 gap-4">
