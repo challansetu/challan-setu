@@ -162,23 +162,23 @@ export function ViolationTypeSection({
             <p className="text-gray-600">Answers to common questions about drink-and-drive cases</p>
           </div>
 
-          <div className="space-y-3 mb-8">
+          <div className="space-y-2 mb-6">
             {content.faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-md"
+                className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-sm"
               >
-                <summary className="flex items-center justify-between cursor-pointer px-6 py-5 font-semibold text-gray-900 hover:bg-slate-50 transition-colors list-none">
-                  <span className="text-base">{faq.q}</span>
+                <summary className="flex items-center justify-between cursor-pointer px-4 py-3 font-semibold text-gray-900 hover:bg-slate-50 transition-colors list-none">
+                  <span className="text-sm">{faq.q}</span>
                   <span
-                    className="ml-4 text-gray-400 flex-shrink-0 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none font-light"
+                    className="ml-3 text-gray-400 flex-shrink-0 group-open:rotate-45 transition-transform duration-300 text-xl leading-none font-light"
                     style={{ color: BRAND_YELLOW }}
                   >
                     +
                   </span>
                 </summary>
-                <div className="px-6 pb-5 pt-2 border-t border-gray-100 bg-slate-50/50">
-                  <p className="text-gray-700 leading-relaxed text-base">{faq.a}</p>
+                <div className="px-4 pb-3 pt-1 border-t border-gray-100 bg-slate-50/50">
+                  <p className="text-gray-700 leading-relaxed text-xs sm:text-sm">{faq.a}</p>
                 </div>
               </details>
             ))}
