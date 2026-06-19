@@ -147,7 +147,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Scrollable content sheet ──────────────────────────────────────── */}
-        <div className="relative z-10 bg-white rounded-t-2xl sm:rounded-none -mt-8 sm:mt-0">
+        <div className="relative z-10 bg-white rounded-t-3xl sm:rounded-none -mt-8 sm:mt-0 overflow-hidden">
 
         {/* ── Trust strip ───────────────────────────────────────────────── */}
         <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
