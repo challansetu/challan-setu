@@ -21,25 +21,25 @@ export function ViolationTypeSection({
   return (
     <>
       {/* ── Premium Hero Section ─────────────────────────────────────────── */}
-      <section className="py-16 sm:py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-8 sm:py-10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="container-app relative z-10">
           <div className="max-w-4xl">
-            <div className="mb-4">
+            <div className="mb-2">
               <span className="text-base font-bold text-amber-300">{content.heroBadge}</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3 leading-tight">
               {content.heroHeading}
             </h2>
 
-            <p className="text-lg sm:text-xl text-slate-200 mb-8 leading-relaxed max-w-2xl">
+            <p className="text-lg sm:text-xl text-slate-200 mb-5 leading-relaxed max-w-2xl">
               {content.heroSubheading}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
               <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg px-4 py-3">
                 <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
                 <span className="text-sm text-slate-300">Severe Penalties</span>
