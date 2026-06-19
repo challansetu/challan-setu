@@ -314,7 +314,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
         {/* ── Related cities ────────────────────────────────────────────── */}
         <section className="py-6 sm:py-8">
-          <div className="container-app">
+          <div className="container-app max-w-5xl">
             <h2 className="text-lg font-bold text-gray-900 mb-4">Related City Pages</h2>
             <div className="flex flex-wrap gap-3">
               {data.relatedCities.map(({ city, slug }) => (
