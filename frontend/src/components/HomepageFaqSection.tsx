@@ -8,7 +8,7 @@ export function HomepageFaqSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="py-10 bg-white">
+    <section className="py-6 bg-white">
       <div className="container-app">
         <div className="mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-none mb-4">
