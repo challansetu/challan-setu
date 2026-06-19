@@ -27,9 +27,9 @@ export function ViolationTypeSection({
 
         <div className="container-app relative z-10">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 mb-6">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-semibold text-amber-300">{content.heroBadge}</span>
+            <div className="flex items-center gap-2 mb-4">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
+              <span className="text-base font-bold text-amber-300">{content.heroBadge}</span>
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
