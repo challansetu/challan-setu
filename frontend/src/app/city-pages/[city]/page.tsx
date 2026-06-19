@@ -163,7 +163,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
               {data.supportBadges.map((badge, index) => {
                 const Icon = BADGE_ICONS[index] ?? ShieldCheck;
                 return (
-                  <div key={badge} className="flex items-center gap-2 flex-shrink-0 bg-white rounded-lg px-4 py-3 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all whitespace-nowrap min-w-max">
+                  <div key={badge} className="flex items-center gap-2 flex-shrink-0 bg-white rounded-2xl px-4 py-3 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all whitespace-nowrap min-w-max">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-amber-100 to-orange-100">
                       <Icon className="w-4 h-4 text-amber-600" />
                     </div>
@@ -182,7 +182,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         <section className="py-6 sm:py-8">
           <div className="container-app max-w-3xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.aboutHeading}</h2>
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
+            <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 space-y-4 text-gray-600 text-sm leading-relaxed shadow-sm">
               {data.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         {/* ── If not paid ──────────────────────────────────────────────── */}
         <section className="py-6 sm:py-8 bg-white border-y border-gray-100">
           <div className="container-app max-w-3xl">
-            <div className="bg-amber-50 rounded-2xl border border-amber-100 p-6 sm:p-8">
+            <div className="bg-amber-50 rounded-3xl border border-amber-100 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{data.unpaidHeading}</h2>
               <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
                 {data.unpaidParagraphs.map((p, i) => <p key={i}>{p}</p>)}
