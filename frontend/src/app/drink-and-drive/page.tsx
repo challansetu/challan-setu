@@ -1,8 +1,49 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { MessageCircle } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howToSchema } from '@/components/seo/JsonLd';
+
+// WhatsApp contact for drink-and-drive cases
+const WHATSAPP_NUMBER = '+919876543210'; // Replace with actual number
+const WHATSAPP_MESSAGE = encodeURIComponent('Hi, I need legal help with my drink & drive challan. Please review my case.');
+
+// CTA Button Component
+function CTAButton({
+  label,
+  subtitle,
+  fullWidth = false,
+  size = 'md',
+}: {
+  label: string;
+  subtitle?: string;
+  fullWidth?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+}) {
+  const sizeClasses = {
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3 text-base',
+    lg: 'px-8 py-4 text-lg',
+  };
+
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${WHATSAPP_MESSAGE}`;
+
+  return (
+    <a
+      href={whatsappLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 active:scale-95 text-gray-900 font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl group ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''}`}
+    >
+      <MessageCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+      <div className="text-left">
+        <div>{label}</div>
+        {subtitle && <div className="text-xs opacity-75">{subtitle}</div>}
+      </div>
+    </a>
+  );
+}
 
 // ── FAQ Data ──────────────────────────────────────────────────────────────────
 const DRINK_AND_DRIVE_FAQS = [
@@ -149,10 +190,11 @@ export default function DrinkAndDrivePage() {
                     Expert legal guidance for Section 185 violations. Understand DUI penalties, settlement options via Lok Adalat, and protect your driving license.
                   </p>
                   <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <button className="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold rounded-xl transition-colors">
-                      Get Free Legal Review
-                      <span className="block text-xs mt-1 opacity-75">Via WhatsApp (5 mins)</span>
-                    </button>
+                    <CTAButton
+                      label="Get Free Legal Review"
+                      subtitle="Via WhatsApp (5 mins)"
+                      size="lg"
+                    />
                   </div>
                 </div>
               </div>
@@ -210,9 +252,11 @@ export default function DrinkAndDrivePage() {
                     <p className="text-sm text-gray-700 mb-4">
                       Unpaid drink and drive cases escalate to criminal charges and vehicle seizure. Get expert legal guidance immediately.
                     </p>
-                    <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors text-sm">
-                      Get Free Legal Review on WhatsApp
-                    </button>
+                    <CTAButton
+                      label="Get Free Legal Review"
+                      subtitle="Immediate support via WhatsApp"
+                      size="sm"
+                    />
                   </div>
                 </div>
               </div>
@@ -394,9 +438,11 @@ export default function DrinkAndDrivePage() {
                 <p className="text-white/60 mb-8 max-w-lg mx-auto">
                   Get expert legal guidance for your drink and drive case. Understand your rights, options, and path to settlement.
                 </p>
-                <button className="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold rounded-xl transition-colors">
-                  Talk to Legal Expert on WhatsApp
-                </button>
+                <CTAButton
+                  label="Talk to Legal Expert"
+                  subtitle="Via WhatsApp"
+                  size="lg"
+                />
               </div>
             </section>
 
