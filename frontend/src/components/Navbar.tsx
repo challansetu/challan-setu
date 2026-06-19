@@ -28,6 +28,11 @@ export function Navbar() {
                 Motor Insurance
               </Button>
             </Link>
+            <Link href="/drink-and-drive">
+              <Button variant="ghost" size="sm" className="text-gray-600">
+                Drink & Drive
+              </Button>
+            </Link>
             <Link href="/how-it-works">
               <Button variant="ghost" size="sm" className="text-gray-600">
                 How It Works
@@ -66,6 +71,14 @@ export function Navbar() {
             >
               <ShieldCheck className="w-4 h-4 text-gray-400" />
               <span className="text-sm font-medium">Motor Insurance</span>
+            </Link>
+            <Link
+              href="/drink-and-drive"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-surface-50 transition-colors"
+            >
+              <ShieldCheck className="w-4 h-4 text-gray-400" />
+              <span className="text-sm font-medium">Drink & Drive</span>
             </Link>
             <Link
               href="/how-it-works"
