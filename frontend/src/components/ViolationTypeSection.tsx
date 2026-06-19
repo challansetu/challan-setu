@@ -68,7 +68,7 @@ export function ViolationTypeSection({
 
       {/* ── Penalties Section ──────────────────────────────────────────── */}
       <section className="py-6 sm:py-8 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container-app max-w-4xl">
+        <div className="container-app max-w-5xl">
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{content.penaltiesHeading}</h2>
             <p className="text-sm text-gray-600">Understand the serious consequences you face</p>
@@ -107,7 +107,7 @@ export function ViolationTypeSection({
 
       {/* ── Process Section ────────────────────────────────────────────── */}
       <section className="py-6 sm:py-8">
-        <div className="container-app max-w-4xl">
+        <div className="container-app max-w-5xl">
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{content.processHeading}</h2>
             <p className="text-sm text-gray-600">Clear, step-by-step legal support from start to finish</p>
@@ -156,7 +156,7 @@ export function ViolationTypeSection({
 
       {/* ── FAQs Section ──────────────────────────────────────────────── */}
       <section className="py-6 sm:py-8 bg-gradient-to-b from-white to-slate-50">
-        <div className="container-app max-w-4xl">
+        <div className="container-app max-w-5xl">
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{content.faqHeading}</h2>
             <p className="text-sm text-gray-600">Answers to common questions about drink-and-drive cases</p>
