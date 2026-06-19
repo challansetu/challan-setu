@@ -163,7 +163,6 @@ export default function DrinkAndDrivePage() {
         name: 'Drink & Drive Challan Settlement Support — Delhi NCR',
         description: PAGE_DESC,
         url: PAGE_URL,
-        areaServed: ['Delhi', 'Noida', 'Gurgaon', 'Ghaziabad', 'Faridabad'],
       })} />
       <JsonLd data={breadcrumbSchema([
         { name: 'Home', url: '/' },
