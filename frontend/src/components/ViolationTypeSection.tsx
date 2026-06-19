@@ -56,11 +56,11 @@ export function ViolationTypeSection({
 
             <a
               href={`#${formId}`}
-              className="inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-xl transition-all hover:-translate-y-1 shadow-2xl hover:shadow-3xl"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
               style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
               {content.ctaButton}
-              <ArrowRight className="w-6 h-6" />
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
         </div>
@@ -208,11 +208,11 @@ export function ViolationTypeSection({
 
           <a
             href={`#${formId}`}
-            className="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-xl font-bold text-xl transition-all hover:-translate-y-1 shadow-2xl hover:shadow-3xl w-full max-w-sm"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl w-full max-w-sm"
             style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
           >
             {content.ctaButton}
-            <ArrowRight className="w-6 h-6" />
+            <ArrowRight className="w-4 h-4" />
           </a>
 
           <p className="text-sm text-slate-400 mt-6">
