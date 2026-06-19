@@ -194,17 +194,17 @@ export function ViolationTypeSection({
       </section>
 
       {/* ── Final CTA Section ──────────────────────────────────────────── */}
-      <section className="py-16 sm:py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-8 sm:py-10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="container-app max-w-2xl text-center relative z-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-amber-500/30 to-orange-500/30 border border-amber-500/50 mb-6">
-            <Scale className="w-8 h-8" style={{ color: BRAND_YELLOW }} />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-amber-500/30 to-orange-500/30 border border-amber-500/50 mb-4">
+            <Scale className="w-7 h-7" style={{ color: BRAND_YELLOW }} />
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">{content.ctaHeading}</h2>
-          <p className="text-lg text-slate-300 mb-8 leading-relaxed">{content.ctaSubtext}</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">{content.ctaHeading}</h2>
+          <p className="text-base text-slate-300 mb-5 leading-relaxed">{content.ctaSubtext}</p>
 
           <a
             href={`#${formId}`}
@@ -215,7 +215,7 @@ export function ViolationTypeSection({
             <ArrowRight className="w-4 h-4" />
           </a>
 
-          <p className="text-sm text-slate-400 mt-6">
+          <p className="text-xs text-slate-400 mt-3">
             ✓ Free consultation • ✓ No payment required to start • ✓ Confidential
           </p>
         </div>
