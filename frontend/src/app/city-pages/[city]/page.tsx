@@ -109,13 +109,16 @@ export default function CityPage({ params }: { params: { city: string } }) {
 
       <Navbar />
 
-      <main className="flex-1 bg-surface-50">
+      <main className="flex-1">
 
-        {/* ── Hero ──────────────────────────────────────────────────────── */}
-        <section
-          className="relative overflow-hidden text-white py-8 sm:py-10"
-          style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
-        >
+        {/* ── Sticky hero + scrollable content wrapper ── */}
+        <div className="relative">
+
+          {/* ── Hero (sticky on mobile, relative on desktop) ──────────────────────────────────────────────────────── */}
+          <section
+            className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden text-white py-8 sm:py-10"
+            style={{ background: `linear-gradient(145deg, ${BRAND_DARK} 0%, #252530 50%, #1a1a22 100%)` }}
+          >
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
 
@@ -142,6 +145,9 @@ export default function CityPage({ params }: { params: { city: string } }) {
             />
           </div>
         </section>
+
+        {/* ── Scrollable content sheet ──────────────────────────────────────── */}
+        <div className="relative z-10 bg-white rounded-t-2xl sm:rounded-none -mt-8 sm:mt-0">
 
         {/* ── Trust strip ───────────────────────────────────────────────── */}
         <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
@@ -343,6 +349,9 @@ export default function CityPage({ params }: { params: { city: string } }) {
             </a>
           </div>
         </section>
+
+        </div>
+        </div>
 
       </main>
       <Footer />
