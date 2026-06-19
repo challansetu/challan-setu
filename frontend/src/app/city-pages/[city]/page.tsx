@@ -144,17 +144,17 @@ export default function CityPage({ params }: { params: { city: string } }) {
         </section>
 
         {/* ── Trust strip ───────────────────────────────────────────────── */}
-        <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-8 sm:py-10">
+        <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
           <div className="container-app">
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <div className="flex gap-3 flex-nowrap overflow-x-auto">
               {data.supportBadges.map((badge, index) => {
                 const Icon = BADGE_ICONS[index] ?? ShieldCheck;
                 return (
-                  <div key={badge} className="flex items-center gap-3 flex-1 bg-white rounded-lg px-5 py-4 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-amber-100 to-orange-100">
-                      <Icon className="w-5 h-5 text-amber-600" />
+                  <div key={badge} className="flex items-center gap-2 flex-shrink-0 bg-white rounded-lg px-4 py-3 border border-gray-150 shadow-sm hover:shadow-md hover:border-amber-200 transition-all whitespace-nowrap">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-amber-100 to-orange-100">
+                      <Icon className="w-4 h-4 text-amber-600" />
                     </div>
-                    <span className="font-medium text-gray-800 text-sm leading-snug">{badge}</span>
+                    <span className="font-medium text-gray-800 text-xs sm:text-sm">{badge}</span>
                   </div>
                 );
               })}
