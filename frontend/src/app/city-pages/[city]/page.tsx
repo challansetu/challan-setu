@@ -146,7 +146,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
         {/* ── Trust strip ───────────────────────────────────────────────── */}
         <section className="bg-gradient-to-r from-amber-50/50 to-orange-50/30 border-y border-amber-100/50 py-5">
           <div className="container-app">
-            <div className="flex gap-3 flex-nowrap overflow-x-auto">
+            <div className="flex gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
               {data.supportBadges.map((badge, index) => {
                 const Icon = BADGE_ICONS[index] ?? ShieldCheck;
                 return (
