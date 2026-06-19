@@ -66,6 +66,7 @@ const ALL_CITY_LINKS: CityRelated[] = [
   { city: 'Noida', slug: 'noida' },
   { city: 'Ghaziabad', slug: 'ghaziabad' },
   { city: 'Faridabad', slug: 'faridabad' },
+  { city: 'Chandigarh', slug: 'chandigarh' },
 ];
 
 function buildCityFaqs(cityLabel: string): CityFAQ[] {
@@ -367,6 +368,47 @@ const CITIES: CityPageData[] = [
       'Challan screenshot, PDF, or notice',
       'Challan number or court reference if available',
       'Basic contact details for request updates',
+    ],
+    violations: [
+      { offence: 'Overspeeding', fine: '₹1,000 – ₹2,000', section: 'Sec 183 MV Act' },
+      { offence: 'Red light jumping', fine: '₹1,000 – ₹5,000', section: 'Sec 119 MV Act' },
+      { offence: 'Using phone while driving', fine: '₹1,000 – ₹5,000', section: 'Sec 184 MV Act' },
+      { offence: 'Wrong-side driving', fine: '₹5,000', section: 'Sec 184 MV Act' },
+      { offence: 'No helmet', fine: '₹1,000', section: 'Sec 129 MV Act' },
+      { offence: 'No seatbelt', fine: '₹1,000', section: 'Sec 194B MV Act' },
+    ],
+  }),
+  createCityPage({
+    slug: 'chandigarh',
+    cityName: 'Chandigarh',
+    stateName: 'Punjab',
+    vehiclePrefix: 'CH',
+    authority: 'Chandigarh Police (Traffic)',
+    exampleVehicle: 'CH01AB1234',
+    metaTitle: 'Traffic Challan Settlement in Chandigarh | ChallanSetu',
+    metaDescription:
+      'Pending challan in Chandigarh? Get expert legal support for settlement, Lok Adalat, and court cases. Save on fines legally. Free WhatsApp consultation.',
+    h1: 'Resolve Your Traffic Challan in Chandigarh – Legal Settlement Support',
+    heroSubheading:
+      'Enter your vehicle number to check settlement eligibility before paying your Chandigarh challan.',
+    aboutParagraphs: [
+      'ChallanSetu helps Chandigarh vehicle owners start a challan settlement eligibility check before payment. This is useful for pending traffic challans, e-challans, and cases that may need court-related support.',
+      'Chandigarh challans may involve overspeeding, signal violations, parking issues, helmet violations, seatbelt violations, and camera-based enforcement on key roads and highways.',
+      'If your Chandigarh challan requires legal review or court support, ChallanSetu helps you understand the available settlement path before payment.',
+    ],
+    settlementParagraphs: [
+      'Some Chandigarh challans may qualify for settlement support through legal review, Lok Adalat, or court-related resolution, depending on the case.',
+      'Final eligibility depends on challan category, offence type, city process, and current legal status after verification.',
+    ],
+    unpaidParagraphs: [
+      'Leaving a Chandigarh challan unresolved may increase complications depending on the violation type and legal stage.',
+      'It is better to review challan details early to understand the available settlement route before the case becomes harder to manage.',
+    ],
+    documents: [
+      'Vehicle number',
+      'Challan screenshot, PDF, or notice',
+      'Challan number or court reference if available',
+      'Basic mobile number for request updates',
     ],
     violations: [
       { offence: 'Overspeeding', fine: '₹1,000 – ₹2,000', section: 'Sec 183 MV Act' },

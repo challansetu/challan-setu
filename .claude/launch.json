@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "/Users/yashgupta/.nvm/versions/node/v20.20.2/bin/node",
+      "runtimeArgs": ["/Users/yashgupta/Downloads/personal/challan-copy/frontend/node_modules/.bin/next", "dev", "-p", "3002"],
+      "port": 3002,
+      "cwd": "/Users/yashgupta/Downloads/personal/challan-copy/frontend"
+    }
+  ]
+}

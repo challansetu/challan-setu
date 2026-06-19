@@ -9,6 +9,8 @@ import { getCityPage, getAllCitySlugs } from '@/data/city-pages';
 import { ArrowRight, MapPin, BadgePercent, FileText, Landmark, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { TopChallanOffencesSection } from '@/components/TopChallanOffencesSection';
 import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
+import { ViolationTypeSection } from '@/components/ViolationTypeSection';
+import { getViolationContent } from '@/data/violation-types';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
@@ -34,9 +36,15 @@ export async function generateMetadata({ params }: { params: { city: string } })
 
 const BADGE_ICONS = [ShieldCheck, BadgePercent, FileText];
 
+// Cities with high drink-and-drive rates that get priority display
+const DRINK_AND_DRIVE_PRIORITY_CITIES = ['gurgaon', 'delhi', 'noida', 'ghaziabad', 'faridabad', 'chandigarh'];
+
 export default function CityPage({ params }: { params: { city: string } }) {
   const data = getCityPage(params.city);
   if (!data) notFound();
+
+  const shouldShowDrinkAndDrive = DRINK_AND_DRIVE_PRIORITY_CITIES.includes(params.city.toLowerCase());
+  const drinkAndDriveContent = shouldShowDrinkAndDrive ? getViolationContent('drink-and-drive') : null;
 
   return (
     <>
@@ -50,6 +58,54 @@ export default function CityPage({ params }: { params: { city: string } }) {
       }).map((schema, i) => (
         <JsonLd key={i} data={schema} />
       ))}
+
+      {/* Drink-and-Drive Schema Markup (if applicable) */}
+      {drinkAndDriveContent && (
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org/',
+            '@type': 'Service',
+            name: `Drink-and-Drive Challan Settlement in ${data.cityName}`,
+            description: drinkAndDriveContent.metaDescription,
+            areaServed: {
+              '@type': 'City',
+              name: data.cityName,
+              'containedIn': {
+                '@type': 'State',
+                name: data.stateName,
+              },
+            },
+            provider: {
+              '@type': 'Organization',
+              name: 'ChallanSetu',
+              url: 'https://challansetu.com',
+            },
+            serviceType: 'Legal Consultation & Challan Settlement Support',
+            offers: {
+              '@type': 'Offer',
+              description: 'Expert guidance for drink-and-drive cases, Lok Adalat settlement, and court support',
+            },
+          }}
+        />
+      )}
+
+      {/* Drink-and-Drive FAQ Schema */}
+      {drinkAndDriveContent && (
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: drinkAndDriveContent.faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.q,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.a,
+              },
+            })),
+          }}
+        />
+      )}
 
       <Navbar />
 
@@ -116,7 +172,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
           </div>
         </section>
 
-        {/* ── Violations + FAQ ──────────────────────────────────────────── */}
+        {/* ── Violations ─────────────────────────────────────────────────── */}
         <TopChallanOffencesSection
           violations={data.violations}
           cityName={data.cityName}
@@ -127,6 +183,15 @@ export default function CityPage({ params }: { params: { city: string } }) {
           showFaq={false}
           showCta={false}
         />
+
+        {/* ── Drink-and-Drive Section (High-Priority Cities) ───────────── */}
+        {drinkAndDriveContent && (
+          <ViolationTypeSection
+            content={drinkAndDriveContent}
+            cityName={data.cityName}
+            formId={`city-${data.slug}-lead-form`}
+          />
+        )}
 
         {/* ── Court challan support ─────────────────────────────────────── */}
         <section className="py-12 sm:py-14">
