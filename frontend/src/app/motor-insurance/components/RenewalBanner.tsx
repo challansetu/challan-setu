@@ -58,6 +58,9 @@ export function RenewalBanner({ className }: { className?: string }) {
     <section className={className ?? 'pt-4 pb-8 bg-white'}>
       <div className="container-app max-w-5xl">
 
+        {/* ── Heading ───────────────────────────────────────────────── */}
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Renew Your Insurance</h2>
+
         {/* ── Desktop: both banners side by side ───────────────────── */}
         <div className="hidden sm:grid sm:grid-cols-3 gap-4">
           {SLIDES.map((slide) => (
