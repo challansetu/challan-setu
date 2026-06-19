@@ -60,7 +60,7 @@ function PostCard({ post }: { post: BlogPost }) {
 
 export function BlogSection({ posts }: { posts: BlogPost[] }) {
   return (
-    <section aria-label="Traffic Challan Guides" className="pt-16 sm:pt-20 pb-10 bg-white">
+    <section aria-label="Traffic Challan Guides" className="pt-8 sm:pt-10 pb-10 bg-white">
       <div className="container-app">
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
