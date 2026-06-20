@@ -5,8 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { JsonLd, faqSchema, webPageSchema } from '@/components/seo/JsonLd';
-import { Navbar } from '@/components/Navbar';
-import { InsuranceTopBar } from '@/components/InsuranceTopBar';
+import { SiteHeader } from '@/components/SiteHeader';
 import { Footer } from '@/components/Footer';
 import { HeroForm } from '@/components/HeroForm';
 import { SocialProofTicker } from '@/components/SocialProofTicker';
@@ -53,15 +52,14 @@ export default async function LandingPage() {
           url: '/',
         })}
       />
-      <InsuranceTopBar />
-      <Navbar />
+      <SiteHeader />
       <main className="flex-1">
 
         {/* ── Sticky hero + content sheet wrapper ── */}
         <div className="relative">
 
           {/* Hero — sticky below navbar on mobile; content sheet slides over it */}
-          <section className="sticky top-16 z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
+          <section className="sticky top-[104px] z-0 sm:relative sm:top-auto sm:z-auto overflow-hidden bg-gradient-hero text-white">
             <div className="absolute inset-0 pattern-dots opacity-40" />
             <div className="absolute top-0 right-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/2 sm:-translate-y-1/2 sm:translate-x-1/4" />
             <div className="absolute bottom-0 left-0 w-[160px] sm:w-[400px] h-[160px] sm:h-[400px] bg-yellow-400/8 rounded-full blur-3xl translate-y-1/2 sm:translate-y-1/2 sm:-translate-x-1/4" />

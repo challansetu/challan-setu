@@ -14,8 +14,10 @@ interface BlogPost {
 const LAUNCH_DATE        = new Date('2026-05-11'); // site went live
 const CONTENT_DATE       = new Date('2026-05-24'); // last content update (homepage, FAQs)
 const LEGAL_DATE         = new Date('2026-05-01'); // privacy / terms / refund
-const STATE_DATE         = new Date('2026-06-02'); // state e-challan pages added
+const STATE_DATE         = new Date('2026-06-20'); // state e-challan pages updated
 const INSURANCE_DATE     = new Date('2026-06-18'); // motor-insurance landing page
+const CITY_DATE          = new Date('2026-06-20'); // NCR city pages added
+const SERVICE_DATE       = new Date('2026-06-20'); // drink-and-drive service page
 
 const STATE_SLUGS = [
   'andaman-nicobar', 'andhra-pradesh', 'arunachal-pradesh', 'assam',
@@ -99,12 +101,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
 
-    // ── City SEO landing pages (/pay-vehicle-challan-in-{city}) ───────────────
+    // ── Drink & Drive service page ────────────────────────────────────────────
+    {
+      url: `${SITE_URL}/drink-and-drive`,
+      lastModified: SERVICE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+
+    // ── Delhi NCR city challan settlement pages ───────────────────────────────
+    ...['delhi', 'gurgaon', 'noida', 'ghaziabad', 'faridabad'].map((city) => ({
+      url: `${SITE_URL}/${city}/challan-settlement`,
+      lastModified: CITY_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    })),
+
+    // ── Legacy city SEO landing pages (/pay-vehicle-challan-in-{city}) ────────
     ...getAllCityPages().map((city) => ({
       url: `${SITE_URL}${city.canonicalPath}`,
       lastModified: LAUNCH_DATE,
       changeFrequency: 'monthly' as const,
-      priority: 0.9,
+      priority: 0.8,
     })),
 
     // ── Legal / policy pages ──────────────────────────────────────────────────

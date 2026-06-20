@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { HeroForm } from '@/components/HeroForm';
 import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema } from '@/components/seo/JsonLd';
-import { MessageCircle } from 'lucide-react';
 
 interface CityPageData {
   id: string;
@@ -27,9 +27,7 @@ interface CityPageData {
 }
 
 export function CityPageTemplate({ city }: { city: CityPageData }) {
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
   const PAGE_URL = `/${city.slug}/challan-settlement`;
-  const WHATSAPP_LINK = `https://wa.me/919876543210?text=Hi, I need help with my challan in ${city.name}. Please review my case.`;
 
   return (
     <>
@@ -59,23 +57,26 @@ export function CityPageTemplate({ city }: { city: CityPageData }) {
           <div className="absolute top-0 right-0 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
 
           <div className="container-app relative">
-            <div className="max-w-3xl">
-              <p className="text-amber-400 font-semibold mb-2">{city.name} Challan Support</p>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.2] mb-6" style={{ color: '#f5c842' }}>
-                Traffic Challan Settlement in {city.name}
-              </h1>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl">
-                Expert legal guidance for pending, court & drink-drive challans. Lok Adalat support with {city.competition?.toLowerCase()} competition.
-              </p>
-              <a
-                href={WHATSAPP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-xl"
-              >
-                <MessageCircle className="w-5 h-5" />
-                Get Free Legal Review on WhatsApp
-              </a>
+            <div className="flex flex-col items-center text-center gap-6">
+              <div className="max-w-2xl">
+                <p className="text-amber-400 font-semibold mb-2">{city.name} Challan Support</p>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.2] mb-4" style={{ color: '#f5c842' }}>
+                  Traffic Challan Settlement in {city.name}
+                </h1>
+                <p className="text-lg text-gray-300 max-w-xl mx-auto">
+                  Enter your vehicle number below — we'll check your challan and contact you with settlement options.
+                </p>
+              </div>
+              {/* Same lead capture form as homepage */}
+              <div className="w-full max-w-xl">
+                <HeroForm
+                  source="city_page"
+                  city={city.name}
+                  formId={`city-lead-form-${city.slug}`}
+                  showCalculatorLink={false}
+                  buttonLabel="Check My Challan"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -216,23 +217,27 @@ export function CityPageTemplate({ city }: { city: CityPageData }) {
             </div>
           </section>
 
-          {/* CTA Section */}
+          {/* Bottom CTA Section */}
           <section className="py-12 text-white relative overflow-hidden" style={{ background: 'linear-gradient(145deg, #1c1c24 0%, #252530 50%, #1a1a22 100%)' }}>
             <div className="absolute inset-0 pattern-dots opacity-10" />
-            <div className="container-app relative text-center max-w-2xl">
-              <h2 className="text-3xl font-bold mb-4">Ready to Settle Your {city.name} Challan?</h2>
-              <p className="text-white/70 mb-8">
-                Get expert legal guidance tailored to {city.name} courts. Free review, no obligation.
+            <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-yellow-400/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
+            <div className="container-app relative text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+                Ready to Settle Your {city.name} Challan?
+              </h2>
+              <p className="text-white/60 mb-8 max-w-lg mx-auto">
+                Enter your vehicle number — we'll contact you directly with the best settlement option.
               </p>
-              <a
-                href={WHATSAPP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl text-lg"
-              >
-                <MessageCircle className="w-6 h-6" />
-                Talk to Our Experts
-              </a>
+              {/* Same lead form as homepage */}
+              <div className="max-w-xl mx-auto">
+                <HeroForm
+                  source="city_page"
+                  city={city.name}
+                  formId={`city-lead-form-bottom-${city.slug}`}
+                  showCalculatorLink={false}
+                  buttonLabel="Get Settlement Options"
+                />
+              </div>
             </div>
           </section>
 
