@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd, breadcrumbSchema, localBusinessSchema, serviceSchema, webPageSchema, faqSchema } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema } from '@/components/seo/JsonLd';
 import { MessageCircle } from 'lucide-react';
 
 interface CityPageData {
@@ -35,14 +35,6 @@ export function CityPageTemplate({ city }: { city: CityPageData }) {
     <>
       {/* Schema Markup */}
       <JsonLd data={faqSchema(city.faqs.map(faq => ({ q: faq.q, a: faq.a })))} />
-      <JsonLd data={localBusinessSchema({
-        name: `ChallanSetu - ${city.name} Challan Settlement Support`,
-        description: city.description,
-        address: `${city.name}, ${city.state}`,
-        phone: city.phone,
-        areaServed: city.serviceArea,
-        url: PAGE_URL,
-      })} />
       <JsonLd data={serviceSchema({
         name: `Challan Settlement Support in ${city.name}`,
         description: city.description,
