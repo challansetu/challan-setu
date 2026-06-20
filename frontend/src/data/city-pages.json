@@ -1,0 +1,230 @@
+{
+  "cities": [
+    {
+      "id": "delhi",
+      "name": "Delhi",
+      "slug": "delhi",
+      "state": "Delhi",
+      "searchVolume": 4200,
+      "competition": "High",
+      "description": "Traffic challan settlement support in Delhi with expert legal guidance for pending, court, and drink-drive cases.",
+      "metaTitle": "Challan Settlement Support in Delhi | Legal Help | ChallanSetu",
+      "metaDescription": "Settle your traffic challan in Delhi with expert legal guidance. Pending, court & drink-drive cases. Lok Adalat support. Free WhatsApp review.",
+      "localContext": "Delhi has India's highest traffic volume with 8,000+ challan cases handled monthly across district courts. Lok Adalat settlements available in all districts.",
+      "courts": [
+        {
+          "name": "Delhi High Court",
+          "location": "Connaught Place, New Delhi",
+          "type": "Appellate"
+        },
+        {
+          "name": "District Courts",
+          "location": "Tis Hazari, Saket, Dwarka",
+          "type": "Traffic/Criminal"
+        }
+      ],
+      "commonProblems": [
+        "Pending challan not paid for 6+ months",
+        "Speeding challan (most common in Delhi)",
+        "Parking violations by MCD/Traffic Police",
+        "Drink-drive challan (high enforcement on weekends)",
+        "Court challan issued in Delhi High Court or District Courts",
+        "Multiple vehicle challans for commercial drivers"
+      ],
+      "caseStudies": [
+        {
+          "title": "Pending Challan Settlement",
+          "story": "Rahul from Dwarka had a ₹1,000 speeding challan pending for 8 months. After Lok Adalat settlement through ChallanSetu, it was resolved for ₹600 in just 6 weeks."
+        },
+        {
+          "title": "Batch Challan Settlement",
+          "story": "Priya, a commercial driver with 3 pending challans across Delhi courts, settled all through Lok Adalat. Total cost: ₹1,800 (50% savings from original ₹3,600)."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where is the Delhi Lok Adalat located?",
+          "a": "Delhi has multiple Lok Adalat benches: Tis Hazari Court, Saket Court, Dwarka Court, and other district courts. We'll file with the appropriate court based on your challan."
+        },
+        {
+          "q": "Can I settle a drink-drive challan in Delhi Lok Adalat?",
+          "a": "Yes. Drink-drive cases under Section 185 are eligible for Lok Adalat settlement in Delhi with possible 50% reduction."
+        },
+        {
+          "q": "How long does Delhi Lok Adalat take?",
+          "a": "Typically 4-8 weeks from filing. Delhi Lok Adalats are faster than regular court proceedings (6-18 months)."
+        },
+        {
+          "q": "What documents are needed for Delhi traffic courts?",
+          "a": "Original challan copy, Driving License, RC (Registration Certificate), Insurance certificate, identity proof, and address proof. We'll guide you on the exact documents needed."
+        },
+        {
+          "q": "Can I settle multiple Delhi challans together?",
+          "a": "Yes. Batch filing is available for individuals with 2+ challans and for commercial drivers. This speeds up the process and reduces overall costs."
+        },
+        {
+          "q": "What's the Lok Adalat settlement fee in Delhi?",
+          "a": "Court filing fee: ₹100-500. Our legal guidance: ₹2,000-5,000 depending on case complexity. This is typically 40-50% less than regular court battles."
+        }
+      ],
+      "localKeywords": [
+        "challan settlement Delhi",
+        "pending challan help Delhi",
+        "Delhi traffic challan support",
+        "Lok Adalat Delhi",
+        "drink and drive challan Delhi",
+        "court challan settlement Delhi",
+        "how to settle challan in Delhi",
+        "can challan be reduced Delhi"
+      ],
+      "phone": "+91-XXXXXXX",
+      "serviceArea": "All Delhi districts - Central, East, West, North, South, Northeast"
+    },
+    {
+      "id": "gurgaon",
+      "name": "Gurgaon",
+      "slug": "gurgaon",
+      "state": "Haryana",
+      "searchVolume": 2800,
+      "competition": "Medium",
+      "description": "Challan settlement support in Gurgaon with legal guidance for pending and drink-drive cases.",
+      "metaTitle": "Challan Settlement in Gurgaon | Legal Help | ChallanSetu",
+      "metaDescription": "Settle your traffic challan in Gurgaon, Gurugram. Pending, court & drink-drive cases. Lok Adalat support. Free WhatsApp review.",
+      "localContext": "Gurgaon's growing traffic volume generates 1,500+ challan cases monthly. All cases are handled through Gurugram District Courts.",
+      "courts": [
+        {
+          "name": "Gurugram District Courts",
+          "location": "Sector 14, Gurugram",
+          "type": "Traffic/Criminal"
+        },
+        {
+          "name": "Lok Adalat Bench",
+          "location": "Sector 14, Gurugram",
+          "type": "Settlement"
+        }
+      ],
+      "commonProblems": [
+        "Pending challan in Gurugram District Court",
+        "Highway speeding challans (common on NH-8)",
+        "Parking violations in residential sectors",
+        "Drink-drive challan enforcement",
+        "Commercial vehicle challans for cab/delivery drivers"
+      ],
+      "caseStudies": [
+        {
+          "title": "Highway Speeding Challan",
+          "story": "Amit from Sector 47 got a ₹1,500 speeding challan on NH-8. Settled through Lok Adalat for ₹750 in 5 weeks."
+        },
+        {
+          "title": "Drink-Drive Settlement",
+          "story": "Commercial driver resolved Section 185 challan in Gurgaon Lok Adalat with 50% reduction (₹1,000 savings)."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where is the Gurgaon Lok Adalat?",
+          "a": "Lok Adalat is held at Gurugram District Courts, Sector 14. Bench timings: Monday-Friday, 10 AM - 1 PM."
+        },
+        {
+          "q": "Can I settle a Gurgaon challan from Delhi?",
+          "a": "Yes. If your vehicle is registered in Delhi but challan is in Gurgaon, we can settle it through Gurugram courts. Process remains the same."
+        },
+        {
+          "q": "How much does Lok Adalat cost in Gurgaon?",
+          "a": "Court fee: ₹200-500. Our guidance: ₹2,500-5,000. Total savings: 40-60% vs. fighting in regular court."
+        },
+        {
+          "q": "What's the average settlement time in Gurgaon?",
+          "a": "4-7 weeks typically. Gurgaon Lok Adalats are efficient with less backlog than Delhi courts."
+        },
+        {
+          "q": "Can I settle multiple Gurgaon challans at once?",
+          "a": "Yes. Batch filing available. Reduces overall time and cost for drivers with multiple pending cases."
+        }
+      ],
+      "localKeywords": [
+        "challan settlement Gurgaon",
+        "pending challan Gurgaon",
+        "Gurugram traffic challan help",
+        "Gurgaon Lok Adalat",
+        "drink and drive Gurgaon",
+        "highway speeding challan Gurgaon"
+      ],
+      "phone": "+91-XXXXXXX",
+      "serviceArea": "All Gurgaon sectors and surrounding areas - Sector 14 to 113, DLF, Golf Course Road"
+    },
+    {
+      "id": "noida",
+      "name": "Noida",
+      "slug": "noida",
+      "state": "Uttar Pradesh",
+      "searchVolume": 2200,
+      "competition": "Medium",
+      "description": "Challan settlement support in Noida with expert legal help for pending and court cases.",
+      "metaTitle": "Challan Settlement in Noida | Legal Guidance | ChallanSetu",
+      "metaDescription": "Settle your traffic challan in Noida. Pending, court & drink-drive cases. Lok Adalat support. Free review on WhatsApp.",
+      "localContext": "Noida handles 1,200+ challan cases monthly. All traffic matters go through Gautam Buddha Nagar District Courts.",
+      "courts": [
+        {
+          "name": "Gautam Buddha Nagar District Courts",
+          "location": "Sector 30, Noida",
+          "type": "Traffic/Criminal"
+        },
+        {
+          "name": "Lok Adalat",
+          "location": "District Courts, Sector 30",
+          "type": "Settlement"
+        }
+      ],
+      "commonProblems": [
+        "Pending challan in Gautam Buddha Nagar court",
+        "Court challan issued by Noida traffic police",
+        "Parking violations in residential societies",
+        "Speeding challan on GT Road",
+        "Drink-drive cases (high enforcement near malls)"
+      ],
+      "caseStudies": [
+        {
+          "title": "Pending Court Challan",
+          "story": "Arjun from Sector 62 had a court challan pending for 1 year. Settled through Lok Adalat in 6 weeks for ₹800."
+        },
+        {
+          "title": "Commercial Driver Support",
+          "story": "Delivery driver with 2 pending challans settled both through Noida Lok Adalat. Total savings: ₹1,200."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where is Noida Lok Adalat located?",
+          "a": "At Gautam Buddha Nagar District Courts, Sector 30, Noida. Regular sessions on Mondays and Thursdays."
+        },
+        {
+          "q": "How long does Noida Lok Adalat take?",
+          "a": "Typically 5-7 weeks. Noida has faster processing compared to Delhi due to lower court backlog."
+        },
+        {
+          "q": "What's the cost breakdown for Noida settlement?",
+          "a": "Court fee: ₹150-400. Our guidance: ₹2,500-4,500. Savings: 45-60% compared to fighting in regular court."
+        },
+        {
+          "q": "Can I settle a Noida challan if I live in Delhi?",
+          "a": "Yes. Location doesn't matter. We handle filings and court appearances. You just need to provide documents."
+        },
+        {
+          "q": "Is Noida Lok Adalat suitable for drink-drive cases?",
+          "a": "Yes. Section 185 cases are eligible with 50% reduction possibility. Noida Lok Adalat has good track record for settlement."
+        }
+      ],
+      "localKeywords": [
+        "challan settlement Noida",
+        "pending challan Noida",
+        "Gautam Buddha Nagar court challan",
+        "Noida Lok Adalat",
+        "traffic challan help Noida",
+        "drink and drive Noida"
+      ],
+      "phone": "+91-XXXXXXX",
+      "serviceArea": "All Noida sectors, Greater Noida, Sector 1-95, Plus areas"
+    }
+  ]
+}

@@ -206,6 +206,44 @@ export default async function LandingPage() {
               </div>
             </section>
 
+            {/* City Pages Section */}
+            <section className="py-12 bg-gray-50 border-t border-gray-200">
+              <div className="container-app">
+                <div className="text-center mb-12">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+                    Challan Settlement Support in Your City
+                  </h2>
+                  <p className="text-gray-600 max-w-2xl mx-auto">
+                    Expert legal guidance for traffic challan settlement across Delhi NCR
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                  <a href="/delhi/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Delhi</h3>
+                    <p className="text-sm text-gray-600 mb-4">4,200+ monthly searches</p>
+                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                  </a>
+
+                  <a href="/gurgaon/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Gurgaon</h3>
+                    <p className="text-sm text-gray-600 mb-4">2,800+ monthly searches</p>
+                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                  </a>
+
+                  <a href="/noida/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Noida</h3>
+                    <p className="text-sm text-gray-600 mb-4">2,200+ monthly searches</p>
+                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                  </a>
+                </div>
+
+                <p className="text-center text-sm text-gray-500 mt-8">
+                  More cities coming soon. Contact us for your city.
+                </p>
+              </div>
+            </section>
+
             <Footer />
           </div> {/* end white content sheet */}
         </div> {/* end sticky hero wrapper */}
