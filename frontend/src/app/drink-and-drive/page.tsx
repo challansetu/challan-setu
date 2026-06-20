@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howToSchema } from '@/components/seo/JsonLd';
 
 // WhatsApp contact for drink-and-drive cases
-const WHATSAPP_NUMBER = '+919876543210'; // Replace with actual number
+const WHATSAPP_NUMBER = '+918796323876'; // ChallanSetu support number
 const WHATSAPP_MESSAGE = encodeURIComponent('Hi, I need legal help with my drink & drive challan. Please review my case.');
 
 // Simple WhatsApp Icon Component

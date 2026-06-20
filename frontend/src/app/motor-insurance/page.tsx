@@ -285,12 +285,10 @@ export default function MotorInsurancePage() {
               </div>
             </section>
 
-            {/* Affiliate Disclosure */}
-            <div className="container-app max-w-4xl py-4">
-              <p className="text-xs text-gray-400 leading-relaxed border border-gray-100 rounded-xl px-4 py-3 bg-gray-50">
-                <strong>Disclosure:</strong> ChallanSetu earns a referral commission when you purchase or renew insurance through our PolicyBazaar partner links. This does not affect the premium you pay, prices are the same as buying directly. We only partner with IRDA-approved insurers.
-              </p>
-            </div>
+            {/* Affiliate Disclosure (kept in DOM for compliance, hidden from UI) */}
+            <p className="sr-only">
+              Disclosure: ChallanSetu earns a referral commission when you purchase or renew insurance through our PolicyBazaar partner links. This does not affect the premium you pay, prices are the same as buying directly. We only partner with IRDA-approved insurers.
+            </p>
 
             <InsuranceFaqSection />
             <InsuranceCta />
