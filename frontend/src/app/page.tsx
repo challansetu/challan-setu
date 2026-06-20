@@ -206,40 +206,52 @@ export default async function LandingPage() {
               </div>
             </section>
 
-            {/* City Pages Section */}
+            {/* Delhi NCR Cities Section */}
             <section className="py-12 bg-gray-50 border-t border-gray-200">
               <div className="container-app">
                 <div className="text-center mb-12">
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-                    Challan Settlement Support in Your City
+                    Challan Settlement Support Across Delhi NCR
                   </h2>
                   <p className="text-gray-600 max-w-2xl mx-auto">
-                    Expert legal guidance for traffic challan settlement across Delhi NCR
+                    Expert legal guidance for traffic challan settlement in all Delhi NCR cities
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                  <a href="/delhi/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
-                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Delhi</h3>
-                    <p className="text-sm text-gray-600 mb-4">4,200+ monthly searches</p>
-                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                  <a href="/delhi/challan-settlement" className="p-4 bg-white rounded-xl border-2 border-amber-200 hover:shadow-lg hover:border-amber-400 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">Delhi</h3>
+                    <p className="text-xs text-gray-600 mb-3">4,200+ searches/mo</p>
+                    <span className="text-amber-600 font-semibold text-xs">View →</span>
                   </a>
 
-                  <a href="/gurgaon/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
-                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Gurgaon</h3>
-                    <p className="text-sm text-gray-600 mb-4">2,800+ monthly searches</p>
-                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                  <a href="/gurgaon/challan-settlement" className="p-4 bg-white rounded-xl border-2 border-amber-200 hover:shadow-lg hover:border-amber-400 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">Gurgaon</h3>
+                    <p className="text-xs text-gray-600 mb-3">2,800+ searches/mo</p>
+                    <span className="text-amber-600 font-semibold text-xs">View →</span>
                   </a>
 
-                  <a href="/noida/challan-settlement" className="p-6 bg-white rounded-xl border border-gray-200 hover:shadow-lg hover:border-amber-300 transition-all group">
-                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">Noida</h3>
-                    <p className="text-sm text-gray-600 mb-4">2,200+ monthly searches</p>
-                    <span className="text-amber-600 font-semibold text-sm">Get Help →</span>
+                  <a href="/noida/challan-settlement" className="p-4 bg-white rounded-xl border-2 border-amber-200 hover:shadow-lg hover:border-amber-400 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">Noida</h3>
+                    <p className="text-xs text-gray-600 mb-3">2,200+ searches/mo</p>
+                    <span className="text-amber-600 font-semibold text-xs">View →</span>
+                  </a>
+
+                  <a href="/ghaziabad/challan-settlement" className="p-4 bg-white rounded-xl border-2 border-amber-200 hover:shadow-lg hover:border-amber-400 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">Ghaziabad</h3>
+                    <p className="text-xs text-gray-600 mb-3">1,600+ searches/mo</p>
+                    <span className="text-amber-600 font-semibold text-xs">View →</span>
+                  </a>
+
+                  <a href="/faridabad/challan-settlement" className="p-4 bg-white rounded-xl border-2 border-amber-200 hover:shadow-lg hover:border-amber-400 transition-all group">
+                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">Faridabad</h3>
+                    <p className="text-xs text-gray-600 mb-3">1,400+ searches/mo</p>
+                    <span className="text-amber-600 font-semibold text-xs">View →</span>
                   </a>
                 </div>
 
-                <p className="text-center text-sm text-gray-500 mt-8">
-                  More cities coming soon. Contact us for your city.
+                <p className="text-center text-sm text-gray-500 mt-8 font-semibold">
+                  Total Delhi NCR Opportunity: 12,200+ monthly searches = ₹300K+/month potential revenue
                 </p>
               </div>
             </section>

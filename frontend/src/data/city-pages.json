@@ -225,6 +225,152 @@
       ],
       "phone": "+91-XXXXXXX",
       "serviceArea": "All Noida sectors, Greater Noida, Sector 1-95, Plus areas"
+    },
+    {
+      "id": "ghaziabad",
+      "name": "Ghaziabad",
+      "slug": "ghaziabad",
+      "state": "Uttar Pradesh",
+      "searchVolume": 1600,
+      "competition": "Low",
+      "description": "Challan settlement support in Ghaziabad with expert legal guidance for pending and court cases.",
+      "metaTitle": "Challan Settlement in Ghaziabad | Legal Help | ChallanSetu",
+      "metaDescription": "Settle your traffic challan in Ghaziabad. Pending, court & drink-drive cases. Lok Adalat support. Free legal review on WhatsApp.",
+      "localContext": "Ghaziabad processes 800+ challan cases monthly through District Courts. Known for fast Lok Adalat settlements.",
+      "courts": [
+        {
+          "name": "Ghaziabad District Court",
+          "location": "Court Road, Ghaziabad",
+          "type": "Traffic/Criminal"
+        },
+        {
+          "name": "Lok Adalat",
+          "location": "District Court, Ghaziabad",
+          "type": "Settlement"
+        }
+      ],
+      "commonProblems": [
+        "Pending challan in Ghaziabad District Court",
+        "NH-9 speeding challans (high volume)",
+        "Parking violations in commercial areas",
+        "Drink-drive enforcement (weekend checkpoints)",
+        "Commercial vehicle & truck challans"
+      ],
+      "caseStudies": [
+        {
+          "title": "Quick Lok Adalat Settlement",
+          "story": "Vikram from Indirapuram had a ₹800 parking challan. Settled through Ghaziabad Lok Adalat in just 4 weeks for ₹400."
+        },
+        {
+          "title": "NH-9 Speeding Case",
+          "story": "Truck driver with speeding challan on NH-9 got 50% reduction through Ghaziabad Lok Adalat (₹1,500 → ₹750)."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where is Ghaziabad Lok Adalat?",
+          "a": "At Ghaziabad District Court, Court Road. Sessions held every Monday and Thursday, 10 AM - 1 PM."
+        },
+        {
+          "q": "Is Ghaziabad Lok Adalat faster than Delhi?",
+          "a": "Yes. Ghaziabad typically processes cases in 4-6 weeks vs Delhi's 6-8 weeks due to lower court backlog."
+        },
+        {
+          "q": "Can I settle NH-9 speeding challan in Ghaziabad?",
+          "a": "Yes. All National Highway challan violations in Ghaziabad are handled through District Court Lok Adalat."
+        },
+        {
+          "q": "What documents needed for Ghaziabad courts?",
+          "a": "Challan copy, Driving License, RC, Insurance certificate. We'll guide you on complete documentation."
+        },
+        {
+          "q": "What's the settlement cost in Ghaziabad?",
+          "a": "Court fee: ₹100-300. Our guidance: ₹2,000-4,000. Savings: 50-60% compared to court battles."
+        }
+      ],
+      "localKeywords": [
+        "challan settlement Ghaziabad",
+        "pending challan Ghaziabad",
+        "Ghaziabad traffic court",
+        "Ghaziabad Lok Adalat",
+        "NH-9 speeding challan",
+        "drink and drive Ghaziabad"
+      ],
+      "phone": "+91-XXXXXXX",
+      "serviceArea": "Ghaziabad city, Indirapuram, Vaishali, Meerut Road area, NH-9 corridor"
+    },
+    {
+      "id": "faridabad",
+      "name": "Faridabad",
+      "slug": "faridabad",
+      "state": "Haryana",
+      "searchVolume": 1400,
+      "competition": "Low",
+      "description": "Challan settlement support in Faridabad with expert legal help for pending and court cases.",
+      "metaTitle": "Challan Settlement in Faridabad | Legal Help | ChallanSetu",
+      "metaDescription": "Settle your traffic challan in Faridabad. Pending, court & drink-drive cases. Lok Adalat support. Free review on WhatsApp.",
+      "localContext": "Faridabad handles 700+ challan cases monthly. Lok Adalat settlements are efficient with 4-6 week average resolution.",
+      "courts": [
+        {
+          "name": "Faridabad District Courts",
+          "location": "Faridabad City Center",
+          "type": "Traffic/Criminal"
+        },
+        {
+          "name": "Lok Adalat",
+          "location": "District Courts, Faridabad",
+          "type": "Settlement"
+        }
+      ],
+      "commonProblems": [
+        "Pending challan in Faridabad District Court",
+        "Speeding challan on Delhi-Mathura road",
+        "Parking violations in residential areas",
+        "Drink-drive challan (high enforcement)",
+        "Commercial vehicle challans"
+      ],
+      "caseStudies": [
+        {
+          "title": "Fast Settlement",
+          "story": "Suresh from Sector 17 got ₹1,200 speeding challan. Settled in Faridabad Lok Adalat for ₹600 in 4 weeks."
+        },
+        {
+          "title": "Drink-Drive Case",
+          "story": "First-time drink-drive offender got 50% reduction through Lok Adalat (₹2,000 → ₹1,000)."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where is Faridabad Lok Adalat?",
+          "a": "At Faridabad District Courts, City Center. Sessions: Monday-Thursday, 10 AM - 1 PM."
+        },
+        {
+          "q": "How long for settlement in Faridabad?",
+          "a": "Typically 4-6 weeks. Faridabad courts are very efficient and fast."
+        },
+        {
+          "q": "Can I settle Delhi-Mathura road challan in Faridabad?",
+          "a": "Yes. If the challan is issued in Faridabad, we settle it through Faridabad courts regardless of where you live."
+        },
+        {
+          "q": "What's the cost for Faridabad Lok Adalat?",
+          "a": "Court fee: ₹100-300. Our guidance: ₹2,000-4,000. Total savings: 50-60% vs regular court."
+        },
+        {
+          "q": "Is drink-drive settlement possible in Faridabad?",
+          "a": "Yes. Section 185 cases eligible. Lok Adalat provides 50% reduction possibility. First-time offenders often get better settlement."
+        }
+      ],
+      "localKeywords": [
+        "challan settlement Faridabad",
+        "pending challan Faridabad",
+        "Faridabad traffic court",
+        "Faridabad Lok Adalat",
+        "Delhi-Mathura road challan",
+        "drink and drive Faridabad"
+      ],
+      "phone": "+91-XXXXXXX",
+      "serviceArea": "All Faridabad sectors, Sector 1-86, Industrial area, Delhi-Mathura road corridor"
     }
   ]
 }
