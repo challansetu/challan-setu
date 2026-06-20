@@ -1071,6 +1071,271 @@ const POSTS: BlogPost[] = [
     ctaHtml:
       "If you have a pending traffic challan in Delhi, Noida, Gurgaon, Ghaziabad, or Faridabad, you don't have to pay the full amount. Visit <a href='/' class='font-semibold underline underline-offset-2'>challansetu.com</a>, enter your vehicle number, and our team will check whether your challan qualifies for a Lok Adalat settlement discount — completely free, no upfront payment. A real lawyer handles the entire process, and if settlement doesn't happen, you get your money back.",
   },
+  {
+    slug: "best-motor-insurance-india-2025",
+    coverImage: "/blog/cover-best-motor-insurance.svg",
+    metaTitle: "Best Motor Insurance in India 2025: How to Choose & Save | ChallanSetu",
+    metaDescription:
+      "How to choose the best motor insurance in India in 2025. Compare car, bike & commercial vehicle plans, understand IDV, NCB & add-ons, and save up to 85% on renewal.",
+    title: "Best Motor Insurance in India 2025: How to Choose & Save up to 85%",
+    category: "Insurance Guide",
+    publishedAt: "2026-06-19",
+    readingTime: 8,
+    excerpt:
+      "Confused by dozens of motor insurance plans? Here is how to compare car, bike and commercial vehicle policies, what really matters, and how to save up to 85% on renewal.",
+    sections: [
+      {
+        blocks: [
+          {
+            kind: "p",
+            html: "Buying or renewing motor insurance in India can feel overwhelming. There are dozens of insurers, confusing add-ons, and premium quotes that swing wildly for the same vehicle. But choosing the best motor insurance is not about picking the cheapest plan or the biggest brand. It is about matching the right coverage to how you actually use your vehicle, and then getting that coverage at the lowest fair price. This guide breaks down exactly how to do that in 2025.",
+          },
+        ],
+      },
+      {
+        heading: "First, Check Your Current Insurance Status (Free)",
+        blocks: [
+          {
+            kind: "p",
+            html: "Before comparing new plans, find out where you stand. Every vehicle in India has its insurance record stored in the government VAHAN database, tied to its registration number. You can check whether your policy is active, expiring soon, or already expired in seconds, without digging out old papers.",
+          },
+          {
+            kind: "p",
+            html: "This matters because renewing before expiry protects your No Claim Bonus and avoids a vehicle inspection. If your policy has already lapsed beyond 90 days, you lose your accumulated discount and the insurer may require an inspection before issuing a fresh policy.",
+          },
+        ],
+      },
+      {
+        heading: "Third-Party vs Comprehensive: Which Do You Need?",
+        blocks: [
+          {
+            kind: "p",
+            html: "Every motor insurance decision starts here. Third-party insurance is the legal minimum mandated by the Motor Vehicles Act. It covers injury or damage you cause to others, but pays nothing toward your own vehicle. Comprehensive insurance covers third-party liability plus damage to your own vehicle from accidents, theft, fire, and natural disasters.",
+          },
+          {
+            kind: "strong_bullets",
+            items: [
+              { label: "Choose Third-Party if", text: "your vehicle is old, low-value, or used rarely, and you only need to stay road-legal at the lowest cost." },
+              { label: "Choose Comprehensive if", text: "your vehicle is under 7 to 8 years old, financed, or used daily. The extra premium is small compared to the protection it gives." },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "The 4 Things That Actually Decide a Good Policy",
+        blocks: [
+          {
+            kind: "strong_bullets",
+            items: [
+              { label: "IDV (Insured Declared Value)", text: "the maximum payout if your vehicle is stolen or totalled. A higher IDV means a slightly higher premium but a bigger payout. Do not pick a plan just because it has a low premium with a low IDV." },
+              { label: "Claim Settlement Ratio", text: "the percentage of claims an insurer actually pays. Prefer insurers with a settlement ratio above 90 percent." },
+              { label: "Cashless Garage Network", text: "more network garages means easier cashless repairs. Check that the insurer has garages near you." },
+              { label: "Useful Add-ons", text: "zero-depreciation, engine protection, roadside assistance and return-to-invoice are worth it for newer vehicles. Skip add-ons you will never use." },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "How Much Does Motor Insurance Cost in 2025?",
+        blocks: [
+          {
+            kind: "table",
+            headers: ["Vehicle Type", "Third-Party (from)", "Comprehensive (from)"],
+            rows: [
+              ["Two-Wheeler", "₹538/year", "₹1.3/day (~₹500+/year)"],
+              ["Private Car (small)", "₹2,094/year", "₹3,500/year"],
+              ["Commercial (goods/taxi)", "₹3,139/year", "Varies by load & permit"],
+            ],
+          },
+          {
+            kind: "p",
+            html: "Third-party rates are fixed by the government and are the same across insurers. Comprehensive premiums vary, which is exactly why comparing quotes can save you 30 to 85 percent for identical coverage.",
+          },
+        ],
+      },
+      {
+        heading: "How to Save up to 85% on Renewal",
+        blocks: [
+          {
+            kind: "ul",
+            items: [
+              "Renew before expiry to protect your No Claim Bonus (up to 50 percent discount).",
+              "Compare quotes from 20+ insurers instead of auto-renewing with your existing one.",
+              "Buy online to skip agent commission, which lowers the premium.",
+              "Pick only the add-ons you actually need.",
+              "Choose a voluntary deductible if you are a careful driver and rarely claim.",
+              "For multiple vehicles, ask for a fleet or multi-vehicle discount.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Pick the Right Page for Your Vehicle",
+        blocks: [
+          {
+            kind: "p",
+            html: "ChallanSetu lets you check status free and compare verified renewal quotes for every vehicle type: <a href='/car-insurance' class='font-semibold underline underline-offset-2'>car insurance</a>, <a href='/bike-insurance' class='font-semibold underline underline-offset-2'>two-wheeler insurance</a>, and <a href='/commercial-vehicle-insurance' class='font-semibold underline underline-offset-2'>commercial vehicle insurance</a>. You can also start from the <a href='/motor-insurance' class='font-semibold underline underline-offset-2'>motor insurance hub</a> for any vehicle.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Which is the best motor insurance company in India?",
+        a: "There is no single best insurer for everyone. The right choice depends on your vehicle, budget, and priorities. Look for a claim settlement ratio above 90 percent, a wide cashless garage network near you, and a fair IDV. Comparing quotes from 20+ IRDA-approved insurers on one platform is the fastest way to find the best fit for your specific vehicle.",
+      },
+      {
+        q: "Is it better to buy motor insurance online or through an agent?",
+        a: "Buying online is usually 30 to 85 percent cheaper because there is no agent commission, and you get instant digital policy issuance with the same legal validity and coverage. Online comparison also lets you see multiple insurers side by side, which an agent tied to one company cannot offer.",
+      },
+      {
+        q: "Should I always choose comprehensive over third-party?",
+        a: "Not always. Comprehensive is strongly recommended for vehicles under 7 to 8 years old, financed vehicles, and daily-use vehicles. For a very old or low-value vehicle used rarely, third-party may be enough to stay road-legal at the lowest cost.",
+      },
+      {
+        q: "How can I lower my motor insurance premium?",
+        a: "Renew before expiry to keep your No Claim Bonus, compare quotes across insurers, buy online, choose only the add-ons you need, and consider a voluntary deductible if you rarely claim. For multiple vehicles, ask about a fleet discount.",
+      },
+      {
+        q: "Does a higher IDV mean better insurance?",
+        a: "A higher IDV means a bigger payout if your vehicle is stolen or written off, but also a slightly higher premium. The best approach is a fair market-value IDV, not the lowest one. A very low IDV reduces your premium but also slashes your payout in a total-loss claim.",
+      },
+    ],
+    ctaHtml:
+      "Ready to renew? Check your motor insurance status free on <a href='/motor-insurance' class='font-semibold underline underline-offset-2'>challansetu.com</a>, then compare quotes from 20+ insurers and save up to 85 percent. It takes under two minutes and there is no obligation to buy.",
+  },
+  {
+    slug: "how-to-claim-motor-insurance",
+    coverImage: "/blog/cover-claim-motor-insurance.svg",
+    metaTitle: "How to Claim Motor Insurance After an Accident (Step-by-Step) | ChallanSetu",
+    metaDescription:
+      "A clear step-by-step guide to claiming motor insurance after an accident in India. Learn cashless vs reimbursement claims, documents needed, and mistakes that get claims rejected.",
+    title: "How to Claim Motor Insurance After an Accident (Step-by-Step)",
+    category: "Insurance Guide",
+    publishedAt: "2026-06-20",
+    readingTime: 7,
+    excerpt:
+      "Filing a motor insurance claim does not have to be confusing. Here is a clear step-by-step guide for cashless and reimbursement claims, plus the mistakes that get claims rejected.",
+    sections: [
+      {
+        blocks: [
+          {
+            kind: "p",
+            html: "An accident is stressful enough without a confusing claims process on top of it. The good news is that motor insurance claims in India follow a clear, predictable path. If you know the steps and avoid a few common mistakes, most claims are settled smoothly. This guide walks you through exactly what to do, from the moment of the accident to receiving your payout.",
+          },
+        ],
+      },
+      {
+        heading: "Step 1: Stay Safe and Inform Your Insurer Immediately",
+        blocks: [
+          {
+            kind: "p",
+            html: "First, move to safety and check for injuries. Then inform your insurer as soon as possible, ideally within 24 to 48 hours. Most insurers have a 24x7 toll-free number and an app or website for intimation. Delaying the intimation is one of the top reasons claims get questioned or rejected.",
+          },
+        ],
+      },
+      {
+        heading: "Step 2: Document the Scene",
+        blocks: [
+          {
+            kind: "ul",
+            items: [
+              "Take clear photos and videos of the damage to your vehicle and any other vehicle involved.",
+              "Photograph the accident location, road conditions, and number plates.",
+              "Note down the other party's details and, if possible, witness contact numbers.",
+              "Do not move the vehicle unnecessarily before documenting, unless it is blocking traffic or unsafe.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Step 3: File an FIR When Required",
+        blocks: [
+          {
+            kind: "p",
+            html: "An FIR (First Information Report) at the nearest police station is required for third-party injury or death, theft of the vehicle, and major accidents. For minor own-damage dents and scratches, an FIR is usually not needed, but always confirm with your insurer. For any theft claim, an FIR is mandatory.",
+          },
+        ],
+      },
+      {
+        heading: "Step 4: Choose Cashless or Reimbursement",
+        blocks: [
+          {
+            kind: "strong_bullets",
+            items: [
+              { label: "Cashless claim", text: "take the vehicle to a network garage of your insurer. The insurer settles the repair bill directly with the garage. You only pay the deductible and any non-covered items. This is the easier, faster option." },
+              { label: "Reimbursement claim", text: "take the vehicle to any garage of your choice, pay the bill yourself, then submit the invoice and documents to the insurer to get reimbursed. Use this when no network garage is nearby." },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Step 5: Submit Documents and Get the Survey Done",
+        blocks: [
+          {
+            kind: "p",
+            html: "The insurer appoints a surveyor to inspect the damage and assess the claim amount. Keep these documents ready to avoid delays:",
+          },
+          {
+            kind: "ul",
+            items: [
+              "Filled and signed claim form",
+              "Copy of the policy document",
+              "Registration Certificate (RC) of the vehicle",
+              "Valid driving licence of the person driving at the time",
+              "FIR copy (where applicable)",
+              "Repair estimate and final invoice from the garage",
+              "Photos of the damage",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Mistakes That Get Claims Rejected",
+        blocks: [
+          {
+            kind: "ul",
+            items: [
+              "Driving with an expired policy at the time of the accident.",
+              "The driver did not hold a valid licence for that vehicle class.",
+              "Driving under the influence of alcohol or drugs.",
+              "Using a private vehicle for commercial purposes (or vice versa) without the right policy.",
+              "Delaying intimation to the insurer by several days.",
+              "Repairing the vehicle before the surveyor inspects it.",
+            ],
+          },
+          {
+            kind: "p",
+            html: "A lapsed policy is the most common and most avoidable reason for rejection. Checking your insurance status regularly and renewing on time is the single best way to make sure you are protected when you need it most.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "How long does a motor insurance claim take to settle?",
+        a: "A straightforward cashless claim at a network garage is often approved within a few days, with repairs starting almost immediately. Reimbursement claims take longer, typically 7 to 15 working days after you submit all documents, because the insurer verifies the invoice and survey report before releasing the payout.",
+      },
+      {
+        q: "What is the difference between cashless and reimbursement claims?",
+        a: "In a cashless claim, you use a network garage and the insurer pays the repair bill directly, so you only pay the deductible. In a reimbursement claim, you use any garage, pay the bill yourself, and then claim the amount back from the insurer with the invoice and documents. Cashless is faster and more convenient when a network garage is available.",
+      },
+      {
+        q: "Do I always need an FIR to claim motor insurance?",
+        a: "No. An FIR is required for third-party injury or death, vehicle theft, and major accidents. For minor own-damage like dents and scratches, an FIR is usually not needed, but you should confirm with your insurer before proceeding.",
+      },
+      {
+        q: "Will my insurance claim affect my No Claim Bonus?",
+        a: "Yes. Making an own-damage claim usually resets your No Claim Bonus to zero at the next renewal. For very small repairs, it is sometimes cheaper to pay out of pocket and preserve your NCB, which can be worth up to a 50 percent discount. A zero-depreciation or NCB-protection add-on can help in some cases.",
+      },
+      {
+        q: "Can I claim insurance if my policy expired before the accident?",
+        a: "No. If the policy was not active at the time of the accident, the claim will be rejected and you become personally liable for all costs. This is why checking your insurance status and renewing before expiry is so important. You can check your status free on ChallanSetu.",
+      },
+    ],
+    ctaHtml:
+      "Make sure you are never caught with a lapsed policy. Check your motor insurance status free on <a href='/motor-insurance' class='font-semibold underline underline-offset-2'>challansetu.com</a>, and if it is expiring, compare renewal quotes from 20+ insurers and save up to 85 percent.",
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

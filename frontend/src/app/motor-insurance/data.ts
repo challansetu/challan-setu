@@ -36,7 +36,7 @@ export const URGENCY_FACTS: UrgencyFact[] = [
     icon: ShieldAlert,
     tag: 'Claim Risk',
     value: 'No Claim Payout',
-    desc: 'If you meet with an accident with an expired policy, your insurer can reject the claim — leaving you fully liable.',
+    desc: 'If you meet with an accident with an expired policy, your insurer can reject the claim, leaving you fully liable.',
     iconColor: '#EA580C',
     tagColor: '#EA580C',
   },
@@ -99,14 +99,14 @@ export const PREMIUM_FACTORS: PremiumFactor[] = [
   { icon: Gauge, title: 'Vehicle Type & Age', desc: 'Newer or high-performance vehicles cost more to insure. Older vehicles may have lower IDV.' },
   { icon: MapPin, title: 'Location (RTO Zone)', desc: 'Urban areas with higher traffic density and theft rates attract higher premiums.' },
   { icon: Gauge, title: 'Engine Cubic Capacity', desc: 'Larger engine vehicles (>1500cc) are placed in a higher insurance slab under IRDAI guidelines.' },
-  { icon: Wrench, title: 'Add-on Covers Chosen', desc: 'Zero depreciation, engine protection, roadside assist — each add-on increases the premium proportionally.' },
+  { icon: Wrench, title: 'Add-on Covers Chosen', desc: 'Zero depreciation, engine protection, roadside assist, each add-on increases the premium proportionally.' },
   { icon: FileText, title: 'Insured Declared Value', desc: 'Higher IDV = higher premium but better claim payout. Setting IDV too low underinsures your vehicle.' },
 ];
 
 export const LAPSE_RISKS: LapseRisk[] = [
   {
     title: 'Loss of No Claim Bonus',
-    desc: 'If your policy lapses beyond 90 days, all accumulated NCB (up to 50% discount) is forfeited. You start over at 0% — even after years of claim-free driving.',
+    desc: 'If your policy lapses beyond 90 days, all accumulated NCB (up to 50% discount) is forfeited. You start over at 0%, even after years of claim-free driving.',
     icon: BadgePercent,
   },
   {
@@ -121,7 +121,7 @@ export const LAPSE_RISKS: LapseRisk[] = [
   },
   {
     title: 'Inspection Before Renewal',
-    desc: 'Insurers may require a physical inspection of your vehicle before issuing a fresh policy if the old one lapsed beyond 90 days — causing delays and inconvenience.',
+    desc: 'Insurers may require a physical inspection of your vehicle before issuing a fresh policy if the old one lapsed beyond 90 days, causing delays and inconvenience.',
     icon: FileText,
   },
 ];

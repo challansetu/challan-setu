@@ -1,10 +1,10 @@
 import { ImageResponse } from 'next/og';
 
-// Open Graph card for /motor-insurance — used by WhatsApp, Facebook, LinkedIn,
+// Open Graph card for /motor-insurance, used by WhatsApp, Facebook, LinkedIn,
 // iMessage, Telegram, Slack when the page link is shared. Mirrors the styling of
 // the root opengraph-image.tsx but uses the insurance page's dark/yellow theme.
 export const runtime = 'edge';
-export const alt = 'Check Motor Insurance Status by Vehicle Number — Free via VAHAN';
+export const alt = 'Check Motor Insurance Status by Vehicle Number, Free via VAHAN';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -74,7 +74,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          by Vehicle Number — Free &amp; Instant
+          by Vehicle Number, Free &amp; Instant
         </div>
 
         {/* Sub-description */}
@@ -88,7 +88,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          See if your policy is active, expiring soon, or expired — verified against the VAHAN government database.
+          See if your policy is active, expiring soon, or expired, verified against the VAHAN government database.
         </div>
 
         {/* Domain pill at bottom */}

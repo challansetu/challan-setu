@@ -1,4 +1,4 @@
-// Car-specific FAQs — unique to /car-insurance (NOT shared with /motor-insurance)
+// Car-specific FAQs, unique to /car-insurance (NOT shared with /motor-insurance)
 // so the two pages target different long-tail queries and don't duplicate content.
 // Single source of truth: rendered on-page AND fed to the FAQPage JSON-LD.
 import type { Faq } from '../motor-insurance/faqs';
@@ -6,7 +6,7 @@ import type { Faq } from '../motor-insurance/faqs';
 export const CAR_FAQS: Faq[] = [
   {
     q: 'How do I check my car insurance status by registration number?',
-    a: 'Enter your car\'s registration number (for example DL3CAB1234) in the box above and tap "Check Status". We look it up against the VAHAN government database and instantly show whether your car insurance is active, expiring soon, or already expired — no policy paperwork needed.',
+    a: 'Enter your car\'s registration number (for example DL3CAB1234) in the box above and tap "Check Status". We look it up against the VAHAN government database and instantly show whether your car insurance is active, expiring soon, or already expired, no policy paperwork needed.',
   },
   {
     q: 'Can I find out if a car is insured using only the number plate?',

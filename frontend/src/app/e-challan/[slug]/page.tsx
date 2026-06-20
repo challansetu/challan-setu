@@ -1181,9 +1181,6 @@ export default async function StatePage({ params }: Props) {
                     </div>
                   ))}
                 </div>
-                <p className="text-sm text-gray-500 mt-4">
-                  💡 <strong>Tip:</strong> Check your pending challans today and explore Lok Adalat settlement — save 30–50% legally without going to court.
-                </p>
               </div>
             </section>
 
@@ -1199,6 +1196,22 @@ export default async function StatePage({ params }: Props) {
                   className="shrink-0 inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm"
                 >
                   Get Legal Help →
+                </Link>
+              </div>
+            </section>
+
+            {/* Motor Insurance Cross-link */}
+            <section className="py-5 bg-white border-t border-gray-100">
+              <div className="container-app max-w-4xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="font-bold text-gray-900">Is your vehicle insurance still valid?</p>
+                  <p className="text-sm text-gray-600 mt-1">Check motor insurance status free via VAHAN. Renew online & save up to 85%.</p>
+                </div>
+                <Link
+                  href="/motor-insurance"
+                  className="shrink-0 inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold px-5 py-2.5 rounded-xl transition-colors text-sm"
+                >
+                  Check Insurance Status →
                 </Link>
               </div>
             </section>

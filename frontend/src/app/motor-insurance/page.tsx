@@ -31,42 +31,48 @@ import { URGENCY_FACTS, BRAND_DARK } from './data';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/motor-insurance';
 // Brand suffix (" | ChallanSetu") is appended by the root layout title template,
-// so it must NOT be repeated here — otherwise the title double-brands.
-const PAGE_TITLE = 'Check Motor Insurance Status by Vehicle Number — Free';
+// so it must NOT be repeated here, otherwise the title double-brands.
+const PAGE_TITLE = 'Motor Insurance Check & Renewal, Save up to 85% | Free VAHAN Check';
 const PAGE_DESC =
-  'Check if your car, bike, truck or any vehicle insurance is active, expired or expiring soon — free & instant via the VAHAN government database.';
+  'Check motor insurance status free by vehicle number via VAHAN. Renew car, bike & commercial vehicle insurance online, compare 20+ insurers, save up to 85% via PolicyBazaar.';
+const DATE_MODIFIED = '2026-06-20';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESC,
   alternates: { canonical: `${SITE_URL}${PAGE_URL}` },
   openGraph: {
-    title: 'Check Motor Insurance Status Free | ChallanSetu',
+    title: 'Motor Insurance Check & Renewal, Save up to 85% | ChallanSetu',
     description: PAGE_DESC,
     url: `${SITE_URL}${PAGE_URL}`,
     siteName: 'ChallanSetu',
     locale: 'en_IN',
     type: 'website',
-    // og:image is supplied automatically by ./opengraph-image.tsx
   },
   robots: { index: true, follow: true },
   keywords: [
-    'motor insurance check',
-    'vehicle insurance status',
-    'car insurance check by vehicle number',
-    'bike insurance status',
-    'check insurance online',
-    'vehicle insurance expired',
+    'motor insurance renewal',
+    'car insurance renewal online',
+    'two wheeler insurance renewal',
+    'vehicle insurance status check',
+    'motor insurance check by vehicle number',
+    'bike insurance renewal',
+    'check insurance online free',
     'VAHAN insurance check',
-    'motor insurance India',
-    'commercial vehicle insurance',
-    'two wheeler insurance check',
+    'compare motor insurance India',
+    'cheap car insurance India',
+    'motor insurance expired',
+    'commercial vehicle insurance renewal',
+    'vehicle insurance expiry check',
+    'motor insurance India 2024',
+    'renew bike insurance online',
+    'best motor insurance India',
   ],
 };
 
 // ── Schema data ──────────────────────────────────────────────────────────────
 // FAQ schema is derived from the SAME FAQS rendered on-page (InsuranceFaqSection),
-// so every visible Q&A is eligible for FAQ rich results — no drift.
+// so every visible Q&A is eligible for FAQ rich results, no drift.
 const FAQS_FOR_SCHEMA = FAQS;
 
 // ── Page ─────────────────────────────────────────────────────────────────────
@@ -75,20 +81,38 @@ export default function MotorInsurancePage() {
     <>
       {/* Structured data */}
       <JsonLd data={faqSchema(FAQS_FOR_SCHEMA)} />
-      <JsonLd data={serviceSchema({ name: 'Motor Insurance Status Check — Free & Instant', description: PAGE_DESC, url: PAGE_URL })} />
+      <JsonLd data={serviceSchema({ name: 'Motor Insurance Check & Renewal, Free VAHAN Check', description: PAGE_DESC, url: PAGE_URL })} />
       <JsonLd data={breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Motor Insurance', url: PAGE_URL }])} />
       <JsonLd
         data={howToSchema({
-          name: 'How to Check Vehicle Insurance Status Online',
-          description: 'Check motor insurance status for any vehicle registered in India using the vehicle registration number.',
+          name: 'How to Check & Renew Motor Insurance Online in India',
+          description: 'Check motor insurance status free via VAHAN and renew online to save up to 85%.',
           steps: [
             { name: 'Enter Vehicle Number', text: 'Type your vehicle registration number (e.g. DL7SBY1234) in the search field.' },
-            { name: 'Run VAHAN Check', text: 'We query the VAHAN government database to fetch your insurance record instantly.' },
-            { name: 'View Status', text: 'See if your insurance is active, expiring soon, or expired, along with the expiry date.' },
+            { name: 'Run VAHAN Check', text: 'We query the VAHAN government database to fetch your insurance status instantly, active, expiring, or expired.' },
+            { name: 'Enter Mobile Number', text: 'Enter your 10-digit mobile number to view personalised renewal options.' },
+            { name: 'Compare & Renew', text: 'Compare quotes from 20+ insurers via PolicyBazaar and renew at up to 85% discount.' },
           ],
         })}
       />
-      <JsonLd data={webPageSchema({ title: PAGE_TITLE, description: PAGE_DESC, url: PAGE_URL })} />
+      <JsonLd data={webPageSchema({ title: PAGE_TITLE, description: PAGE_DESC, url: PAGE_URL, dateModified: DATE_MODIFIED })} />
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'InsuranceAgency',
+        name: 'ChallanSetu, Motor Insurance Check & Renewal',
+        url: `${SITE_URL}${PAGE_URL}`,
+        description: PAGE_DESC,
+        areaServed: 'IN',
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'Motor Insurance Plans',
+          itemListElement: [
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Car Insurance Renewal' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Two-Wheeler Insurance Renewal' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Commercial Vehicle Insurance' } },
+          ],
+        },
+      }} />
 
       <Navbar />
       <main className="flex-1">
@@ -176,7 +200,7 @@ export default function MotorInsurancePage() {
             <LapseRisksList />
             <DocumentsNeeded />
 
-            {/* In-depth content — topical depth + descriptive internal links */}
+            {/* In-depth content, topical depth + descriptive internal links */}
             <section className="py-10 bg-white" aria-labelledby="about-motor-insurance">
               <div className="container-app max-w-3xl">
                 <h2 id="about-motor-insurance" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4">
@@ -184,20 +208,24 @@ export default function MotorInsurancePage() {
                 </h2>
                 <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
                   <p>
-                    Every vehicle registered in India — a two-wheeler, private car, taxi, or commercial truck — is
+                    Every vehicle registered in India, a two-wheeler, private car, taxi, or commercial truck, is
                     recorded in the government&apos;s central <strong>VAHAN</strong> database, along with the status of
                     its insurance policy. Checking your <strong>motor insurance status by vehicle number</strong> simply
                     reads that official record, so you instantly know whether your cover is active, expiring soon, or
-                    already expired — without digging through old policy papers or calling your insurer. Looking only
+                    already expired, without digging through old policy papers or calling your insurer. Looking only
                     for a four-wheeler? Use our dedicated{' '}
-                    <Link href="/car-insurance" className="text-blue-600 hover:underline font-medium">car insurance status check</Link>.
+                    <Link href="/car-insurance" className="text-blue-600 hover:underline font-medium">car insurance status check</Link>,
+                    for a two-wheeler use our{' '}
+                    <Link href="/bike-insurance" className="text-blue-600 hover:underline font-medium">bike insurance renewal page</Link>, or
+                    for trucks, taxis and fleets see our{' '}
+                    <Link href="/commercial-vehicle-insurance" className="text-blue-600 hover:underline font-medium">commercial vehicle insurance page</Link>.
                   </p>
                   <p>
                     Under the Motor Vehicles Act, 1988, at least a <strong>Third-Party Liability</strong> policy is
                     legally mandatory to drive on Indian roads. Third-party cover pays for injury or damage you cause to
                     others, while a <strong>Comprehensive</strong> policy also protects your own vehicle against
                     accidents, theft, fire, and natural calamities. If you are unsure which you hold, a quick status
-                    check is the fastest way to find out — and you can{' '}
+                    check is the fastest way to find out, and you can{' '}
                     <Link href="/how-it-works" className="text-blue-600 hover:underline font-medium">see exactly how the lookup works</Link>{' '}
                     before you start.
                   </p>
@@ -213,12 +241,56 @@ export default function MotorInsurancePage() {
                     Renewing on time protects more than your legal standing. Letting a policy lapse beyond 90 days wipes
                     out your accumulated <strong>No Claim Bonus</strong> (worth up to a 50% premium discount) and may
                     force a fresh vehicle inspection. And if the worst happens, knowing your cover is active matters most
-                    — here is what to do if you ever need to{' '}
+                   , here is what to do if you ever need to{' '}
                     <Link href="/recover-stolen-vehicle" className="text-blue-600 hover:underline font-medium">report and recover a stolen vehicle</Link>.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Comparison: Third-Party vs Comprehensive */}
+            <section className="py-8 bg-gray-50" aria-labelledby="comparison-heading">
+              <div className="container-app max-w-4xl">
+                <h2 id="comparison-heading" className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-6">
+                  Third-Party vs Comprehensive Insurance, Which is Right for You?
+                </h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="bg-gray-900 text-white">
+                        <th className="px-4 py-3 text-left font-bold rounded-tl-xl">Feature</th>
+                        <th className="px-4 py-3 text-center font-bold">Third-Party Only</th>
+                        <th className="px-4 py-3 text-center font-bold rounded-tr-xl" style={{ background: '#f5c842', color: '#1a1a1a' }}>Comprehensive ★ Recommended</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        ['Legal Requirement', '✅ Yes', '✅ Yes'],
+                        ['Covers 3rd Party Damage', '✅ Yes', '✅ Yes'],
+                        ['Covers Own Vehicle Damage', '❌ No', '✅ Yes'],
+                        ['Covers Theft', '❌ No', '✅ Yes'],
+                        ['Natural Disaster Cover', '❌ No', '✅ Yes'],
+                        ['No Claim Bonus (NCB)', '❌ No', '✅ Up to 50%'],
+                        ['Typical Annual Cost', '₹2,094+ (car)', '₹3,500+ (car)'],
+                      ].map(([feature, tp, comp], i) => (
+                        <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-3 font-medium text-gray-700 border-b border-gray-100">{feature}</td>
+                          <td className="px-4 py-3 text-center text-gray-600 border-b border-gray-100">{tp}</td>
+                          <td className="px-4 py-3 text-center font-semibold text-gray-900 border-b border-gray-100 bg-amber-50">{comp}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            {/* Affiliate Disclosure */}
+            <div className="container-app max-w-4xl py-4">
+              <p className="text-xs text-gray-400 leading-relaxed border border-gray-100 rounded-xl px-4 py-3 bg-gray-50">
+                <strong>Disclosure:</strong> ChallanSetu earns a referral commission when you purchase or renew insurance through our PolicyBazaar partner links. This does not affect the premium you pay, prices are the same as buying directly. We only partner with IRDA-approved insurers.
+              </p>
+            </div>
 
             <InsuranceFaqSection />
             <InsuranceCta />

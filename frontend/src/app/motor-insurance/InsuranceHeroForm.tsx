@@ -92,9 +92,9 @@ interface InsuranceHeroFormProps {
 }
 
 export function InsuranceHeroForm({
-  headingLine1 = 'Check Motor Insurance Status',
-  headingLine2 = 'by Vehicle Number',
-  subheading = 'Enter your vehicle number to check insurance validity and find renewal options.',
+  headingLine1 = 'Check & Renew Motor Insurance',
+  headingLine2 = 'Save up to 85% Online',
+  subheading = 'Free VAHAN check, enter your vehicle number to check status & compare renewal quotes from 20+ insurers.',
 }: InsuranceHeroFormProps = {}) {
   const [step, setStep] = useState<Step>('vehicle');
   const [value, setValue] = useState('');
@@ -144,7 +144,7 @@ export function InsuranceHeroForm({
     try {
       await leadsApi.create(payload);
     } catch {
-      // Retry once — gives Railway's cold-starting backend time to wake up.
+      // Retry once, gives Railway's cold-starting backend time to wake up.
       await new Promise((resolve) => setTimeout(resolve, 5000));
       try {
         await leadsApi.create(payload);
@@ -228,7 +228,7 @@ export function InsuranceHeroForm({
 
       {step === 'vehicle' && (
         <form onSubmit={handleVehicleSubmit}>
-          {/* Vehicle types — display only */}
+          {/* Vehicle types, display only */}
           <div className="flex items-center justify-center gap-6 mb-4">
             {VEHICLE_TABS.map((tab) => (
               <div key={tab.key} className="flex items-center gap-1.5 text-sm font-medium text-white/80">

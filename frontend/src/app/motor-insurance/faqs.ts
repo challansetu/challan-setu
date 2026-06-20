@@ -31,7 +31,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: 'Does motor insurance cover commercial vehicles?',
-    a: 'Yes. Commercial vehicle insurance (for trucks, buses, taxis, goods carriers, etc.) is a separate category from private car or two-wheeler insurance. Our tool checks insurance status for all vehicle types registered in VAHAN — including private cars, two-wheelers, and commercial vehicles.',
+    a: 'Yes. Commercial vehicle insurance (for trucks, buses, taxis, goods carriers, etc.) is a separate category from private car or two-wheeler insurance. Our tool checks insurance status for all vehicle types registered in VAHAN, including private cars, two-wheelers, and commercial vehicles.',
   },
   {
     q: 'Can I renew motor insurance online after it expires?',
@@ -40,5 +40,33 @@ export const FAQS: Faq[] = [
   {
     q: 'What documents do I need to buy or renew motor insurance?',
     a: 'You typically need your vehicle registration certificate (RC), your Aadhaar card or other ID, your driving licence, the previous policy document (for renewals), and passport-size photographs. For commercial vehicles, additional documents like permits or fitness certificates may be required.',
+  },
+  {
+    q: 'How much does motor insurance cost in India?',
+    a: 'Motor insurance cost depends on vehicle type, age, and coverage. Third-party car insurance starts from ₹2,094/year (government fixed rate for small cars). Comprehensive insurance starts from ₹3,500-5,000/year for small cars. Two-wheeler insurance starts from ₹1.3/day (₹500/year for basic). Use our free VAHAN check + PolicyBazaar comparison to get the best price for your vehicle.',
+  },
+  {
+    q: 'Can I insure a vehicle with expired insurance?',
+    a: 'Yes. You can renew expired motor insurance online. However, if the policy has lapsed for more than 90 days, an insurer may require a fresh vehicle inspection before issuing the policy. Renewing online within 90 days of expiry is the fastest and cheapest option, no inspection needed.',
+  },
+  {
+    q: 'Is it safe to buy motor insurance online in India?',
+    a: 'Yes. Buying motor insurance online through IRDA-approved comparison platforms like PolicyBazaar is completely safe and legally valid. You get instant digital policy issuance, the same coverage as offline purchase, and often 30-85% lower premiums due to no agent commission. ChallanSetu partners with PolicyBazaar for verified, trusted renewals.',
+  },
+  {
+    q: 'How to claim motor insurance after an accident?',
+    a: 'To claim motor insurance: (1) Inform your insurer immediately after the accident. (2) File an FIR if required (for third-party claims or theft). (3) Take photos of damage. (4) Take the vehicle to a network garage for cashless claims, or any garage for reimbursement claims. (5) Submit claim form with documents. Most comprehensive policies offer 24×7 roadside assistance and cashless claims at 5,000+ network garages.',
+  },
+  {
+    q: 'What is the penalty for driving without motor insurance in India?',
+    a: 'Driving without valid insurance in India is a punishable offence under Section 196 of the Motor Vehicles Act. Penalty: ₹2,000 fine for first offence, ₹4,000 for repeat offence. Additionally, you may face imprisonment of up to 3 months. If involved in an accident without insurance, all financial liability, including third-party injury costs, falls entirely on you.',
+  },
+  {
+    q: 'What is IDV in motor insurance?',
+    a: 'IDV (Insured Declared Value) is the maximum amount your insurer pays if your vehicle is stolen or completely damaged (total loss). IDV is calculated as: Current market value of vehicle minus depreciation. Higher IDV = higher premium but better coverage. When comparing insurance plans, always check the IDV offered, a lower premium plan may have a lower IDV, reducing your payout in case of total loss.',
+  },
+  {
+    q: 'Can I transfer motor insurance when selling my vehicle?',
+    a: 'Yes. Motor insurance can be transferred to the new owner when selling a vehicle. The seller must inform the insurer within 14 days of sale. Third-party insurance transfers automatically with the vehicle ownership. Comprehensive insurance requires a formal transfer request. NCB (No Claim Bonus) stays with the original owner, the seller can request an NCB certificate to use for their new vehicle.',
   },
 ];

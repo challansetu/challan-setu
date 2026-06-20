@@ -62,6 +62,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/bike-insurance`,
+      lastModified: INSURANCE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/commercial-vehicle-insurance`,
+      lastModified: INSURANCE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
 
     // ── Core static pages ─────────────────────────────────────────────────────
     {

@@ -1,9 +1,9 @@
 import { ImageResponse } from 'next/og';
 
-// Open Graph card for /car-insurance — used by WhatsApp, Facebook, LinkedIn,
+// Open Graph card for /car-insurance, used by WhatsApp, Facebook, LinkedIn,
 // iMessage, Telegram, Slack when the page link is shared.
 export const runtime = 'edge';
-export const alt = 'Check Car Insurance Status by Registration Number — Free via VAHAN';
+export const alt = 'Check Car Insurance Status by Registration Number, Free via VAHAN';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -83,7 +83,7 @@ export default function Image() {
             display: 'flex',
           }}
         >
-          See if your car&apos;s policy is active, expiring soon, or expired — and get renewal quotes in seconds.
+          See if your car&apos;s policy is active, expiring soon, or expired, and get renewal quotes in seconds.
         </div>
 
         <div

@@ -8,7 +8,7 @@ export function LapseRisksList() {
         <SectionHeading
           id="risks-heading"
           title="Risks of Letting Insurance Lapse"
-          subtitle="The consequences go beyond just a fine — here is what is at stake"
+          subtitle="The consequences go beyond just a fine, here is what is at stake"
           mb="mb-6"
         />
 
