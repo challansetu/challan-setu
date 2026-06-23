@@ -7,6 +7,9 @@ import { ViolationTypeContent } from '@/data/violation-types';
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
 
+// ChallanSetu support number (same as the drink-and-drive page & floating button).
+const WHATSAPP_NUMBER = '918796323876';
+
 export interface ViolationTypeSectionProps {
   content: ViolationTypeContent;
   cityName: string;
@@ -18,6 +21,14 @@ export function ViolationTypeSection({
   cityName,
   formId,
 }: ViolationTypeSectionProps) {
+  // The CTA is labelled "Get Help on WhatsApp", so it must open WhatsApp (not
+  // just scroll to the form). Pre-fill a message with the violation type + city.
+  const violation = content.violationType.replace(/-/g, ' ');
+  const waMessage = encodeURIComponent(
+    `Hi, I need legal help with my ${violation} challan in ${cityName}. Please review my case.`,
+  );
+  const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
+
   return (
     <>
       {/* ── Premium Hero Section ─────────────────────────────────────────── */}
@@ -55,7 +66,9 @@ export function ViolationTypeSection({
             </div>
 
             <a
-              href={`#${formId}`}
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
               style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
@@ -207,7 +220,9 @@ export function ViolationTypeSection({
           <p className="text-base text-slate-300 mb-5 leading-relaxed">{content.ctaSubtext}</p>
 
           <a
-            href={`#${formId}`}
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl w-full max-w-sm"
             style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
           >
