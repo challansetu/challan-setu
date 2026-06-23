@@ -57,7 +57,9 @@ export default function LicenseSuspensionBlog() {
               <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">License Suspension Explained</h2>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  When you receive a drink-and-drive challan, license suspension is automatic in many cases. The suspension period varies based on offense history:
+                  When you receive a drink-and-drive challan, license suspension is automatic in many cases. For the full picture — Section 185 penalties, fines, and settlement routes — see our{' '}
+                  <Link href="/drink-and-drive" className="text-blue-600 hover:underline font-medium">drink &amp; drive challan settlement &amp; legal help</Link>{' '}
+                  page. The suspension period varies based on offense history:
                 </p>
                 <div className="mt-6 space-y-4">
                   <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">

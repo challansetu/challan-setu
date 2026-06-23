@@ -8,16 +8,17 @@ import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howT
 const WHATSAPP_NUMBER = '+918796323876'; // ChallanSetu support number
 const WHATSAPP_MESSAGE = encodeURIComponent('Hi, I need legal help with my drink & drive challan. Please review my case.');
 
-// Simple WhatsApp Icon Component
+// WhatsApp Icon Component (same as the floating landing-page button)
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 32 32"
       fill="currentColor"
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2 22l6.29-.97A10 10 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.41 0-2.73-.36-3.88-.97l-.28-.15-2.89.45.45-2.89-.15-.28A8 8 0 1 1 12 20z" />
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.742 5.49 2.041 7.8L0 32l8.419-2.203A15.934 15.934 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 0 1-6.771-1.853l-.485-.287-5.03 1.315 1.34-4.894-.317-.502A13.267 13.267 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333z" />
+      <path d="M23.18 19.385c-.388-.194-2.301-1.134-2.656-1.264-.356-.13-.615-.194-.874.194-.26.388-1.003 1.264-1.23 1.523-.226.26-.452.292-.84.097-.388-.194-1.638-.603-3.12-1.92-1.153-1.026-1.933-2.292-2.16-2.68-.226-.388-.024-.598.17-.791.174-.174.388-.453.582-.68.194-.226.26-.388.388-.647.13-.26.065-.485-.033-.68-.097-.194-.874-2.107-1.197-2.884-.315-.756-.636-.653-.874-.665-.226-.01-.485-.013-.743-.013-.26 0-.68.097-1.036.485-.355.388-1.357 1.328-1.357 3.238s1.39 3.756 1.584 4.015c.194.26 2.737 4.18 6.63 5.862.927.4 1.65.639 2.213.817.93.296 1.778.255 2.447.155.747-.11 2.301-.94 2.627-1.848.325-.907.325-1.684.227-1.848-.097-.163-.355-.26-.743-.453z" />
     </svg>
   );
 }
@@ -119,9 +120,12 @@ const DRINK_AND_DRIVE_FAQS = [
 // ── Page metadata ─────────────────────────────────────────────────────────────
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/drink-and-drive';
-const PAGE_TITLE = 'Drink & Drive Challan Settlement & Legal Help | Section 185 | Delhi NCR';
+// Keyword-first and national (no geo lock) — the page should rank for anyone in
+// India searching the drink-and-drive challan / Section 185 intent. Brand suffix
+// "| ChallanSetu" is appended by the root layout template, so it's omitted here.
+const PAGE_TITLE = 'Drink & Drive Challan: Penalty & Settlement Help';
 const PAGE_DESC =
-  'Expert drink and drive challan settlement support in Delhi, Noida, Gurgaon. Understand Section 185 penalties, DUI fines, Lok Adalat options, and legal defense. Get free legal review via WhatsApp.';
+  'Got a drink & drive challan? Understand Section 185 penalties, DUI fines, Lok Adalat & legal settlement options. Free case review on WhatsApp.';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

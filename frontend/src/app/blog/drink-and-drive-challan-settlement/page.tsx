@@ -87,7 +87,9 @@ export default function DrinkAndDriveBlog() {
                   A drink-and-drive violation (DUI/DUW) occurs when you operate a vehicle while under the influence of alcohol. In India, this is one of the most serious traffic violations with severe legal consequences under Section 185 of the Motor Vehicles Act.
                 </p>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  Unlike regular traffic violations like overspeeding or red light jumping, drink-and-drive cases often involve criminal charges that can lead to imprisonment, license suspension, and heavy fines. The severity increases significantly for repeat offenders.
+                  Unlike regular traffic violations like overspeeding or red light jumping, drink-and-drive cases often involve criminal charges that can lead to imprisonment, license suspension, and heavy fines. The severity increases significantly for repeat offenders. If you are dealing with a case right now, see our{' '}
+                  <Link href="/drink-and-drive" className="text-blue-600 hover:underline font-medium">drink &amp; drive challan settlement &amp; legal help</Link>{' '}
+                  page for penalties, Section 185 details, and your settlement options.
                 </p>
               </div>
             </section>
