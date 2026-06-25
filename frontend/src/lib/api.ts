@@ -62,4 +62,43 @@ export const recoveryLeadsApi = {
   }, { timeout: 25000 }),
 };
 
+// ─── Payments (Razorpay) ────────────────────────────
+export interface CreateOrderResponse {
+  keyId: string;
+  orderId: string;
+  amount: number; // paise
+  currency: string;
+  name: string;
+  phone: string;
+  email: string | null;
+}
+
+export const paymentsApi = {
+  createOrder: (data: {
+    amount: number; // rupees
+    name: string;
+    phone: string;
+    email?: string;
+    note?: string;
+  }) => api.post<CreateOrderResponse>('/payments/order', data, { timeout: 25000 }),
+
+  verify: (data: {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+  }) => api.post<{ success: boolean; status: PaymentStatusValue; orderId: string }>('/payments/verify', data, { timeout: 25000 }),
+
+  getStatus: (orderId: string) =>
+    api.get<{ orderId: string; status: PaymentStatusValue; amount: number }>(`/payments/status/${orderId}`, { timeout: 20000 }),
+};
+
+export type PaymentStatusValue =
+  | 'CREATED'
+  | 'AUTHORIZED'
+  | 'PAID'
+  | 'FAILED'
+  | 'VERIFICATION_FAILED'
+  | 'FLAGGED'
+  | 'PENDING';
+
 export default api;

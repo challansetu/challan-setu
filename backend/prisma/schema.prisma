@@ -366,3 +366,66 @@ model DiscountRule {
   @@index([isActive])
   @@map("discount_rules")
 }
+
+// ─── Payments (Razorpay "pay any amount") ───────────
+// Standalone payment record. Intentionally NOT linked to the removed
+// orders/carts/settlements layer — just an auditable log of Razorpay payments
+// created from the public /payments page.
+enum PaymentStatus {
+  CREATED // order created, awaiting payment (a.k.a. pending)
+  AUTHORIZED // authorized but not yet captured (transient under auto-capture)
+  PAID // captured / order paid — final success
+  FAILED // payment failed — final failure
+  VERIFICATION_FAILED // signature mismatch on callback — needs review
+  FLAGGED // amount/currency/order mismatch — needs manual review
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  razorpayOrderId   String        @unique
+  razorpayPaymentId String?       @unique
+  amount            Int // amount in paise (smallest currency unit)
+  currency          String        @default("INR")
+  status            PaymentStatus @default(CREATED)
+
+  customerName  String?
+  customerPhone String?
+  customerEmail String?
+  note          String?
+
+  // How the payment moved to PAID — "callback" (checkout handler), "webhook", or "reconciliation"
+  verifiedVia   String?
+  failureReason String?
+  // Why a payment was FLAGGED (mismatch details) — for manual review
+  flagReason    String?
+  // Last time we synced this payment's status from the Razorpay API
+  lastSyncedAt  DateTime?
+
+  // Refund tracking (refunds are issued manually via the Razorpay dashboard;
+  // we only record what the refund webhooks tell us).
+  refundStatus   String? // null | processing | processed | failed | partial
+  refundId       String?
+  refundedAmount Int? // paise
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("payments")
+}
+
+// ─── Webhook event log (idempotency + raw payload audit) ────────────────────────
+// Every Razorpay webhook carries a unique x-razorpay-event-id. We persist it so
+// a redelivered/duplicate webhook is processed exactly once, and we keep the raw
+// payload for debugging / reconciliation.
+model WebhookEvent {
+  id        String   @id @default(cuid())
+  eventId   String   @unique // x-razorpay-event-id
+  eventType String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@index([eventType])
+  @@map("webhook_events")
+}
