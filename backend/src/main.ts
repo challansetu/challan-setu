@@ -14,7 +14,9 @@ import {
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  // rawBody: true preserves the unparsed request buffer (req.rawBody) so the
+  // Razorpay webhook can verify its HMAC signature against the exact payload.
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   // Behind Railway's proxy: trust the first hop so req.ip (used for rate
   // limiting and audit logs) reflects the real client, not the load balancer.

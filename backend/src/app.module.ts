@@ -24,6 +24,7 @@ import { QueueModule } from './queue/queue.module';
 
 import { LeadsModule } from './leads/leads.module';
 import { QrScansModule } from './qr-scans/qr-scans.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { QrScansModule } from './qr-scans/qr-scans.module';
     QueueModule,
     LeadsModule,
     QrScansModule,
+    PaymentsModule,
   ],
   providers: [
     // Enforce the ThrottlerModule config globally. Without this the @Throttle
