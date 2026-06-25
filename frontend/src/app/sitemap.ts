@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
 import { getAllCityPages } from '@/data/city-pages';
+import { getAllDrinkDriveCitySlugs } from '@/data/drink-drive-cities';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
@@ -120,6 +121,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+
+    // ── Drink & Drive per-city long-tail pages ────────────────────────────────
+    ...getAllDrinkDriveCitySlugs().map((slug) => ({
+      url: `${SITE_URL}/drink-and-drive/${slug}`,
+      lastModified: SERVICE_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    })),
 
     // ── Delhi NCR city challan settlement pages ───────────────────────────────
     ...['delhi', 'gurgaon', 'noida', 'ghaziabad', 'faridabad'].map((city) => ({

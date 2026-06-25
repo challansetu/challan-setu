@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howToSchema } from '@/components/seo/JsonLd';
+import { getAllDrinkDriveCities } from '@/data/drink-drive-cities';
 
 // WhatsApp contact for drink-and-drive cases
 const WHATSAPP_NUMBER = '+918796323876'; // ChallanSetu support number
@@ -69,7 +70,7 @@ function CTAButton({
 const DRINK_AND_DRIVE_FAQS = [
   {
     q: 'What is the penalty for drink and drive in India?',
-    a: 'Under Section 185 of the Motor Vehicles Act, 1988: First offense: ₹2,000 fine or 6 months imprisonment or both. Second offense within 3 years: ₹3,000 fine or 2 years imprisonment or both. License suspension: 6-12 months. A conviction is also recorded in your criminal history, affecting future employment and background checks.',
+    a: 'Under Section 185 of the Motor Vehicles Act, 1988 (as amended in 2019): First offense: ₹10,000 fine or up to 6 months imprisonment or both. Second offense within 3 years: ₹15,000 fine or up to 2 years imprisonment or both. License suspension: 6-12 months. A conviction is also recorded in your criminal history, affecting future employment and background checks. (A few states apply different fine amounts — we confirm the exact figure for your city.)',
   },
   {
     q: 'Can a drink and drive challan be settled in India?',
@@ -115,6 +116,22 @@ const DRINK_AND_DRIVE_FAQS = [
     q: 'Can I drive after getting a drink and drive challan?',
     a: 'Not legally. Police may seize your driving license at the time of the challan. You cannot legally drive until the case is resolved or your license is returned by court order. Driving without a valid license during this period is an additional offense. You can apply to the transport authority for a temporary license in some cases.',
   },
+  {
+    q: 'Can a first-time drink and drive offender avoid jail?',
+    a: 'In most first-time cases — with no accident, injury, or extremely high BAC — magistrates impose a fine, a warning, and a temporary license suspension rather than imprisonment. The 6-month jail term in Section 185 is the maximum, not a mandatory minimum. A well-prepared case (clean record, guilty plea where appropriate, procedural points raised) significantly improves the chance of a fine-only outcome. Aggravating factors like an accident, very high BAC, or rude behaviour with police increase the jail risk.',
+  },
+  {
+    q: 'Is drink and drive a bailable offence in India?',
+    a: 'Yes. A standalone Section 185 drink and drive charge (no accident or injury) is a bailable offence — you are generally released on bail and summoned to appear before a magistrate. However, if drunk driving caused an accident, injury, or death, additional charges under the BNS (formerly IPC) can apply, which may be non-bailable and far more serious. Getting legal guidance immediately is important to understand exactly what you are charged with.',
+  },
+  {
+    q: 'Will my car or bike insurance cover an accident if I was drink driving?',
+    a: 'No. Almost every motor insurance policy in India treats driving under the influence of alcohol as a standard exclusion. If you were over the legal BAC limit, the insurer can legally reject both own-damage and third-party claims, leaving you personally liable for all damages. This is one of the most expensive hidden consequences of a drink and drive case — often far more than the fine itself.',
+  },
+  {
+    q: 'How do I get my driving license back after a drink and drive suspension?',
+    a: 'Once the suspension period set by the court ends (typically 6-12 months for a first offense), you apply to the RTO/transport authority that issued the suspension. You will usually need the court order showing the case is closed, proof the fine was paid, your original license details, and identity/address documents. In some cases the court itself directs restoration as part of the final order. We help you compile the documents and follow the correct restoration process.',
+  },
 ];
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
@@ -126,6 +143,9 @@ const PAGE_URL = '/drink-and-drive';
 const PAGE_TITLE = 'Drink & Drive Challan: Penalty & Settlement Help';
 const PAGE_DESC =
   'Got a drink & drive challan? Understand Section 185 penalties, DUI fines, Lok Adalat & legal settlement options. Free case review on WhatsApp.';
+// Freshness signal — bump this whenever penalties/process content is reviewed.
+const LAST_UPDATED_ISO = '2026-06-23';
+const LAST_UPDATED_LABEL = 'June 2026';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -183,7 +203,7 @@ export default function DrinkAndDrivePage() {
           { name: 'Case Resolution', text: 'Receive final settlement confirmation from the court. Your criminal record shows resolution/settlement status.' },
         ],
       })} />
-      <JsonLd data={webPageSchema({ title: PAGE_TITLE, description: PAGE_DESC, url: PAGE_URL })} />
+      <JsonLd data={webPageSchema({ title: PAGE_TITLE, description: PAGE_DESC, url: PAGE_URL, dateModified: LAST_UPDATED_ISO })} />
 
       <Navbar />
       <main className="flex-1">
@@ -210,6 +230,9 @@ export default function DrinkAndDrivePage() {
                   </h1>
                   <p className="text-base sm:text-lg text-gray-300 mt-6 leading-relaxed max-w-xl mx-auto">
                     Expert legal guidance for Section 185 violations. Understand DUI penalties, settlement options via Lok Adalat, and protect your driving license.
+                  </p>
+                  <p className="text-xs text-gray-400 mt-4">
+                    Updated {LAST_UPDATED_LABEL} · Reflects the Motor Vehicles (Amendment) Act, 2019
                   </p>
                   <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                     <CTAButton
@@ -251,8 +274,8 @@ export default function DrinkAndDrivePage() {
                     When you are caught driving under alcohol influence, the police issues a challan with criminal charges (not just a traffic fine). This includes:
                   </p>
                   <ul className="space-y-2 ml-4 list-disc">
-                    <li><strong>First offense:</strong> ₹2,000 fine or 6 months imprisonment (or both)</li>
-                    <li><strong>Second offense within 3 years:</strong> ₹3,000 fine or 2 years imprisonment (or both)</li>
+                    <li><strong>First offense:</strong> ₹10,000 fine or up to 6 months imprisonment (or both)</li>
+                    <li><strong>Second offense within 3 years:</strong> ₹15,000 fine or up to 2 years imprisonment (or both)</li>
                     <li><strong>License suspension:</strong> Driving license suspension for 6-12 months minimum</li>
                     <li><strong>Criminal record:</strong> Permanent criminal conviction recorded</li>
                     <li><strong>Employment impact:</strong> Affects background checks for jobs and professional licenses</li>
@@ -261,6 +284,53 @@ export default function DrinkAndDrivePage() {
                     <strong>⚠️ Important:</strong> Drink and drive is <strong>NOT</strong> just a traffic violation — it's a criminal case. Ignoring the challan can lead to arrest, vehicle seizure, and license cancellation.
                   </p>
                 </div>
+              </div>
+            </section>
+
+            {/* Penalty at a glance table */}
+            <section className="py-8 bg-white" aria-labelledby="penalty-table-section">
+              <div className="container-app max-w-3xl">
+                <h2 id="penalty-table-section" className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                  Drink & Drive Penalty at a Glance (2026)
+                </h2>
+                <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed mb-5">
+                  Current penalties under Section 185 of the Motor Vehicles Act, 1988 (post-2019 amendment). The legal blood-alcohol limit is <strong>30 mg per 100 ml of blood</strong> — anything above is an offence.
+                </p>
+                <div className="overflow-x-auto rounded-lg border border-gray-200">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-gray-50 text-gray-900">
+                      <tr>
+                        <th className="px-4 py-3 font-bold">Offence</th>
+                        <th className="px-4 py-3 font-bold">Fine</th>
+                        <th className="px-4 py-3 font-bold">Imprisonment</th>
+                        <th className="px-4 py-3 font-bold">Licence</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 text-gray-600">
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-gray-900">First offence</td>
+                        <td className="px-4 py-3">Up to ₹10,000</td>
+                        <td className="px-4 py-3">Up to 6 months</td>
+                        <td className="px-4 py-3">Suspended 6-12 months</td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-4 py-3 font-medium text-gray-900">Repeat (within 3 years)</td>
+                        <td className="px-4 py-3">Up to ₹15,000</td>
+                        <td className="px-4 py-3">Up to 2 years</td>
+                        <td className="px-4 py-3">Suspended 1 year+</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-gray-900">With accident / injury</td>
+                        <td className="px-4 py-3">Higher + damages</td>
+                        <td className="px-4 py-3">Additional BNS charges</td>
+                        <td className="px-4 py-3">May be cancelled</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                  A conviction is also recorded permanently in your criminal history. A few states apply different fine amounts — we confirm the exact figure for your city before you decide anything.
+                </p>
               </div>
             </section>
 
@@ -318,6 +388,62 @@ export default function DrinkAndDrivePage() {
                     </Link>
                     {' '}after a drink & drive case, as it impacts your eligibility and premiums.
                   </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Settlement Options Comparison */}
+            <section className="py-8 bg-white" aria-labelledby="settlement-options-section">
+              <div className="container-app max-w-3xl">
+                <h2 id="settlement-options-section" className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                  How to Settle a Drink & Drive Case: 4 Options Compared
+                </h2>
+                <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed mb-5">
+                  There is no single &ldquo;settlement fee&rdquo; for a drink and drive case — what you pay and how it ends depends on the route you take. Here is an honest comparison of every legal path, so you can choose with open eyes.
+                </p>
+                <div className="overflow-x-auto rounded-lg border border-gray-200">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-gray-50 text-gray-900">
+                      <tr>
+                        <th className="px-4 py-3 font-bold">Option</th>
+                        <th className="px-4 py-3 font-bold">Typical Cost</th>
+                        <th className="px-4 py-3 font-bold">Timeline</th>
+                        <th className="px-4 py-3 font-bold">Best For</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 text-gray-600">
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-gray-900">Lok Adalat settlement</td>
+                        <td className="px-4 py-3">~₹2,000-5,000</td>
+                        <td className="px-4 py-3">4-8 weeks</td>
+                        <td className="px-4 py-3">First offence, no accident, want it over fast &amp; cheap</td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-4 py-3 font-medium text-gray-900">Court compromise / plea</td>
+                        <td className="px-4 py-3">~₹3,000-8,000</td>
+                        <td className="px-4 py-3">3-6 months</td>
+                        <td className="px-4 py-3">Case already in court, aiming for fine-only outcome</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-medium text-gray-900">Legal defence (contest)</td>
+                        <td className="px-4 py-3">₹10,000-30,000+</td>
+                        <td className="px-4 py-3">6-18 months</td>
+                        <td className="px-4 py-3">Faulty breathalyzer / procedure, wrongful charge, high stakes</td>
+                      </tr>
+                      <tr className="bg-gray-50/50">
+                        <td className="px-4 py-3 font-medium text-gray-900">Pay full court fine</td>
+                        <td className="px-4 py-3">Up to ₹10,000-15,000</td>
+                        <td className="px-4 py-3">1-3 hearings</td>
+                        <td className="px-4 py-3">Simplest, but no fine reduction &amp; full conviction recorded</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                  Costs shown include legal assistance plus court fees and are indicative — exact amounts depend on your city, BAC reading, and whether an accident was involved. We tell you which route realistically applies to your case <strong>before</strong> you pay anything.
+                </p>
+                <div className="mt-5">
+                  <CTAButton label="Find My Best Settlement Option" subtitle="Free case review on WhatsApp" size="md" />
                 </div>
               </div>
             </section>
@@ -381,6 +507,43 @@ export default function DrinkAndDrivePage() {
               </div>
             </section>
 
+            {/* Real Case Outcomes */}
+            <section className="py-8 bg-white" aria-labelledby="outcomes-section">
+              <div className="container-app max-w-3xl">
+                <h2 id="outcomes-section" className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  Recent Drink & Drive Case Outcomes
+                </h2>
+                <p className="text-sm text-gray-500 mb-6">
+                  Anonymised real outcomes. Every case differs — these show what is realistically possible, not a guarantee.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    {
+                      tag: 'First offence · Gurgaon',
+                      detail: 'BAC just over limit, no accident. Resolved via Lok Adalat in ~6 weeks.',
+                      result: 'Fine-only, no jail',
+                    },
+                    {
+                      tag: 'First offence · Delhi',
+                      detail: 'Breathalyzer procedure not followed correctly; raised on record.',
+                      result: 'Charge contested, reduced',
+                    },
+                    {
+                      tag: 'Repeat case · Noida',
+                      detail: 'Second offence within 3 years. Mitigation + structured plea in court.',
+                      result: 'Licence retained',
+                    },
+                  ].map((c) => (
+                    <div key={c.tag} className="rounded-lg border border-gray-200 p-4 bg-gray-50">
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{c.tag}</p>
+                      <p className="text-sm text-gray-600 mt-2 leading-relaxed">{c.detail}</p>
+                      <p className="text-sm font-bold text-green-700 mt-3">✓ {c.result}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
             {/* Trust Signals */}
             <section className="py-8 bg-green-50">
               <div className="container-app max-w-3xl">
@@ -412,7 +575,7 @@ export default function DrinkAndDrivePage() {
                   Drink & Drive Challan: Common Questions
                 </h2>
                 <div className="space-y-4">
-                  {DRINK_AND_DRIVE_FAQS.slice(0, 6).map((faq, i) => (
+                  {DRINK_AND_DRIVE_FAQS.map((faq, i) => (
                     <details key={i} className="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                       <summary className="px-6 py-4 cursor-pointer font-bold text-gray-900 flex items-center justify-between bg-gray-50 group-open:bg-amber-50">
                         <span>{faq.q}</span>
@@ -425,9 +588,32 @@ export default function DrinkAndDrivePage() {
                   ))}
                   <div className="text-center pt-4">
                     <Link href="/faq" className="text-amber-600 hover:text-amber-700 font-medium text-sm">
-                      View all drink & drive FAQs →
+                      Have a different question? View all FAQs →
                     </Link>
                   </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Drink & Drive Help by City */}
+            <section className="py-8 bg-white border-t border-gray-100" aria-labelledby="by-city-section">
+              <div className="container-app max-w-3xl">
+                <h2 id="by-city-section" className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  Drink & Drive Help by City
+                </h2>
+                <p className="text-sm text-gray-600 mb-5">
+                  Caught in a specific city? Get local court details, enforcement info, and settlement options for your case.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {getAllDrinkDriveCities().map((c) => (
+                    <Link
+                      key={c.slug}
+                      href={`/drink-and-drive/${c.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium rounded-xl px-4 py-2 border border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50 transition-colors"
+                    >
+                      Drink &amp; Drive in {c.cityName}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </section>
