@@ -1,5 +1,7 @@
 'use client';
 
+import { trackWhatsAppClick } from '@/lib/analytics';
+
 const WA_NUMBER = '918796323876'; // 91 = India country code
 const WA_MESSAGE = encodeURIComponent('Hi Challan Setu, I want to check discount eligibility for my vehicle challan. Please help me.');
 const WA_URL = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
@@ -17,6 +19,7 @@ export function WhatsAppButton() {
         href={WA_URL}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackWhatsAppClick('floating_button')}
         aria-label="Chat with us on WhatsApp"
         className="group relative w-14 h-14 bg-[#25D366] hover:bg-[#20bc5a] text-white rounded-full shadow-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
       >

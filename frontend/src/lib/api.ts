@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { trackEvent } from './analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -8,22 +9,55 @@ const api = axios.create({
   timeout: 30000, // 30-second timeout for all requests
 });
 
+// ─── Analytics helpers (GA4) ─────────────────────────
+function trackChallanResults(challans: ChallanEntry[] | undefined, extra: Record<string, unknown>) {
+  const list = challans ?? [];
+  trackEvent('challan_results_viewed', {
+    challan_count: list.length,
+    total_amount: list.reduce((sum, c) => sum + (c.amountChallan || 0), 0),
+    ...extra,
+  });
+}
+
 // ─── Challans (public) ───────────────────────────────
 export const challansApi = {
-  getPublic: (vehicleNumber: string) =>
-    api.get<{ challans: ChallanEntry[] }>('/challans/public', {
+  getPublic: (vehicleNumber: string) => {
+    trackEvent('challan_search_started', { method: 'public' });
+    const req = api.get<{ challans: ChallanEntry[] }>('/challans/public', {
       params: { vehicle: vehicleNumber },
       timeout: 35000,
-    }),
+    });
+    req
+      .then((res) => trackChallanResults(res.data?.challans, { method: 'public' }))
+      .catch(() => trackEvent('challan_search_failed', { method: 'public' }));
+    return req;
+  },
 
-  eparivahanInitiate: (vehicleNumber: string) =>
-    api.post<
+  eparivahanInitiate: (vehicleNumber: string) => {
+    trackEvent('challan_search_started', { method: 'eparivahan' });
+    const req = api.post<
       | { otpRequired: false; challans: ChallanEntry[]; confirmed: boolean }
       | { otpRequired: true; sessionId: string; otpMessage: string }
-    >('/challans/eparivahan/initiate', { vehicleNumber }, { timeout: 60000 }),
+    >('/challans/eparivahan/initiate', { vehicleNumber }, { timeout: 60000 });
+    req
+      .then((res) => {
+        if (res.data && res.data.otpRequired === false) {
+          trackChallanResults(res.data.challans, { method: 'eparivahan', step: 'initiate' });
+        } else {
+          trackEvent('challan_otp_required', { method: 'eparivahan' });
+        }
+      })
+      .catch(() => trackEvent('challan_search_failed', { method: 'eparivahan', step: 'initiate' }));
+    return req;
+  },
 
-  eparivahanVerify: (sessionId: string, otp: string) =>
-    api.post<{ challans: ChallanEntry[] }>('/challans/eparivahan/verify', { sessionId, otp }, { timeout: 30000 }),
+  eparivahanVerify: (sessionId: string, otp: string) => {
+    const req = api.post<{ challans: ChallanEntry[] }>('/challans/eparivahan/verify', { sessionId, otp }, { timeout: 30000 });
+    req
+      .then((res) => trackChallanResults(res.data?.challans, { method: 'eparivahan', step: 'verify' }))
+      .catch(() => trackEvent('challan_search_failed', { method: 'eparivahan', step: 'verify' }));
+    return req;
+  },
 };
 
 export interface ChallanEntry {
@@ -45,7 +79,13 @@ export const leadsApi = {
     consentAccepted: boolean;
     source?: 'homepage' | 'city_page' | 'insurance';
     city?: string;
-  }) => api.post('/leads', data, { timeout: 25000 }),
+  }) => {
+    const req = api.post('/leads', data, { timeout: 25000 });
+    req
+      .then(() => trackEvent('lead_submitted', { source: data.source ?? 'homepage', city: data.city ?? null }))
+      .catch(() => {});
+    return req;
+  },
 };
 
 // ─── Recovery Leads ─────────────────────────────────
@@ -55,11 +95,17 @@ export const recoveryLeadsApi = {
     mobileNumber: string;
     vehicleNumber: string;
     consentAccepted: boolean;
-  }) => api.post('/leads', {
-    ...data,
-    source: 'vehicle_recovery',
-    notes: '[VEHICLE RECOVERY]',
-  }, { timeout: 25000 }),
+  }) => {
+    const req = api.post('/leads', {
+      ...data,
+      source: 'vehicle_recovery',
+      notes: '[VEHICLE RECOVERY]',
+    }, { timeout: 25000 });
+    req
+      .then(() => trackEvent('lead_submitted', { source: 'vehicle_recovery' }))
+      .catch(() => {});
+    return req;
+  },
 };
 
 // ─── Payments (Razorpay) ────────────────────────────

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ArrowRight, RotateCw } from 'lucide-react';
 import { recoveryLeadsApi } from '@/lib/api';
+import { trackWhatsAppClick } from '@/lib/analytics';
 
 interface RecoveryFormProps {
   hero?: boolean;
@@ -68,6 +69,7 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
               Our team will call you on <span className="font-bold text-white">{phone}</span> within 30 minutes.
             </p>
             <a href="https://wa.me/918796323876"
+              onClick={() => trackWhatsAppClick('recovery_success')}
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors">
               💬 WhatsApp us your documents
             </a>

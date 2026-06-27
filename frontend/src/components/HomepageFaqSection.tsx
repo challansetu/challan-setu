@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { HOMEPAGE_FAQS, HOMEPAGE_FAQ_SUBTITLE, HOMEPAGE_FAQ_TITLE } from '@/data/homepage-faqs';
+import { trackEvent } from '@/lib/analytics';
 
 export function HomepageFaqSection() {
   const [openIndex, setOpenIndex] = useState(0);
@@ -30,7 +31,11 @@ export function HomepageFaqSection() {
               >
                 <button
                   type="button"
-                  onClick={() => setOpenIndex((current) => (current === index ? -1 : index))}
+                  onClick={() => setOpenIndex((current) => {
+                    const next = current === index ? -1 : index;
+                    if (next === index) trackEvent('faq_expanded', { question: faq.q, page: 'homepage' });
+                    return next;
+                  })}
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-inset"
                   aria-expanded={isOpen}
                   aria-controls={`homepage-faq-answer-${index}`}

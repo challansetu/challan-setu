@@ -3,6 +3,7 @@
 import { AlertTriangle, ArrowRight, CheckCircle, Scale, Shield, Clock, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 import { ViolationTypeContent } from '@/data/violation-types';
+import { trackWhatsAppClick } from '@/lib/analytics';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
@@ -69,6 +70,7 @@ export function ViolationTypeSection({
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick('violation_section')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
               style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
             >
@@ -223,6 +225,7 @@ export function ViolationTypeSection({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('violation_section_cta')}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl w-full max-w-sm"
             style={{ background: BRAND_YELLOW, color: BRAND_DARK }}
           >

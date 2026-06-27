@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 import axios from 'axios';
 import { paymentsApi, type PaymentStatusValue } from '@/lib/api';
+import { trackEvent } from '@/lib/analytics';
 
 const RAZORPAY_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
 const MIN_AMOUNT = 1;
@@ -82,11 +83,13 @@ export function PaymentForm() {
 
   const resolveOutcome = useCallback((finalStatus: PaymentStatusValue, amt: number, orderId: string, paymentId?: string) => {
     if (finalStatus === 'PAID') {
+      trackEvent('payment_succeeded', { amount: amt });
       setSuccess({ amount: amt, paymentId: paymentId ?? '—' });
       setStatus('success');
       return;
     }
     if (finalStatus === 'FAILED') {
+      trackEvent('payment_failed', { reason: 'failed' });
       setStatus('idle');
       setError('Your payment did not go through. If any amount was deducted, it is auto-refunded by your bank within 5–7 working days. You can try again.');
       return;
@@ -109,6 +112,7 @@ export function PaymentForm() {
 
     busyRef.current = true;
     setStatus('processing');
+    trackEvent('payment_initiated', { amount: Number(amount) });
 
     const scriptOk = await loadRazorpay();
     if (!scriptOk) {
@@ -187,6 +191,7 @@ export function PaymentForm() {
       rzp.on('payment.failed', (resp: any) => {
         busyRef.current = false;
         setStatus('idle');
+        trackEvent('payment_failed', { reason: resp?.error?.description ?? 'failed' });
         const reason = resp?.error?.description ? ` (${resp.error.description})` : '';
         setError(`Payment failed${reason}. If any amount was deducted, it is auto-refunded by your bank within 5–7 working days. You can try again.`);
       });

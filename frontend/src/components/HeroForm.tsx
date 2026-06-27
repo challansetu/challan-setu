@@ -13,6 +13,7 @@ import {
 } from '@/lib/constants';
 import messages from '@/data/messages.json';
 import landingData from '@/data/landing.json';
+import { trackEvent } from '@/lib/analytics';
 
 interface HeroFormProps {
   source?: 'homepage' | 'city_page';
@@ -162,8 +163,9 @@ export function HeroForm({
     setShowOverlay(false);
     setOverlayError('');
     setPendingVehicle(cleaned);
+    trackEvent('vehicle_number_entered', { source, city: city ?? null });
     setLeadModalOpen(true);
-  }, [saveRecent]);
+  }, [saveRecent, source, city]);
 
   return (
     <>
