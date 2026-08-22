@@ -6,9 +6,9 @@ import { JsonLd, breadcrumbSchema, itemListSchema } from '@/components/seo/JsonL
 import { ArrowRight, MapPin, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Vehicle Challan Support by City | Delhi, Noida, Gurgaon, Ghaziabad, Faridabad',
+  title: 'Vehicle Challan Support by City in Delhi NCR',
   description:
-    'ChallanSetu provides traffic challan assistance in Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. Select your city to request challan support and discount eligibility review.',
+    'Traffic challan assistance in Delhi, Noida, Gurgaon, Ghaziabad and Faridabad. Select your city for a challan discount eligibility review.',
   alternates: { canonical: '/cities' },
 };
 

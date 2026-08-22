@@ -3,35 +3,42 @@ import Link from 'next/link';
 import { ArrowRight, AlertTriangle, Shield, Scale } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
 import { HeroForm } from '@/components/HeroForm';
+import { SITE_URL } from '@/lib/site-url';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
 
 export const metadata: Metadata = {
-  title: 'Drink-and-Drive Challan Settlement: Legal Process & Options Explained',
-  description: 'Complete guide to drink-and-drive challan settlement in India. Understand penalties, Lok Adalat options, license recovery, and legal defense. Get expert help today.',
+  title: 'Drink-and-Drive Challan Settlement Options',
+  description: 'Drink-and-drive challan settlement in India: penalties, Lok Adalat options, license recovery and legal defense explained.',
   alternates: {
     canonical: '/blog/drink-and-drive-challan-settlement',
   },
   openGraph: {
-    title: 'Drink-and-Drive Challan Settlement: Legal Process & Options Explained',
+    title: 'Drink-and-Drive Challan Settlement Options',
     description: 'Complete guide to drink-and-drive challan settlement in India. Understand penalties, Lok Adalat options, license recovery, and legal defense.',
     url: '/blog/drink-and-drive-challan-settlement',
     type: 'article',
   },
 };
 
+// Fixed publication dates. These must not be `new Date()`: a date that moves
+// on every render tells Google the article is rewritten daily and breaks
+// server/client hydration on the visible byline.
+const PUBLISHED_ISO = '2026-06-20';
+const MODIFIED_ISO = '2026-06-20';
+
 export default function DrinkAndDriveBlog() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Drink-and-Drive Challan Settlement: Legal Process & Options Explained',
+    headline: 'Drink-and-Drive Challan Settlement Options',
     description: metadata.description,
-    image: 'https://challansetu.com/og-image.png',
-    datePublished: new Date().toISOString(),
-    dateModified: new Date().toISOString(),
+    image: `${SITE_URL}/opengraph-image`,
+    datePublished: PUBLISHED_ISO,
+    dateModified: MODIFIED_ISO,
     author: {
       '@type': 'Organization',
       name: 'ChallanSetu',
@@ -39,12 +46,19 @@ export default function DrinkAndDriveBlog() {
     publisher: {
       '@type': 'Organization',
       name: 'ChallanSetu',
-      logo: 'https://challansetu.com/logo.png',
+      logo: `${SITE_URL}/challan-logo.svg`,
     },
   };
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: 'Drink-and-Drive Challan Settlement', url: '/blog/drink-and-drive-challan-settlement' },
+        ])}
+      />
       <JsonLd data={articleSchema} />
       <Navbar />
 
@@ -69,7 +83,14 @@ export default function DrinkAndDriveBlog() {
               Understand the serious consequences of drink-and-drive charges, legal options, and how to minimize penalties through proper legal process.
             </p>
             <div className="flex gap-3 text-sm text-white/60">
-              <span>Published: {new Date().toLocaleDateString()}</span>
+              <span>
+                Published:{' '}
+                {new Date(PUBLISHED_ISO).toLocaleDateString('en-IN', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </span>
               <span>•</span>
               <span>8 min read</span>
             </div>

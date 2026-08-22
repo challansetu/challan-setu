@@ -5,8 +5,7 @@ import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, itemListSchema } from '@/components/seo/JsonLd';
 import { getAllBlogPosts } from '@/data/blog';
 import { Clock, ArrowRight, Tag } from 'lucide-react';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
+import { SITE_URL } from '@/lib/site-url';
 
 export const metadata: Metadata = {
   title: { absolute: 'Traffic Challan Help & Guides | ChallanSetu Blog' },
@@ -18,7 +17,6 @@ export const metadata: Metadata = {
     description:
       'Practical guides on challan discount, Lok Adalat settlement, and legally paying less on traffic fines in Delhi NCR.',
     url: `${SITE_URL}/blog`,
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 

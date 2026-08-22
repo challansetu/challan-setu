@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/site-url';
 interface JsonLdProps {
   data: Record<string, unknown> | Record<string, unknown>[];
 }
@@ -12,8 +13,6 @@ export function JsonLd({ data }: JsonLdProps) {
 }
 
 // ─── Reusable schema builders ─────────────────────────────────────────────────
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 
 export function organizationSchema() {
   return {

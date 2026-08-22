@@ -4,11 +4,11 @@ import Script from 'next/script';
 import './globals.css';
 import siteData from '@/data/site.json';
 import { JsonLd, organizationSchema, websiteSchema, localBusinessSchema } from '@/components/seo/JsonLd';
+import { SITE_URL } from '@/lib/site-url';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap', variable: '--font-jakarta' });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {

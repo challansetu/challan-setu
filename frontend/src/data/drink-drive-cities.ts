@@ -76,9 +76,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'DL',
     trafficPolice: 'Delhi Traffic Police',
     court: 'Metropolitan Magistrate courts (Tis Hazari, Saket, Karkardooma, Rohini, Dwarka, Patiala House)',
-    metaTitle: 'Caught for Drink & Drive in Delhi? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Delhi? Settlement Help',
     metaDescription:
-      'Caught for drink & drive in Delhi? Understand Section 185 penalties, the court process at Tis Hazari/Saket, Lok Adalat settlement & how to protect your licence. Free WhatsApp review.',
+      'Drink & drive in Delhi? Section 185 penalties, Tis Hazari/Saket court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Delhi? Here\'s What to Do',
     heroSubheading:
       'A Section 185 charge in Delhi is a criminal case, not a normal challan. Understand your penalties, the court process, and your fastest legal settlement option.',
@@ -113,9 +113,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'HR',
     trafficPolice: 'Gurugram Traffic Police',
     court: 'District Court, Gurugram',
-    metaTitle: 'Caught for Drink & Drive in Gurgaon? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Gurgaon? Settlement Help',
     metaDescription:
-      'Drink & drive case in Gurgaon (Gurugram)? Understand Section 185 penalties, the District Court process, Lok Adalat settlement & how to save your licence. Free WhatsApp case review.',
+      'Drink & drive case in Gurgaon? Section 185 penalties, District Court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Gurgaon? Here\'s What to Do',
     heroSubheading:
       'A drink & drive charge in Gurugram is a criminal case under Section 185. Know your penalties, the court process, and your fastest legal way to settle.',
@@ -150,9 +150,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'UP',
     trafficPolice: 'Gautam Buddh Nagar Traffic Police',
     court: 'District & Sessions Court, Gautam Buddh Nagar (Surajpur)',
-    metaTitle: 'Caught for Drink & Drive in Noida? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Noida? Settlement Help',
     metaDescription:
-      'Drink & drive case in Noida? Understand Section 185 penalties, the Gautam Buddh Nagar court process, Lok Adalat settlement & licence recovery. Free WhatsApp case review.',
+      'Drink & drive in Noida? Section 185 penalties, Gautam Buddh Nagar court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Noida? Here\'s What to Do',
     heroSubheading:
       'A Section 185 drink & drive charge in Noida is a criminal case. Know your penalties, the Gautam Buddh Nagar court process, and your fastest legal settlement route.',
@@ -187,9 +187,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'UP',
     trafficPolice: 'Ghaziabad Traffic Police',
     court: 'District Court, Ghaziabad',
-    metaTitle: 'Caught for Drink & Drive in Ghaziabad? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Ghaziabad? Settlement Help',
     metaDescription:
-      'Drink & drive case in Ghaziabad? Understand Section 185 penalties, the District Court process, Lok Adalat settlement & how to protect your licence. Free WhatsApp case review.',
+      'Drink & drive in Ghaziabad? Section 185 penalties, District Court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Ghaziabad? Here\'s What to Do',
     heroSubheading:
       'A drink & drive charge in Ghaziabad is a criminal case under Section 185. Understand your penalties, the court process, and your fastest legal settlement option.',
@@ -224,9 +224,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'HR',
     trafficPolice: 'Faridabad Traffic Police',
     court: 'District Court, Faridabad (Sector 12)',
-    metaTitle: 'Caught for Drink & Drive in Faridabad? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Faridabad? Settlement Help',
     metaDescription:
-      'Drink & drive case in Faridabad? Understand Section 185 penalties, the District Court process, Lok Adalat settlement & how to save your licence. Free WhatsApp case review.',
+      'Drink & drive in Faridabad? Section 185 penalties, District Court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Faridabad? Here\'s What to Do',
     heroSubheading:
       'A drink & drive charge in Faridabad is a criminal case under Section 185. Know your penalties, the court process, and your fastest legal way to settle.',
@@ -261,9 +261,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'CH',
     trafficPolice: 'Chandigarh Traffic Police',
     court: 'District Courts, Chandigarh (Sector 43)',
-    metaTitle: 'Caught for Drink & Drive in Chandigarh? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Chandigarh? Settlement Help',
     metaDescription:
-      'Drink & drive case in Chandigarh? Understand Section 185 penalties, the District Court process, Lok Adalat settlement & how to protect your licence. Free WhatsApp case review.',
+      'Drink & drive in Chandigarh? Section 185 penalties, District Court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Chandigarh? Here\'s What to Do',
     heroSubheading:
       'A Section 185 drink & drive charge in Chandigarh is a criminal case. Understand your penalties, the court process, and your fastest legal settlement option.',
@@ -298,9 +298,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'MH',
     trafficPolice: 'Mumbai Traffic Police',
     court: 'Metropolitan Magistrate courts (Esplanade, Bandra, Andheri)',
-    metaTitle: 'Caught for Drink & Drive in Mumbai? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Mumbai? Settlement Help',
     metaDescription:
-      'Drink & drive case in Mumbai? Understand Section 185 penalties, the Metropolitan Magistrate court process, Lok Adalat settlement & licence recovery. Free WhatsApp case review.',
+      'Drink & drive in Mumbai? Section 185 penalties, Metropolitan Magistrate court process, Lok Adalat settlement & licence recovery. Free review.',
     h1: 'Caught for Drink & Drive in Mumbai? Here\'s What to Do',
     heroSubheading:
       'A Section 185 drink & drive charge in Mumbai is a criminal case, not a normal challan. Know your penalties, the court process, and your fastest legal settlement route.',
@@ -335,9 +335,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'MH',
     trafficPolice: 'Pune Traffic Police',
     court: 'District Court, Pune (Shivajinagar)',
-    metaTitle: 'Caught for Drink & Drive in Pune? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Pune? Settlement Help',
     metaDescription:
-      'Drink & drive case in Pune? Understand Section 185 penalties, the District Court process, Lok Adalat settlement & how to protect your licence. Free WhatsApp case review.',
+      'Drink & drive in Pune? Section 185 penalties, District Court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Pune? Here\'s What to Do',
     heroSubheading:
       'A drink & drive charge in Pune is a criminal case under Section 185. Understand your penalties, the court process, and your fastest legal way to settle.',
@@ -372,9 +372,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'KA',
     trafficPolice: 'Bengaluru Traffic Police',
     court: 'Magistrate courts / Traffic Lok Adalat, Bengaluru',
-    metaTitle: 'Caught for Drink & Drive in Bangalore? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Bangalore? Settlement Help',
     metaDescription:
-      'Drink & drive case in Bangalore? Understand Section 185 penalties, the court process, Lok Adalat settlement & how to protect your licence. Free WhatsApp case review.',
+      'Drink & drive in Bangalore? Section 185 penalties, the court process, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Bangalore? Here\'s What to Do',
     heroSubheading:
       'A Section 185 drink & drive charge in Bengaluru is a criminal case. Know your penalties, the court process, and your fastest legal settlement route.',
@@ -409,9 +409,9 @@ const CITIES: DrinkDriveCity[] = [
     vehiclePrefix: 'TS',
     trafficPolice: 'Hyderabad Traffic Police',
     court: 'Metropolitan / Magistrate courts, Hyderabad',
-    metaTitle: 'Caught for Drink & Drive in Hyderabad? What to Do | Settlement Help',
+    metaTitle: 'Drink & Drive in Hyderabad? Settlement Help',
     metaDescription:
-      'Drink & drive case in Hyderabad? Understand Section 185 penalties, the mandatory court production process, Lok Adalat settlement & licence recovery. Free WhatsApp case review.',
+      'Drink & drive in Hyderabad? Section 185 penalties, mandatory court production, Lok Adalat settlement & licence recovery. Free WhatsApp review.',
     h1: 'Caught for Drink & Drive in Hyderabad? Here\'s What to Do',
     heroSubheading:
       'A Section 185 drink & drive charge in Hyderabad is a criminal case, and the city is known for producing offenders before court. Know your penalties and options.',

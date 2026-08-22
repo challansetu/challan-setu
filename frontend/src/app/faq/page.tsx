@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     title: 'How to Reduce Traffic Challan Fine – FAQ | ChallanSetu',
     description:
       'Can you legally reduce a traffic challan? Yes. Learn how Lok Adalat works, what documents you need, and how much you can save.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 

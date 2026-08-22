@@ -15,13 +15,13 @@ import {
   webPageSchema,
 } from '@/components/seo/JsonLd';
 import { COMMERCIAL_FAQS } from './faqs';
+import { SITE_URL } from '@/lib/site-url';
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/commercial-vehicle-insurance';
-const PAGE_TITLE = 'Commercial Vehicle Insurance Renewal, Save up to 85% | Truck, Taxi & Fleet';
+const PAGE_TITLE = 'Commercial Vehicle Insurance, Save 85%';
 const PAGE_DESC =
-  'Check commercial vehicle insurance status free by registration number via VAHAN. Renew truck, taxi, bus & fleet insurance online, compare 20+ insurers, save up to 85%.';
+  'Check commercial vehicle insurance free via VAHAN. Renew truck, taxi, bus & fleet insurance online, compare 20+ insurers, save up to 85%.';
 const DATE_MODIFIED = '2026-06-20';
 
 export const metadata: Metadata = {

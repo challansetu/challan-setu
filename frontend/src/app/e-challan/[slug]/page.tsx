@@ -9,6 +9,7 @@ import { JsonLd, breadcrumbSchema, faqSchema, webPageSchema, serviceSchema, howT
 import { HeroForm } from '@/components/HeroForm';
 import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { CheckCircle2, MapPin, AlertCircle, ExternalLink, BookOpen } from 'lucide-react';
+import { SITE_URL } from '@/lib/site-url';
 
 // State-level metadata: capitals, cities, local enforcement content
 const STATE_META: Record<string, { capital: string; majorCities: string[]; localContent: string }> = {
@@ -876,17 +877,32 @@ const STATES: Record<string, StateData> = {
   },
 };
 
+// Metadata for these 35 state pages is consumed twice — once by
+// generateMetadata() and once by the page's WebPage JSON-LD. Build both from
+// one place so the two can never disagree about title, description or date.
+//
+// Titles stay under ~60 chars *including* the "| ChallanSetu" the root layout
+// appends, so Google renders them whole instead of truncating mid-phrase.
+const STATE_PAGE_MODIFIED_ISO = '2026-06-20'; // keep in sync with STATE_DATE in sitemap.ts
+
+function stateSeo(slug: string, state: { name: string; rtoCode: string }) {
+  const meta = STATE_META[slug];
+  const cityList = meta?.majorCities?.slice(0, 3).join(', ') || state.name;
+  return {
+    meta,
+    cityList,
+    title: `${state.name} E-Challan Check & Settlement`,
+    description: `Check pending e-challans in ${state.name} (${state.rtoCode}) free — ${cityList}. Settle via Lok Adalat and save up to 50%, no court visit.`,
+  };
+}
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const state = STATES[slug];
   if (!state) return {};
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
-  const meta = STATE_META[slug];
-  const cityList = meta?.majorCities?.slice(0, 3).join(', ') || state.name;
-  const title = `${state.name} E-Challan Check | Pending Traffic Challan & Settlement Online`;
-  const description = `Check & settle pending e-challans in ${state.name} (${state.rtoCode}) — ${cityList}. Lok Adalat settlement, save up to 50%. Free check, no court visit. Expert legal guidance.`;
+  const { title, description } = stateSeo(slug, state);
   const image = `${SITE_URL}/images/states/e_challan_${slug.replace(/-/g, '_')}.webp`;
   const canonicalUrl = `${SITE_URL}/e-challan/${slug}`;
   return {
@@ -989,13 +1005,9 @@ export default async function StatePage({ params }: Props) {
     },
   ];
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
-  const pageUrl = `/e-challan/${slug}`;
-  const meta = STATE_META[slug];
-  const cityList = meta?.majorCities?.slice(0, 3).join(', ') || state.name;
-  const title = `${state.name} E-Challan Check | Pending Traffic Challan & Settlement Online`;
-  const description = `Check & settle pending e-challans in ${state.name} (${state.rtoCode}) — ${cityList}. Lok Adalat settlement, save up to 50%. Free check, no court visit. Expert legal guidance.`;
-  const dateModified = new Date().toISOString().split('T')[0];
+    const pageUrl = `/e-challan/${slug}`;
+  const { meta, cityList, title, description } = stateSeo(slug, state);
+  const dateModified = STATE_PAGE_MODIFIED_ISO;
 
   return (
     <>

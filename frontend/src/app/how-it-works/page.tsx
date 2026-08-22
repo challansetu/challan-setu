@@ -22,7 +22,6 @@ export const metadata: Metadata = {
     title: 'How Lok Adalat Challan Settlement Works | ChallanSetu',
     description:
       'See how ChallanSetu settles your challan in 3 steps via Lok Adalat. No court visits, no stress — just a legal fine reduction up to 50%.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 

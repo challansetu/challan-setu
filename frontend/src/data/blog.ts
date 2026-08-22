@@ -35,7 +35,7 @@ const POSTS: BlogPost[] = [
   {
     slug: "challan-discount-delhi",
     coverImage: "/blog/cover-delhi-challan.svg",
-    metaTitle: "Challan Discount in Delhi: How to Legally Pay Less | ChallanSetu",
+    metaTitle: "Challan Discount in Delhi: How to Pay Less | ChallanSetu",
     metaDescription:
       "Got a traffic challan in Delhi? Learn how challan discount via Lok Adalat can cut your fine by up to 50%. Check eligibility free.",
     title: "Got a Traffic Challan in Delhi? Here’s How to Legally Pay Less",
@@ -276,9 +276,9 @@ const POSTS: BlogPost[] = [
   {
     slug: "what-happens-if-you-dont-pay-challan",
     coverImage: "/blog/cover-unpaid-challan.svg",
-    metaTitle: "What Happens If You Don't Pay a Traffic Challan? | ChallanSetu",
+    metaTitle: "What Happens If You Don't Pay a Challan? | ChallanSetu",
     metaDescription:
-      "Ignoring a traffic challan can block your RC renewal, suspend your licence, and grow your fine. Find out the real consequences and how to resolve pending challans.",
+      "Ignoring a traffic challan can block your RC renewal, suspend your licence and grow your fine. The real consequences, and how to resolve them.",
     title: "What Happens If You Don't Pay a Traffic Challan?",
     category: "Challan Guide",
     publishedAt: "2026-05-05",
@@ -453,9 +453,9 @@ const POSTS: BlogPost[] = [
   {
     slug: "court-challan-vs-online-challan",
     coverImage: "/blog/cover-court-vs-online.svg",
-    metaTitle: "Court Challan vs Online Challan: What's the Difference? | ChallanSetu",
+    metaTitle: "Court Challan vs Online Challan | ChallanSetu",
     metaDescription:
-      "Not all traffic challans are the same. Learn the difference between an e-challan and a court challan, how each is issued, and what you can do to settle each one for less.",
+      "The difference between an e-challan and a court challan, how each is issued, and what you can do to settle each one for less.",
     title: "Court Challan vs Online Challan: What's the Difference and How to Settle Each",
     category: "Challan Guide",
     publishedAt: "2026-05-10",
@@ -647,9 +647,9 @@ const POSTS: BlogPost[] = [
   {
     slug: "how-to-check-pending-challan-delhi",
     coverImage: "/blog/cover-check-challan.svg",
-    metaTitle: "How to Check Pending Challan in Delhi (4 Free Methods) | ChallanSetu",
+    metaTitle: "How to Check Pending Challan in Delhi | ChallanSetu",
     metaDescription:
-      "Check pending challans on your Delhi vehicle number in minutes. 4 free methods: Parivahan portal, mParivahan app, Delhi Traffic Police site, and ChallanSetu.",
+      "Check pending challans on your Delhi vehicle number free: Parivahan portal, mParivahan app, Delhi Traffic Police site, and ChallanSetu.",
     title: "How to Check Pending Challan in Delhi (4 Ways That Actually Work)",
     category: "Challan Guide",
     publishedAt: "2026-05-15",
@@ -859,7 +859,7 @@ const POSTS: BlogPost[] = [
   {
     slug: "lok-adalat-challan-settlement",
     coverImage: "/blog/cover-lok-adalat.svg",
-    metaTitle: "What is Lok Adalat? How It Reduces Your Traffic Challan Fine | ChallanSetu",
+    metaTitle: "What is Lok Adalat? Cut Your Traffic Fine | ChallanSetu",
     metaDescription:
       "Lok Adalat is a government-recognised legal forum that can cut your traffic challan fine by 30–50%. Learn how it works, who's eligible, and how to use it.",
     title: "What is Lok Adalat? How It Can Cut Your Traffic Fine by 50%",
@@ -1074,9 +1074,9 @@ const POSTS: BlogPost[] = [
   {
     slug: "best-motor-insurance-india-2025",
     coverImage: "/blog/cover-best-motor-insurance.svg",
-    metaTitle: "Best Motor Insurance in India 2025: How to Choose & Save | ChallanSetu",
+    metaTitle: "Best Motor Insurance in India 2025 | ChallanSetu",
     metaDescription:
-      "How to choose the best motor insurance in India in 2025. Compare car, bike & commercial vehicle plans, understand IDV, NCB & add-ons, and save up to 85% on renewal.",
+      "Compare car, bike & commercial vehicle plans for 2025, understand IDV, NCB & add-ons, and save up to 85% on renewal.",
     title: "Best Motor Insurance in India 2025: How to Choose & Save up to 85%",
     category: "Insurance Guide",
     publishedAt: "2026-06-19",
@@ -1207,9 +1207,9 @@ const POSTS: BlogPost[] = [
   {
     slug: "how-to-claim-motor-insurance",
     coverImage: "/blog/cover-claim-motor-insurance.svg",
-    metaTitle: "How to Claim Motor Insurance After an Accident (Step-by-Step) | ChallanSetu",
+    metaTitle: "How to Claim Motor Insurance After an Accident | ChallanSetu",
     metaDescription:
-      "A clear step-by-step guide to claiming motor insurance after an accident in India. Learn cashless vs reimbursement claims, documents needed, and mistakes that get claims rejected.",
+      "Claiming motor insurance after an accident in India: cashless vs reimbursement, documents needed, and mistakes that get claims rejected.",
     title: "How to Claim Motor Insurance After an Accident (Step-by-Step)",
     category: "Insurance Guide",
     publishedAt: "2026-06-20",

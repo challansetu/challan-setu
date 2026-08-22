@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
 import { CityPageTemplate } from '@/components/CityPageTemplate';
 import cityPagesData from '@/data/city-pages.json';
+import { SITE_URL } from '@/lib/site-url';
 
 // Get Gurgaon data
 const gurgaon = cityPagesData.cities.find(c => c.id === 'gurgaon')!;
 
 export const metadata: Metadata = {
-  title: gurgaon.metaTitle,
+  // metaTitle already carries the brand suffix — don't let the layout add a second.
+  title: { absolute: gurgaon.metaTitle },
   description: gurgaon.metaDescription,
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com'}/gurgaon/challan-settlement`,
+    canonical: `${SITE_URL}/gurgaon/challan-settlement`,
   },
   openGraph: {
     title: gurgaon.metaTitle,

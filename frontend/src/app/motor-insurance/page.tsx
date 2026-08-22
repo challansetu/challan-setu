@@ -26,15 +26,15 @@ import {
   InsuranceCta,
 } from './components';
 import { URGENCY_FACTS, BRAND_DARK } from './data';
+import { SITE_URL } from '@/lib/site-url';
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/motor-insurance';
 // Brand suffix (" | ChallanSetu") is appended by the root layout title template,
 // so it must NOT be repeated here, otherwise the title double-brands.
-const PAGE_TITLE = 'Motor Insurance Check & Renewal, Save up to 85% | Free VAHAN Check';
+const PAGE_TITLE = 'Motor Insurance Check & Renewal, Save 85%';
 const PAGE_DESC =
-  'Check motor insurance status free by vehicle number via VAHAN. Renew car, bike & commercial vehicle insurance online, compare 20+ insurers, save up to 85% via PolicyBazaar.';
+  'Check motor insurance status free by vehicle number via VAHAN. Renew car, bike & commercial insurance online, compare 20+ insurers, save up to 85%.';
 const DATE_MODIFIED = '2026-06-20';
 
 export const metadata: Metadata = {

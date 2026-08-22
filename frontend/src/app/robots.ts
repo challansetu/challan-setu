@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
+import { SITE_URL } from '@/lib/site-url';
 
 export default function robots(): MetadataRoute.Robots {
   const isProduction = process.env.NODE_ENV === 'production';

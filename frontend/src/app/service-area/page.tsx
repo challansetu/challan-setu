@@ -6,15 +6,14 @@ import { JsonLd, breadcrumbSchema, webPageSchema } from '@/components/seo/JsonLd
 import { MapPin, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Service Area - Delhi, Noida, Gurgaon, Ghaziabad & Faridabad',
+  title: 'Service Area: Delhi NCR Challan Coverage',
   description:
-    'ChallanSetu currently serves Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. See which challans are covered across Delhi NCR and what to expect if your vehicle is from another city.',
+    'ChallanSetu serves Delhi, Noida, Gurgaon, Ghaziabad and Faridabad. See which challan types are covered across Delhi NCR.',
   alternates: { canonical: '/service-area' },
   openGraph: {
     title: 'ChallanSetu Service Area - Delhi, Noida, Gurgaon, Ghaziabad & Faridabad',
     description:
       'See which cities and challan types ChallanSetu covers. We are currently live in Delhi NCR.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 };
 
@@ -67,7 +66,7 @@ export default function ServiceAreaPage() {
       />
       <JsonLd
         data={webPageSchema({
-          title: 'Service Area - Delhi, Noida, Gurgaon, Ghaziabad & Faridabad | ChallanSetu',
+          title: 'Service Area: Delhi NCR Challan Coverage | ChallanSetu',
           description: 'ChallanSetu currently serves Delhi, Noida, Gurgaon, Ghaziabad, and Faridabad. See which challans are covered across Delhi NCR.',
           url: '/service-area',
         })}

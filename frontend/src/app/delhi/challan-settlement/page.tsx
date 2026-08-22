@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
 import { CityPageTemplate } from '@/components/CityPageTemplate';
 import cityPagesData from '@/data/city-pages.json';
+import { SITE_URL } from '@/lib/site-url';
 
 // Get Delhi data
 const delhi = cityPagesData.cities.find(c => c.id === 'delhi')!;
 
 export const metadata: Metadata = {
-  title: delhi.metaTitle,
+  // metaTitle already carries the brand suffix — don't let the layout add a second.
+  title: { absolute: delhi.metaTitle },
   description: delhi.metaDescription,
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com'}/delhi/challan-settlement`,
+    canonical: `${SITE_URL}/delhi/challan-settlement`,
   },
   openGraph: {
     title: delhi.metaTitle,

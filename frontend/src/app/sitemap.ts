@@ -3,8 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { getAllCityPages } from '@/data/city-pages';
 import { getAllDrinkDriveCitySlugs } from '@/data/drink-drive-cities';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
+import { SITE_URL } from '@/lib/site-url';
 
 interface BlogPost {
   slug: string;
@@ -19,6 +18,13 @@ const STATE_DATE         = new Date('2026-06-20'); // state e-challan pages upda
 const INSURANCE_DATE     = new Date('2026-06-18'); // motor-insurance landing page
 const CITY_DATE          = new Date('2026-06-20'); // NCR city pages added
 const SERVICE_DATE       = new Date('2026-06-20'); // drink-and-drive service page
+
+// Hand-authored blog pages that live outside blog-posts.json (own route folders).
+// Keep the dates in sync with the datePublished/dateModified in each page.tsx.
+const STANDALONE_POSTS = [
+  { slug: 'drink-and-drive-challan-settlement',        date: new Date('2026-06-20') },
+  { slug: 'license-suspension-appeal-drink-and-drive', date: new Date('2026-06-20') },
+];
 
 const STATE_SLUGS = [
   'andaman-nicobar', 'andhra-pradesh', 'arunachal-pradesh', 'assam',
@@ -36,10 +42,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const blogPosts: BlogPost[] = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
 
   // Latest blog post date drives the blog listing freshness
-  const latestPostDate = blogPosts.reduce<Date>((latest, p) => {
-    const d = new Date(p.date);
-    return d > latest ? d : latest;
-  }, LAUNCH_DATE);
+  const allPostDates = [
+    ...blogPosts.map((p) => new Date(p.date)),
+    ...STANDALONE_POSTS.map((p) => p.date),
+  ];
+  const latestPostDate = allPostDates.reduce<Date>(
+    (latest, d) => (d > latest ? d : latest),
+    LAUNCH_DATE,
+  );
 
   return [
     // ── Homepage ──────────────────────────────────────────────────────────────
@@ -184,6 +194,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogPosts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       lastModified: new Date(post.date),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+
+    // Standalone blog routes (not in blog-posts.json) — these back the
+    // drink-and-drive cluster, so they carry the same priority as the JSON posts.
+    ...STANDALONE_POSTS.map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: post.date,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),

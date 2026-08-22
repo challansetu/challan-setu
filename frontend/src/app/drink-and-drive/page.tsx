@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, serviceSchema, webPageSchema, faqSchema, howToSchema } from '@/components/seo/JsonLd';
 import { getAllDrinkDriveCities } from '@/data/drink-drive-cities';
 import { WhatsAppCtaButton } from '@/components/WhatsAppCtaButton';
+import { SITE_URL } from '@/lib/site-url';
 
 const DND_WHATSAPP_MESSAGE = 'Hi, I need legal help with my drink & drive challan. Please review my case.';
 
@@ -82,12 +83,11 @@ const DRINK_AND_DRIVE_FAQS = [
 ];
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/drink-and-drive';
 // Keyword-first and national (no geo lock) — the page should rank for anyone in
 // India searching the drink-and-drive challan / Section 185 intent. Brand suffix
 // "| ChallanSetu" is appended by the root layout template, so it's omitted here.
-const PAGE_TITLE = 'Drink & Drive Challan: Penalty & Settlement Help';
+const PAGE_TITLE = 'Drink & Drive Challan: Penalty & Help';
 const PAGE_DESC =
   'Got a drink & drive challan? Understand Section 185 penalties, DUI fines, Lok Adalat & legal settlement options. Free case review on WhatsApp.';
 // Freshness signal — bump this whenever penalties/process content is reviewed.

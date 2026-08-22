@@ -15,12 +15,12 @@ import {
   webPageSchema,
 } from '@/components/seo/JsonLd';
 import { CAR_FAQS } from './faqs';
+import { SITE_URL } from '@/lib/site-url';
 
 // ── Page metadata ─────────────────────────────────────────────────────────────
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/car-insurance';
 // Brand suffix (" | ChallanSetu") is appended by the root layout title template.
-const PAGE_TITLE = 'Car Insurance Renewal & Status Check, Save up to 85% | Free VAHAN';
+const PAGE_TITLE = 'Car Insurance Renewal & Free VAHAN Check';
 const PAGE_DESC =
   'Check car insurance status free by registration number via VAHAN. Renew online & save up to 85%, compare 20+ insurers, instant policy, cashless claims.';
 const DATE_MODIFIED = '2026-06-20';

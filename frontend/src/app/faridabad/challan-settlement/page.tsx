@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
 import { CityPageTemplate } from '@/components/CityPageTemplate';
 import cityPagesData from '@/data/city-pages.json';
+import { SITE_URL } from '@/lib/site-url';
 
 const faridabad = cityPagesData.cities.find(c => c.id === 'faridabad')!;
 
 export const metadata: Metadata = {
-  title: faridabad.metaTitle,
+  // metaTitle already carries the brand suffix — don't let the layout add a second.
+  title: { absolute: faridabad.metaTitle },
   description: faridabad.metaDescription,
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com'}/faridabad/challan-settlement`,
+    canonical: `${SITE_URL}/faridabad/challan-settlement`,
   },
   openGraph: {
     title: faridabad.metaTitle,

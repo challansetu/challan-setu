@@ -3,30 +3,43 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { JsonLd } from '@/components/seo/JsonLd';
+import { JsonLd, breadcrumbSchema } from '@/components/seo/JsonLd';
 import { HeroForm } from '@/components/HeroForm';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
 
 export const metadata: Metadata = {
-  title: 'License Suspension After Drink-and-Drive: Recovery & Appeal Process',
+  title: 'License Suspension After Drink & Drive',
   description: 'Complete guide to license suspension after drink-and-drive challan. Learn about appeal options, recovery timeline, and how to get your license back.',
   alternates: {
     canonical: '/blog/license-suspension-appeal-drink-and-drive',
   },
 };
 
+// Fixed publication dates — see the sibling drink-and-drive post for why
+// these must never be `new Date()`.
+const PUBLISHED_ISO = '2026-06-20';
+const MODIFIED_ISO = '2026-06-20';
+
 export default function LicenseSuspensionBlog() {
   return (
     <>
       <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: 'License Suspension After Drink-and-Drive', url: '/blog/license-suspension-appeal-drink-and-drive' },
+        ])}
+      />
+      <JsonLd
         data={{
           '@context': 'https://schema.org',
           '@type': 'Article',
-          headline: 'License Suspension After Drink-and-Drive: Recovery & Appeal Process',
+          headline: 'License Suspension After Drink & Drive',
           description: metadata.description,
-          datePublished: new Date().toISOString(),
+          datePublished: PUBLISHED_ISO,
+          dateModified: MODIFIED_ISO,
           author: { '@type': 'Organization', name: 'ChallanSetu' },
         }}
       />

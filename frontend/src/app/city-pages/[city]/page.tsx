@@ -11,6 +11,7 @@ import { TopChallanOffencesSection } from '@/components/TopChallanOffencesSectio
 import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { ViolationTypeSection } from '@/components/ViolationTypeSection';
 import { getViolationContent } from '@/data/violation-types';
+import { SITE_URL } from '@/lib/site-url';
 
 const BRAND_DARK = '#1c1c24';
 const BRAND_YELLOW = '#f5c842';
@@ -78,7 +79,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
             provider: {
               '@type': 'Organization',
               name: 'ChallanSetu',
-              url: 'https://challansetu.com',
+              url: SITE_URL,
             },
             serviceType: 'Legal Consultation & Challan Settlement Support',
             offers: {

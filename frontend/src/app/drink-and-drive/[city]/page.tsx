@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { JsonLd, breadcrumbSchema, webPageSchema, faqSchema, howToSchema } from '@/components/seo/JsonLd';
 import { WhatsAppCtaButton } from '@/components/WhatsAppCtaButton';
+import { SITE_URL } from '@/lib/site-url';
 import {
   getDrinkDriveCity,
   getAllDrinkDriveCitySlugs,
@@ -16,7 +17,6 @@ import {
   DRINK_DRIVE_FIRST_STEPS,
 } from '@/data/drink-drive-cities';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const BRAND_DARK = '#1c1c24';
 
 // Freshness signal — bump when penalties/process content is reviewed.

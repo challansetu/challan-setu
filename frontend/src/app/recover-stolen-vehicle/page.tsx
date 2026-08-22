@@ -8,11 +8,11 @@ import { WhatWeHandle } from '@/components/WhatWeHandle';
 import { RecoveryFaqSection } from '@/components/RecoveryFaqSection';
 import { JsonLd, faqSchema, breadcrumbSchema, serviceSchema } from '@/components/seo/JsonLd';
 import { RECOVERY_FAQS } from '@/data/recovery-faqs';
+import { SITE_URL } from '@/lib/site-url';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
 const PAGE_URL = '/recover-stolen-vehicle';
-const PAGE_TITLE = 'Recover Stolen Vehicle in India | Superdari Application | ChallanSetu';
-const PAGE_DESC = 'Vehicle stolen and recovered by police? ChallanSetu handles your Superdari application, FIR follow-up, court filing and vehicle release end-to-end. Get started on WhatsApp.';
+const PAGE_TITLE = 'Recover Stolen Vehicle: Superdari Help | ChallanSetu';
+const PAGE_DESC = 'Vehicle stolen and recovered by police? ChallanSetu handles your Superdari application, FIR follow-up and court filing end-to-end.';
 
 export const metadata: Metadata = {
   // absolute: PAGE_TITLE already ends in "| ChallanSetu"; absolute stops the

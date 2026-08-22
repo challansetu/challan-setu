@@ -8,8 +8,7 @@ import { JsonLd, breadcrumbSchema, faqSchema, articleSchema } from '@/components
 import { getBlogPost, getAllBlogSlugs, type BlogBlock } from '@/data/blog';
 import { RenewalBanner } from '@/app/motor-insurance/components/RenewalBanner';
 import { Clock, Tag, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.challansetu.com';
+import { SITE_URL } from '@/lib/site-url';
 
 // ─── Static generation ────────────────────────────────────────────────────────
 
