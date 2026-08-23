@@ -27,8 +27,20 @@ export class ChallansController {
   async getPublicChallans(@Query('vehicle') vehicle: string) {
     if (!vehicle) return { challans: [] };
     const vn = vehicle.toUpperCase().replace(/[\s\-]/g, '');
-    const result = await this.challanProvider.fetchChallans(vn);
-    return { challans: result.result ?? [] };
+    try {
+      const result = await this.challanProvider.fetchChallans(vn);
+      return { challans: result.result ?? [] };
+    } catch (e: any) {
+      // An empty list must only ever mean "no challans". When the lookup itself
+      // fails, say so — otherwise an outage is indistinguishable from a clean vehicle.
+      this.logger.error(`getPublicChallans failed for ${vn}: ${e?.message}`, e?.stack);
+      if (e instanceof ScraperUnavailableError || e?.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+        throw new ServiceUnavailableException(
+          'Challan lookup is temporarily unavailable. Please try again shortly.',
+        );
+      }
+      throw new InternalServerErrorException('Challan lookup failed. Please try again.');
+    }
   }
 
   @Public()
@@ -85,7 +97,19 @@ export class ChallansController {
     @CurrentUser('id') userId: string,
     @Body() dto: SearchChallanDto,
   ) {
-    return this.challansService.searchChallans(userId, dto);
+    try {
+      return await this.challansService.searchChallans(userId, dto);
+    } catch (e: any) {
+      // The service marks the search FAILED and deliberately does not cache the
+      // result, so surface a retryable 503 rather than a generic 500.
+      this.logger.error(`searchChallans failed for ${dto?.vehicleNumber}: ${e?.message}`, e?.stack);
+      if (e instanceof ScraperUnavailableError || e?.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+        throw new ServiceUnavailableException(
+          'Challan lookup is temporarily unavailable. Please try again shortly.',
+        );
+      }
+      throw e;
+    }
   }
 
   @Get('history')

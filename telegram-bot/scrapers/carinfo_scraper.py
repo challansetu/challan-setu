@@ -12,16 +12,20 @@ Anti-blocking:
   - sec-ch-ua / sec-ch-ua-mobile / sec-ch-ua-platform aligned with User-Agent
   - Correct sec-fetch-* for navigation vs XHR requests
   - Random 1–3s delay between page load and API call (human pacing)
-  - Rotates across 5 Chrome profiles on Android/Windows/Linux
+  - Rotates across 3 desktop Chrome profiles (Windows/Linux/macOS) — mobile UAs
+    are routed to CarInfo's App Router build, which has no _next/data endpoint
   - Auto-refreshes buildId on 404
   - BuildId cached 1 hour
 
 Production behaviour:
   - Network errors → retry up to 3 times with exponential backoff
-  - HTTP 429/503 → retry with longer wait
-  - Decryption failure → return [] (logged as warning)
-  - Empty xdataprops → return [] (no challans on CarInfo)
-  - All exceptions caught — scraper never raises, always returns a list
+  - HTTP 429/5xx → retry with longer wait
+  - Empty xdataprops / empty tabSection → return [] (genuinely no challans)
+  - Anything else (no buildId, persistent 404, non-JSON, decryption failure,
+    unexpected payload shape, retries exhausted) raises ScraperUnavailableError
+
+An empty list means "this vehicle has no challans". A broken upstream raises.
+Callers must not conflate the two — see scraper_api.py /search.
 """
 from __future__ import annotations
 
@@ -38,31 +42,30 @@ from typing import Optional
 
 log = logging.getLogger("scraper.carinfo")
 
+
+class ScraperUnavailableError(Exception):
+    """Upstream is broken or has changed shape — distinct from 'no challans found'."""
+
 _AES_KEY = b"Gx!7m$9zK@qW2vP"
 
 _build_cache: dict = {"id": None, "ts": 0.0}
 _BUILD_TTL = 3600  # seconds
 
+# DESKTOP PROFILES ONLY — do not add mobile UAs here.
+#
+# On 2026-08-20 CarInfo migrated its MOBILE challan-details experience to the
+# Next.js App Router, which has no /_next/data endpoint. Desktop still serves
+# the legacy Pages Router build that exposes it. The routing decision is made
+# purely from the User-Agent, and it is fully deterministic:
+#
+#     Android / Mobile UA  -> App Router  -> /_next/data/... 404s
+#     Windows/macOS/Linux  -> Pages Router -> /_next/data/... 200 + xdataprops
+#
+# The old list held 3 mobile + 2 desktop profiles, so 3 in 5 lookups silently
+# returned "no challans". Adding a mobile UA back here reintroduces that bug.
+#
 # Each profile: (user_agent, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform)
 _CHROME_PROFILES = [
-    (
-        "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-        "?1",
-        '"Android"',
-    ),
-    (
-        "Mozilla/5.0 (Linux; Android 13; Samsung SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-        "?1",
-        '"Android"',
-    ),
-    (
-        "Mozilla/5.0 (Linux; Android 12; OnePlus 9 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-        "?1",
-        '"Android"',
-    ),
     (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
@@ -74,6 +77,12 @@ _CHROME_PROFILES = [
         '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
         "?0",
         '"Linux"',
+    ),
+    (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        "?0",
+        '"macOS"',
     ),
 ]
 
@@ -221,13 +230,27 @@ def _parse(data: dict, vn: str) -> list[dict]:
     state = vn[:2]
     results = []
 
-    try:
-        tab_section = (
-            data.get("data", {}).get("tabs", [{}])[0].get("tabSection", [])
+    # A trustworthy empty result requires the expected envelope. The genuine
+    # "no challans" payload is {"data": {"tabs": [{"tabSection": []}]}} — a
+    # missing or malformed envelope is upstream breakage, not a clean vehicle.
+    inner = data.get("data") if isinstance(data, dict) else None
+    tabs = inner.get("tabs") if isinstance(inner, dict) else None
+    if not isinstance(tabs, list) or not tabs or not isinstance(tabs[0], dict):
+        raise ScraperUnavailableError(
+            f"CarInfo payload shape changed for {vn}: missing or malformed 'data.tabs'"
         )
-    except (IndexError, AttributeError, TypeError):
-        log.warning("CarInfo unexpected data structure for %s", vn)
+
+    # A vehicle with no challans comes back as a tab holding an empty-state
+    # "message" block and no tabSection at all — that is a genuine empty result.
+    # A tabSection of some *other* type means the envelope changed.
+    tab_section = tabs[0].get("tabSection")
+    if tab_section is None:
         return []
+    if not isinstance(tab_section, list):
+        raise ScraperUnavailableError(
+            f"CarInfo payload shape changed for {vn}: 'tabSection' is "
+            f"{type(tab_section).__name__}, expected list or absent"
+        )
 
     for entry in tab_section:
         if not isinstance(entry, dict):
@@ -287,9 +310,11 @@ class CarInfoScraper:
                 return await self._run_with_curl(vn, ua, sec_ch_ua, mobile, platform)
             else:
                 return await self._run_with_httpx(vn, ua, sec_ch_ua, mobile, platform)
+        except ScraperUnavailableError:
+            raise  # surface upstream breakage to the caller
         except Exception as e:
             log.error("CarInfo unexpected error for %s: %s", vn, e, exc_info=True)
-            return []
+            raise ScraperUnavailableError(f"CarInfo scrape failed for {vn}: {e}") from e
 
     async def _run_with_curl(self, vn: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> list[dict]:
         proxy_kwargs = {"proxies": {"https": _PROXY_URL, "http": _PROXY_URL}} if _PROXY_URL else {}
@@ -298,8 +323,9 @@ class CarInfoScraper:
 
             build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform)
             if not build_id:
-                log.warning("CarInfo: could not determine buildId for %s", vn)
-                return []
+                raise ScraperUnavailableError(
+                    f"CarInfo buildId unavailable for {vn} — page markup changed or blocked"
+                )
 
             # Human-like pause between page load and API call
             await asyncio.sleep(random.uniform(0.8, 2.0))
@@ -311,11 +337,21 @@ class CarInfoScraper:
                 await asyncio.sleep(random.uniform(1.0, 2.5))
                 build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform, force=True)
                 if not build_id:
-                    return []
+                    raise ScraperUnavailableError(
+                        f"CarInfo buildId unavailable on refresh for {vn}"
+                    )
                 await asyncio.sleep(random.uniform(0.5, 1.5))
                 result = await self._fetch_with_retry_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
 
-            challans = result or []
+            if result is None:
+                # Still 404 with a freshly-parsed buildId: the _next/data route is
+                # gone, not stale. Never report this as "no challans".
+                raise ScraperUnavailableError(
+                    f"CarInfo _next/data route returned 404 for {vn} after buildId refresh "
+                    "— the challan-details route has moved (App Router migration)"
+                )
+
+            challans = result
             if challans:
                 log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
             else:
@@ -331,8 +367,9 @@ class CarInfoScraper:
 
             build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform)
             if not build_id:
-                log.warning("CarInfo: could not determine buildId for %s", vn)
-                return []
+                raise ScraperUnavailableError(
+                    f"CarInfo buildId unavailable for {vn} — page markup changed or blocked"
+                )
 
             await asyncio.sleep(random.uniform(0.8, 2.0))
             result = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
@@ -342,10 +379,18 @@ class CarInfoScraper:
                 await asyncio.sleep(random.uniform(1.0, 2.5))
                 build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform, force=True)
                 if not build_id:
-                    return []
+                    raise ScraperUnavailableError(
+                        f"CarInfo buildId unavailable on refresh for {vn}"
+                    )
                 result = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
 
-            challans = result or []
+            if result is None:
+                raise ScraperUnavailableError(
+                    f"CarInfo _next/data route returned 404 for {vn} after buildId refresh "
+                    "— the challan-details route has moved (App Router migration)"
+                )
+
+            challans = result
             if challans:
                 log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
             else:
@@ -353,26 +398,36 @@ class CarInfoScraper:
             return challans
 
     async def _fetch_with_retry_curl(self, session, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
+        last_error: Optional[Exception] = None
         for attempt in range(_MAX_RETRIES):
             try:
                 return await self._fetch_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
+            except ScraperUnavailableError:
+                raise  # terminal — retrying a changed contract cannot help
             except Exception as e:
+                last_error = e
                 log.warning("CarInfo curl error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
             if attempt < _MAX_RETRIES - 1:
                 await asyncio.sleep(_RETRY_BACKOFF[attempt])
-        log.error("CarInfo: all %d retries exhausted for %s", _MAX_RETRIES, vn)
-        return []
+        raise ScraperUnavailableError(
+            f"CarInfo unreachable for {vn} after {_MAX_RETRIES} attempts: {last_error}"
+        )
 
     async def _fetch_with_retry_httpx(self, client, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
+        last_error: Optional[Exception] = None
         for attempt in range(_MAX_RETRIES):
             try:
                 return await self._fetch_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+            except ScraperUnavailableError:
+                raise  # terminal — retrying a changed contract cannot help
             except Exception as e:
+                last_error = e
                 log.warning("CarInfo httpx error for %s (attempt %d/%d): %s", vn, attempt + 1, _MAX_RETRIES, e)
             if attempt < _MAX_RETRIES - 1:
                 await asyncio.sleep(_RETRY_BACKOFF[attempt])
-        log.error("CarInfo: all %d retries exhausted for %s", _MAX_RETRIES, vn)
-        return []
+        raise ScraperUnavailableError(
+            f"CarInfo unreachable for {vn} after {_MAX_RETRIES} attempts: {last_error}"
+        )
 
     async def _fetch_curl(self, session, vn: str, build_id: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> Optional[list[dict]]:
         url = f"https://www.carinfo.app/_next/data/{build_id}/challan-details/{vn}.json"
@@ -388,23 +443,25 @@ class CarInfoScraper:
         if resp.status_code == 404:
             return None
 
+        # Retryable: rate limiting and upstream server errors
         if resp.status_code == 429:
             log.warning("CarInfo rate limited (429) for %s", vn)
             raise Exception("Rate limited")
 
-        if resp.status_code == 503:
-            log.warning("CarInfo service unavailable (503) for %s", vn)
-            raise Exception("Service unavailable")
+        if resp.status_code >= 500:
+            log.warning("CarInfo server error (%d) for %s", resp.status_code, vn)
+            raise Exception(f"Upstream HTTP {resp.status_code}")
 
+        # Terminal: any other unexpected status means the contract changed
         if resp.status_code != 200:
-            log.warning("CarInfo HTTP %d for %s", resp.status_code, vn)
-            return []
+            raise ScraperUnavailableError(f"CarInfo HTTP {resp.status_code} for {vn}")
 
         try:
             body = resp.json()
-        except Exception:
-            log.warning("CarInfo response not JSON for %s", vn)
-            return []
+        except Exception as e:
+            raise ScraperUnavailableError(
+                f"CarInfo response was not JSON for {vn}"
+            ) from e
 
         xdata = body.get("pageProps", {}).get("xdataprops", "")
         if not xdata:
@@ -413,7 +470,8 @@ class CarInfoScraper:
 
         decrypted = _decrypt(xdata)
         if not decrypted:
-            log.warning("CarInfo: decryption failed for %s (key may have changed)", vn)
-            return []
+            raise ScraperUnavailableError(
+                f"CarInfo decryption failed for {vn} — AES key or envelope changed"
+            )
 
         return _parse(decrypted, vn)

@@ -110,9 +110,17 @@ export class ChallanProviderService {
     return e instanceof Error ? e : new Error(msg);
   }
 
+  /**
+   * Fetches challans for a vehicle.
+   *
+   * Resolves with `result: null` ONLY when the scrape succeeded and the vehicle
+   * genuinely has no challans. Any upstream failure throws
+   * ScraperUnavailableError — callers must not present a failure as a clean
+   * vehicle, and must not cache it.
+   */
   async fetchChallans(vehicleNumber: string): Promise<ProviderChallanResponse> {
     if (!this.scraperApiUrl) {
-      return { code: 200, message: 'No scraper configured', result: null };
+      throw new ScraperUnavailableError('Challan lookup is not configured (SCRAPER_API_URL unset)');
     }
 
     try {
@@ -128,7 +136,13 @@ export class ChallanProviderService {
         { timeout: SCRAPER_TIMEOUT_MS },
       );
 
-      const { challans } = response.data;
+      const { success, challans, error } = response.data;
+
+      // Defensive: an older scraper build may still signal failure in-band with HTTP 200
+      if (success === false) {
+        throw new ScraperUnavailableError(error || 'Scraper reported failure');
+      }
+
       this.logger.log(`Scraper returned ${challans?.length ?? 0} challan(s) for ${vehicleNumber}`);
 
       return {
@@ -137,12 +151,8 @@ export class ChallanProviderService {
         result: challans?.length ? challans : null,
       };
     } catch (error) {
-      if (error instanceof AxiosError) {
-        this.logger.warn(`Scraper API error: ${error.message}`);
-      } else {
-        this.logger.warn(`Scraper unexpected error: ${error}`);
-      }
-      return { code: 200, message: 'Scraper unavailable', result: null };
+      if (error instanceof ScraperUnavailableError) throw error;
+      throw this._scraperError(error);
     }
   }
 }

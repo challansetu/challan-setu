@@ -64,7 +64,27 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     try:
         async with httpx.AsyncClient(timeout=SCRAPER_TIMEOUT) as client:
             resp = await client.post(_SEARCH_URL, json={"vehicleNumber": vehicle})
-            data = resp.json()
+
+        # Only a successful scrape may be reported as "no challans"
+        if resp.status_code != 200:
+            log.error(
+                "Scraper API returned HTTP %d for %s: %s",
+                resp.status_code, vehicle, resp.text[:300],
+            )
+            await _edit(
+                status_msg,
+                "❌ Challan lookup is temporarily unavailable. Please try again shortly.",
+            )
+            return
+
+        data = resp.json()
+        if data.get("success") is False:
+            log.error("Scraper reported failure for %s: %s", vehicle, data.get("error"))
+            await _edit(
+                status_msg,
+                "❌ Challan lookup is temporarily unavailable. Please try again shortly.",
+            )
+            return
 
         challans = data.get("challans") or []
         if challans:

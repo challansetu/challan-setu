@@ -19,7 +19,7 @@ from fastapi import FastAPI, HTTPException
 import httpx
 from pydantic import BaseModel
 
-from scrapers.carinfo_scraper import CarInfoScraper
+from scrapers.carinfo_scraper import CarInfoScraper, ScraperUnavailableError
 from scrapers.eparivahan_scraper import EparivahanScraper
 
 logging.basicConfig(
@@ -52,15 +52,23 @@ async def health():
 
 @app.post("/search")
 async def search_challans(req: SearchRequest):
+    """
+    Returns 200 with a (possibly empty) challan list only when the scrape
+    genuinely succeeded. Upstream breakage returns 503 — an empty list must
+    always be trustworthy as "this vehicle has no challans".
+    """
     vn = req.vehicleNumber.upper().replace(" ", "").replace("-", "")
     log.info("CarInfo: scraping %s", vn)
     try:
         async with CarInfoScraper() as scraper:
             challans = await scraper.search_all_challans(vn)
         return {"success": True, "vehicleNumber": vn, "challans": challans, "source": "CarInfo"}
+    except ScraperUnavailableError as exc:
+        log.error("CarInfo unavailable for %s: %s", vn, exc)
+        raise HTTPException(status_code=503, detail=str(exc) or "CarInfo upstream unavailable")
     except Exception as exc:
         log.error("CarInfo error for %s: %s", vn, exc, exc_info=True)
-        return {"success": False, "vehicleNumber": vn, "challans": [], "error": str(exc)}
+        raise HTTPException(status_code=500, detail=str(exc) or f"{type(exc).__name__}")
 
 
 # ── eparivahan two-step endpoints ─────────────────────────────────────────────
