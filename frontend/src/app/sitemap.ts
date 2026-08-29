@@ -149,12 +149,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
 
     // ── Legacy city SEO landing pages (/pay-vehicle-challan-in-{city}) ────────
-    ...getAllCityPages().map((city) => ({
-      url: `${SITE_URL}${city.canonicalPath}`,
-      lastModified: LAUNCH_DATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    })),
+    // The 5 NCR cities that now have a /{city}/challan-settlement page 301
+    // redirect there (next.config.js) to fix keyword cannibalization — only
+    // Chandigarh (no new-style counterpart) is still served directly.
+    ...getAllCityPages()
+      .filter((city) => !['delhi', 'gurgaon', 'noida', 'ghaziabad', 'faridabad'].includes(city.slug))
+      .map((city) => ({
+        url: `${SITE_URL}${city.canonicalPath}`,
+        lastModified: LAUNCH_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+      })),
+
+    // ── Hub / index pages for internal linking ────────────────────────────────
+    {
+      url: `${SITE_URL}/challan-settlement`,
+      lastModified: CITY_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/e-challan`,
+      lastModified: STATE_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
 
     // ── Legal / policy pages ──────────────────────────────────────────────────
     {

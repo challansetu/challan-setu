@@ -33,7 +33,7 @@ const nextConfig = {
 
   // Redirect non-www → www to avoid duplicate content indexing
   async redirects() {
-    return isProduction
+    const wwwRedirect = isProduction
       ? [
           {
             source: '/:path*',
@@ -43,6 +43,21 @@ const nextConfig = {
           },
         ]
       : [];
+
+    // Consolidate the two competing URL patterns that both target "challan
+    // settlement in {NCR city}" (keyword cannibalization). /{city}/challan-settlement
+    // is the canonical, richer page (linked from the homepage); the legacy
+    // /pay-vehicle-challan-in-{city} pages 301 into it so any existing rankings
+    // or backlinks transfer instead of being split across two URLs.
+    const cityConsolidationRedirects = [
+      { source: '/pay-vehicle-challan-in-delhi', destination: '/delhi/challan-settlement', permanent: true },
+      { source: '/pay-vehicle-challan-in-gurgaon', destination: '/gurgaon/challan-settlement', permanent: true },
+      { source: '/pay-vehicle-challan-in-noida', destination: '/noida/challan-settlement', permanent: true },
+      { source: '/pay-vehicle-challan-in-ghaziabad', destination: '/ghaziabad/challan-settlement', permanent: true },
+      { source: '/pay-vehicle-challan-in-faridabad', destination: '/faridabad/challan-settlement', permanent: true },
+    ];
+
+    return [...wwwRedirect, ...cityConsolidationRedirects];
   },
 
   // Rewrites for API proxying (optional; frontend can also call backend directly)

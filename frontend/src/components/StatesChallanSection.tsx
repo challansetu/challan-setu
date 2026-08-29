@@ -51,7 +51,6 @@ export function StatesChallanSection() {
 
   // Show 3 rows worth — use desktop col count as the baseline
   const visibleCount = 9;
-  const visible = expanded ? STATES : STATES.slice(0, visibleCount);
 
   return (
     <section className="py-10 bg-surface-50">
@@ -65,12 +64,20 @@ export function StatesChallanSection() {
       </div>
 
       <div className="container-app">
+        {/*
+          All 34 states are always rendered in the DOM/HTML (not just the
+          expanded ones) so every state page gets an internal link from the
+          homepage even before a crawler executes the "show all" click —
+          collapsing extras with CSS only, never conditional rendering.
+        */}
         <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
-          {visible.map((state) => (
+          {STATES.map((state, i) => (
             <Link
               key={state.slug}
               href={`/e-challan/${state.slug}`}
-              className="group relative overflow-hidden rounded-xl sm:rounded-2xl aspect-square sm:aspect-[2/3] block focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              className={`group relative overflow-hidden rounded-xl sm:rounded-2xl aspect-square sm:aspect-[2/3] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+                i >= visibleCount && !expanded ? 'hidden' : 'block'
+              }`}
             >
               <Image
                 src={state.image}

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Menu, X, HelpCircle, Info, BookOpen, ShieldCheck } from 'lucide-react';
+import { Menu, X, HelpCircle, Info, BookOpen, ShieldCheck, MapPin } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from './ui/Button';
 
@@ -31,6 +31,11 @@ export function Navbar() {
             <Link href="/drink-and-drive">
               <Button variant="ghost" size="sm" className="text-gray-600">
                 Drink & Drive
+              </Button>
+            </Link>
+            <Link href="/cities">
+              <Button variant="ghost" size="sm" className="text-gray-600">
+                Cities
               </Button>
             </Link>
             <Link href="/how-it-works">
@@ -79,6 +84,14 @@ export function Navbar() {
             >
               <ShieldCheck className="w-4 h-4 text-gray-400" />
               <span className="text-sm font-medium">Drink & Drive</span>
+            </Link>
+            <Link
+              href="/cities"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-surface-50 transition-colors"
+            >
+              <MapPin className="w-4 h-4 text-gray-400" />
+              <span className="text-sm font-medium">Cities</span>
             </Link>
             <Link
               href="/how-it-works"

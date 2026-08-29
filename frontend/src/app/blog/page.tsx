@@ -28,8 +28,32 @@ function formatDate(iso: string) {
   });
 }
 
+// Hand-authored posts that live in their own route folder (not the
+// data-driven BlogPost shape in src/data/blog.ts) — listed here manually so
+// they aren't orphaned pages reachable only through the sitemap.
+const STANDALONE_POSTS = [
+  {
+    slug: 'drink-and-drive-challan-settlement',
+    title: 'Drink-and-Drive Challan Settlement Options',
+    category: 'Settlement Guide',
+    publishedAt: '2026-06-20',
+    readingTime: 8,
+    excerpt: 'Drink-and-drive challan settlement in India: penalties, Lok Adalat options, license recovery and legal defense explained.',
+  },
+  {
+    slug: 'license-suspension-appeal-drink-and-drive',
+    title: 'License Suspension After Drink & Drive',
+    category: 'Settlement Guide',
+    publishedAt: '2026-06-20',
+    readingTime: 7,
+    excerpt: 'Complete guide to license suspension after a drink-and-drive challan: timelines, the appeal process, and how to get your license back.',
+  },
+];
+
 export default function BlogIndexPage() {
-  const posts = getAllBlogPosts();
+  const posts = [...getAllBlogPosts(), ...STANDALONE_POSTS].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 
   return (
     <>

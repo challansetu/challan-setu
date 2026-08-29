@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const CITIES = [
   {
     name: 'Delhi',
-    href: '/pay-vehicle-challan-in-delhi',
+    href: '/delhi/challan-settlement',
     state: 'Delhi (DL)',
     authority: 'Delhi Traffic Police',
     desc: 'CCTV echallan, ITMS speed challans, and physical challans for all DL-registered vehicles across North, South, East, and West Delhi.',
@@ -23,7 +23,7 @@ const CITIES = [
   },
   {
     name: 'Noida',
-    href: '/pay-vehicle-challan-in-noida',
+    href: '/noida/challan-settlement',
     state: 'Uttar Pradesh (UP)',
     authority: 'UP Traffic Police',
     desc: 'Echallan and physical challans for UP-registered vehicles in Noida (Gautam Buddha Nagar) - including Noida-Greater Noida Expressway and DND Flyway corridors.',
@@ -31,7 +31,7 @@ const CITIES = [
   },
   {
     name: 'Gurgaon',
-    href: '/pay-vehicle-challan-in-gurgaon',
+    href: '/gurgaon/challan-settlement',
     state: 'Haryana (HR)',
     authority: 'Haryana Traffic Police',
     desc: 'Echallan and physical challans for HR-registered vehicles in Gurgaon (Gurugram) - NH-48, MG Road, Golf Course Road, and Dwarka Expressway.',
@@ -39,7 +39,7 @@ const CITIES = [
   },
   {
     name: 'Ghaziabad',
-    href: '/pay-vehicle-challan-in-ghaziabad',
+    href: '/ghaziabad/challan-settlement',
     state: 'Uttar Pradesh (UP)',
     authority: 'UP Traffic Police',
     desc: 'Echallan and physical challans for UP-registered vehicles in Ghaziabad - including the Delhi-Meerut Expressway, NH-9, and key arterial roads.',
@@ -47,11 +47,19 @@ const CITIES = [
   },
   {
     name: 'Faridabad',
-    href: '/pay-vehicle-challan-in-faridabad',
+    href: '/faridabad/challan-settlement',
     state: 'Haryana (HR)',
     authority: 'Faridabad Traffic Police',
     desc: 'Traffic challan support for HR-registered vehicles in Faridabad, including city-road camera notices, speed violations, and settlement support requests.',
     highlight: 'Covers core Faridabad city corridors',
+  },
+  {
+    name: 'Chandigarh',
+    href: '/pay-vehicle-challan-in-chandigarh',
+    state: 'Chandigarh (CH)',
+    authority: 'Chandigarh Police (Traffic)',
+    desc: 'Traffic challan support for CH-registered vehicles in Chandigarh, including camera-based enforcement on key roads and highways.',
+    highlight: 'Covers Chandigarh city & highway corridors',
   },
 ];
 
@@ -78,7 +86,7 @@ export default function CitiesPage() {
               Vehicle Challan Support by City
             </h1>
             <p className="text-white/70 text-base sm:text-lg max-w-2xl">
-              ChallanSetu currently serves 5 cities in the NCR region. Choose your city to request challan assistance and discount eligibility review.
+              ChallanSetu currently serves 6 cities in the Delhi NCR region and Chandigarh. Choose your city to request challan assistance and discount eligibility review.
             </p>
           </div>
         </section>

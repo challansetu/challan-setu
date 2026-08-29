@@ -169,7 +169,7 @@ const POSTS: BlogPost[] = [
             items: [
               {
                 title: "Enter your vehicle number",
-                html: "Head to <a href=\"/pay-vehicle-challan-in-delhi\" class=\"text-primary-600 underline underline-offset-2 hover:text-primary-700\">challansetu.com/pay-vehicle-challan-in-delhi</a> and enter your registration number. No payment at this stage. Just your number plate.",
+                html: "Head to <a href=\"/delhi/challan-settlement\" class=\"text-primary-600 underline underline-offset-2 hover:text-primary-700\">challansetu.com/delhi/challan-settlement</a> and enter your registration number. No payment at this stage. Just your number plate.",
               },
               {
                 title: "Share your challan details",
