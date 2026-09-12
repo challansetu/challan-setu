@@ -6,6 +6,14 @@ import { AdminLoginDto } from './dto/admin-login.dto';
 import { AdminRole } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
+function normalizePrefixes(prefixes?: string[]): string[] {
+  if (!prefixes) return [];
+  const cleaned = prefixes
+    .map((p) => p.trim().toUpperCase())
+    .filter((p) => p.length > 0);
+  return Array.from(new Set(cleaned));
+}
+
 @Injectable()
 export class AdminAuthService {
   constructor(
@@ -40,35 +48,60 @@ export class AdminAuthService {
 
     return {
       accessToken: token,
-      admin: { id: admin.id, email: admin.email, name: admin.name, role: admin.role },
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+        vehiclePrefixes: admin.vehiclePrefixes,
+      },
     };
   }
 
-  async createAdmin(data: { email: string; password: string; name: string; role?: AdminRole }) {
+  async createAdmin(data: { email: string; password: string; name: string; role?: AdminRole; vehiclePrefixes?: string[] }) {
     const existing = await this.prisma.adminUser.findUnique({ where: { email: data.email } });
     if (existing) throw new ConflictException('Email already exists');
 
     const passwordHash = await bcrypt.hash(data.password, 12);
+    const role = data.role ?? 'SUPPORT_AGENT';
     const admin = await this.prisma.adminUser.create({
-      data: { email: data.email, passwordHash, name: data.name, role: data.role ?? 'SUPPORT_AGENT' },
+      data: {
+        email: data.email,
+        passwordHash,
+        name: data.name,
+        role,
+        vehiclePrefixes: role === 'LAWYER' ? normalizePrefixes(data.vehiclePrefixes) : [],
+      },
     });
-    return { id: admin.id, email: admin.email, name: admin.name, role: admin.role };
+    return { id: admin.id, email: admin.email, name: admin.name, role: admin.role, vehiclePrefixes: admin.vehiclePrefixes };
   }
 
   async listAdmins() {
     return this.prisma.adminUser.findMany({
-      select: { id: true, email: true, name: true, role: true, isActive: true, lastLoginAt: true, createdAt: true },
+      select: {
+        id: true, email: true, name: true, role: true, isActive: true,
+        vehiclePrefixes: true, lastLoginAt: true, createdAt: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async updateAdmin(id: string, data: { name?: string; role?: AdminRole; isActive?: boolean }) {
+  async updateAdmin(id: string, data: { name?: string; role?: AdminRole; isActive?: boolean; vehiclePrefixes?: string[] }) {
     const admin = await this.prisma.adminUser.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin not found');
+
+    const nextRole = data.role ?? admin.role;
+    const update: any = { name: data.name, role: data.role, isActive: data.isActive };
+    if (data.vehiclePrefixes !== undefined) {
+      update.vehiclePrefixes = nextRole === 'LAWYER' ? normalizePrefixes(data.vehiclePrefixes) : [];
+    } else if (data.role && data.role !== 'LAWYER' && admin.role === 'LAWYER') {
+      update.vehiclePrefixes = [];
+    }
+
     return this.prisma.adminUser.update({
       where: { id },
-      data,
-      select: { id: true, email: true, name: true, role: true, isActive: true },
+      data: update,
+      select: { id: true, email: true, name: true, role: true, isActive: true, vehiclePrefixes: true },
     });
   }
 

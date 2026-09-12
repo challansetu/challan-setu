@@ -9,6 +9,7 @@ import { Badge } from "@/components/admin/ui/Badge";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SkeletonTable } from "@/components/admin/ui/Skeleton";
 import { formatDate } from "@/lib/utils";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 import type { Lead, LeadsResponse, LeadChallan } from "@/types/admin";
 
 const CRM_STATUSES = [
@@ -35,7 +36,7 @@ const EMPTY_CHALLAN = { challanNumber: "", realAmount: "", amount: "", location:
 
 type ChallanTotals = { totalRealAmount: number; totalAmountPaid: number; totalSettled: number };
 
-function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTotalsChange?: (t: ChallanTotals) => void }) {
+function LeadChallansSection({ leadId, onTotalsChange, readOnly }: { leadId: string; onTotalsChange?: (t: ChallanTotals) => void; readOnly?: boolean }) {
   const { data: challans, isLoading, mutate } = useSWR<LeadChallan[]>(
     `lead-challans-${leadId}`,
     () => adminApi.getLeadChallans(leadId),
@@ -139,6 +140,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
       )}
 
       {/* Add form */}
+      {!readOnly && (
       <form onSubmit={handleCreate} className="mb-3 p-3 bg-indigo-50 rounded-xl border border-indigo-100 space-y-2">
         <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Add Challan</p>
         <div className="grid grid-cols-2 gap-2">
@@ -197,6 +199,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
           {saveError && <p className="text-xs text-red-600 font-medium">{saveError}</p>}
         </div>
       </form>
+      )}
 
       {/* List */}
       {isLoading ? (
@@ -275,6 +278,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
                     )}
                   </div>
                 </div>
+                {!readOnly && (
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => { setEditId(c.id); setEditForm({ challanNumber: c.challanNumber, realAmount: c.realAmount != null ? String(c.realAmount) : "", amount: String(c.amount), location: c.location, settledAmount: c.settledAmount != null ? String(c.settledAmount) : "" }); }}
                     className="p-1 text-gray-400 hover:text-indigo-600 transition-colors rounded hover:bg-indigo-50">
@@ -285,6 +289,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
                     {deletingId === c.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
                   </button>
                 </div>
+                )}
               </div>
             );
           })}
@@ -294,7 +299,7 @@ function LeadChallansSection({ leadId, onTotalsChange }: { leadId: string; onTot
   );
 }
 
-function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => void; onUpdate: (updated: Lead) => void }) {
+function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose: () => void; onUpdate: (updated: Lead) => void; readOnly?: boolean }) {
   const [form, setForm] = useState({
     crmStatus: lead.crmStatus ?? "new",
     paymentStatus: lead.paymentStatus ?? "pending",
@@ -434,6 +439,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                     value={form.crmStatus}
                     onChange={(e) => updateForm({ crmStatus: e.target.value })}
                     className={inputCls}
+                    disabled={readOnly}
                   >
                     {CRM_STATUSES.map((s) => (
                       <option key={s.value} value={s.value}>{s.label}</option>
@@ -446,6 +452,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                     value={form.paymentStatus}
                     onChange={(e) => updateForm({ paymentStatus: e.target.value })}
                     className={inputCls}
+                    disabled={readOnly}
                   >
                     {PAYMENT_STATUSES.map((s) => (
                       <option key={s.value} value={s.value}>{s.label}</option>
@@ -458,6 +465,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
                     value={form.challanSettled}
                     onChange={(e) => updateForm({ challanSettled: e.target.value })}
                     className={inputCls}
+                    disabled={readOnly}
                   >
                     <option value="no">No</option>
                     <option value="initiated">Initiated</option>
@@ -469,7 +477,7 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
           </div>
 
           {/* Per-challan entries */}
-          <LeadChallansSection leadId={lead.id} onTotalsChange={handleChallansChange} />
+          <LeadChallansSection leadId={lead.id} onTotalsChange={handleChallansChange} readOnly={readOnly} />
 
           {/* Challan Financials */}
           <div>
@@ -527,15 +535,17 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
           {!saved && <span />}
           <div className="flex gap-3">
             <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-              Cancel
+              {readOnly ? "Close" : "Cancel"}
             </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-4 py-2 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-lg transition-colors"
-            >
-              {saving ? "Saving…" : "Save Changes"}
-            </button>
+            {!readOnly && (
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-lg transition-colors"
+              >
+                {saving ? "Saving…" : "Save Changes"}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -546,6 +556,8 @@ function LeadDrawer({ lead, onClose, onUpdate }: { lead: Lead; onClose: () => vo
 export default function LeadsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { admin } = useAdminAuth();
+  const isLawyer = admin?.role === "LAWYER";
   const [searchInput, setSearchInput] = useState(searchParams.get("search") ?? "");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
@@ -755,6 +767,7 @@ export default function LeadsPage() {
           lead={selectedLead}
           onClose={() => setSelectedLead(null)}
           onUpdate={handleUpdate}
+          readOnly={isLawyer}
         />
       )}
     </div>

@@ -10,6 +10,7 @@ import {
   Users,
   ScrollText,
   QrCode,
+  Scale,
   Menu,
   X,
   LogOut,
@@ -20,12 +21,15 @@ import { RoleBadge } from "@/components/admin/ui/Badge";
 import { FullPageSpinner } from "@/components/admin/ui/Spinner";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/leads", label: "Leads", icon: Inbox },
-  { href: "/admin/users", label: "Users", icon: Users },
-  { href: "/admin/audit-logs", label: "Audit Logs", icon: ScrollText },
-  { href: "/admin/qr-scans", label: "QR Scans", icon: QrCode },
+  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT"] },
+  { href: "/admin/leads", label: "Leads", icon: Inbox, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT", "LAWYER"] },
+  { href: "/admin/users", label: "Users", icon: Users, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT"] },
+  { href: "/admin/audit-logs", label: "Audit Logs", icon: ScrollText, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT"] },
+  { href: "/admin/qr-scans", label: "QR Scans", icon: QrCode, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT"] },
+  { href: "/admin/lawyers", label: "Lawyers", icon: Scale, roles: ["SUPER_ADMIN"] },
 ];
+
+const LAWYER_HOME = "/admin/leads";
 
 interface AdminShellProps {
   children: React.ReactNode;
@@ -40,11 +44,18 @@ export function AdminShell({ children }: AdminShellProps) {
   React.useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push("/admin/login");
+      return;
     }
-  }, [loading, isAuthenticated, router]);
+    if (!loading && admin?.role === "LAWYER" && !pathname.startsWith(LAWYER_HOME)) {
+      router.push(LAWYER_HOME);
+    }
+  }, [loading, isAuthenticated, admin?.role, pathname, router]);
 
   if (loading) return <FullPageSpinner />;
   if (!isAuthenticated) return null;
+  if (admin?.role === "LAWYER" && !pathname.startsWith(LAWYER_HOME)) return null;
+
+  const visibleNavItems = navItems.filter((item) => !admin?.role || item.roles.includes(admin.role));
 
   const handleLogout = () => {
     logout();
@@ -70,7 +81,7 @@ export function AdminShell({ children }: AdminShellProps) {
         )}
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {visibleNavItems.map(({ href, label, icon: Icon }) => {
           const isActive =
             pathname === href || pathname.startsWith(href + "/");
           return (

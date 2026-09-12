@@ -1,4 +1,4 @@
-export type AdminRole = "SUPER_ADMIN" | "ADMIN" | "SUPPORT_AGENT";
+export type AdminRole = "SUPER_ADMIN" | "ADMIN" | "SUPPORT_AGENT" | "LAWYER";
 
 export type UserLifecycleStatus =
   | "NEW_USER"
@@ -14,6 +14,13 @@ export interface AdminUser {
   email: string;
   name: string;
   role: AdminRole;
+  vehiclePrefixes?: string[];
+}
+
+export interface AdminAccount extends AdminUser {
+  isActive: boolean;
+  lastLoginAt: string | null;
+  createdAt: string;
 }
 
 export interface Lead {

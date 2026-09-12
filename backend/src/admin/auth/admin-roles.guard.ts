@@ -6,6 +6,7 @@ export const ADMIN_ROLES_KEY = 'adminRoles';
 export const AdminRoles = (...roles: AdminRole[]) => SetMetadata(ADMIN_ROLES_KEY, roles);
 
 const HIERARCHY: Record<AdminRole, number> = {
+  LAWYER: 0,
   SUPPORT_AGENT: 1,
   ADMIN: 2,
   SUPER_ADMIN: 3,

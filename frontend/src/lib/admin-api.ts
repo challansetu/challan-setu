@@ -5,6 +5,8 @@ import type {
   UserDetail,
   AuditLogsResponse,
   AdminUser,
+  AdminAccount,
+  AdminRole,
   AdminNote,
   LeadsResponse,
   ListLeadsParams,
@@ -259,6 +261,35 @@ export const adminApi = {
 
   qrScans: async (params: { source?: string; page?: number; limit?: number } = {}) => {
     const res = await axiosInstance.get<QrScansResponse>("/admin/qr-scans", { params });
+    return res.data;
+  },
+
+  listAdmins: async () => {
+    const res = await axiosInstance.get<AdminAccount[]>("/admin/auth/admins");
+    return res.data;
+  },
+
+  createAdmin: async (data: {
+    email: string;
+    name: string;
+    password: string;
+    role?: AdminRole;
+    vehiclePrefixes?: string[];
+  }) => {
+    const res = await axiosInstance.post<AdminAccount>("/admin/auth/admins", data);
+    return res.data;
+  },
+
+  updateAdmin: async (
+    id: string,
+    data: { name?: string; role?: AdminRole; isActive?: boolean; vehiclePrefixes?: string[] }
+  ) => {
+    const res = await axiosInstance.put<AdminAccount>(`/admin/auth/admins/${id}`, data);
+    return res.data;
+  },
+
+  resetAdminPassword: async (id: string, newPassword: string) => {
+    const res = await axiosInstance.put(`/admin/auth/admins/${id}/reset-password`, { newPassword });
     return res.data;
   },
 

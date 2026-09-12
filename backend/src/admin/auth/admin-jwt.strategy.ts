@@ -34,6 +34,12 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     const admin = await this.prisma.adminUser.findUnique({ where: { id: payload.sub } });
     if (!admin || !admin.isActive) throw new UnauthorizedException('Admin not found or inactive');
 
-    return { adminId: admin.id, email: admin.email, role: admin.role, name: admin.name };
+    return {
+      adminId: admin.id,
+      email: admin.email,
+      role: admin.role,
+      name: admin.name,
+      vehiclePrefixes: admin.vehiclePrefixes,
+    };
   }
 }

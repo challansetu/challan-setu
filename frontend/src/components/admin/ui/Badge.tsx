@@ -52,12 +52,14 @@ const roleVariant: Record<AdminRole, BadgeVariant> = {
   SUPER_ADMIN: "purple",
   ADMIN: "blue",
   SUPPORT_AGENT: "gray",
+  LAWYER: "orange",
 };
 
 const roleLabel: Record<AdminRole, string> = {
   SUPER_ADMIN: "Super Admin",
   ADMIN: "Admin",
   SUPPORT_AGENT: "Support Agent",
+  LAWYER: "Lawyer",
 };
 
 interface BadgeProps {

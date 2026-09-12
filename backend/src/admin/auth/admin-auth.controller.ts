@@ -6,18 +6,20 @@ import { AdminLoginDto } from './dto/admin-login.dto';
 import { AdminJwtGuard } from './admin-jwt.guard';
 import { AdminRolesGuard, AdminRoles } from './admin-roles.guard';
 import { AdminRole } from '@prisma/client';
-import { IsString, MinLength, IsOptional, IsEmail, IsBoolean, IsEnum } from 'class-validator';
+import { IsString, MinLength, IsOptional, IsEmail, IsBoolean, IsEnum, IsArray } from 'class-validator';
 
 class CreateAdminDto {
   @IsEmail() email: string;
   @IsString() name: string;
   @IsString() @MinLength(8) password: string;
   @IsOptional() @IsEnum(AdminRole) role?: AdminRole;
+  @IsOptional() @IsArray() @IsString({ each: true }) vehiclePrefixes?: string[];
 }
 class UpdateAdminDto {
   @IsOptional() @IsString() name?: string;
   @IsOptional() @IsEnum(AdminRole) role?: AdminRole;
   @IsOptional() @IsBoolean() isActive?: boolean;
+  @IsOptional() @IsArray() @IsString({ each: true }) vehiclePrefixes?: string[];
 }
 class ResetPasswordDto {
   @IsString() @MinLength(8) newPassword: string;

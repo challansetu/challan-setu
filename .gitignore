@@ -8,6 +8,7 @@ frontend/.next-dev/
 .env.local
 .env*.local
 backend/.env
+backend/.env.production-local
 frontend/.env.local
 *.log
 .DS_Store

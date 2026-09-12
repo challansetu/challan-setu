@@ -8,6 +8,7 @@ import { PricingService } from '../pricing/pricing.service';
 import { QrScansService } from '../qr-scans/qr-scans.service';
 import { AdminJwtGuard } from './auth/admin-jwt.guard';
 import { AdminRolesGuard, AdminRoles } from './auth/admin-roles.guard';
+import { LawyerScopeGuard, LawyerAllowed } from './auth/lawyer-scope.guard';
 import { AdminRole, UserLifecycleStatus } from '@prisma/client';
 import { IsString, IsOptional, IsBoolean, IsEnum, MinLength, IsNumber, IsPositive } from 'class-validator';
 import { CreateDiscountRuleDto } from './dto/create-discount-rule.dto';
@@ -45,7 +46,7 @@ class UpdateUserChallanDto {
 
 @ApiTags('Admin')
 @ApiBearerAuth()
-@UseGuards(AdminJwtGuard, AdminRolesGuard)
+@UseGuards(AdminJwtGuard, AdminRolesGuard, LawyerScopeGuard)
 @Controller('admin')
 export class AdminController {
   constructor(
@@ -53,6 +54,10 @@ export class AdminController {
     private readonly pricingService: PricingService,
     private readonly qrScansService: QrScansService,
   ) {}
+
+  private lawyerPrefixes(req: any): string[] | undefined {
+    return req?.user?.role === 'LAWYER' ? (req.user.vehiclePrefixes ?? []) : undefined;
+  }
 
   // ─── Dashboard ────────────────────────────────────────────────────────────
 
@@ -65,6 +70,7 @@ export class AdminController {
   // ─── Leads ────────────────────────────────────────────────────────────────
 
   @Get('leads')
+  @LawyerAllowed()
   @ApiOperation({ summary: 'List MVP homepage leads' })
   async listLeads(
     @Query('page') page = 1,
@@ -72,20 +78,23 @@ export class AdminController {
     @Query('search') search?: string,
     @Query('status') status?: string,
     @Query('source') source?: string,
+    @Req() req?: any,
   ) {
-    return this.adminService.getLeads({ page, limit, search, status, source });
+    return this.adminService.getLeads({ page, limit, search, status, source, vehiclePrefixes: this.lawyerPrefixes(req) });
   }
 
   @Get('leads/stats')
+  @LawyerAllowed()
   @ApiOperation({ summary: 'Leads aggregate stats' })
-  async getLeadsStats() {
-    return this.adminService.getLeadsStats();
+  async getLeadsStats(@Req() req: any) {
+    return this.adminService.getLeadsStats(this.lawyerPrefixes(req));
   }
 
   @Get('leads/:id')
+  @LawyerAllowed()
   @ApiOperation({ summary: 'Get single lead detail' })
-  async getLead(@Param('id') id: string) {
-    return this.adminService.getLead(id);
+  async getLead(@Param('id') id: string, @Req() req: any) {
+    return this.adminService.getLead(id, this.lawyerPrefixes(req));
   }
 
   @Patch('leads/:id')
@@ -178,8 +187,9 @@ export class AdminController {
   // ─── Lead Challans ────────────────────────────────────────────────────────
 
   @Get('leads/:id/challans')
-  async getLeadChallans(@Param('id') id: string) {
-    return this.adminService.getLeadChallans(id);
+  @LawyerAllowed()
+  async getLeadChallans(@Param('id') id: string, @Req() req: any) {
+    return this.adminService.getLeadChallans(id, this.lawyerPrefixes(req));
   }
 
   @Post('leads/:id/challans')

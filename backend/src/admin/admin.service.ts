@@ -69,27 +69,47 @@ export class AdminService {
     return result;
   }
 
+  private vehiclePrefixFilter(vehiclePrefixes?: string[]) {
+    if (!vehiclePrefixes || vehiclePrefixes.length === 0) return null;
+    return { OR: vehiclePrefixes.map((prefix) => ({ vehicleNumber: { startsWith: prefix, mode: 'insensitive' as const } })) };
+  }
+
+  private assertVehicleAllowed(vehicleNumber: string, vehiclePrefixes?: string[]) {
+    if (!vehiclePrefixes || vehiclePrefixes.length === 0) return;
+    const normalized = vehicleNumber.trim().toUpperCase();
+    const allowed = vehiclePrefixes.some((prefix) => normalized.startsWith(prefix.trim().toUpperCase()));
+    if (!allowed) throw new NotFoundException('Lead not found');
+  }
+
   async getLeads(params: {
     page?: number | string;
     limit?: number | string;
     search?: string;
     status?: string;
     source?: string;
+    vehiclePrefixes?: string[];
   }) {
     const page = Math.max(1, Number(params.page) || 1);
     const limit = Math.min(100, Math.max(1, Number(params.limit) || 25));
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const and: any[] = [];
 
     if (params.search) {
       const search = params.search.trim();
-      where.OR = [
-        { fullName: { contains: search, mode: 'insensitive' } },
-        { mobileNumber: { contains: search, mode: 'insensitive' } },
-        { vehicleNumber: { contains: search, mode: 'insensitive' } },
-      ];
+      and.push({
+        OR: [
+          { fullName: { contains: search, mode: 'insensitive' } },
+          { mobileNumber: { contains: search, mode: 'insensitive' } },
+          { vehicleNumber: { contains: search, mode: 'insensitive' } },
+        ],
+      });
     }
+
+    const prefixFilter = this.vehiclePrefixFilter(params.vehiclePrefixes);
+    if (prefixFilter) and.push(prefixFilter);
+
+    const where: any = and.length > 0 ? { AND: and } : {};
 
     if (params.status) {
       where.crmStatus = params.status;
@@ -118,17 +138,25 @@ export class AdminService {
     };
   }
 
-  async getLeadsStats() {
-    const cached = this.getCached<any>('leads-stats');
+  async getLeadsStats(vehiclePrefixes?: string[]) {
+    const scoped = !!vehiclePrefixes?.length;
+    const cacheKey = scoped ? null : 'leads-stats';
+    const cached = cacheKey ? this.getCached<any>(cacheKey) : undefined;
     if (cached) return cached;
 
+    const prefixFilter = this.vehiclePrefixFilter(vehiclePrefixes);
+    const baseWhere = prefixFilter ?? {};
+    const withStatus = (status: Record<string, any>) =>
+      prefixFilter ? { AND: [prefixFilter, status] } : status;
+
     const [total, converted, dead, followUp, paymentDone, agg] = await Promise.all([
-      this.prisma.lead.count(),
-      this.prisma.lead.count({ where: { crmStatus: 'converted' } }),
-      this.prisma.lead.count({ where: { crmStatus: 'dead' } }),
-      this.prisma.lead.count({ where: { crmStatus: 'follow_up' } }),
-      this.prisma.lead.count({ where: { paymentStatus: 'payment_done' } }),
+      this.prisma.lead.count({ where: baseWhere }),
+      this.prisma.lead.count({ where: withStatus({ crmStatus: 'converted' }) }),
+      this.prisma.lead.count({ where: withStatus({ crmStatus: 'dead' }) }),
+      this.prisma.lead.count({ where: withStatus({ crmStatus: 'follow_up' }) }),
+      this.prisma.lead.count({ where: withStatus({ paymentStatus: 'payment_done' }) }),
       this.prisma.lead.aggregate({
+        where: baseWhere,
         _sum: { paidAmount: true, settledAmount: true, discountGiven: true, totalChallan: true },
       }),
     ]);
@@ -143,13 +171,14 @@ export class AdminService {
       totalDiscount: agg._sum.discountGiven ?? 0,
       totalChallanValue: agg._sum.totalChallan ?? 0,
     };
-    this.setCached('leads-stats', result, 30_000);
+    if (cacheKey) this.setCached(cacheKey, result, 30_000);
     return result;
   }
 
-  async getLead(id: string) {
+  async getLead(id: string, vehiclePrefixes?: string[]) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
+    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
     return lead;
   }
 
@@ -490,9 +519,10 @@ export class AdminService {
 
   // ─── Lead Challans (per-challan CRM tracking) ────────────────────────────
 
-  async getLeadChallans(leadId: string) {
+  async getLeadChallans(leadId: string, vehiclePrefixes?: string[]) {
     const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
     if (!lead) throw new NotFoundException('Lead not found');
+    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
     return this.prisma.leadChallan.findMany({ where: { leadId }, orderBy: { createdAt: 'desc' } });
   }
 
