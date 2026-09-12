@@ -570,7 +570,7 @@ export default function LeadsPage() {
 
   const params = getParams();
 
-  const { data: stats } = useSWR("admin-leads-stats", adminApi.leadsStats);
+  const { data: stats } = useSWR(isLawyer ? null : "admin-leads-stats", adminApi.leadsStats);
 
   const { data, isLoading, error, mutate } = useSWR<LeadsResponse>(
     ["admin-leads", JSON.stringify(params)],
@@ -623,7 +623,8 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      {/* Stats bar */}
+      {/* Stats bar (hidden for lawyers — internal business metrics, not case data) */}
+      {!isLawyer && (
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
         {[
           { label: "Total Leads", value: stats?.total ?? "—", color: "text-gray-900" },
@@ -640,6 +641,7 @@ export default function LeadsPage() {
           </div>
         ))}
       </div>
+      )}
 
       <div className="bg-white rounded-xl shadow-sm p-4">
         <div className="flex flex-wrap gap-3">
