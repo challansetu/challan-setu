@@ -82,19 +82,26 @@ async function main() {
     console.log(`⏭️  Vehicle already exists: ${SEED_TEST_VEHICLE}`);
   }
 
-  // Create super admin for admin panel
-  const superAdminHash = await bcrypt.hash('Admin@1234', 12);
-  const superAdmin = await prisma.adminUser.upsert({
-    where: { email: 'superadmin@challan.app' },
-    update: {},
-    create: {
-      email: 'superadmin@challan.app',
-      passwordHash: superAdminHash,
-      name: 'Super Admin',
-      role: 'SUPER_ADMIN',
-    },
-  });
-  console.log(`✅ Super admin created: ${superAdmin.email} / Admin@1234`);
+  // Create super admin for admin panel — password must come from the
+  // environment; never hardcode a real, usable credential in source control.
+  const superAdminEmail = process.env.SEED_SUPER_ADMIN_EMAIL;
+  const superAdminPassword = process.env.SEED_SUPER_ADMIN_PASSWORD;
+  if (superAdminEmail && superAdminPassword) {
+    const superAdminHash = await bcrypt.hash(superAdminPassword, 12);
+    const superAdmin = await prisma.adminUser.upsert({
+      where: { email: superAdminEmail },
+      update: {},
+      create: {
+        email: superAdminEmail,
+        passwordHash: superAdminHash,
+        name: 'Super Admin',
+        role: 'SUPER_ADMIN',
+      },
+    });
+    console.log(`✅ Super admin ensured: ${superAdmin.email}`);
+  } else {
+    console.log('⏭️  Skipping super admin creation: set SEED_SUPER_ADMIN_EMAIL and SEED_SUPER_ADMIN_PASSWORD to seed one.');
+  }
 
   console.log('🎉 Seeding completed!');
 }

@@ -69,13 +69,18 @@ export class AdminService {
     return result;
   }
 
+  // `undefined` = caller isn't a lawyer, so no restriction applies at all.
+  // A defined-but-empty array means a lawyer with NO assigned prefixes, which
+  // must match nothing — never fall back to "no restriction" for that case.
   private vehiclePrefixFilter(vehiclePrefixes?: string[]) {
-    if (!vehiclePrefixes || vehiclePrefixes.length === 0) return null;
+    if (vehiclePrefixes === undefined) return null;
+    if (vehiclePrefixes.length === 0) return { id: '__no_vehicle_prefixes_assigned__' };
     return { OR: vehiclePrefixes.map((prefix) => ({ vehicleNumber: { startsWith: prefix, mode: 'insensitive' as const } })) };
   }
 
   private assertVehicleAllowed(vehicleNumber: string, vehiclePrefixes?: string[]) {
-    if (!vehiclePrefixes || vehiclePrefixes.length === 0) return;
+    if (vehiclePrefixes === undefined) return;
+    if (vehiclePrefixes.length === 0) throw new NotFoundException('Lead not found');
     const normalized = vehicleNumber.trim().toUpperCase();
     const allowed = vehiclePrefixes.some((prefix) => normalized.startsWith(prefix.trim().toUpperCase()));
     if (!allowed) throw new NotFoundException('Lead not found');
@@ -139,7 +144,7 @@ export class AdminService {
   }
 
   async getLeadsStats(vehiclePrefixes?: string[]) {
-    const scoped = !!vehiclePrefixes?.length;
+    const scoped = vehiclePrefixes !== undefined;
     const cacheKey = scoped ? null : 'leads-stats';
     const cached = cacheKey ? this.getCached<any>(cacheKey) : undefined;
     if (cached) return cached;

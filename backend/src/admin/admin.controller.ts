@@ -89,10 +89,9 @@ export class AdminController {
   }
 
   @Get('leads/stats')
-  @LawyerAllowed()
-  @ApiOperation({ summary: 'Leads aggregate stats' })
-  async getLeadsStats(@Req() req: any) {
-    return this.adminService.getLeadsStats(this.lawyerPrefixes(req));
+  @ApiOperation({ summary: 'Leads aggregate stats (internal business metrics — not exposed to lawyers)' })
+  async getLeadsStats() {
+    return this.adminService.getLeadsStats();
   }
 
   @Get('leads/:id')
