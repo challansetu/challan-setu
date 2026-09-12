@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../config/prisma.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 
@@ -9,18 +10,58 @@ export class LeadsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createLead(dto: CreateLeadDto) {
-    const lead = await this.prisma.lead.create({
-      data: {
-        fullName: dto.fullName,
-        mobileNumber: dto.mobileNumber,
-        vehicleNumber: dto.vehicleNumber,
-        consentAccepted: dto.consentAccepted,
-        consentTimestamp: new Date(),
-        source: dto.source ?? 'homepage',
-        city: dto.city ?? null,
-        leadStatus: 'new',
-      },
-    });
+    const idempotencyKey = dto.idempotencyKey?.trim() || undefined;
+
+    if (idempotencyKey) {
+      const existing = await this.prisma.lead.findUnique({ where: { idempotencyKey } });
+      if (existing) {
+        this.logger.log(`Duplicate submission ignored for idempotencyKey=${idempotencyKey}, lead=${existing.id}`);
+        return {
+          success: true,
+          leadId: existing.id,
+          leadStatus: existing.leadStatus,
+          createdAt: existing.createdAt,
+        };
+      }
+    }
+
+    let lead;
+    try {
+      lead = await this.prisma.lead.create({
+        data: {
+          fullName: dto.fullName,
+          mobileNumber: dto.mobileNumber,
+          vehicleNumber: dto.vehicleNumber,
+          consentAccepted: dto.consentAccepted,
+          consentTimestamp: new Date(),
+          source: dto.source ?? 'homepage',
+          city: dto.city ?? null,
+          leadStatus: 'new',
+          idempotencyKey,
+        },
+      });
+    } catch (err) {
+      // Two near-simultaneous requests for the same attempt can both pass the
+      // findUnique check above; the unique constraint is the real guard, so
+      // on a race just return the row the other request created.
+      if (
+        idempotencyKey &&
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        const existing = await this.prisma.lead.findUnique({ where: { idempotencyKey } });
+        if (existing) {
+          this.logger.log(`Duplicate submission (race) ignored for idempotencyKey=${idempotencyKey}, lead=${existing.id}`);
+          return {
+            success: true,
+            leadId: existing.id,
+            leadStatus: existing.leadStatus,
+            createdAt: existing.createdAt,
+          };
+        }
+      }
+      throw err;
+    }
 
     this.notifyTelegram(lead).catch((err) =>
       this.logger.warn(`Telegram notify failed: ${err?.message}`),

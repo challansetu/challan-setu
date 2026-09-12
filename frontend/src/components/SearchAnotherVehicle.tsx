@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ArrowRight, Pencil, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { leadsApi } from '@/lib/api';
+import { generateIdempotencyKey, leadsApi } from '@/lib/api';
 import { VEHICLE_NUMBER_REGEX, VEHICLE_NUMBER_MIN_LENGTH, VEHICLE_NUMBER_MAX_LENGTH } from '@/lib/constants';
 import { LeadCaptureModal } from '@/components/LeadCaptureModal';
 import { Logo } from '@/components/Logo';
@@ -98,6 +98,7 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
 
     if (userInfo?.fullName && userInfo?.mobileNumber) {
       setLoading(true);
+      const idempotencyKey = generateIdempotencyKey();
       let response;
       try {
         response = await leadsApi.create({
@@ -106,6 +107,7 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
           vehicleNumber: cleaned,
           consentAccepted: true,
           source: 'homepage',
+          idempotencyKey,
         });
       } catch {
         await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -116,6 +118,7 @@ export function VehicleInfoCard({ vehicleNumber }: VehicleInfoCardProps) {
             vehicleNumber: cleaned,
             consentAccepted: true,
             source: 'homepage',
+            idempotencyKey,
           });
         } catch {
           setLoading(false);

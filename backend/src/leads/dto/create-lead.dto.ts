@@ -45,4 +45,14 @@ export class CreateLeadDto {
   @IsString()
   @MaxLength(500)
   notes?: string;
+
+  @ApiProperty({
+    example: 'a1b2c3d4-...',
+    required: false,
+    description: 'Client-generated key, stable across retries of the same submission attempt, used to dedupe.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  idempotencyKey?: string;
 }

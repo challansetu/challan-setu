@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, RotateCw } from 'lucide-react';
-import { recoveryLeadsApi } from '@/lib/api';
+import { generateIdempotencyKey, recoveryLeadsApi } from '@/lib/api';
 import { trackWhatsAppClick } from '@/lib/analytics';
 
 interface RecoveryFormProps {
@@ -35,6 +35,7 @@ export function RecoveryForm({ hero }: RecoveryFormProps) {
       mobileNumber: phone,
       vehicleNumber: vehicle.toUpperCase().replace(/\s/g, ''),
       consentAccepted: true as const,
+      idempotencyKey: generateIdempotencyKey(),
     };
 
     try {

@@ -9,6 +9,19 @@ const api = axios.create({
   timeout: 30000, // 30-second timeout for all requests
 });
 
+/**
+ * A key stable across retries of the SAME submission attempt (generate once
+ * before the first try, reuse it on the retry) so the backend can dedupe a
+ * request that actually succeeded but timed out client-side before the
+ * response arrived — the classic cause of duplicate lead submissions.
+ */
+export function generateIdempotencyKey(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+}
+
 // ─── Analytics helpers (GA4) ─────────────────────────
 function trackChallanResults(challans: ChallanEntry[] | undefined, extra: Record<string, unknown>) {
   const list = challans ?? [];
@@ -79,6 +92,7 @@ export const leadsApi = {
     consentAccepted: boolean;
     source?: 'homepage' | 'city_page' | 'insurance';
     city?: string;
+    idempotencyKey: string;
   }) => {
     const req = api.post('/leads', data, { timeout: 25000 });
     req
@@ -95,6 +109,7 @@ export const recoveryLeadsApi = {
     mobileNumber: string;
     vehicleNumber: string;
     consentAccepted: boolean;
+    idempotencyKey: string;
   }) => {
     const req = api.post('/leads', {
       ...data,

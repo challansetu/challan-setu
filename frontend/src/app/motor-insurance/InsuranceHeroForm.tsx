@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import { VEHICLE_NUMBER_MIN_LENGTH } from '@/lib/constants';
-import { leadsApi } from '@/lib/api';
+import { generateIdempotencyKey, leadsApi } from '@/lib/api';
 import { trackBannerClick } from '@/lib/analytics';
 
 const BRAND_YELLOW = '#f5c842';
@@ -139,6 +139,7 @@ export function InsuranceHeroForm({
       vehicleNumber: vehicleClean,
       consentAccepted: true as const,
       source: 'insurance' as const,
+      idempotencyKey: generateIdempotencyKey(),
     };
 
     try {

@@ -7,7 +7,7 @@ import { ArrowRight, RotateCw, X } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import api, { leadsApi } from '@/lib/api';
+import api, { generateIdempotencyKey, leadsApi } from '@/lib/api';
 import { NAME_MAX_LENGTH, NAME_MIN_LENGTH, PHONE_MAX_DIGITS, PHONE_REGEX } from '@/lib/constants';
 import messages from '@/data/messages.json';
 
@@ -50,6 +50,7 @@ export function LeadCaptureModal({
   const router = useRouter();
   const overlayRef = useRef<HTMLDivElement>(null);
   const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const idempotencyKeyRef = useRef<string>('');
 
   const [fullName, setFullName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -71,6 +72,7 @@ export function LeadCaptureModal({
       fullName: false,
       mobileNumber: false,
     });
+    idempotencyKeyRef.current = generateIdempotencyKey();
 
     // Warm up the backend while the user fills in the form so cold starts
     // don't hit during the actual submission.
@@ -162,6 +164,7 @@ export function LeadCaptureModal({
       consentAccepted: true as const,
       source,
       city,
+      idempotencyKey: idempotencyKeyRef.current,
     };
 
     let response;
