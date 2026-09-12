@@ -746,8 +746,8 @@ export default function LeadsPage() {
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Vehicle</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Contact Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Challan Settled</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">CRM Status</th>
+                  {!isLawyer && <th className="text-left px-4 py-3 font-medium text-gray-500">Source</th>}
+                  {!isLawyer && <th className="text-left px-4 py-3 font-medium text-gray-500">CRM Status</th>}
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Payment</th>
                 </tr>
               </thead>
@@ -782,15 +782,19 @@ export default function LeadsPage() {
                         variant={lead.challanSettled === "yes" ? "green" : lead.challanSettled === "initiated" ? "yellow" : "gray"}
                       />
                     </td>
+                    {!isLawyer && (
                     <td className="px-4 py-3">
                       <Badge label={lead.source} variant="blue" className="capitalize" />
                     </td>
+                    )}
+                    {!isLawyer && (
                     <td className="px-4 py-3">
                       <Badge
                         label={CRM_STATUSES.find((s) => s.value === (lead.crmStatus ?? "new"))?.label ?? lead.crmStatus ?? "New"}
                         variant={CRM_STATUS_VARIANT[lead.crmStatus ?? "new"] ?? "gray"}
                       />
                     </td>
+                    )}
                     <td className="px-4 py-3">
                       <Badge
                         label={lead.paymentStatus === "payment_done" ? "Done" : "Pending"}
@@ -800,7 +804,7 @@ export default function LeadsPage() {
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={9} className="px-4 py-10 text-center text-gray-500">
+                    <td colSpan={isLawyer ? 7 : 9} className="px-4 py-10 text-center text-gray-500">
                       No leads found.
                     </td>
                   </tr>
