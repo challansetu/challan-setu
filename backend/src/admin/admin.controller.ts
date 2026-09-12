@@ -10,7 +10,9 @@ import { AdminJwtGuard } from './auth/admin-jwt.guard';
 import { AdminRolesGuard, AdminRoles } from './auth/admin-roles.guard';
 import { LawyerScopeGuard, LawyerAllowed } from './auth/lawyer-scope.guard';
 import { AdminRole, UserLifecycleStatus } from '@prisma/client';
-import { IsString, IsOptional, IsBoolean, IsEnum, MinLength, IsNumber, IsPositive } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsEnum, IsIn, MinLength, IsNumber, IsPositive } from 'class-validator';
+
+const LAWYER_STATUSES = ['not_connected', 'in_progress', 'connected', 'not_interested'] as const;
 import { CreateDiscountRuleDto } from './dto/create-discount-rule.dto';
 
 class AddNoteDto {
@@ -42,6 +44,9 @@ class UpdateUserChallanDto {
   @IsOptional() @IsNumber() @IsPositive() amount?: number;
   @IsOptional() @IsString() location?: string;
   @IsOptional() @IsNumber() settledAmount?: number | null;
+}
+class UpdateLawyerStatusDto {
+  @IsIn(LAWYER_STATUSES) lawyerStatus: string;
 }
 
 @ApiTags('Admin')
@@ -112,6 +117,13 @@ export class AdminController {
     },
   ) {
     return this.adminService.updateLead(id, body);
+  }
+
+  @Patch('leads/:id/lawyer-status')
+  @LawyerAllowed()
+  @ApiOperation({ summary: 'Update a lead\'s lawyer contact status' })
+  async updateLeadLawyerStatus(@Param('id') id: string, @Body() dto: UpdateLawyerStatusDto, @Req() req: any) {
+    return this.adminService.updateLeadLawyerStatus(id, dto.lawyerStatus, this.lawyerPrefixes(req));
   }
 
   // ─── Users ────────────────────────────────────────────────────────────────

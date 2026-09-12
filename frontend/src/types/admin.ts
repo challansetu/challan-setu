@@ -40,6 +40,7 @@ export interface Lead {
   paidAmount: number | null;
   settledAmount: number | null;
   discountGiven: number | null;
+  lawyerStatus: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -31,6 +31,20 @@ const CRM_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "ye
   dead: "red",
 };
 
+const LAWYER_STATUSES = [
+  { value: "not_connected", label: "Not Connected" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "connected", label: "Connected" },
+  { value: "not_interested", label: "Not Interested" },
+];
+
+const LAWYER_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "yellow"> = {
+  not_connected: "gray",
+  in_progress: "yellow",
+  connected: "green",
+  not_interested: "red",
+};
+
 const CHALLAN_LOCATIONS = ["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Chandigarh", "Himachal"];
 const EMPTY_CHALLAN = { challanNumber: "", realAmount: "", amount: "", location: "Delhi", settledAmount: "" };
 
@@ -327,10 +341,26 @@ function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [lawyerStatus, setLawyerStatus] = useState(lead.lawyerStatus ?? "not_connected");
+  const [savingLawyerStatus, setSavingLawyerStatus] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
+
+  const handleLawyerStatusChange = async (value: string) => {
+    setLawyerStatus(value);
+    setSavingLawyerStatus(true);
+    try {
+      const updated = await adminApi.updateLeadLawyerStatus(lead.id, value);
+      onUpdate(updated);
+    } catch {
+      setLawyerStatus(lead.lawyerStatus ?? "not_connected");
+    } finally {
+      setSavingLawyerStatus(false);
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -426,6 +456,24 @@ function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Lawyer Contact Status — editable by lawyers and admins alike */}
+          <div>
+            <p className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-3 flex items-center gap-2">
+              Contact Status
+              {savingLawyerStatus && <Loader2 className="w-3 h-3 animate-spin text-gray-400" />}
+            </p>
+            <select
+              value={lawyerStatus}
+              onChange={(e) => handleLawyerStatusChange(e.target.value)}
+              disabled={savingLawyerStatus}
+              className={inputCls}
+            >
+              {LAWYER_STATUSES.map((s) => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
           </div>
 
           {/* CRM Fields */}
@@ -696,6 +744,7 @@ export default function LeadsPage() {
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Mobile</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Vehicle</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">Contact Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Challan Settled</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">CRM Status</th>
@@ -723,6 +772,12 @@ export default function LeadsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <Badge
+                        label={LAWYER_STATUSES.find((s) => s.value === (lead.lawyerStatus ?? "not_connected"))?.label ?? "Not Connected"}
+                        variant={LAWYER_STATUS_VARIANT[lead.lawyerStatus ?? "not_connected"] ?? "gray"}
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge
                         label={lead.challanSettled === "yes" ? "Yes" : lead.challanSettled === "initiated" ? "Initiated" : "No"}
                         variant={lead.challanSettled === "yes" ? "green" : lead.challanSettled === "initiated" ? "yellow" : "gray"}
                       />
@@ -745,7 +800,7 @@ export default function LeadsPage() {
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={8} className="px-4 py-10 text-center text-gray-500">
+                    <td colSpan={9} className="px-4 py-10 text-center text-gray-500">
                       No leads found.
                     </td>
                   </tr>

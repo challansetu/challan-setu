@@ -100,6 +100,11 @@ export const adminApi = {
     return res.data;
   },
 
+  updateLeadLawyerStatus: async (id: string, lawyerStatus: string) => {
+    const res = await axiosInstance.patch<import("@/types/admin").Lead>(`/admin/leads/${id}/lawyer-status`, { lawyerStatus });
+    return res.data;
+  },
+
   users: async (params: ListUsersParams = {}) => {
     const res = await axiosInstance.get<UsersResponse>("/admin/users", {
       params,

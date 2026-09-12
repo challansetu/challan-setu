@@ -238,6 +238,9 @@ model Lead {
   settledAmount  Int?
   discountGiven  Int?
 
+  // Lawyer contact tracking (set by lawyers scoped to this lead's vehicle prefix)
+  lawyerStatus String @default("not_connected") // not_connected | in_progress | connected | not_interested
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -248,6 +251,7 @@ model Lead {
   @@index([city])
   @@index([leadStatus])
   @@index([crmStatus])
+  @@index([lawyerStatus])
   @@index([source])
   @@index([createdAt])
   @@map("leads")

@@ -196,6 +196,13 @@ export class AdminService {
     return this.prisma.lead.update({ where: { id }, data: dto });
   }
 
+  async updateLeadLawyerStatus(id: string, lawyerStatus: string, vehiclePrefixes?: string[]) {
+    const lead = await this.prisma.lead.findUnique({ where: { id } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
+    return this.prisma.lead.update({ where: { id }, data: { lawyerStatus } });
+  }
+
   // ─── Users (filtered) ─────────────────────────────────────────────────────
 
   async getUsers(params: {
