@@ -316,6 +316,51 @@ class CarInfoScraper:
             log.error("CarInfo unexpected error for %s: %s", vn, e, exc_info=True)
             raise ScraperUnavailableError(f"CarInfo scrape failed for {vn}: {e}") from e
 
+    async def _confirm_if_empty(self, result: list[dict], vn: str) -> list[dict]:
+        """
+        A first-attempt empty result (missing xdataprops) isn't trustworthy on
+        its own — a session/cookie handshake hiccup on that one request can
+        produce a page with no challan data even though the vehicle has some.
+        Confirm with one independent fresh session (new cookies, new buildId)
+        before accepting "no challans"; a terminal error on the confirmation
+        attempt is swallowed rather than overriding the original result.
+        """
+        if result:
+            return result
+
+        log.info("CarInfo: empty result for %s — confirming with a fresh session before trusting it", vn)
+        await asyncio.sleep(random.uniform(1.0, 2.5))
+        ua, sec_ch_ua, mobile, platform = random.choice(_CHROME_PROFILES)
+
+        try:
+            if _USE_CURL:
+                proxy_kwargs = {"proxies": {"https": _PROXY_URL, "http": _PROXY_URL}} if _PROXY_URL else {}
+                async with _CurlSession(impersonate="chrome124", **proxy_kwargs) as session:
+                    build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform, force=True)
+                    if not build_id:
+                        return result
+                    confirmed = await self._fetch_with_retry_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
+            else:
+                client_kwargs: dict = {"timeout": 30.0, "follow_redirects": True}
+                if _PROXY_URL:
+                    client_kwargs["proxy"] = _PROXY_URL
+                async with _httpx.AsyncClient(**client_kwargs) as client:
+                    build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform, force=True)
+                    if not build_id:
+                        return result
+                    confirmed = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+        except Exception as e:
+            log.warning("CarInfo: confirmation attempt failed for %s, keeping original empty result: %s", vn, e)
+            return result
+
+        if confirmed:
+            log.warning(
+                "CarInfo: first session found 0 challans for %s but a fresh session found %d — using the fresh result",
+                vn, len(confirmed),
+            )
+            return confirmed
+        return result
+
     async def _run_with_curl(self, vn: str, ua: str, sec_ch_ua: str, mobile: str, platform: str) -> list[dict]:
         proxy_kwargs = {"proxies": {"https": _PROXY_URL, "http": _PROXY_URL}} if _PROXY_URL else {}
         async with _CurlSession(impersonate="chrome124", **proxy_kwargs) as session:
@@ -351,7 +396,7 @@ class CarInfoScraper:
                     "— the challan-details route has moved (App Router migration)"
                 )
 
-            challans = result
+            challans = await self._confirm_if_empty(result, vn)
             if challans:
                 log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
             else:
@@ -390,7 +435,7 @@ class CarInfoScraper:
                     "— the challan-details route has moved (App Router migration)"
                 )
 
-            challans = result
+            challans = await self._confirm_if_empty(result, vn)
             if challans:
                 log.info("CarInfo: %d challan(s) found for %s", len(challans), vn)
             else:

@@ -275,6 +275,36 @@ class TestCarInfoScraper:
         assert get_mock.await_count == 1
 
     @pytest.mark.asyncio
+    async def test_empty_result_confirmed_with_fresh_session_finds_challans(self, no_sleep):
+        """
+        A session/cookie hiccup on the first attempt can produce an empty
+        result for a vehicle that genuinely has challans. The scraper must
+        confirm with a fresh session before trusting "no challans".
+        """
+        get_mock = AsyncMock(side_effect=[
+            self._json_response(body={"pageProps": {}}),  # first attempt: empty
+            self._json_response(),  # confirmation attempt: real xdataprops
+        ])
+        with self._patch_transport(get_mock), \
+             patch("scrapers.carinfo_scraper._get_build_id", new=AsyncMock(return_value="abc123")), \
+             patch("scrapers.carinfo_scraper._decrypt", return_value=CARINFO_DECRYPTED):
+            result = await CarInfoScraper().search_all_challans("DL01AB1234")
+
+        assert len(result) == 2
+        assert get_mock.await_count == 2
+
+    @pytest.mark.asyncio
+    async def test_empty_result_confirmed_still_empty_stays_empty(self, no_sleep):
+        """If the fresh-session confirmation also comes back empty, trust it."""
+        get_mock = AsyncMock(return_value=self._json_response(body={"pageProps": {}}))
+        with self._patch_transport(get_mock), \
+             patch("scrapers.carinfo_scraper._get_build_id", new=AsyncMock(return_value="abc123")):
+            result = await CarInfoScraper().search_all_challans("DL01AB1234")
+
+        assert result == []
+        assert get_mock.await_count == 2
+
+    @pytest.mark.asyncio
     async def test_normalises_vehicle_number(self, no_sleep):
         requested = []
 
