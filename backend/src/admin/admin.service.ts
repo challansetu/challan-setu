@@ -6,6 +6,8 @@ import { UserLifecycleStatus, AdminRole } from '@prisma/client';
 export class AdminService {
   private readonly logger = new Logger(AdminService.name);
   private readonly cache = new Map<string, { value: any; expiresAt: number }>();
+  // Lawyers handle challan settlement / vehicle recovery cases, not insurance leads.
+  private static readonly LAWYER_EXCLUDED_SOURCES = ['insurance'];
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -86,6 +88,19 @@ export class AdminService {
     if (!allowed) throw new NotFoundException('Lead not found');
   }
 
+  // `vehiclePrefixes === undefined` is reused here purely as the "is this
+  // caller a lawyer" signal (see lawyerPrefixes() in the controller) — a
+  // lawyer never sees insurance leads, regardless of vehicle prefix.
+  private lawyerSourceFilter(vehiclePrefixes?: string[]) {
+    if (vehiclePrefixes === undefined) return null;
+    return { source: { notIn: AdminService.LAWYER_EXCLUDED_SOURCES } };
+  }
+
+  private assertSourceAllowed(source: string, vehiclePrefixes?: string[]) {
+    if (vehiclePrefixes === undefined) return;
+    if (AdminService.LAWYER_EXCLUDED_SOURCES.includes(source)) throw new NotFoundException('Lead not found');
+  }
+
   async getLeads(params: {
     page?: number | string;
     limit?: number | string;
@@ -113,6 +128,9 @@ export class AdminService {
 
     const prefixFilter = this.vehiclePrefixFilter(params.vehiclePrefixes);
     if (prefixFilter) and.push(prefixFilter);
+
+    const sourceFilter = this.lawyerSourceFilter(params.vehiclePrefixes);
+    if (sourceFilter) and.push(sourceFilter);
 
     const where: any = and.length > 0 ? { AND: and } : {};
 
@@ -184,6 +202,7 @@ export class AdminService {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
     this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
+    this.assertSourceAllowed(lead.source, vehiclePrefixes);
     return lead;
   }
 
@@ -205,6 +224,7 @@ export class AdminService {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
     this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
+    this.assertSourceAllowed(lead.source, vehiclePrefixes);
     return this.prisma.lead.update({ where: { id }, data: { lawyerStatus } });
   }
 
@@ -535,6 +555,7 @@ export class AdminService {
     const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
     if (!lead) throw new NotFoundException('Lead not found');
     this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
+    this.assertSourceAllowed(lead.source, vehiclePrefixes);
     return this.prisma.leadChallan.findMany({ where: { leadId }, orderBy: { createdAt: 'desc' } });
   }
 
