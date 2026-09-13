@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Put, Body, Param, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Body, Param, Req, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AdminAuthService } from './admin-auth.service';
@@ -76,5 +76,14 @@ export class AdminAuthController {
   @ApiBearerAuth()
   async resetPassword(@Param('id') id: string, @Body() dto: ResetPasswordDto) {
     return this.adminAuthService.resetPassword(id, dto.newPassword);
+  }
+
+  @Delete('admins/:id')
+  @UseGuards(AdminJwtGuard, AdminRolesGuard)
+  @AdminRoles(AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  async deleteAdmin(@Param('id') id: string, @Req() req: any) {
+    return this.adminAuthService.deleteAdmin(id, req.user.adminId);
   }
 }

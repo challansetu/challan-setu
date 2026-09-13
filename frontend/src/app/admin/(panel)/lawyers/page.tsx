@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
-import { Plus, Pencil, KeyRound, Loader2, Scale } from "lucide-react";
+import { Plus, Pencil, Trash2, KeyRound, Loader2, Scale } from "lucide-react";
 import { adminApi } from "@/lib/admin-api";
 import { Badge } from "@/components/admin/ui/Badge";
 import { Button } from "@/components/admin/ui/Button";
@@ -220,11 +220,57 @@ function EditLawyerModal({
   );
 }
 
+function DeleteLawyerModal({
+  lawyer,
+  onClose,
+  onDeleted,
+}: {
+  lawyer: AdminAccount;
+  onClose: () => void;
+  onDeleted: () => void;
+}) {
+  const { showToast } = useToast();
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setError(null);
+    try {
+      await adminApi.deleteAdmin(lawyer.id);
+      showToast("Lawyer account deleted", "success");
+      onDeleted();
+      onClose();
+    } catch (err: any) {
+      setError(err?.response?.data?.message ?? "Failed to delete lawyer account");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <Modal isOpen onClose={onClose} title="Delete Lawyer Account">
+      <div className="space-y-4">
+        <p className="text-sm text-gray-600">
+          Are you sure you want to delete <span className="font-semibold text-gray-900">{lawyer.name}</span> ({lawyer.email})?
+          They will immediately lose access and this cannot be undone.
+        </p>
+        {error && <p className="text-xs text-red-600 font-medium">{error}</p>}
+        <div className="flex justify-end gap-3 pt-2">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="button" variant="danger" loading={deleting} onClick={handleDelete}>Delete</Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 export default function LawyersPage() {
   const router = useRouter();
   const { admin } = useAdminAuth();
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<AdminAccount | null>(null);
+  const [deleting, setDeleting] = useState<AdminAccount | null>(null);
 
   useEffect(() => {
     if (admin && admin.role !== "SUPER_ADMIN") {
@@ -296,12 +342,20 @@ export default function LawyersPage() {
                     {lawyer.lastLoginAt ? formatDate(lawyer.lastLoginAt) : "Never"}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => setEditing(lawyer)}
-                      className="p-1.5 text-gray-400 hover:text-indigo-600 transition-colors rounded hover:bg-indigo-50"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
+                    <div className="inline-flex items-center gap-0.5">
+                      <button
+                        onClick={() => setEditing(lawyer)}
+                        className="p-1.5 text-gray-400 hover:text-indigo-600 transition-colors rounded hover:bg-indigo-50"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setDeleting(lawyer)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -321,6 +375,14 @@ export default function LawyersPage() {
           lawyer={editing}
           onClose={() => setEditing(null)}
           onUpdated={() => mutate()}
+        />
+      )}
+
+      {deleting && (
+        <DeleteLawyerModal
+          lawyer={deleting}
+          onClose={() => setDeleting(null)}
+          onDeleted={() => mutate()}
         />
       )}
     </div>

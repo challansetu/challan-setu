@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../config/prisma.service';
@@ -109,5 +109,30 @@ export class AdminAuthService {
     const passwordHash = await bcrypt.hash(newPassword, 12);
     await this.prisma.adminUser.update({ where: { id }, data: { passwordHash } });
     return { message: 'Password reset successfully' };
+  }
+
+  async deleteAdmin(id: string, requestingAdminId: string) {
+    const admin = await this.prisma.adminUser.findUnique({ where: { id } });
+    if (!admin) throw new NotFoundException('Admin not found');
+
+    if (id === requestingAdminId) {
+      throw new BadRequestException('You cannot delete your own account');
+    }
+
+    if (admin.role === 'SUPER_ADMIN') {
+      const otherSuperAdmins = await this.prisma.adminUser.count({
+        where: { role: 'SUPER_ADMIN', id: { not: id } },
+      });
+      if (otherSuperAdmins === 0) {
+        throw new BadRequestException('Cannot delete the last Super Admin account');
+      }
+    }
+
+    try {
+      await this.prisma.adminUser.delete({ where: { id } });
+    } catch {
+      throw new ConflictException('Cannot delete this account — it has associated records (notes, status changes, or audit logs)');
+    }
+    return { deleted: true };
   }
 }

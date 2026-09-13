@@ -298,6 +298,10 @@ export const adminApi = {
     return res.data;
   },
 
+  deleteAdmin: async (id: string) => {
+    await axiosInstance.delete(`/admin/auth/admins/${id}`);
+  },
+
 };
 
 export default axiosInstance;
