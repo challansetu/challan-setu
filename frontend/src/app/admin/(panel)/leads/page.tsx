@@ -36,13 +36,15 @@ const LAWYER_STATUSES = [
   { value: "in_progress", label: "In Progress" },
   { value: "connected", label: "Connected" },
   { value: "not_interested", label: "Not Interested" },
+  { value: "incorrect_lead", label: "Incorrect Lead" },
 ];
 
-const LAWYER_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "yellow"> = {
+const LAWYER_STATUS_VARIANT: Record<string, "gray" | "blue" | "green" | "red" | "yellow" | "orange"> = {
   not_connected: "gray",
   in_progress: "yellow",
   connected: "green",
   not_interested: "red",
+  incorrect_lead: "orange",
 };
 
 const CHALLAN_LOCATIONS = ["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Chandigarh", "Himachal"];

@@ -12,7 +12,7 @@ import { LawyerScopeGuard, LawyerAllowed } from './auth/lawyer-scope.guard';
 import { AdminRole, UserLifecycleStatus } from '@prisma/client';
 import { IsString, IsOptional, IsBoolean, IsEnum, IsIn, MinLength, IsNumber, IsPositive } from 'class-validator';
 
-const LAWYER_STATUSES = ['not_connected', 'in_progress', 'connected', 'not_interested'] as const;
+const LAWYER_STATUSES = ['not_connected', 'in_progress', 'connected', 'not_interested', 'incorrect_lead'] as const;
 import { CreateDiscountRuleDto } from './dto/create-discount-rule.dto';
 
 class AddNoteDto {
