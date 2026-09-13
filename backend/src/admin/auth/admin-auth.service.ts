@@ -86,10 +86,18 @@ export class AdminAuthService {
       select: {
         id: true, email: true, name: true, role: true, isActive: true,
         vehiclePrefixes: true, lastLoginAt: true, lastLoginIp: true, lastLoginLocation: true,
-        createdAt: true,
+        lastActiveAt: true, createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async heartbeat(adminId: string) {
+    await this.prisma.adminUser.update({
+      where: { id: adminId },
+      data: { lastActiveAt: new Date() },
+    });
+    return { ok: true };
   }
 
   async updateAdmin(id: string, data: { name?: string; role?: AdminRole; isActive?: boolean; vehiclePrefixes?: string[] }) {

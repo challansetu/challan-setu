@@ -10,8 +10,17 @@ import { Button } from "@/components/admin/ui/Button";
 import { Modal } from "@/components/admin/ui/Modal";
 import { useToast } from "@/components/admin/ui/Toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 import type { AdminAccount } from "@/types/admin";
+
+// Heartbeats land every 20s (see AdminShell) — 45s allows one missed beat
+// (a slow request, a brief network blip) without flashing offline.
+const ONLINE_THRESHOLD_MS = 45_000;
+
+function isLawyerOnline(lastActiveAt: string | null): boolean {
+  if (!lastActiveAt) return false;
+  return Date.now() - new Date(lastActiveAt).getTime() < ONLINE_THRESHOLD_MS;
+}
 
 function parsePrefixes(input: string): string[] {
   return Array.from(
@@ -278,7 +287,10 @@ export default function LawyersPage() {
     }
   }, [admin, router]);
 
-  const { data, isLoading, mutate } = useSWR<AdminAccount[]>("admin-accounts", adminApi.listAdmins);
+  const { data, isLoading, mutate } = useSWR<AdminAccount[]>("admin-accounts", adminApi.listAdmins, {
+    // Poll so a lawyer's presence dot flips soon after they open/close the panel.
+    refreshInterval: 15_000,
+  });
   const lawyers = (data ?? []).filter((a) => a.role === "LAWYER");
 
   if (admin && admin.role !== "SUPER_ADMIN") return null;
@@ -323,7 +335,18 @@ export default function LawyersPage() {
                 </td></tr>
               ) : lawyers.map((lawyer) => (
                 <tr key={lawyer.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-900">{lawyer.name}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900">
+                    <span className="inline-flex items-center gap-2">
+                      <span
+                        className={cn(
+                          "w-2 h-2 rounded-full flex-shrink-0",
+                          isLawyerOnline(lawyer.lastActiveAt) ? "bg-green-500" : "bg-gray-300"
+                        )}
+                        title={isLawyerOnline(lawyer.lastActiveAt) ? "Online" : "Offline"}
+                      />
+                      {lawyer.name}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-gray-700">{lawyer.email}</td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">

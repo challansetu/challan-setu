@@ -46,6 +46,16 @@ export class AdminAuthController {
     return req.user;
   }
 
+  @Post('heartbeat')
+  @UseGuards(AdminJwtGuard)
+  @Throttle({ default: { ttl: 60000, limit: 10 } })
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Record that the current admin/lawyer has the panel open (drives online/offline presence)' })
+  async heartbeat(@Req() req: any) {
+    return this.adminAuthService.heartbeat(req.user.adminId);
+  }
+
   @Get('admins')
   @UseGuards(AdminJwtGuard, AdminRolesGuard)
   @AdminRoles(AdminRole.SUPER_ADMIN)

@@ -19,6 +19,9 @@ model AdminUser {
   lastLoginAt       DateTime?
   lastLoginIp       String?
   lastLoginLocation String?
+  // Bumped by a periodic heartbeat while the admin panel tab is open; used to
+  // derive online/offline presence (a stale timestamp means the panel is closed).
+  lastActiveAt      DateTime?
   vehiclePrefixes   String[]  @default([])
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt

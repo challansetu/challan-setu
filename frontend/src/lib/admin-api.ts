@@ -302,6 +302,10 @@ export const adminApi = {
     await axiosInstance.delete(`/admin/auth/admins/${id}`);
   },
 
+  heartbeat: async () => {
+    await axiosInstance.post("/admin/auth/heartbeat");
+  },
+
 };
 
 export default axiosInstance;

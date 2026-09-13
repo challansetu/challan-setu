@@ -17,8 +17,14 @@ import {
 } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { cn } from "@/lib/utils";
+import { adminApi } from "@/lib/admin-api";
 import { RoleBadge } from "@/components/admin/ui/Badge";
 import { FullPageSpinner } from "@/components/admin/ui/Spinner";
+
+// How often to tell the backend "this admin/lawyer still has the panel open".
+// Must stay well under ONLINE_THRESHOLD_MS in the Lawyers page so a normal
+// gap between beats never reads as offline.
+const HEARTBEAT_INTERVAL_MS = 20_000;
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["SUPER_ADMIN", "ADMIN", "SUPPORT_AGENT"] },
@@ -50,6 +56,23 @@ export function AdminShell({ children }: AdminShellProps) {
       router.push(LAWYER_HOME);
     }
   }, [loading, isAuthenticated, admin?.role, pathname, router]);
+
+  React.useEffect(() => {
+    if (loading || !isAuthenticated) return;
+
+    const beat = () => {
+      if (document.visibilityState === "visible") {
+        adminApi.heartbeat().catch(() => {});
+      }
+    };
+    beat();
+    const interval = setInterval(beat, HEARTBEAT_INTERVAL_MS);
+    document.addEventListener("visibilitychange", beat);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", beat);
+    };
+  }, [loading, isAuthenticated]);
 
   if (loading) return <FullPageSpinner />;
   if (!isAuthenticated) return null;

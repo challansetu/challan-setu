@@ -22,6 +22,7 @@ export interface AdminAccount extends AdminUser {
   lastLoginAt: string | null;
   lastLoginIp: string | null;
   lastLoginLocation: string | null;
+  lastActiveAt: string | null;
   createdAt: string;
 }
 
