@@ -20,6 +20,8 @@ export interface AdminUser {
 export interface AdminAccount extends AdminUser {
   isActive: boolean;
   lastLoginAt: string | null;
+  lastLoginIp: string | null;
+  lastLoginLocation: string | null;
   createdAt: string;
 }
 

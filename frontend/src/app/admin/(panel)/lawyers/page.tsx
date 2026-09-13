@@ -10,7 +10,7 @@ import { Button } from "@/components/admin/ui/Button";
 import { Modal } from "@/components/admin/ui/Modal";
 import { useToast } from "@/components/admin/ui/Toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { formatDate } from "@/lib/utils";
+import { formatDateTime } from "@/lib/utils";
 import type { AdminAccount } from "@/types/admin";
 
 function parsePrefixes(input: string): string[] {
@@ -307,16 +307,17 @@ export default function LawyersPage() {
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Vehicle Prefixes</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Last Login</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Login Location</th>
                 <th className="text-right px-4 py-3 font-medium text-gray-500">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {isLoading ? (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-gray-400">
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-gray-400">
                   <Loader2 className="w-5 h-5 animate-spin inline" />
                 </td></tr>
               ) : !lawyers.length ? (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-gray-500">
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-gray-500">
                   <Scale className="w-6 h-6 mx-auto mb-2 text-gray-300" />
                   No lawyer accounts yet.
                 </td></tr>
@@ -338,8 +339,11 @@ export default function LawyersPage() {
                   <td className="px-4 py-3">
                     <Badge label={lawyer.isActive ? "Active" : "Inactive"} variant={lawyer.isActive ? "green" : "gray"} />
                   </td>
+                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                    {lawyer.lastLoginAt ? formatDateTime(lawyer.lastLoginAt) : "Never"}
+                  </td>
                   <td className="px-4 py-3 text-gray-500">
-                    {lawyer.lastLoginAt ? formatDate(lawyer.lastLoginAt) : "Never"}
+                    {lawyer.lastLoginLocation ?? (lawyer.lastLoginIp ? <span className="font-mono text-xs">{lawyer.lastLoginIp}</span> : "—")}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex items-center gap-0.5">

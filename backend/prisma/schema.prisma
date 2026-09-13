@@ -10,16 +10,18 @@ datasource db {
 
 // ─── Admin Users ────────────────────────────────────
 model AdminUser {
-  id              String    @id @default(cuid())
-  email           String    @unique
-  passwordHash    String
-  name            String
-  role            AdminRole @default(SUPPORT_AGENT)
-  isActive        Boolean   @default(true)
-  lastLoginAt     DateTime?
-  vehiclePrefixes String[]  @default([])
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String
+  name              String
+  role              AdminRole @default(SUPPORT_AGENT)
+  isActive          Boolean   @default(true)
+  lastLoginAt       DateTime?
+  lastLoginIp       String?
+  lastLoginLocation String?
+  vehiclePrefixes   String[]  @default([])
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   notes         AdminNote[]
   statusChanges UserStatusHistory[]
@@ -245,7 +247,7 @@ model Lead {
   discountGiven  Int?
 
   // Lawyer contact tracking (set by the assigned lawyer)
-  lawyerStatus String @default("not_connected") // not_connected | in_progress | connected | not_interested
+  lawyerStatus String @default("not_connected") // not_connected | in_progress | connected | not_interested | incorrect_lead
 
   // Round-robin assigned at creation time (see LawyerAssignmentService) —
   // exclusive owner of this lead among lawyers. Null = never assigned (no

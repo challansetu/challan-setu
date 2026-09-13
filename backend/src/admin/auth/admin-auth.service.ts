@@ -5,6 +5,7 @@ import { PrismaService } from '../../config/prisma.service';
 import { AdminLoginDto } from './dto/admin-login.dto';
 import { AdminRole } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+import { resolveLoginLocation } from './ip-location.util';
 
 function normalizePrefixes(prefixes?: string[]): string[] {
   if (!prefixes) return [];
@@ -31,7 +32,11 @@ export class AdminAuthService {
 
     await this.prisma.adminUser.update({
       where: { id: admin.id },
-      data: { lastLoginAt: new Date() },
+      data: {
+        lastLoginAt: new Date(),
+        lastLoginIp: ip ?? null,
+        lastLoginLocation: resolveLoginLocation(ip),
+      },
     });
 
     const secret = this.config.get<string>('ADMIN_JWT_SECRET');
@@ -80,7 +85,8 @@ export class AdminAuthService {
     return this.prisma.adminUser.findMany({
       select: {
         id: true, email: true, name: true, role: true, isActive: true,
-        vehiclePrefixes: true, lastLoginAt: true, createdAt: true,
+        vehiclePrefixes: true, lastLoginAt: true, lastLoginIp: true, lastLoginLocation: true,
+        createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
     });
