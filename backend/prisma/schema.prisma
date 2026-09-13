@@ -24,6 +24,7 @@ model AdminUser {
   notes         AdminNote[]
   statusChanges UserStatusHistory[]
   auditLogs     AuditLog[]
+  assignedLeads Lead[]              @relation("LeadAssignedLawyer")
 
   @@map("admin_users")
 }
@@ -243,8 +244,16 @@ model Lead {
   settledAmount  Int?
   discountGiven  Int?
 
-  // Lawyer contact tracking (set by lawyers scoped to this lead's vehicle prefix)
+  // Lawyer contact tracking (set by the assigned lawyer)
   lawyerStatus String @default("not_connected") // not_connected | in_progress | connected | not_interested
+
+  // Round-robin assigned at creation time (see LawyerAssignmentService) —
+  // exclusive owner of this lead among lawyers. Null = never assigned (no
+  // eligible lawyer existed yet, or the source is excluded from assignment),
+  // or the assigned lawyer was later deleted (SetNull) — either way it falls
+  // back to prefix-based visibility rather than becoming unreachable.
+  assignedLawyerId String?
+  assignedLawyer   AdminUser? @relation("LeadAssignedLawyer", fields: [assignedLawyerId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -253,13 +262,30 @@ model Lead {
 
   @@index([mobileNumber])
   @@index([vehicleNumber])
+  @@index([mobileNumber, vehicleNumber, createdAt])
   @@index([city])
   @@index([leadStatus])
   @@index([crmStatus])
   @@index([lawyerStatus])
+  @@index([assignedLawyerId])
   @@index([source])
   @@index([createdAt])
   @@map("leads")
+}
+
+// ─── Lawyer Assignment State ────────────────────────
+// One row per vehicle-number state-prefix (e.g. "DL"), tracking the last
+// lawyer a lead with that prefix was round-robin assigned to. Kept
+// independent of AdminUser deletion — a stale lastAssignedLawyerId simply
+// isn't found among current eligible lawyers, so the rotation just starts
+// from the first eligible one again.
+model LawyerAssignmentState {
+  id                   String   @id @default(cuid())
+  vehiclePrefix        String   @unique
+  lastAssignedLawyerId String?
+  updatedAt            DateTime @updatedAt
+
+  @@map("lawyer_assignment_state")
 }
 
 // ─── Admin Notes ────────────────────────────────────

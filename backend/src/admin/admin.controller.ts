@@ -60,8 +60,9 @@ export class AdminController {
     private readonly qrScansService: QrScansService,
   ) {}
 
-  private lawyerPrefixes(req: any): string[] | undefined {
-    return req?.user?.role === 'LAWYER' ? (req.user.vehiclePrefixes ?? []) : undefined;
+  private lawyerContext(req: any): { id: string; vehiclePrefixes: string[] } | undefined {
+    if (req?.user?.role !== 'LAWYER') return undefined;
+    return { id: req.user.adminId, vehiclePrefixes: req.user.vehiclePrefixes ?? [] };
   }
 
   // ─── Dashboard ────────────────────────────────────────────────────────────
@@ -85,7 +86,7 @@ export class AdminController {
     @Query('source') source?: string,
     @Req() req?: any,
   ) {
-    return this.adminService.getLeads({ page, limit, search, status, source, vehiclePrefixes: this.lawyerPrefixes(req) });
+    return this.adminService.getLeads({ page, limit, search, status, source, lawyerCtx: this.lawyerContext(req) });
   }
 
   @Get('leads/stats')
@@ -98,7 +99,7 @@ export class AdminController {
   @LawyerAllowed()
   @ApiOperation({ summary: 'Get single lead detail' })
   async getLead(@Param('id') id: string, @Req() req: any) {
-    return this.adminService.getLead(id, this.lawyerPrefixes(req));
+    return this.adminService.getLead(id, this.lawyerContext(req));
   }
 
   @Patch('leads/:id')
@@ -122,7 +123,7 @@ export class AdminController {
   @LawyerAllowed()
   @ApiOperation({ summary: 'Update a lead\'s lawyer contact status' })
   async updateLeadLawyerStatus(@Param('id') id: string, @Body() dto: UpdateLawyerStatusDto, @Req() req: any) {
-    return this.adminService.updateLeadLawyerStatus(id, dto.lawyerStatus, this.lawyerPrefixes(req));
+    return this.adminService.updateLeadLawyerStatus(id, dto.lawyerStatus, this.lawyerContext(req));
   }
 
   // ─── Users ────────────────────────────────────────────────────────────────
@@ -200,7 +201,7 @@ export class AdminController {
   @Get('leads/:id/challans')
   @LawyerAllowed()
   async getLeadChallans(@Param('id') id: string, @Req() req: any) {
-    return this.adminService.getLeadChallans(id, this.lawyerPrefixes(req));
+    return this.adminService.getLeadChallans(id, this.lawyerContext(req));
   }
 
   @Post('leads/:id/challans')

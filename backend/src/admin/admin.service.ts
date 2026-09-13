@@ -72,32 +72,52 @@ export class AdminService {
   }
 
   // `undefined` = caller isn't a lawyer, so no restriction applies at all.
-  // A defined-but-empty array means a lawyer with NO assigned prefixes, which
-  // must match nothing — never fall back to "no restriction" for that case.
-  private vehiclePrefixFilter(vehiclePrefixes?: string[]) {
-    if (vehiclePrefixes === undefined) return null;
-    if (vehiclePrefixes.length === 0) return { id: '__no_vehicle_prefixes_assigned__' };
-    return { OR: vehiclePrefixes.map((prefix) => ({ vehicleNumber: { startsWith: prefix, mode: 'insensitive' as const } })) };
+  //
+  // A lead round-robin ASSIGNED to a lawyer (see LawyerAssignmentService)
+  // belongs exclusively to that lawyer, full stop — that's what "assignment"
+  // means. A lead with no assignment yet (created before this feature
+  // existed, or no eligible lawyer existed at creation time) falls back to
+  // the older prefix-membership check, so pre-existing data everyone could
+  // already see doesn't just vanish.
+  private lawyerVisibilityFilter(lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
+    if (lawyerCtx === undefined) return null;
+    if (lawyerCtx.vehiclePrefixes.length === 0) return { assignedLawyerId: lawyerCtx.id };
+    const prefixMatch = {
+      OR: lawyerCtx.vehiclePrefixes.map((prefix) => ({ vehicleNumber: { startsWith: prefix, mode: 'insensitive' as const } })),
+    };
+    return {
+      OR: [
+        { assignedLawyerId: lawyerCtx.id },
+        { AND: [{ assignedLawyerId: null }, prefixMatch] },
+      ],
+    };
   }
 
-  private assertVehicleAllowed(vehicleNumber: string, vehiclePrefixes?: string[]) {
-    if (vehiclePrefixes === undefined) return;
-    if (vehiclePrefixes.length === 0) throw new NotFoundException('Lead not found');
-    const normalized = vehicleNumber.trim().toUpperCase();
-    const allowed = vehiclePrefixes.some((prefix) => normalized.startsWith(prefix.trim().toUpperCase()));
+  private assertLeadVisible(
+    lead: { vehicleNumber: string; assignedLawyerId: string | null },
+    lawyerCtx?: { id: string; vehiclePrefixes: string[] },
+  ) {
+    if (lawyerCtx === undefined) return;
+    if (lead.assignedLawyerId !== null) {
+      if (lead.assignedLawyerId !== lawyerCtx.id) throw new NotFoundException('Lead not found');
+      return;
+    }
+    if (lawyerCtx.vehiclePrefixes.length === 0) throw new NotFoundException('Lead not found');
+    const normalized = lead.vehicleNumber.trim().toUpperCase();
+    const allowed = lawyerCtx.vehiclePrefixes.some((prefix) => normalized.startsWith(prefix.trim().toUpperCase()));
     if (!allowed) throw new NotFoundException('Lead not found');
   }
 
-  // `vehiclePrefixes === undefined` is reused here purely as the "is this
-  // caller a lawyer" signal (see lawyerPrefixes() in the controller) — a
-  // lawyer never sees insurance leads, regardless of vehicle prefix.
-  private lawyerSourceFilter(vehiclePrefixes?: string[]) {
-    if (vehiclePrefixes === undefined) return null;
+  // A lawyer never sees insurance leads, regardless of assignment/prefix —
+  // enforced independently of ownership as defense in depth (leads are never
+  // actually assigned to a lawyer for this source in the first place).
+  private lawyerSourceFilter(lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
+    if (lawyerCtx === undefined) return null;
     return { source: { notIn: AdminService.LAWYER_EXCLUDED_SOURCES } };
   }
 
-  private assertSourceAllowed(source: string, vehiclePrefixes?: string[]) {
-    if (vehiclePrefixes === undefined) return;
+  private assertSourceAllowed(source: string, lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
+    if (lawyerCtx === undefined) return;
     if (AdminService.LAWYER_EXCLUDED_SOURCES.includes(source)) throw new NotFoundException('Lead not found');
   }
 
@@ -107,7 +127,7 @@ export class AdminService {
     search?: string;
     status?: string;
     source?: string;
-    vehiclePrefixes?: string[];
+    lawyerCtx?: { id: string; vehiclePrefixes: string[] };
   }) {
     const page = Math.max(1, Number(params.page) || 1);
     const limit = Math.min(100, Math.max(1, Number(params.limit) || 25));
@@ -126,10 +146,10 @@ export class AdminService {
       });
     }
 
-    const prefixFilter = this.vehiclePrefixFilter(params.vehiclePrefixes);
-    if (prefixFilter) and.push(prefixFilter);
+    const visibilityFilter = this.lawyerVisibilityFilter(params.lawyerCtx);
+    if (visibilityFilter) and.push(visibilityFilter);
 
-    const sourceFilter = this.lawyerSourceFilter(params.vehiclePrefixes);
+    const sourceFilter = this.lawyerSourceFilter(params.lawyerCtx);
     if (sourceFilter) and.push(sourceFilter);
 
     const where: any = and.length > 0 ? { AND: and } : {};
@@ -161,25 +181,19 @@ export class AdminService {
     };
   }
 
-  async getLeadsStats(vehiclePrefixes?: string[]) {
-    const scoped = vehiclePrefixes !== undefined;
-    const cacheKey = scoped ? null : 'leads-stats';
-    const cached = cacheKey ? this.getCached<any>(cacheKey) : undefined;
+  // No longer takes a lawyer scope — lawyers are blocked from this endpoint
+  // entirely (internal business metrics), so it's always the global stats.
+  async getLeadsStats() {
+    const cached = this.getCached<any>('leads-stats');
     if (cached) return cached;
 
-    const prefixFilter = this.vehiclePrefixFilter(vehiclePrefixes);
-    const baseWhere = prefixFilter ?? {};
-    const withStatus = (status: Record<string, any>) =>
-      prefixFilter ? { AND: [prefixFilter, status] } : status;
-
     const [total, converted, dead, followUp, paymentDone, agg] = await Promise.all([
-      this.prisma.lead.count({ where: baseWhere }),
-      this.prisma.lead.count({ where: withStatus({ crmStatus: 'converted' }) }),
-      this.prisma.lead.count({ where: withStatus({ crmStatus: 'dead' }) }),
-      this.prisma.lead.count({ where: withStatus({ crmStatus: 'follow_up' }) }),
-      this.prisma.lead.count({ where: withStatus({ paymentStatus: 'payment_done' }) }),
+      this.prisma.lead.count(),
+      this.prisma.lead.count({ where: { crmStatus: 'converted' } }),
+      this.prisma.lead.count({ where: { crmStatus: 'dead' } }),
+      this.prisma.lead.count({ where: { crmStatus: 'follow_up' } }),
+      this.prisma.lead.count({ where: { paymentStatus: 'payment_done' } }),
       this.prisma.lead.aggregate({
-        where: baseWhere,
         _sum: { paidAmount: true, settledAmount: true, discountGiven: true, totalChallan: true },
       }),
     ]);
@@ -194,15 +208,15 @@ export class AdminService {
       totalDiscount: agg._sum.discountGiven ?? 0,
       totalChallanValue: agg._sum.totalChallan ?? 0,
     };
-    if (cacheKey) this.setCached(cacheKey, result, 30_000);
+    this.setCached('leads-stats', result, 30_000);
     return result;
   }
 
-  async getLead(id: string, vehiclePrefixes?: string[]) {
+  async getLead(id: string, lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
-    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
-    this.assertSourceAllowed(lead.source, vehiclePrefixes);
+    this.assertLeadVisible(lead, lawyerCtx);
+    this.assertSourceAllowed(lead.source, lawyerCtx);
     return lead;
   }
 
@@ -220,11 +234,11 @@ export class AdminService {
     return this.prisma.lead.update({ where: { id }, data: dto });
   }
 
-  async updateLeadLawyerStatus(id: string, lawyerStatus: string, vehiclePrefixes?: string[]) {
+  async updateLeadLawyerStatus(id: string, lawyerStatus: string, lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
-    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
-    this.assertSourceAllowed(lead.source, vehiclePrefixes);
+    this.assertLeadVisible(lead, lawyerCtx);
+    this.assertSourceAllowed(lead.source, lawyerCtx);
     return this.prisma.lead.update({ where: { id }, data: { lawyerStatus } });
   }
 
@@ -551,11 +565,11 @@ export class AdminService {
 
   // ─── Lead Challans (per-challan CRM tracking) ────────────────────────────
 
-  async getLeadChallans(leadId: string, vehiclePrefixes?: string[]) {
+  async getLeadChallans(leadId: string, lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
     const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
     if (!lead) throw new NotFoundException('Lead not found');
-    this.assertVehicleAllowed(lead.vehicleNumber, vehiclePrefixes);
-    this.assertSourceAllowed(lead.source, vehiclePrefixes);
+    this.assertLeadVisible(lead, lawyerCtx);
+    this.assertSourceAllowed(lead.source, lawyerCtx);
     return this.prisma.leadChallan.findMany({ where: { leadId }, orderBy: { createdAt: 'desc' } });
   }
 
