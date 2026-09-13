@@ -2,12 +2,22 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../config/prisma.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
+import { LawyerAssignmentService } from './lawyer-assignment.service';
+
+// A visitor re-submitting the same mobile + vehicle from a different page/
+// form (homepage, city page, insurance, etc.) is still the same underlying
+// inquiry — dedupe it within this window rather than only deduping exact
+// same-attempt retries (see idempotencyKey below).
+const DUPLICATE_SUBMISSION_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class LeadsService {
   private readonly logger = new Logger(LeadsService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly lawyerAssignment: LawyerAssignmentService,
+  ) {}
 
   async createLead(dto: CreateLeadDto) {
     const idempotencyKey = dto.idempotencyKey?.trim() || undefined;
@@ -25,6 +35,27 @@ export class LeadsService {
       }
     }
 
+    const recentDuplicate = await this.prisma.lead.findFirst({
+      where: {
+        mobileNumber: dto.mobileNumber,
+        vehicleNumber: dto.vehicleNumber,
+        createdAt: { gte: new Date(Date.now() - DUPLICATE_SUBMISSION_WINDOW_MS) },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (recentDuplicate) {
+      this.logger.log(`Duplicate submission ignored (same mobile+vehicle within ${DUPLICATE_SUBMISSION_WINDOW_MS / 3_600_000}h) for lead=${recentDuplicate.id}`);
+      return {
+        success: true,
+        leadId: recentDuplicate.id,
+        leadStatus: recentDuplicate.leadStatus,
+        createdAt: recentDuplicate.createdAt,
+      };
+    }
+
+    const source = dto.source ?? 'homepage';
+    const assignedLawyerId = await this.lawyerAssignment.assignLawyer(dto.vehicleNumber, source);
+
     let lead;
     try {
       lead = await this.prisma.lead.create({
@@ -34,10 +65,11 @@ export class LeadsService {
           vehicleNumber: dto.vehicleNumber,
           consentAccepted: dto.consentAccepted,
           consentTimestamp: new Date(),
-          source: dto.source ?? 'homepage',
+          source,
           city: dto.city ?? null,
           leadStatus: 'new',
           idempotencyKey,
+          assignedLawyerId,
         },
       });
     } catch (err) {
