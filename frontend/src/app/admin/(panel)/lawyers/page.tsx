@@ -365,7 +365,10 @@ export default function LawyersPage() {
                   <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                     {lawyer.lastLoginAt ? formatDateTime(lawyer.lastLoginAt) : "Never"}
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td
+                    className="px-4 py-3 text-gray-500"
+                    title={lawyer.lastLoginIp ? `IP: ${lawyer.lastLoginIp}` : undefined}
+                  >
                     {lawyer.lastLoginLocation ?? (lawyer.lastLoginIp ? <span className="font-mono text-xs">{lawyer.lastLoginIp}</span> : "—")}
                   </td>
                   <td className="px-4 py-3 text-right">

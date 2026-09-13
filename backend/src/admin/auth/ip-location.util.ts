@@ -1,5 +1,9 @@
 import * as geoip from 'geoip-lite';
 
+// geoip-lite only gives an ISO country code (e.g. "BR") — spell it out
+// ("Brazil") so a country-only match doesn't read as a cryptic two-letter code.
+const countryNames = new Intl.DisplayNames(['en'], { type: 'region' });
+
 /**
  * Offline lookup (bundled MaxMind-lite DB, no network call) — deliberately not
  * a remote geolocation API, so a lookup failure/latency can never affect the
@@ -14,5 +18,6 @@ export function resolveLoginLocation(ip?: string | null): string | null {
   const geo = geoip.lookup(normalized);
   if (!geo) return null;
 
-  return [geo.city, geo.region, geo.country].filter(Boolean).join(', ') || null;
+  const country = geo.country ? (countryNames.of(geo.country) ?? geo.country) : undefined;
+  return [geo.city, geo.region, country].filter(Boolean).join(', ') || null;
 }
