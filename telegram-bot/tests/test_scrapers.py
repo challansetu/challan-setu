@@ -305,6 +305,26 @@ class TestCarInfoScraper:
         assert get_mock.await_count == 2
 
     @pytest.mark.asyncio
+    async def test_confirmation_does_not_retry_transient_errors(self, no_sleep):
+        """
+        The confirmation attempt must stay a single request, not the full
+        3-attempt retry cycle — doubling that on top of the original attempt
+        would meaningfully raise CarInfo request volume for every genuinely
+        clean vehicle. A transient error while confirming just keeps the
+        original (empty) result.
+        """
+        get_mock = AsyncMock(side_effect=[
+            self._json_response(body={"pageProps": {}}),  # first attempt: empty
+            self._json_response(status=500),  # confirmation attempt: transient error
+        ])
+        with self._patch_transport(get_mock), \
+             patch("scrapers.carinfo_scraper._get_build_id", new=AsyncMock(return_value="abc123")):
+            result = await CarInfoScraper().search_all_challans("DL01AB1234")
+
+        assert result == []
+        assert get_mock.await_count == 2  # not 1 (original) + 3 (confirmation retries)
+
+    @pytest.mark.asyncio
     async def test_normalises_vehicle_number(self, no_sleep):
         requested = []
 

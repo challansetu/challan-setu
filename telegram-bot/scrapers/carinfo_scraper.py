@@ -332,6 +332,13 @@ class CarInfoScraper:
         await asyncio.sleep(random.uniform(1.0, 2.5))
         ua, sec_ch_ua, mobile, platform = random.choice(_CHROME_PROFILES)
 
+        # Single direct attempt (no internal 429/5xx retry loop) — this is a
+        # confirmation, not a full retry cycle. Doubling the whole 3-attempt
+        # backoff sequence on top of the original attempt would meaningfully
+        # add to CarInfo's per-lookup request volume for every genuinely
+        # clean vehicle (the common case), raising detection exposure for
+        # comparatively little extra certainty. Any failure here — including
+        # a transient one — just falls back to trusting the original result.
         try:
             if _USE_CURL:
                 proxy_kwargs = {"proxies": {"https": _PROXY_URL, "http": _PROXY_URL}} if _PROXY_URL else {}
@@ -339,7 +346,7 @@ class CarInfoScraper:
                     build_id = await _get_build_id(session, ua, sec_ch_ua, mobile, platform, force=True)
                     if not build_id:
                         return result
-                    confirmed = await self._fetch_with_retry_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
+                    confirmed = await self._fetch_curl(session, vn, build_id, ua, sec_ch_ua, mobile, platform)
             else:
                 client_kwargs: dict = {"timeout": 30.0, "follow_redirects": True}
                 if _PROXY_URL:
@@ -348,7 +355,7 @@ class CarInfoScraper:
                     build_id = await _get_build_id(client, ua, sec_ch_ua, mobile, platform, force=True)
                     if not build_id:
                         return result
-                    confirmed = await self._fetch_with_retry_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
+                    confirmed = await self._fetch_httpx(client, vn, build_id, ua, sec_ch_ua, mobile, platform)
         except Exception as e:
             log.warning("CarInfo: confirmation attempt failed for %s, keeping original empty result: %s", vn, e)
             return result
