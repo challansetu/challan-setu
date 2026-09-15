@@ -123,7 +123,13 @@ export class AdminController {
   @LawyerAllowed()
   @ApiOperation({ summary: 'Update a lead\'s lawyer contact status' })
   async updateLeadLawyerStatus(@Param('id') id: string, @Body() dto: UpdateLawyerStatusDto, @Req() req: any) {
-    return this.adminService.updateLeadLawyerStatus(id, dto.lawyerStatus, this.lawyerContext(req));
+    return this.adminService.updateLeadLawyerStatus(id, dto.lawyerStatus, req.user.adminId, this.lawyerContext(req));
+  }
+
+  @Get('leads/:id/status-history')
+  @ApiOperation({ summary: 'Lead contact-status change history — who changed it and when (not exposed to lawyers)' })
+  async getLeadStatusHistory(@Param('id') id: string) {
+    return this.adminService.getLeadStatusHistory(id);
   }
 
   // ─── Users ────────────────────────────────────────────────────────────────

@@ -98,6 +98,14 @@ export interface ChallanSearch {
   source?: string;
 }
 
+export interface LeadStatusHistoryEntry {
+  id: string;
+  oldStatus: string;
+  newStatus: string;
+  createdAt: string;
+  admin: { id: string; name: string; role: AdminRole } | null;
+}
+
 export interface LeadChallan {
   id: string;
   leadId: string;

@@ -234,12 +234,49 @@ export class AdminService {
     return this.prisma.lead.update({ where: { id }, data: dto });
   }
 
-  async updateLeadLawyerStatus(id: string, lawyerStatus: string, lawyerCtx?: { id: string; vehiclePrefixes: string[] }) {
+  async updateLeadLawyerStatus(
+    id: string,
+    lawyerStatus: string,
+    adminId: string,
+    lawyerCtx?: { id: string; vehiclePrefixes: string[] },
+  ) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Lead not found');
     this.assertLeadVisible(lead, lawyerCtx);
     this.assertSourceAllowed(lead.source, lawyerCtx);
-    return this.prisma.lead.update({ where: { id }, data: { lawyerStatus } });
+
+    if (lead.lawyerStatus === lawyerStatus) return lead;
+
+    const [updated] = await Promise.all([
+      this.prisma.lead.update({ where: { id }, data: { lawyerStatus } }),
+      this.prisma.leadStatusHistory.create({
+        data: { leadId: id, oldStatus: lead.lawyerStatus, newStatus: lawyerStatus, changedBy: adminId },
+      }),
+    ]);
+
+    await this.prisma.auditLog.create({
+      data: {
+        adminId,
+        action: 'LEAD_LAWYER_STATUS_CHANGED',
+        entity: 'Lead',
+        entityId: id,
+        oldValue: { lawyerStatus: lead.lawyerStatus },
+        newValue: { lawyerStatus },
+      },
+    });
+
+    return updated;
+  }
+
+  // Super Admin / admin-facing only — who changed a lead's contact status, and when.
+  async getLeadStatusHistory(leadId: string) {
+    const lead = await this.prisma.lead.findUnique({ where: { id: leadId }, select: { id: true } });
+    if (!lead) throw new NotFoundException('Lead not found');
+    return this.prisma.leadStatusHistory.findMany({
+      where: { leadId },
+      orderBy: { createdAt: 'desc' },
+      include: { admin: { select: { id: true, name: true, role: true } } },
+    });
   }
 
   // ─── Users (filtered) ─────────────────────────────────────────────────────

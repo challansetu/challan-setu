@@ -105,6 +105,13 @@ export const adminApi = {
     return res.data;
   },
 
+  getLeadStatusHistory: async (leadId: string) => {
+    const res = await axiosInstance.get<import("@/types/admin").LeadStatusHistoryEntry[]>(
+      `/admin/leads/${leadId}/status-history`
+    );
+    return res.data;
+  },
+
   users: async (params: ListUsersParams = {}) => {
     const res = await axiosInstance.get<UsersResponse>("/admin/users", {
       params,

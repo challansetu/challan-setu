@@ -26,10 +26,11 @@ model AdminUser {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  notes         AdminNote[]
-  statusChanges UserStatusHistory[]
-  auditLogs     AuditLog[]
-  assignedLeads Lead[]              @relation("LeadAssignedLawyer")
+  notes             AdminNote[]
+  statusChanges     UserStatusHistory[]
+  auditLogs         AuditLog[]
+  assignedLeads     Lead[]              @relation("LeadAssignedLawyer")
+  leadStatusChanges LeadStatusHistory[]
 
   @@map("admin_users")
 }
@@ -263,7 +264,8 @@ model Lead {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  leadChallans LeadChallan[]
+  leadChallans  LeadChallan[]
+  statusHistory LeadStatusHistory[]
 
   @@index([mobileNumber])
   @@index([vehicleNumber])
@@ -325,6 +327,22 @@ model UserStatusHistory {
 
   @@index([userId])
   @@map("user_status_history")
+}
+
+// ─── Lead Status History (lawyer contact-status changes) ────
+model LeadStatusHistory {
+  id        String   @id @default(cuid())
+  leadId    String
+  oldStatus String
+  newStatus String
+  changedBy String?
+  createdAt DateTime @default(now())
+
+  lead  Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  admin AdminUser? @relation(fields: [changedBy], references: [id])
+
+  @@index([leadId])
+  @@map("lead_status_history")
 }
 
 // ─── Audit Logs ──────────────────────────────────────

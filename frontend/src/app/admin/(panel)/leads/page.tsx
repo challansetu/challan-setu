@@ -2,15 +2,15 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate as globalMutate } from "swr";
 import { Search, X, Phone, Car, MapPin, Calendar, Globe, Plus, Pencil, Trash2, Check, Loader2, ChevronDown, TrendingDown, FileText } from "lucide-react";
 import { adminApi } from "@/lib/admin-api";
 import { Badge } from "@/components/admin/ui/Badge";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SkeletonTable } from "@/components/admin/ui/Skeleton";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatDateTime } from "@/lib/utils";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
-import type { Lead, LeadsResponse, LeadChallan } from "@/types/admin";
+import type { Lead, LeadsResponse, LeadChallan, LeadStatusHistoryEntry } from "@/types/admin";
 
 const CRM_STATUSES = [
   { value: "new", label: "New" },
@@ -315,6 +315,46 @@ function LeadChallansSection({ leadId, onTotalsChange, readOnly }: { leadId: str
   );
 }
 
+// Super Admin / admin visibility only — which lawyer changed a lead's contact
+// status, to what, and when (lawyers cannot reach this endpoint, see LawyerScopeGuard).
+function LeadStatusHistorySection({ leadId }: { leadId: string }) {
+  const { data: history, isLoading } = useSWR<LeadStatusHistoryEntry[]>(
+    `lead-status-history-${leadId}`,
+    () => adminApi.getLeadStatusHistory(leadId),
+    { revalidateOnFocus: false }
+  );
+
+  return (
+    <div>
+      <p className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-3">Status History</p>
+      {isLoading ? (
+        <p className="text-xs text-gray-400">Loading…</p>
+      ) : history && history.length > 0 ? (
+        <div className="space-y-3">
+          {history.map((entry) => (
+            <div key={entry.id} className="flex items-start gap-3">
+              <div className="h-2 w-2 rounded-full bg-primary-400 mt-1.5 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap text-xs">
+                  <Badge label={LAWYER_STATUSES.find((s) => s.value === entry.oldStatus)?.label ?? entry.oldStatus} variant={LAWYER_STATUS_VARIANT[entry.oldStatus] ?? "gray"} />
+                  <span className="text-gray-300">→</span>
+                  <Badge label={LAWYER_STATUSES.find((s) => s.value === entry.newStatus)?.label ?? entry.newStatus} variant={LAWYER_STATUS_VARIANT[entry.newStatus] ?? "gray"} />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {entry.admin ? <span className="font-medium text-gray-700">{entry.admin.name}</span> : "Unknown"}
+                  <span className="text-gray-400"> · {formatDateTime(entry.createdAt)}</span>
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-xs text-gray-400">No status changes yet</p>
+      )}
+    </div>
+  );
+}
+
 function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose: () => void; onUpdate: (updated: Lead) => void; readOnly?: boolean }) {
   const [form, setForm] = useState({
     crmStatus: lead.crmStatus ?? "new",
@@ -357,6 +397,7 @@ function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose
     try {
       const updated = await adminApi.updateLeadLawyerStatus(lead.id, value);
       onUpdate(updated);
+      globalMutate(`lead-status-history-${lead.id}`);
     } catch {
       setLawyerStatus(lead.lawyerStatus ?? "not_connected");
     } finally {
@@ -477,6 +518,9 @@ function LeadDrawer({ lead, onClose, onUpdate, readOnly }: { lead: Lead; onClose
               ))}
             </select>
           </div>
+
+          {/* Status History — who changed the Contact Status, and when (not shown to lawyers) */}
+          {!readOnly && <LeadStatusHistorySection leadId={lead.id} />}
 
           {/* CRM Fields */}
           <div>
